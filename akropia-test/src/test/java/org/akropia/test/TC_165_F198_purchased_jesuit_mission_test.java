@@ -69,7 +69,7 @@ public class TC_165_F198_purchased_jesuit_mission_test
 
     @Test
     @Tag("local")
-    void TC_01_bought_jesuit_sails_home_and_establishes_an_expert_mission()
+    void TC_01_bought_jesuit_sails_home_and_is_consumed_for_expert_influence()
             throws Exception {
         // Start from the purchase game that has the Aztec capital next to the
         // colony.
@@ -169,18 +169,13 @@ public class TC_165_F198_purchased_jesuit_mission_test
         journey.chooseUnitOnColonySquare(JESUIT);
         journey.verifySelectedUnit(JESUIT);
         visit.enterSettlement(COLONY, CAPITAL);
-        mission.verifyMissionButtonShown();
-        mission.startMissionChoice();
-        mission.verifyMissionConfirmation(EXPERT_EN);
-        mission.verifyMissionConfirmation("Progress: 0 of 5 updates.");
         // Relations evolve during the voyage; show the current attitude.
-        mission.verifyMissionAttitude(JESUIT, CAPITAL);
 
         // Back leaves the Jesuit on the map and the settlement without a
         // mission.
+        mission.verifyMissionConfirmation("Corinth: 5 → 7");
         mission.backFromMission();
         mission.verifyMissionNotEstablished(JESUIT, CAPITAL);
-        visit.escape();
         visit.verifyChooserClosed();
 
         // Choose the Jesuit again; Confirm stations the same Jesuit at the
@@ -188,23 +183,18 @@ public class TC_165_F198_purchased_jesuit_mission_test
         journey.chooseUnitOnColonySquare(JESUIT);
         journey.verifySelectedUnit(JESUIT);
         visit.enterSettlement(COLONY, CAPITAL);
-        mission.startMissionChoice();
         mission.confirmMission();
-        mission.verifyMissionEstablished(JESUIT, CAPITAL, 0);
+        mission.verifyMissionApplied(JESUIT, CAPITAL, 7);
         visit.verifyChooserClosed();
 
         // The next owner turn counts one update and the settlement keeps it.
         game.nextTurnAndCloseDialogs();
-        mission.verifyMissionEstablished(JESUIT, CAPITAL, 1);
-        NativeAlarmPage.of(getContext()).openWithNKey();
-        mission.verifySettlementMission(PROGRESS_ONE_EN);
-        NativeAlarmPage.of(getContext()).closeWithEscape();
+        mission.verifyMissionApplied(JESUIT, CAPITAL, 7);
 
         // Save and Continue keep the mission, its progress and the Jesuit.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        mission.verifyMissionEstablished(JESUIT, CAPITAL, 1);
-        journey.verifyBoughtJesuit(JESUIT, GOLD_AFTER_PURCHASE);
+        mission.verifyMissionApplied(JESUIT, CAPITAL, 7);
     }
 
 }

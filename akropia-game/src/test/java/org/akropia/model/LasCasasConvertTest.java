@@ -254,7 +254,7 @@ class LasCasasConvertTest {
     }
 
     @Test
-    void theLifetimeCountEndsWithTheAffiliationAndTheSaveHoldsNoConvertFields() {
+    void liberationRemovesConvertFieldsAndTheUnitRemains() {
         final Scene scene = scene(Founder.BARTOLOME_DE_LAS_CASAS, 1000);
         final Model model = scene.model;
         final Player dutch = dutch(model);
@@ -262,7 +262,7 @@ class LasCasasConvertTest {
         for (int update = 0; update < 7; update++) {
             model.advanceNativeConverts(dutch);
         }
-        assertEquals(7, scene.onMap.getConvertUnassignedUpdates());
+        assertEquals(0, scene.onMap.getConvertUnassignedUpdates());
 
         assertTrue(dutch.startTurn());
 
@@ -332,7 +332,7 @@ class LasCasasConvertTest {
     }
 
     @Test
-    void aConvertAcquiredAfterTheJoinStaysAConvertAndCountsOnItsOwn() {
+    void aConvertAcquiredAfterTheJoinStaysAConvert() {
         final Scene scene = scene(Founder.BARTOLOME_DE_LAS_CASAS, 1000);
         final Model model = scene.model;
         final Player dutch = dutch(model);
@@ -343,7 +343,7 @@ class LasCasasConvertTest {
         model.advanceNativeConverts(dutch);
 
         assertTrue(future.isNativeConvert());
-        assertEquals(1, future.getConvertUnassignedUpdates());
+        assertEquals(0, future.getConvertUnassignedUpdates());
         assertFalse(scene.onMap.isNativeConvert());
         assertEquals(1, freedNotices(model));
     }

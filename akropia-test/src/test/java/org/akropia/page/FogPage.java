@@ -385,6 +385,11 @@ public final class FogPage extends AbstractScreen {
                 .isCurrentlyVisible(location));
     }
 
+    public void verifyTileDetailsContain(final String expectedText) {
+        assertTrue(getLabeledById("tileName").getText().contains(expectedText),
+                () -> "Tile details: " + getLabeledById("tileName").getText());
+    }
+
     public void verifyStatusBarContains(final String expectedText) {
         GamePage.of(getContext()).verifyThatStatusBarContains(expectedText);
     }

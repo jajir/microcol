@@ -151,7 +151,14 @@ final class DiplomacyJourneyFixture {
                 TURN);
         model.addProperty("combatRandomState", seed());
         players(gson, model);
-        anger(model, variant == Variant.HOSTILE ? HOSTILE_ANGER : UNEASY_ANGER);
+        for (final var entry : model.getAsJsonArray("nativeFriendships")) {
+            final JsonObject row = entry.getAsJsonObject();
+            if ("AZTEC".equals(row.get("nation").getAsString())) {
+                row.getAsJsonObject("favour").addProperty("DUTCH",
+                        variant == Variant.HOSTILE ? 2 : 7);
+                row.getAsJsonObject("favour").addProperty("FRENCH", 5);
+            }
+        }
         model.add("nativeLandRights", rights(gson));
         final JsonArray units = model.getAsJsonArray("units");
         sentryFrench(units);

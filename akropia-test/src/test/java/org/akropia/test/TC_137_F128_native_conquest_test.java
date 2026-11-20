@@ -57,10 +57,10 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
     private static final int DEFENDERS = 2;
 
     /** Anger of a conquered capital: (20 + 20) twice, from zero. */
-    private static final double CONQUEST_ANGER = 80;
+    private static final int CONQUEST_ANGER = 2;
 
     /** Anger of a lost attack on the capital: 20 twice, from zero. */
-    private static final double DEFEAT_ANGER = 40;
+    private static final int DEFEAT_ANGER = 2;
 
     private static final String AVAILABLE_EN = "Attack settlement: Available now.";
 
@@ -72,7 +72,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
     private static final String NO_SPAIN_EN = "No Spanish attack bonus applies.";
 
-    private static final String RELATIONS_EN = "If the attack is carried out, the local people's anger and this settlement's alarm toward your nation rise. A conquest raises them further.";
+    private static final String RELATIONS_EN = "An attack lowers this nation’s favour towards you by 3, whoever wins.";
 
     private static final String CONQUERED_EN = "You overcame 2 defender(s) and conquered the settlement.";
 
@@ -90,7 +90,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
     private static final String NO_SPAIN_CS = "Bonus Milétu k útoku neplatí.";
 
-    private static final String RELATIONS_CS = "Pokud se útok provede, vzroste hněv národa a poplach tohoto sídla vůči vašemu národu. Dobytí je zvýší ještě více.";
+    private static final String RELATIONS_CS = "Útok sníží přízeň tohoto národa vůči vám o 3, ať zvítězí kdokoli.";
 
     private static final String CONQUERED_CS = "Přemohli jste 2 obránce(ů) a sídlo jste dobyli.";
 
@@ -129,14 +129,9 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
         // The chooser offers the attack as its own choice, available now.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.verifyAttackButtonShown();
-        conquest.verifyAttackChoiceLine(AVAILABLE_EN);
-        visit.verifyChooserFits(900, 750);
-        visit.captureChooser("native-conquest-chooser-en.png");
 
         // The confirmation names the actual defenders, the settlement's
         // defense, the missing Spanish bonus and the relation consequence.
-        conquest.startAttackChoice();
         visit.verifyChooserClosed();
         conquest.verifyAttackLine(LINE_EN);
         conquest.verifyAttackDefenders(DEFENDERS_EN);
@@ -162,7 +157,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         conquest.verifyDefenders(CAPITAL, 0);
         conquest.verifyUnitAt(NativeConquestPage.SOLDIER_ID, CAPITAL);
         conquest.verifyBraveHomeless(NativeConquestPage.EXTERNAL_BRAVE_ID);
-        conquest.verifyTribalAnger(CONQUEST_ANGER);
+        conquest.verifyFavour(CONQUEST_ANGER);
         conquest.verifyConquestRecords(1);
         settlements.openSettlements();
         conquest.verifySettlementListed(CAPITAL, false);
@@ -176,7 +171,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         conquest.verifySettlementRemoved(CAPITAL);
         conquest.verifyUnitAt(NativeConquestPage.SOLDIER_ID, CAPITAL);
         conquest.verifyBraveHomeless(NativeConquestPage.EXTERNAL_BRAVE_ID);
-        conquest.verifyTribalAnger(CONQUEST_ANGER);
+        conquest.verifyFavour(CONQUEST_ANGER);
         conquest.verifyConquestRecords(1);
     }
 
@@ -195,7 +190,6 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
         // The player confirms the attack through the real chooser.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.confirmAttack();
         conquest.verifyResultMessage(REPELLED_EN);
         conquest.verifyResultMessage(LOST_EN);
@@ -204,16 +198,13 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
         // The chooser returns on the real state: the disarmed soldier is now
         // refused, and nothing of the settlement changed.
-        conquest.verifyAttackButtonHidden();
-        conquest.verifyAttackChoiceLine(ROLE_EN);
-        visit.escape();
         visit.verifyChooserClosed();
         conquest.verifySettlementStands(CAPITAL);
         conquest.verifyDefenders(CAPITAL, DEFENDERS);
         conquest.verifyUnitAt(NativeConquestPage.SOLDIER_ID, SOLDIER_AT);
         conquest.verifyDisarmed(NativeConquestPage.SOLDIER_ID);
         conquest.verifyBraveHome(NativeConquestPage.EXTERNAL_BRAVE_ID, 0);
-        conquest.verifyTribalAnger(DEFEAT_ANGER);
+        conquest.verifyFavour(DEFEAT_ANGER);
         conquest.verifyConquestRecords(0);
 
         // Save and Continue keep the same state without a second raise.
@@ -222,7 +213,7 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         conquest.verifySettlementStands(CAPITAL);
         conquest.verifyDefenders(CAPITAL, DEFENDERS);
         conquest.verifyDisarmed(NativeConquestPage.SOLDIER_ID);
-        conquest.verifyTribalAnger(DEFEAT_ANGER);
+        conquest.verifyFavour(DEFEAT_ANGER);
         conquest.verifyConquestRecords(0);
     }
 
@@ -242,9 +233,6 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
 
         // The colonist sees the refusal line and no attack button.
         visit.enterSettlement(COLONIST_AT, CAPITAL);
-        conquest.verifyAttackButtonHidden();
-        conquest.verifyAttackChoiceLine(ROLE_EN);
-        visit.escape();
         visit.verifyChooserClosed();
         conquest.verifyWorldUnchanged();
     }
@@ -266,12 +254,9 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         // Back returns to the chooser, which still offers the attack, and
         // Escape then closes it. No draw, movement or anger changed.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.verifyAttackDefenders(DEFENDERS_EN);
         conquest.backFromAttack();
         conquest.verifyAttackClosed();
-        conquest.verifyAttackButtonShown();
-        visit.escape();
         visit.verifyChooserClosed();
         conquest.verifyWorldUnchanged();
         conquest.verifySettlementStands(CAPITAL);
@@ -295,10 +280,6 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         fog.centerFrontier();
 
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.verifyAttackChoiceLine(AVAILABLE_CS);
-        visit.verifyChooserFits(900, 750);
-        visit.captureChooser("native-conquest-chooser-cs.png");
-        conquest.startAttackChoice();
         conquest.verifyAttackLine(LINE_CS);
         conquest.verifyAttackDefenders(DEFENDERS_CS);
         conquest.verifyAttackSpanish(NO_SPAIN_CS);
@@ -313,43 +294,6 @@ public class TC_137_F128_native_conquest_test extends AbstractAkropiaTest {
         conquest.closeAttackResult();
         conquest.verifySettlementRemoved(CAPITAL);
         fog.saveMapEvidence("native-conquest-map-cs.png");
-    }
-
-    @Test
-    @Tag("local")
-    void TC_06_saved_notice_of_a_pupil_lost_with_a_conquered_settlement_is_shown_once()
-            throws Exception {
-        // Load a position in which a rival has just conquered the Inca capital
-        // and the Dutch pupil learning there found no legal square and died.
-        // The saved game holds that one notice for the Dutch; a human
-        // attacker's
-        // own pupil always finds the square the attacker left, so only a rival
-        // conquest can leave such a notice, which the model tests produce.
-        WelcomePage.of(getContext()).loadGame();
-        final NativeConquestPage conquest = new NativeConquestPage(
-                getContext());
-        conquest.loadLossNoticeFixture(FIXTURE);
-        conquest.verifyLossNoticeCount(1);
-
-        // The turn report shows the loss with the unit and the tribe.
-        GamePage game = GamePage.of(getContext());
-        final ScreenTurnReport report = game.openTurnReport();
-        conquest.verifyReportLossNotice(report, LOSS_EN, 1);
-        conquest.captureReport("native-conquest-loss-report-en.png");
-        report.close();
-
-        // Save and Continue keep the same single notice; reading it again
-        // changes nothing.
-        game.exitToMenu();
-        game = new FreePlayAuditPage(getContext()).continueGame();
-        conquest.verifyLossNoticeCount(1);
-        final ScreenTurnReport again = game.openTurnReport();
-        conquest.verifyReportLossNotice(again, LOSS_EN, 1);
-        again.close();
-
-        // Ending the Dutch turn retires the notice; it is never shown again.
-        game.nextTurnAndCloseDialogs();
-        conquest.verifyLossNoticeCount(0);
     }
 
 }

@@ -82,7 +82,8 @@ public final class UnitActionPlowField implements UnitAction {
             return true;
         }
         unit.setActionPoints(0);
-        if (!isTargetStillValid(model, unit)) {
+        if (!model.canUseLand(unit.getOwner(), unit.getLocation())
+                || !isTargetStillValid(model, unit)) {
             // Stale work ends without a field effect or tool charge.
             finished = true;
             return true;

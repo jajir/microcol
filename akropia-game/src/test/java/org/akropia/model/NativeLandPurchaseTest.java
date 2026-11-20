@@ -127,12 +127,12 @@ class NativeLandPurchaseTest {
     }
 
     @Test
-    void minuitWaivesThePriceAndTheQuoteIsNotPayable() {
+    void legacyFounderCannotWaiveNeutralLandPrice() {
         final Model model = dutchOnTile().minuitMember(DUTCH).toModel();
         final NativeLandQuote offer = quote(model, DUTCH, TILE);
-        assertEquals(NativeLandStatus.WAIVED, offer.getStatus());
-        assertEquals(0, offer.getPrice());
-        assertFalse(model.canBuyNativeLand(offer));
+        assertEquals(NativeLandStatus.UNPAID, offer.getStatus());
+        assertEquals(200, offer.getPrice());
+        assertTrue(model.canBuyNativeLand(offer));
         assertEquals(500, model.getPlayerByName(DUTCH).getGold());
     }
 
@@ -183,12 +183,15 @@ class NativeLandPurchaseTest {
         final Model model = dutchOnTile().toModel();
         model.buyNativeLand(quote(model, DUTCH, TILE));
         final ModelPo saved = model.save();
-        // The only settlement moves away, so nothing claims the square now.
+        // The settlement moves away; the original national claim stays
+        // recorded.
         saved.getNativeSettlements().get(0).setLocation(at(-3, 0));
         final Model loaded = Model.make(saved,
                 MissionImpl.getPredefinedGameOverEvaluators());
-        assertTrue(loaded.quoteNativeLand(loaded.getPlayerByName(DUTCH), TILE)
-                .isEmpty());
+        assertEquals(NativeLandStatus.PAID,
+                quote(loaded, DUTCH, TILE).getStatus());
+        assertEquals(java.util.Optional.of(loaded.getPlayerByName(DUTCH)),
+                loaded.getLandOwner(TILE));
         // The right is neither lost nor rejected at load.
         final ModelPo again = loaded.save();
         assertEquals(1, again.getNativeLandRights().size());
@@ -202,7 +205,7 @@ class NativeLandPurchaseTest {
         model.buyNativeLand(quote(model, DUTCH, TILE));
         final ModelPo saved = model.save();
         // The first settlement moves off and a Tupi camp one square the other
-        // way now owns the claim on the same square.
+        // way overlaps the same square, without replacing its original claim.
         saved.getNativeSettlements().get(0).setLocation(at(-3, 0));
         final NativeSettlementPo camp = new NativeSettlementPo();
         camp.setId(1);
@@ -223,7 +226,9 @@ class NativeLandPurchaseTest {
         final NativeLandQuote after = quote(loaded, DUTCH, TILE);
         // One purchase satisfies the obligation: no hidden second claim.
         assertEquals(NativeLandStatus.PAID, after.getStatus());
-        assertEquals(1, after.getClaimant().getId());
+        assertEquals(0, after.getClaimant().getId());
+        assertEquals(java.util.Optional.of(NativeNation.AZTEC),
+                loaded.getNativeLandClaim(TILE));
         assertEquals(0, after.getPrice());
         assertEquals(300, loaded.getPlayerByName(DUTCH).getGold());
         assertEquals(2000, loaded.getNativeSettlements().get(1).getTreasury());

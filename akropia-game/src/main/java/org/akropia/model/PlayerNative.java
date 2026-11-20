@@ -53,8 +53,7 @@ public final class PlayerNative extends Player {
     @Override
     boolean startTurn() {
         getAllUnits().forEach(unit -> unit.startTurn());
-        nationModel.updateNativeMarkets(nation);
-        nationModel.checkNativeIncitement(nation);
+        nationModel.updateNativeFriendship(nation);
         return true;
     }
 
@@ -64,7 +63,7 @@ public final class PlayerNative extends Player {
      */
     @Override
     public void endTurn() {
-        nationModel.advanceNativeIncitement(nation);
+
         super.endTurn();
     }
 

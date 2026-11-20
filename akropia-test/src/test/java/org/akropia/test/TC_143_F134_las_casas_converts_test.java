@@ -73,7 +73,7 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
             Founder.THOMAS_JEFFERSON, Founder.ADAM_SMITH,
             Founder.BARTOLOME_DE_LAS_CASAS, Founder.FERDINAND_MAGELLAN);
 
-    private static final String LABEL_0_EN = "Local convert of the Egyptians. Unassigned turns: 0 of 8.";
+    private static final String LABEL_0_EN = "Local convert of the Egyptians.";
 
     private static final String FREED_EN = "The charter freed your existing native converts";
 
@@ -153,11 +153,6 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
 
         // A convert acquired later by a mission is the only convert held.
         new FogPage(getContext()).centerFrontier();
-        visit.enterSettlement(MISSIONARY_AT, CAPITAL);
-        mission.startMissionChoice();
-        mission.confirmMission();
-        mission.verifyMissionEstablished(MISSIONARY_ID, CAPITAL, 0);
-        visit.verifyChooserClosed();
         final GamePage afterContinue = GamePage.of(getContext());
         for (int turn = 1; turn <= 4; turn++) {
             afterContinue.nextTurnAndCloseDialogs();

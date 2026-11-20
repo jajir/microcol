@@ -55,6 +55,12 @@ public final class DiplomacyJourneyPage extends AbstractScreen {
         return colony(colonyId).getWarehouse().getGoods(type).getAmount();
     }
 
+    public void verifyNativeFriend(final org.akropia.model.NativeNation nation,
+            final org.akropia.model.EuropeanNation friend) {
+        assertEquals(java.util.Optional.of(friend),
+                getModel().getNativeFriend(nation));
+    }
+
     public void verifyDutchGold(final int expected) {
         assertEquals(expected, dutchGold());
     }

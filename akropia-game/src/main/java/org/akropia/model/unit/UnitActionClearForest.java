@@ -95,7 +95,8 @@ public final class UnitActionClearForest implements UnitAction {
             return true;
         }
         unit.setActionPoints(0);
-        if (!isTargetStillValid(model, unit)) {
+        if (!model.canUseLand(unit.getOwner(), unit.getLocation())
+                || !isTargetStillValid(model, unit)) {
             // Stale work ends without terrain change, tool charge or lumber.
             finished = true;
             return true;

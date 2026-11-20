@@ -23,6 +23,19 @@ Zmrazený `GameResult` i položka `HallOfFameEntry` ukládají vedle roku také
 Odpovědnosti balíčků se nemění. Viz
 [pravidla kalendáře](gap-analysis.md#calendar-and-starting-expeditions).
 
+## Domorodá přízeň a vlastnictví půdy — 20. listopadu 2026
+
+Místní alarm a hněv národa nahrazuje jediná tabulka
+`model.NativeFriendships`. Tento model vlastní přízeň, jedinečného přítele,
+jednorázový účinek misionáře a uložený čtyřicetikolový interval konvertitů.
+`LandOwnership` odděluje jediného vlastníka políčka od domorodého nároku a
+trvalého zaplacení. `Model` validuje akce před mutací a spojuje práva s pohybem,
+koloniemi a prací; UI a AI čtou stejné dotazy. `store.NativeFriendshipPo` a
+`store.LandOwnershipPo` ukládají tento stav bez migrace starších hráčských save.
+Starší popisy rušených mechanismů níže jsou historické; aktuální kontrakt je v
+[pravidlech vztahů](gap-analysis.md#native-and-european-relations).
+Lokální přejímku dokládá [testová evidence](functional-tests.md#native-redesign-2026-11-20); plná regrese je samostatná.
+
 ## Kam patří nová změna
 
 | Otázka | Vlastník |

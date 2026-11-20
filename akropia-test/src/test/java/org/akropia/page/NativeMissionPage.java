@@ -55,21 +55,37 @@ public final class NativeMissionPage extends AbstractScreen {
     public void loadMissionFixture(final File source, final String firstType,
             final int firstId, final Location firstAt, final int secondId,
             final Location secondAt) throws Exception {
+        loadMissionFixture(source, firstType, firstId, firstAt, secondId,
+                secondAt, false);
+    }
+
+    public void loadRivalFriendFixture(final File source, final int firstId,
+            final Location firstAt, final int secondId, final Location secondAt)
+            throws Exception {
+        loadMissionFixture(source, "JESUIT_MISSIONARY", firstId, firstAt,
+                secondId, secondAt, true);
+    }
+
+    private void loadMissionFixture(final File source, final String firstType,
+            final int firstId, final Location firstAt, final int secondId,
+            final Location secondAt, final boolean rivalFriend)
+            throws Exception {
         final Gson gson = new Gson();
         final JsonObject game = gson.fromJson(Files.readString(source.toPath()),
                 JsonObject.class);
         final JsonObject model = game.getAsJsonObject("model");
         final JsonArray units = model.getAsJsonArray("units");
-        // A Jesuit is a specialist whose role flag stays false; an ordinary
-        // missionary is ordained.
-        units.add(missionary(firstId, firstType, firstAt,
-                !"JESUIT_MISSIONARY".equals(firstType)));
+        // Both ordinary and expert missionaries carry the ordained role.
+        units.add(missionary(firstId, firstType, firstAt, true));
         units.add(missionary(secondId, "COLONIST", secondAt, true));
-        for (final var entry : model.getAsJsonArray("nativeTribalAnger")) {
-            final JsonObject anger = entry.getAsJsonObject();
-            if ("AZTEC".equals(anger.get("nation").getAsString())
-                    && "DUTCH".equals(anger.get("european").getAsString())) {
-                anger.addProperty("value", 0.0);
+        if (rivalFriend) {
+            for (final var entry : model.getAsJsonArray("nativeFriendships")) {
+                final JsonObject row = entry.getAsJsonObject();
+                if ("AZTEC".equals(row.get("nation").getAsString())) {
+                    row.getAsJsonObject("favour").addProperty("DUTCH", 7);
+                    row.getAsJsonObject("favour").addProperty("FRENCH", 8);
+                    row.addProperty("friend", "FRENCH");
+                }
             }
         }
         final Path fixture = Files.createTempFile("native-mission-",
@@ -215,6 +231,16 @@ public final class NativeMissionPage extends AbstractScreen {
      * settlement holds it, and its counted progress is as expected. The model
      * change runs in the background, so the check waits for it.
      */
+    public void verifyMissionApplied(final int unitId,
+            final Location settlement, final int favour) throws Exception {
+        WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,
+                () -> getModel().tryGetUnitById(unitId).isEmpty());
+        final NativeSettlement site = knownSettlement(settlement);
+        assertTrue(site.getMissionaryId().isEmpty());
+        assertEquals(favour, getModel().getNativeFavour(site.getNation(),
+                org.akropia.model.EuropeanNation.DUTCH));
+    }
+
     public void verifyMissionEstablished(final int unitId,
             final Location settlement, final int updates) throws Exception {
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS,

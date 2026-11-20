@@ -54,6 +54,11 @@ public final class NativeRelationsPage extends AbstractScreen {
                                 settlementAt(european, location))));
     }
 
+    public void verifyFavour(final EuropeanNation european,
+            final NativeNation tribe, final int expected) {
+        assertEquals(expected, getModel().getNativeFavour(tribe, european));
+    }
+
     public void verifyTribalAnger(EuropeanNation european, NativeNation tribe,
             double expected) {
         assertEquals(expected,

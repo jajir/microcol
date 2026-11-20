@@ -1239,75 +1239,72 @@ Ordination decision (2026-10-19): ordination is free and does not consume moveme
 
 ### Native and European relations
 
-1. Store tribal anger T and settlement-local alarm L separately per European,
-   both clamped 0..100 (fractions retained). Display hostility from `max(T,L)`:
-   [0,25) content, [25,50) uneasy, [50,75) angry, [75,100] hostile. Start at 0. Every
-   peaceful update reduces each by 1. Local unpaid worked/claimed land adds
-   2 per tile per update; taking a new tile adds 5 once. Each nearby European
-   resident within the settlement's claimed radius adds 0.25 per update, each
-   armed unit within two squares adds 2, and a fort/fortress there adds 2/3.
-   Apply [difficulty and national effects](#difficulty-and-national-effects)/[founder details](#founder-details) local reductions after summing positive inputs. At the end
-   of each update add `mean(local alarm)/20` to tribal anger, then clamp; this
-   transmits local pressure without confusing the two stored measures.
-2. Attacking a native unit adds T+10 and its home's L+10; attacking a settlement
-   adds +20 to both, destroying it adds another +20; a capital doubles those
-   increments. Disturbing a burial site adds T+30. Tributes add +10 to both even
-   if refused. Buying one claimed tile costs `ceil(100 × k)` gold (capital
-   claims double), permanently removes unpaid-use alarm for that European and
-   tile. Land payment/claim changes are atomic. Nearby arms sold to natives
-   add +5 T per complete 50 weapons/horses; retain partial counters.
-3. A trade reduces local alarm by 2, a gift by 5 per 100 goods, proportionally;
-   at a capital double the reduction and apply it to tribal anger too. Native
-   hostile AI normally attacks the nearest reachable enemy within two tiles, otherwise
-   patrols its home; [paid targeting](#r-0166-refinement) permits pursuit beyond
-   that radius for 20 native turns. Calmer states do not initiate attacks. Missions reduce
-   owner-local alarm by 2/4 per update ordinary/expert; add 1 to each contacted
-   rival's local alarm. Keep these effects separate from direct tribal anger.
-4. Preserve the catalogue's contact, role and repeated-commodity restrictions.
-   Settlement treasury starts at 1000 (capital 2000), gains 20/40 each update
-   capped at twice its initial amount. Offer up to three goods available in local
-   production, ordered by surplus then goods ID, initial stock 100 each and
-   restock 10/update capped at 200; demand is the three tradable goods with
-   lowest local production (ties ID). Native buy price is `max(1, floor(Europe
-   bid × 0.75))`, ×1.5 for demand; ship receipts get a final ×0.8. Native sell
-   price is Europe ask. Floor once per full quote; budget, stock and capacity
-   cap quantity. One haggle requests +10% receipts, accepted 50% when content,
-   25% uneasy, otherwise refused; the original offer remains. Save a pending
-   quote/draw so reopening cannot reroll. De Witt foreign-colony trade uses
-   the host's Europe prices without home tax and its actual stock/treasury,
-   requires peace/alliance, and transfers real goods and gold.
-5. A chief grants one encounter per visitor nation/settlement: content outcome
-   probabilities information/gold/death = 70/25/5%, uneasy 75/15/10%, angry
-   60/10/30%, hostile 40/0/60%. Seasoned scouts halve death probability and
-   move the difference to information. Gold is min(100, settlement treasury),
-   doubled cap in a capital; information reveals only that settlement's goods,
-   teaching and neighboring two-square terrain. Later visits repeat information
-   without another gift/death roll. Confirmed action consumes the visit.
-6. Native teaching requires content/uneasy relations and an unskilled free
-   colonist/servant, never a criminal or existing specialist. It takes 4 owner
-   updates at the settlement, one pupil at a time; cancel releases the person
-   without skill and discards progress. Hostility cancels teaching safely.
-   Keep the card's native-teachable list. Ordinary/expert missionary contest
-   strength is 1/2, each multiplied by `1 + (100 − hostility toward that
-   missionary’s nation)/100`: success `own/(own+resident)`, capped 10–90%; failure kills
-   the visitor, success kills the resident missionary and replaces the mission.
-   Show this risk before confirmation; cancel changes neither person nor mission. Incitement
-   costs `ceil(500 × (1 + own hostility/100) / (1 + 0.1×own missions in this
-   tribe))` gold and succeeds 25%/50% ordinary/expert, charging only a confirmed
-   attempt; success sets T toward the selected European to at least 75.
-7. Every fifth update of a nonhostile mission, conversion chance is 10% ordinary
-   or 20% expert, doubled by Sepulveda. At most one convert per event, delivered
-   to nearest owned colony by land distance then ID; without a reachable colony,
-   skip without banking a convert. No combat conversion is added. Persist native
-   affiliation and eight cumulative unassigned turns to expiry, paused but not reset by work (PROD-007). Conquest treasure
-   without Cortes has 50% chance of 500 gold (capital 1000); Cortes guarantees
-   double. The manual's printed p. 76/PDF p. 82 gives two treasure transport
-   routes: fill six galleon holds and take the train to Europe, or leave it in
-   an owned coastal colony for the King's galleon to collect at a price.
-   Royal deductions, collection timing and independence closure follow the
-   [accepted redemption rule](#r-0175-refinement). Native tribute yields min(100, treasury), capital cap 200, once per
-   10 turns per European/settlement if eligible armed force strength is at least
-   the settlement's defenders; otherwise refuses.
+Native redesign agreed on **2026-11-20**. The following rules supersede the
+older NAT catalogue and archived requirements where those describe tribal
+anger, settlement alarm, native trade, teaching, chief visits, permanent
+missions, tribute, mission contests or paid incitement. Implemented behavior
+and local acceptance are recorded in the [test evidence](functional-tests.md#native-redesign-2026-11-20).
+
+Implementation defaults awaiting the follow-up answers: converts remain permanently,
+including unemployment and a lost friendship; disturbing a burial ground costs
+3 favour; Peter Minuit, Pocahontas and Juan de Sepulveda are excluded from new
+founder offers because their sole old effects no longer exist. These defaults
+are not additional confirmed decisions or verified acceptance results.
+
+1. Each native nation has one integer favour, from 1 through 10, toward each
+   participating colonial nation. Initial favour is 5. There is no separate
+   settlement alarm, passive decay, population pressure or armed-unit pressure.
+   Settlements of the same nation share these relationships.
+2. Favour 1–3 is hostile. A unique highest favour of at least 8 establishes
+   friendship; a tie establishes no friendship. Each native nation has at most
+   one friend. Other relationships are neutral unless military assistance
+   makes the colonial nation an enemy of the native nation's friend.
+3. An eligible missionary visits an adjacent known native settlement. The
+   confirmation shows the national favour changes. Confirmation consumes the
+   missionary and changes favour once: +1 toward its owner and −1 toward every
+   other participating colonial nation; effective experts use 2 instead of 1.
+   Clamp each result to 1–10. Cancellation and stale confirmation change
+   nothing. A missionary may visit hostile nations and nations allied with a
+   rival. No permanent mission or competing resident missionary remains.
+4. Friendship is recomputed immediately after an influence change. Attacking a
+   native unit or settlement subtracts 3 favour toward the attacker, once per
+   initiated attack, regardless of result. Destruction adds no second penalty.
+5. Each native nation supplies one convert during each forty consecutive
+   native turns of friendship. Draw its arrival turn once per forty-turn
+   period, persist that draw and progress, and reset the period when friendship
+   ends or changes owner. Deliver to an owned colony reachable by land; without
+   a valid destination, that arrival is skipped rather than banked. Loading or
+   viewing information never draws again or advances the period.
+6. Native military assistance targets the friend's wartime enemies within
+   seven squares (Chebyshev distance) of a settlement of that native nation.
+   Ordinary legal movement, visibility, movement costs and combat still apply;
+   this is not an instant ranged attack. Hostile native nations can likewise
+   attack hostile colonial units in that area. Native units never attack
+   missionaries, including missionaries of an enemy.
+7. Land ownership and the native claim are separate. A land square can belong
+   to one colonial player, to its native claimant, or to nobody. A colonial
+   title retains the native nation that originally claimed it. Merely querying
+   ownership never changes the world or reveals undiscovered information.
+8. Friendly native land can be acquired without payment. Neutral native land
+   must be purchased before founding, working or improving it. Hostile nations
+   neither sell land nor allow new use. Purchased land remains the player's
+   permanently, including after hostility; do not charge again or confiscate it.
+   Retain the existing purchase price and claim-radius rules.
+9. When friendship ends, free native land remains colonial only while occupied
+   by that player's unit. A colony center and a working colonist count as
+   occupation. Return an unoccupied square to the native claimant immediately,
+   and continue checking after later departures. Paid land is exempt. Native
+   land restrictions do not prevent a missionary's diplomatic visit.
+10. Remove native trade, haggling, gifts of trade cargo, native teaching, chief
+    encounters, tribute, paid incitement and contests over resident missions.
+    Rivalry is expressed through missionary influence and the friendship rule.
+    Keep ordinary military attacks and conquest as separate explicit actions.
+11. The map details and native advisor show the nation, favour and current
+    friend. The map also distinguishes land owner from native claim. Do not
+    present retired trade, teaching or alarm information as active gameplay.
+
+European diplomacy retains its separate rules:
+
 8. European contact requires a visible adjacent foreign unit or colony; use
    soldiers, dragoons or scouts for tribute, any colonist for peace/alliance.
    AI accepts peace for `ceil(200 × max(1, rival military strength / max(1, own

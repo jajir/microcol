@@ -90,8 +90,8 @@ class NativeRaidTest {
                         capitalDy)
                 .settlement(INCA_HOME, NativeNation.INCA, true, 4, -4)
                 .nativePlayer(NativeNation.AZTEC)
-                .nativePlayer(NativeNation.INCA)
-                .anger(NativeNation.AZTEC, EuropeanNation.DUTCH, aztecAnger);
+                .nativePlayer(NativeNation.INCA).favour(NativeNation.AZTEC,
+                        EuropeanNation.DUTCH, aztecAnger >= 80 ? 2 : 5);
     }
 
     /** Scene with the Aztec capital in the far corner and hostile Aztecs. */
@@ -297,8 +297,12 @@ class NativeRaidTest {
         final NativeTurnScene scene = hostileScene().brave(NativeNation.AZTEC,
                 AZTEC_HOME, 0, 0);
         // Three squares away but known through the lookout beside it.
-        lookout(scene, 3, -1);
-        final int beyond = placeColonist(scene, 3, 0);
+        final var terrain = scene.po().getMap().getTerrainMap();
+        terrain.put(at(8, -1), TerrainType.GRASSLAND);
+        terrain.put(at(8, 0), TerrainType.GRASSLAND);
+        scene.po().getMap().setTerrainType(terrain);
+        lookout(scene, 8, -1);
+        final int beyond = placeColonist(scene, 8, 0);
         final Model model = scene.model();
         final Attacks attacks = watch(model);
         final List<NativeRobotPlayer> robots = robots(model);
@@ -410,12 +414,9 @@ class NativeRaidTest {
         // Peace improves while the game is saved at a European turn. Continue
         // must not replay the attack, and the next native turn stands down.
         final ModelPo saved = firstModel.save();
-        for (final NativeTribalAngerPo entry : saved.getNativeTribalAnger()) {
-            if (entry.getNation() == NativeNation.AZTEC
-                    && entry.getEuropean() == EuropeanNation.DUTCH) {
-                entry.setValue(10.0);
-            }
-        }
+        saved.getNativeFriendships().stream()
+                .filter(row -> row.getNation() == NativeNation.AZTEC)
+                .forEach(row -> row.getFavour().put(EuropeanNation.DUTCH, 5));
         final Model restored = NativeTurnScene.make(saved);
         final Attacks restoredAttacks = watch(restored);
         final List<NativeRobotPlayer> restoredRobots = robots(restored);
@@ -560,32 +561,6 @@ class NativeRaidTest {
         } finally {
             robots.forEach(NativeRobotPlayer::stop);
         }
-    }
-
-    // ---- attitude read by the model -------------------------------------
-
-    @Test
-    void homelessBraveReadsOnlyTheTribalAngerOfItsNation() {
-        final Model model = scene(FAR, FAR, 30)
-                .brave(NativeNation.AZTEC, null, 0, 0).model();
-        final UnitNativeBrave brave = braveOf(model, NativeNation.AZTEC);
-        assertTrue(model.getNativeBraveHome(brave).isEmpty());
-        assertEquals(NativeHostility.UNEASY,
-                model.getNativeBraveAttitude(brave, player(model, "Dutch")));
-    }
-
-    @Test
-    void homedBraveReadsItsHomeSettlementAttitude() {
-        final Model model = scene(FAR, FAR, 80)
-                .brave(NativeNation.AZTEC, AZTEC_HOME, 0, 0).model();
-        final UnitNativeBrave brave = braveOf(model, NativeNation.AZTEC);
-        assertEquals(at(FAR, FAR),
-                model.getNativeBraveHome(brave).orElseThrow().getLocation());
-        assertEquals(NativeHostility.HOSTILE,
-                model.getNativeBraveAttitude(brave, player(model, "Dutch")));
-        // Toward a nation with no anger the same brave is content.
-        assertEquals(NativeHostility.CONTENT,
-                model.getNativeBraveAttitude(brave, player(model, "France")));
     }
 
 }

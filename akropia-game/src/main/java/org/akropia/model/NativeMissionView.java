@@ -24,10 +24,28 @@ public final class NativeMissionView {
     private final NativeHostility hostility;
 
     private final int completedUpdates;
+    private final java.util.Map<EuropeanNation, Integer> favour;
+
+    public java.util.Map<EuropeanNation, Integer> getFavour() {
+        return favour;
+    }
+
+    public int getInfluence() {
+        return effectiveExpert ? 2 : 1;
+    }
 
     NativeMissionView(final EuropeanNation owner, final String ownerName,
             final boolean effectiveExpert, final NativeHostility hostility,
             final int completedUpdates) {
+        this(owner, ownerName, effectiveExpert, hostility, completedUpdates,
+                java.util.Map.of());
+    }
+
+    NativeMissionView(final EuropeanNation owner, final String ownerName,
+            final boolean effectiveExpert, final NativeHostility hostility,
+            final int completedUpdates,
+            final java.util.Map<EuropeanNation, Integer> favour) {
+        this.favour = java.util.Map.copyOf(favour);
         this.owner = Objects.requireNonNull(owner);
         this.ownerName = Objects.requireNonNull(ownerName);
         this.effectiveExpert = effectiveExpert;
@@ -80,7 +98,8 @@ public final class NativeMissionView {
             return false;
         }
         final NativeMissionView that = (NativeMissionView) other;
-        return owner == that.owner && ownerName.equals(that.ownerName)
+        return favour.equals(that.favour) && owner == that.owner
+                && ownerName.equals(that.ownerName)
                 && effectiveExpert == that.effectiveExpert
                 && hostility == that.hostility
                 && completedUpdates == that.completedUpdates;
@@ -88,8 +107,8 @@ public final class NativeMissionView {
 
     @Override
     public int hashCode() {
-        return Objects.hash(owner, ownerName, effectiveExpert, hostility,
-                completedUpdates);
+        return Objects.hash(favour, owner, ownerName, effectiveExpert,
+                hostility, completedUpdates);
     }
 
 }

@@ -92,11 +92,17 @@ public final class DialogNativeMission extends AbstractMessageWindow {
     @Override
     public void updateLanguage(final I18n i18n) {
         setTitle(i18n.get(Loc.nativeMissionTitle));
-        line.setText(i18n.get(Loc.nativeMissionLine, mission.getOwnerName(),
-                i18n.get(expertName(mission.isEffectiveExpert())),
-                i18n.get(DialogNativeChief.moodName(mission.getHostility())),
-                mission.getCompletedUpdates(),
-                NativeMissionView.REQUIRED_UPDATES));
+        final String relations = mission.getFavour().entrySet().stream()
+                .sorted(java.util.Map.Entry.comparingByKey())
+                .map(entry -> entry.getKey().getDisplayName() + ": "
+                        + entry.getValue() + " → "
+                        + Math.max(1,
+                                Math.min(10, entry.getValue()
+                                        + (entry.getKey() == mission.getOwner()
+                                                ? mission.getInfluence()
+                                                : -mission.getInfluence()))))
+                .collect(java.util.stream.Collectors.joining("\n"));
+        line.setText(i18n.get(Loc.nativeMissionLine, relations));
         confirm.setText(i18n.get(Loc.nativeMissionConfirmButton));
         back.setText(i18n.get(Loc.nativeMissionBackButton));
     }

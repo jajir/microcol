@@ -1,3 +1,106 @@
+<a id="native-redesign-2026-11-20"></a>
+
+## Native diplomacy and land redesign — local acceptance, 2026-11-20
+
+1. UC-060/061/065/066 now target national favour, one-shot missionaries,
+   friendship defense and persistent land ownership. The former native trade,
+   chief, teaching, tribute, mission-contest and paid-incitement cases are retired
+   by the [new rules](gap-analysis.md#native-and-european-relations), not accepted
+   by skipping tests. Historical scenario IDs and past evidence remain historical.
+   TC_114/02–03 (unpaid taking and Minuit waiver) and TC_134/08
+   (convert departure) are also retired; their IDs remain reserved.
+   TC_113 (Pocahontas anger reset), TC_127 (the removed multi-action chooser),
+   TC_137/06 (loss of a native pupil), and TC_169/03 (repeat chief rewards)
+   are retired too. Missionary and conquest confirmations remain covered by
+   TC_133 and TC_137; the national report is covered by TC_169.
+2. Retired UI scenarios: TC_124 (local alarm), TC_128 (teaching),
+   TC_129/130/131 (native market and trade), TC_135 (resident mission contest),
+   TC_136 (paid incitement), and TC_138 (native tribute). Their numbers are
+   reserved; they do not describe supported player actions. European tribute
+   and the remaining native combat, land, conversion and advisor cases remain
+   in scope for verification.
+3. New model coverage includes `NativeFriendshipsTest`, `LandOwnershipTest`,
+   `NativeLandLifecycleTest`, `NativeDefenseTest` and the rewritten
+   `NativeMissionTest`. TC_133 keeps its scenario number and now tests missionary
+   consumption, cancellation, repeated influence and Continue. Final local
+   results and review are recorded below.
+4. Completion `20261120T154550Z-db728f1ac028` timed out during preparation:
+   `docker ps` exceeded 20 seconds; no test command started. A subsequent bounded
+   read-only Docker query succeeded. This does not establish the timeout's cause.
+5. Diagnostic model completion `20261120T155104Z-bfc685a3659d`, based on
+   `6118af37c21dc3836b04d5df44e7589df4e8065d` plus the captured working changes,
+   failed after 157.966 seconds. Reports `target/verification/run-ulk07jar`
+   contain 5,153 checks, 100 failures, 138 errors and zero skips. The failures
+   include retired expectations and actual integration defects; this run is not
+   acceptance evidence for the newer working changes. Its notification was queued.
+6. Later model runs `20261120T162257Z-cc360e4738e5` and
+   `20261120T162951Z-3af85ee9e5ad` each passed 4,890 checks with zero failures,
+   errors or skips (152.484 and 160.846 seconds). Reports are
+   `target/verification/run-0q9qq9xj` and `target/verification/run-66l2fhnc`.
+   These results precede the subsequent pioneer title-acquisition and retained
+   claim fixes; the final source still needs model acceptance.
+7. Docker UI `20261120T163244Z-f754fc4cac2f` executed 26 cases in 508.095
+   seconds: two failures, zero errors/skips. Both failures expected the removed
+   eight-turn convert-expiry label; the assertions now match permanent converts.
+   Docker UI `20261120T164149Z-be6d8a0c81db` then executed 37 cases in 725.347
+   seconds: one failure, zero errors/skips. TC96, TC112, TC115, TC123, TC134,
+   TC137, TC143 and TC186 passed. TC139 failed when its tile-selection helper
+   required hover coordinates while a retained combat outcome still occupied
+   the status bar after Continue. The helper now clicks without that unrelated
+   precondition; treasure value and persistence assertions remain unchanged.
+   Both runs remain failed evidence, not final acceptance.
+8. Targeted host model checks cover pioneer acquisition, continuous release,
+   paid permanence and original native claims. TC114/06 adds free friendly
+   pioneer work and title persistence through Continue; TC133/04–05 add rival
+   friendship takeover and Czech confirmation/cancel. Docker run
+   `20261120T164838Z-d148d81f322e` passed eight selected cases (TC114: three,
+   TC133: five), zero failures/errors/skips, in 150.512 seconds after 316.949
+   seconds waiting for the local lock. TC114/06 was absent because its tag did
+   not match the local selection; the tag is corrected and that case still
+   needs execution. This run therefore does not verify the new pioneer journey.
+9. Final runtime model snapshot `20261120T165643Z-433327bfb485` passed
+   **4,892 checks, zero failures/errors/skips** in 155.892 seconds. Reports:
+   `target/verification/run-p4qawltd`. The runtime includes pioneer acquisition
+   and quotes based on the retained original native claim. Subsequent edits
+   only correct UI-test selection and add tile-detail assertions.
+10. Docker run `20261120T165938Z-11b20b666196` selects TC96, TC112, TC114,
+    TC115, TC123, TC125, TC126, TC133, TC134, TC137, TC139, TC143, TC165,
+    TC169 and TC186 against that runtime. All **55 cases passed**, with zero
+    failures/errors/skips, in 1,036.420 seconds, including TC114/06 and all
+    four TC139 treasure scenarios. Additional TC112 assertions for native land
+    owner, favour and friendship were verified separately as described below.
+11. Right-panel run `20261120T170129Z-b75ecc36ba9d` failed one case in
+    60.934 seconds after 925.175 seconds waiting for the local lock. The panel
+    displayed the nation, favour and friendship correctly, but showed unowned
+    land: the old F103 identity fixture contained settlements without native
+    player participants. F103 now includes its three native participants from
+    the existing F106 scenario; the owner assertion remains unchanged. Only
+    TC112 uses this fixture. Rerun `20261120T171857Z-a362aa1b3859` passed
+    its one case, zero failures/errors/skips, in 73.325 seconds after 225.272
+    seconds waiting for the lock. It verifies the right-panel owner, favour and
+    friendship, as well as the existing visibility and Continue assertions.
+12. Fixed smoke `20261120T171708Z-e19fd26efdb8` passed all **23 checks**,
+    zero failures/errors/skips, in 287.393 seconds within the 420-second limit;
+    waiting for the local lock took 47.264 seconds separately. Reports are in
+    `target/verification/run-esqopr52`, with the fixed scenario/support selection
+    recorded in its manifest. Runtime source hashes still match both the final
+    model and smoke manifests; only the isolated F103 test fixture changed.
+13. Review covered shared model preconditions, clamped influence and ties,
+    missionary consumption, one penalty per attack, saved convert timing,
+    native defense and missionary immunity, title acquisition/release, retained
+    claims, and UI confirmation/cancellation. The final corrections are covered
+    by the passing model and UI selections above. Java files were formatted
+    with the shared Eclipse profile; the diff has no whitespace errors.
+14. Local acceptance covers base revision
+    `6118af37c21dc3836b04d5df44e7589df4e8065d` plus this task's working changes,
+    identified by the verification manifests. Runtime hashes match both final
+    model and smoke snapshots. Final documentation consistency passed all 14
+    checks; name audit found zero unexplained occurrences; strict MkDocs passed
+    in 6.45 seconds. This is
+    local acceptance, not full-regression or distribution-publication evidence.
+    Historical failed runs remain failed. The unrelated backlog reorder is
+    excluded from this task's commit.
+
 <a id="season-date-2026-11-20"></a>
 
 ## Season-first date — 2026-11-20

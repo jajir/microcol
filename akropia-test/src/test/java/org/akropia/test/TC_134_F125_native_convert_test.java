@@ -91,11 +91,11 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     private static final String RETURNED_EN = "A native convert returned to the local people after eight turns";
 
-    private static final String LABEL_0_EN = "Local convert of the Egyptians. Unassigned turns: 0 of 8.";
+    private static final String LABEL_0_EN = "Local convert of the Egyptians.";
 
-    private static final String LABEL_7_EN = "Local convert of the Egyptians. Unassigned turns: 7 of 8.";
+    private static final String LABEL_7_EN = "Local convert of the Egyptians.";
 
-    private static final String LABEL_1_CS = "Místní konvertita: Egypťané. Nepřiřazená kola: 1 z 8.";
+    private static final String LABEL_1_CS = "Místní konvertita: Egypťané.";
 
     private static final String ACQUIRED_CS = "Místní konvertita se připojil ke kolonii";
 
@@ -112,34 +112,23 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_the_fifth_nonhostile_update_delivers_a_convert_that_keeps_its_identity_across_continue()
+    void TC_01_saved_friendship_arrival_delivers_a_convert_that_keeps_identity_across_continue()
             throws Exception {
         WelcomePage.of(getContext()).loadGame();
-        final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final NativeMissionPage mission = new NativeMissionPage(getContext());
         final NativeConvertPage convert = new NativeConvertPage(getContext());
-        convert.loadMissionConvertFixture(FIXTURE, CONVERT_STATE, MISSIONARY_AT,
-                MISSIONARY_ID);
+        convert.loadFriendshipConvertFixture(FIXTURE);
         new FogPage(getContext()).centerFrontier();
-
-        visit.enterSettlement(MISSIONARY_AT, CAPITAL);
-        mission.startMissionChoice();
-        mission.confirmMission();
-        mission.verifyMissionEstablished(MISSIONARY_ID, CAPITAL, 0);
-        visit.verifyChooserClosed();
 
         // Four nonhostile updates advance the mission; the fifth one converts.
         final GamePage game = GamePage.of(getContext());
         for (int turn = 1; turn <= 4; turn++) {
             game.nextTurnAndCloseDialogs();
         }
-        mission.verifyMissionEstablished(MISSIONARY_ID, CAPITAL, 4);
         final ScreenTurnReport report = game.nextTurn().orElseThrow();
         report.verifyThatAtLeastOneEventMessageContains(ACQUIRED_EN);
         convert.captureReport("native-convert-acquired-en.png");
         report.close();
         convert.verifyConvertAcquired("AZTEC", 0, NEAREST_COLONY);
-        mission.verifyMissionEstablished(MISSIONARY_ID, CAPITAL, 0);
 
         // Save and Continue keep the convert and its native identity.
         game.exitToMenu();
@@ -149,55 +138,42 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_02_an_unassigned_convert_counts_each_owner_update_and_returns_on_the_eighth_across_continue()
+    void TC_02_an_unassigned_convert_remains_after_eight_turns_and_continue()
             throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeConvertPage convert = new NativeConvertPage(getContext());
         convert.loadConvertFixture(FIXTURE, MISSIONARY_AT, CONVERT_ID, 0);
         new FogPage(getContext()).centerFrontier();
-        convert.verifyUnassignedUpdates(0);
+        // The unit remains affiliated without a departure countdown.
         convert.verifyVisibleConvertLabel(LABEL_0_EN);
-
         final GamePage game = GamePage.of(getContext());
-        for (int turn = 1; turn <= 7; turn++) {
+        for (int turn = 0; turn < 8; turn++) {
             game.nextTurnAndCloseDialogs();
         }
-        convert.verifyUnassignedUpdates(7);
-        convert.verifyVisibleConvertLabel(LABEL_7_EN);
-
-        // Save and Continue keep the accumulated count; nothing is replayed.
+        convert.verifyUnassignedUpdates(0);
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        convert.verifyUnassignedUpdates(7);
-
-        // The eighth unassigned owner update returns the convert once.
-        final ScreenTurnReport report = GamePage.of(getContext()).nextTurn()
-                .orElseThrow();
-        report.verifyThatAtLeastOneEventMessageContains(RETURNED_EN);
-        convert.captureReport("native-convert-returned-en.png");
-        report.close();
-        convert.verifyConvertReturned();
+        convert.verifyUnassignedUpdates(0);
+        convert.verifyVisibleConvertLabel(LABEL_0_EN);
     }
 
     @Test
     @Tag("local")
-    void TC_03_czech_convert_label_names_the_nation_and_the_count()
-            throws Exception {
+    void TC_03_czech_convert_label_names_the_nation() throws Exception {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
         final NativeConvertPage convert = new NativeConvertPage(getContext());
         convert.loadConvertFixture(FIXTURE, MISSIONARY_AT, CONVERT_ID, 0);
         new FogPage(getContext()).centerFrontier();
-
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
-        convert.verifyUnassignedUpdates(1);
+        convert.verifyUnassignedUpdates(0);
         convert.verifyVisibleConvertLabel(LABEL_1_CS);
     }
 
     @Test
     @Tag("local")
-    void TC_04_a_convert_works_a_field_at_plus_one_and_a_brief_building_job_pauses_the_count_across_continue()
+    void TC_04_a_convert_keeps_field_bonus_and_building_job_across_continue()
             throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeConvertPage convert = new NativeConvertPage(getContext());
@@ -230,12 +206,12 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         people.verifyOutside(WORKER_ID);
         ColonyScreen.of(getContext(), COLONY_NAME).close();
         game.nextTurnAndCloseDialogs();
-        convert.verifyUnassignedUpdates(4);
+        convert.verifyUnassignedUpdates(3);
 
         // Save and Continue keep the same person, affiliation and count.
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        convert.verifyUnassignedUpdates(4);
+        convert.verifyUnassignedUpdates(3);
         convert.verifyUnassignedAtColony(WORKER_ID, "AZTEC", COLONY);
     }
 
@@ -291,17 +267,9 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
-        final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final NativeMissionPage mission = new NativeMissionPage(getContext());
         final NativeConvertPage convert = new NativeConvertPage(getContext());
-        convert.loadMissionConvertFixture(FIXTURE, CONVERT_STATE, MISSIONARY_AT,
-                MISSIONARY_ID);
+        convert.loadFriendshipConvertFixture(FIXTURE);
         new FogPage(getContext()).centerFrontier();
-
-        visit.enterSettlement(MISSIONARY_AT, CAPITAL);
-        mission.startMissionChoice();
-        mission.confirmMission();
-        mission.verifyMissionEstablished(MISSIONARY_ID, CAPITAL, 0);
 
         final GamePage game = GamePage.of(getContext());
         for (int turn = 1; turn <= 4; turn++) {
@@ -312,25 +280,6 @@ public class TC_134_F125_native_convert_test extends AbstractAkropiaTest {
         convert.captureReport("native-convert-acquired-cs.png");
         report.close();
         convert.verifyConvertAcquired("AZTEC", 0, NEAREST_COLONY);
-    }
-
-    @Test
-    @Tag("local")
-    void TC_08_czech_return_report_names_the_departure() throws Exception {
-        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
-        settings.setCzechLanguage();
-        settings.goBack().loadGame();
-        final NativeConvertPage convert = new NativeConvertPage(getContext());
-        convert.loadConvertFixture(FIXTURE, MISSIONARY_AT, CONVERT_ID, 7);
-        new FogPage(getContext()).centerFrontier();
-        convert.verifyUnassignedUpdates(7);
-
-        final ScreenTurnReport report = GamePage.of(getContext()).nextTurn()
-                .orElseThrow();
-        report.verifyThatAtLeastOneEventMessageContains(RETURNED_CS);
-        convert.captureReport("native-convert-returned-cs.png");
-        report.close();
-        convert.verifyConvertReturned();
     }
 
     @Test

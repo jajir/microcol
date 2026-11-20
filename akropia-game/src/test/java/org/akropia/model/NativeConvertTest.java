@@ -6,7 +6,6 @@ import static org.akropia.model.NativeRelationsScene.at;
 import static org.akropia.model.NativeRelationsScene.island;
 import static org.akropia.model.NativeRelationsScene.settlement;
 
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -20,14 +19,6 @@ import org.akropia.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
 
-/**
- * The native convert (R-0149): the controlled conversion chance, the single
- * saved draw of each fifth nonhostile update, the no-colony skip without
- * banking, the saved identity and unassigned count, the eighth-update return
- * with its cleanup, the founding and manufacturing refusals, education that
- * keeps the identity, and rejected malformed saves. Colony-level cases (nearest
- * land route, production, assignment) are in NativeConvertColonyTest.
- */
 class NativeConvertTest {
 
     private static final int MISSIONARY_ID = 200;
@@ -101,50 +92,6 @@ class NativeConvertTest {
     }
 
     @Test
-    void theConversionChanceIsTenOrTwentyPercentDoubledBySepulveda() {
-        assertEquals(0.10, NativeConversion.chance(false, false), 1e-12);
-        assertEquals(0.20, NativeConversion.chance(true, false), 1e-12);
-        assertEquals(0.20, NativeConversion.chance(false, true), 1e-12);
-        assertEquals(0.40, NativeConversion.chance(true, true), 1e-12);
-    }
-
-    @Test
-    void onlyTheFifthNonhostileUpdateDrawsTheSavedRandomnessOnce() {
-        final Model model = missionScene();
-        establish(model);
-        final Player dutch = model.getPlayerByName(DUTCH);
-        final long before = randomState(model);
-        for (int update = 0; update < 4; update++) {
-            missionUpdate(model, dutch);
-            assertEquals(before, randomState(model));
-        }
-        missionUpdate(model, dutch);
-        assertEquals(before + DRAW_STEP, randomState(model));
-        // Reopening and Continue read the saved state and draw nothing.
-        assertEquals(before + DRAW_STEP, randomState(reload(model)));
-    }
-
-    /**
-     * The fifth event consumes its draw even when no owned colony can receive a
-     * successful convert, so the skip banks nothing and creates nobody. The
-     * island has no Dutch colony at all.
-     */
-    @Test
-    void aSuccessWithoutAReachableColonyCreatesNothingAndBanksNothing() {
-        final Model model = missionScene();
-        establish(model);
-        final Player dutch = model.getPlayerByName(DUTCH);
-        final Set<Integer> baseline = unitIds(dutch);
-        for (int update = 0; update < 10; update++) {
-            missionUpdate(model, dutch);
-        }
-        // Inherited units stay; no convert appears and no success is banked.
-        assertEquals(baseline, unitIds(dutch));
-        assertFalse(convertOf(model).isNativeConvert());
-        assertEquals(0, settlement(model).getMissionUpdates());
-    }
-
-    @Test
     void aConvertKeepsItsNativeNationAndCountAcrossSaveAndContinue() {
         final Model model = convertScene(3);
         final Model restored = reload(model);
@@ -156,36 +103,28 @@ class NativeConvertTest {
     }
 
     @Test
-    void aConvertReturnsOnTheEighthUnassignedOwnerUpdateOnly() {
+    void anUnassignedConvertRemainsAfterManyOwnerUpdates() {
         final Model model = convertScene(0);
         final Player dutch = model.getPlayerByName(DUTCH);
-        final Set<Integer> withConvert = unitIds(dutch);
-        final Set<Integer> withoutConvert = new HashSet<>(withConvert);
-        withoutConvert.remove(CONVERT_ID);
-        for (int update = 1; update <= 7; update++) {
+        final Set<Integer> before = unitIds(dutch);
+        for (int update = 0; update < 80; update++) {
             model.advanceNativeConverts(dutch);
-            assertTrue(model.tryGetUnitById(CONVERT_ID).isPresent(),
-                    "Expired too early at update " + update);
         }
-        assertEquals(7, convertOf(model).getConvertUnassignedUpdates());
-        model.advanceNativeConverts(dutch);
-        assertTrue(model.tryGetUnitById(CONVERT_ID).isEmpty());
-        // Only the convert leaves; unrelated inherited units remain.
-        assertEquals(withoutConvert, unitIds(dutch));
-        // The return happened once; a later update finds nobody to return.
-        model.advanceNativeConverts(dutch);
-        assertEquals(withoutConvert, unitIds(dutch));
+        assertEquals(before, unitIds(dutch));
+        assertTrue(convertOf(model).isNativeConvert());
+        assertEquals(before, unitIds(reload(model).getPlayerByName(DUTCH)));
     }
 
     @Test
-    void aSavedAccumulatedCountSurvivesContinueAndStillExpiresOnTheEighth() {
+    void aSavedConvertRemainsAfterContinueAndFurtherUpdates() {
         final Model restored = reload(convertScene(5));
         final Player dutch = restored.getPlayerByName(DUTCH);
-        restored.advanceNativeConverts(dutch);
-        restored.advanceNativeConverts(dutch);
-        assertTrue(restored.tryGetUnitById(CONVERT_ID).isPresent());
-        restored.advanceNativeConverts(dutch);
-        assertTrue(restored.tryGetUnitById(CONVERT_ID).isEmpty());
+        for (int update = 0; update < 40; update++) {
+            restored.advanceNativeConverts(dutch);
+        }
+        assertTrue(convertOf(restored).isNativeConvert());
+        assertEquals(Optional.of(NativeNation.AZTEC),
+                convertOf(restored).getConvertNation());
     }
 
     /**
@@ -257,27 +196,16 @@ class NativeConvertTest {
                 .isWorkAllowed(convert, ConstructionType.LUMBER_MILL));
     }
 
-    /**
-     * A convert in a native course is unassigned and keeps counting. At the
-     * eighth update it leaves through the shared cleanup, the settlement drops
-     * its pupil and a later teaching update finds nothing dangling.
-     */
     @Test
-    void anExpiringPupilLeavesNoCourseBehind() {
+    void aConvertCannotStartRetiredNativeTeaching() {
         final Model model = convertScene(7);
-        final Player dutch = model.getPlayerByName(DUTCH);
         final NativeSettlement site = settlement(model);
-        model.startNativeTeaching(convertOf(model), site,
-                site.getTeachableSkill());
-        assertTrue(convertOf(model).isAtPlaceNativeCourse());
-
-        model.advanceNativeConverts(dutch);
-
-        assertTrue(model.tryGetUnitById(CONVERT_ID).isEmpty());
-        assertTrue(site.getTeachingPupilId().isEmpty());
-        // The teaching update and Continue must not meet a missing pupil.
-        model.advanceNativeTeaching(dutch);
-        assertTrue(reload(model).tryGetUnitById(CONVERT_ID).isEmpty());
+        final Gson gson = new Gson();
+        final var before = gson.toJsonTree(model.save());
+        assertThrows(IllegalStateException.class,
+                () -> model.startNativeTeaching(convertOf(model), site,
+                        site.getTeachableSkill()));
+        assertEquals(before, gson.toJsonTree(model.save()));
     }
 
     @Test

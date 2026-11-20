@@ -64,6 +64,11 @@ public class TC_112_F103_native_settlement_identity_test
         fog.verifyNativeSettlementKnown(AZTEC_CAPITAL, NativeNation.AZTEC,
                 true);
         fog.verifyStatusBarContains("Local capital: Egyptians, city.");
+        // The selected tile also explains its owner and national relationship.
+        game.selectTile(AZTEC_CAPITAL);
+        fog.verifyTileDetailsContain("Land owner: Egyptians");
+        fog.verifyTileDetailsContain("Favour towards Corinth: 5/10");
+        fog.verifyTileDetailsContain("No friend");
         fog.saveMapEvidence("TC_112-capital.png");
         fog.verifyNativeSettlementPixels(AZTEC_CAPITAL, AZTEC_FILL, true);
 

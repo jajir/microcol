@@ -67,6 +67,8 @@ final class NativeTurnScene {
         po.setNativeSettlements(settlements);
         po.setNativeSettlementKnowledge(new ArrayList<>());
         po.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        po.setNativeFriendships(org.akropia.model.NativeFriendships.fresh());
+        po.setLandOwnership(java.util.List.of());
         po.setNativeLandRights(new ArrayList<>());
         po.setNativeLandTakings(new ArrayList<>());
     }
@@ -111,6 +113,14 @@ final class NativeTurnScene {
     }
 
     /** Saved tribal anger of a nation toward a European, as given. */
+    NativeTurnScene favour(final NativeNation nation,
+            final EuropeanNation european, final int value) {
+        po.getNativeFriendships().stream()
+                .filter(row -> row.getNation() == nation)
+                .forEach(row -> row.getFavour().put(european, value));
+        return this;
+    }
+
     NativeTurnScene anger(final NativeNation nation,
             final EuropeanNation european, final double value) {
         for (final NativeTribalAngerPo entry : po.getNativeTribalAnger()) {

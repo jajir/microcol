@@ -75,7 +75,7 @@
 	<entry key="nativeLandTitle">Local land</entry>
 	<entry key="nativeLandClaimedBy">This square is claimed by: %s.</entry>
 	<entry key="nativeLandPrice">Price: %s gold. You have %s gold.</entry>
-	<entry key="nativeLandConsequence">If you use it without paying, the settlement's alarm toward you rises by 5 once at the first use and by 2 each turn while the square stays in use.</entry>
+	<entry key="nativeLandConsequence">Purchased land remains yours even if relations change.</entry>
 	<entry key="nativeLandPay">Pay and continue</entry>
 	<entry key="nativeLandProceed">Continue unpaid</entry>
 	<entry key="nativeLandCancel">Cancel</entry>
@@ -132,7 +132,7 @@
 	<entry key="nativeAttackDefenders">Defenders on the square: %d. Settlement defense: +%d%%. First battle: your strength %d against %d, chance to win %d%%.</entry>
 	<entry key="nativeAttackSpanishBonus">Spanish attack bonus: +%d%%. It applies to this native settlement attack only.</entry>
 	<entry key="nativeAttackNoSpanish">No Spanish attack bonus applies.</entry>
-	<entry key="nativeAttackRelations">If the attack is carried out, the local people's anger and this settlement's alarm toward your nation rise. A conquest raises them further.</entry>
+	<entry key="nativeAttackRelations">An attack lowers this nation’s favour towards you by 3, whoever wins.</entry>
 	<entry key="nativeAttackConfirmButton">Attack</entry>
 	<entry key="nativeAttackBackButton">Back</entry>
 	<entry key="nativeAttackConquered">You overcame %d defender(s) and conquered the settlement.</entry>
@@ -238,9 +238,10 @@
 	<entry key="nativeChiefRepeatInformation">The chief repeats the same information. Goods for sale: %s. Goods wanted: %s. Teachable skill: %s. The land within two squares is marked on your map.</entry>
 	<entry key="nativeChiefNone">none</entry>
 	<entry key="nativeChiefRejected">The chief visit changed, so nothing happened.</entry>
-	<entry key="nativeMissionTitle">Establish a mission</entry>
-	<entry key="nativeMissionLine">Owner: %s. Missionary: %s. The local peoples are %s. Progress: %d of %d updates. Each update lowers their alarm toward you by 2, or by 4 for an expert, and raises the alarm of each rival they know by 1.</entry>
-	<entry key="nativeMissionConfirmButton">Establish</entry>
+	<entry key="nativeMissionTitle">Send missionary</entry>
+	<entry key="nativeMissionLine">The missionary is consumed after this visit. National favour changes once:
+%s</entry>
+	<entry key="nativeMissionConfirmButton">Send missionary</entry>
 	<entry key="nativeMissionBackButton">Back</entry>
 	<entry key="nativeMissionOrdinary">ordinary</entry>
 	<entry key="nativeMissionExpert">expert</entry>
@@ -294,7 +295,7 @@
     <entry key="unitsPanel_treasureValue">Treasure value: %d gold</entry>
     <entry key="unitsPanel_occupiedHolds">Occupied holds: %d</entry>
     <entry key="unitsPanel_continental">Military role: Continental</entry>
-    <entry key="unitsPanel_convert">Local convert of the %s. Unassigned turns: %s of 8.</entry>
+    <entry key="unitsPanel_convert">Local convert of the %s.</entry>
     <entry key="unitsPanel_royal">Military role: Soldier of the mother city</entry>
     <entry key="selectedShipCargo">Selected ship cargo · #%s</entry>
     <entry key="selectShipCargo">Select a ship to see its cargo</entry>
@@ -322,4 +323,10 @@
     <entry key="close">Close</entry>
     <entry key="nativeLandChoose">Choose an option</entry>
     <entry key="expeditionCalendarIntro">Around 1000 BC. Year 1 begins with your expedition. One round is one day; twelve months of seven days make a year. Greek month names are a historical inspiration.</entry>
+	<entry key="nativeFavour">Favour towards %s: %d/10</entry>
+	<entry key="nativeFriend">Friend: %s</entry>
+	<entry key="nativeNoFriend">No friend</entry>
+	<entry key="landOwner">Land owner: %s</entry>
+	<entry key="landUnowned">Unowned land</entry>
+    <entry key="nativeLandUnavailable">You cannot use this land: it belongs to another player or to a hostile native nation.</entry>
 </properties>

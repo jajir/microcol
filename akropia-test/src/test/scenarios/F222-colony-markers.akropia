@@ -823,7 +823,9 @@
     ],
     "nextColonyId": 12,
     "nativeSettlementKnowledge": [],
-    "nativeTribalAnger": [
+    "landOwnership":[{"location":{"x":20,"y":10},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":24,"y":10},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":28,"y":10},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":20,"y":13},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":24,"y":13},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":28,"y":13},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":20,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":24,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":28,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":20,"y":19},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":24,"y":19},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":28,"y":19},"owner":"Dutch","nativeClaim":null,"purchased":false}],
+  "nativeFriendships": [{"nation": "ARAWAK", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "AZTEC", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "INCA", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "TUPI", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "CHEROKEE", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "IROQUOIS", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "SIOUX", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "APACHE", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}],
+  "nativeTribalAnger": [
       {
         "nation": "ARAWAK",
         "european": "DUTCH",

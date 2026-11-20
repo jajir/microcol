@@ -404,62 +404,6 @@ class LaborReportTest {
     }
 
     @Test
-    void aNativeCourseNamesItsSettlementOnlyOnceTheOwnerHasLearnedIt() {
-        final Model model = NativeRelationsScene.island(NativeNation.AZTEC)
-                .unit(NativeRelationsScene.DUTCH, UnitType.COLONIST,
-                        NativeRelationsScene.at(1, 0),
-                        NativeRelationsScene.UNARMED)
-                .toModel();
-        final Unit pupil = model.getUnitById(NATIVE_PERSON_ID);
-        final NativeSettlement site = NativeRelationsScene.settlement(model);
-        model.startNativeTeaching(pupil, site, site.getTeachableSkill());
-
-        // The pupil stood beside the settlement, so the owner really learned it
-        // by sight; the course names it and the jump is allowed.
-        final LaborLocation known = nativePlace(model);
-        assertEquals(Kind.NATIVE_COURSE, known.getKind());
-        assertEquals(site.getId(),
-                known.getNativeSettlement().orElseThrow().getId());
-        assertEquals(site.getLocation(), known.getLocation().orElseThrow());
-        assertTrue(known.isNavigable());
-
-        // A saved course whose settlement was never learned reveals nothing.
-        final LaborLocation unknown = nativePlace(
-                withoutLearnedSettlements(model));
-        assertEquals(Kind.NATIVE_COURSE, unknown.getKind());
-        assertTrue(unknown.getNativeSettlement().isEmpty());
-        assertTrue(unknown.getLocation().isEmpty());
-        assertFalse(unknown.isNavigable());
-    }
-
-    @Test
-    void aNativeMissionNamesItsSettlementOnlyOnceTheOwnerHasLearnedIt() {
-        final Model model = NativeRelationsScene.island(NativeNation.AZTEC)
-                .unit(NativeRelationsScene.DUTCH, UnitType.COLONIST,
-                        NativeRelationsScene.at(1, 0),
-                        unit -> unit.setMissionary(true))
-                .toModel();
-        final Unit missionary = model.getUnitById(NATIVE_PERSON_ID);
-        final NativeSettlement site = NativeRelationsScene.settlement(model);
-        model.establishNativeMission(missionary, site,
-                model.getNativeMissionPreview(missionary, site).orElseThrow());
-
-        final LaborLocation known = nativePlace(model);
-        assertEquals(Kind.NATIVE_MISSION, known.getKind());
-        assertEquals(site.getId(),
-                known.getNativeSettlement().orElseThrow().getId());
-        assertEquals(site.getLocation(), known.getLocation().orElseThrow());
-        assertTrue(known.isNavigable());
-
-        final LaborLocation unknown = nativePlace(
-                withoutLearnedSettlements(model));
-        assertEquals(Kind.NATIVE_MISSION, unknown.getKind());
-        assertTrue(unknown.getNativeSettlement().isEmpty());
-        assertTrue(unknown.getLocation().isEmpty());
-        assertFalse(unknown.isNavigable());
-    }
-
-    @Test
     void aPersonTakenByAnotherNationLeavesTheReportAtOnce() {
         final Model model = load(placedData());
         final LaborReport before = model.getLaborReport(france(model));

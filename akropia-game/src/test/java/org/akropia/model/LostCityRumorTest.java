@@ -255,8 +255,9 @@ class LostCityRumorTest {
         assertFalse(notice.isDeSotoAverted(), label);
         assertEquals(afterDraws(seed, expected == Outcome.GOLD ? 2 : 1),
                 randomState(model), label);
-        assertEquals(0.0, model.getNativeTribalAnger(dutch, NativeNation.AZTEC)
-                - (expected == Outcome.BURIAL ? 30 : 0), EXACT, label);
+        assertEquals(expected == Outcome.BURIAL ? 2 : 5,
+                model.getNativeFavour(NativeNation.AZTEC, EuropeanNation.DUTCH),
+                label);
         switch (expected) {
         case GOLD:
             final int amount = 200 + (int) (roll(seed, 2) * 301);
@@ -296,10 +297,8 @@ class LostCityRumorTest {
             assertEquals(0.0,
                     model.getNativeLocalAlarm(dutch, settlement(model)), EXACT,
                     label);
-            assertEquals(0.0,
-                    model.getNativeTribalAnger(model.getPlayerByName(FRANCE),
-                            NativeNation.AZTEC),
-                    EXACT, label);
+            assertEquals(5, model.getNativeFavour(NativeNation.AZTEC,
+                    EuropeanNation.FRENCH), EXACT, label);
             break;
         default:
             assertEquals(gold, dutch.getGold(), label);
@@ -676,9 +675,11 @@ class LostCityRumorTest {
 
         step(model, scout(model), RUMOR);
 
-        assertEquals(30.0, model.getNativeTribalAnger(dutch, NativeNation.INCA),
+        assertEquals(2,
+                model.getNativeFavour(NativeNation.INCA, EuropeanNation.DUTCH),
                 EXACT);
-        assertEquals(0.0, model.getNativeTribalAnger(dutch, NativeNation.AZTEC),
+        assertEquals(5,
+                model.getNativeFavour(NativeNation.AZTEC, EuropeanNation.DUTCH),
                 EXACT);
         assertEquals(0.0, model.getNativeLocalAlarm(dutch,
                 model.getNativeSettlements().get(1)), EXACT);
@@ -714,17 +715,19 @@ class LostCityRumorTest {
                     : NativeNation.AZTEC;
             final NativeNation other = index == 1 ? NativeNation.AZTEC
                     : NativeNation.INCA;
-            assertEquals(30.0, model.getNativeTribalAnger(dutch, expected),
+            assertEquals(2,
+                    model.getNativeFavour(expected, EuropeanNation.DUTCH),
                     EXACT, "seed " + seed);
-            assertEquals(0.0, model.getNativeTribalAnger(dutch, other), EXACT,
-                    "seed " + seed);
+            assertEquals(5, model.getNativeFavour(other, EuropeanNation.DUTCH),
+                    EXACT, "seed " + seed);
             assertEquals(afterDraws(seed, 2), randomState(model),
                     "seed " + seed);
             assertEquals(expected, notices(model).get(0).getNation());
             // The choice is saved once: neither Continue nor a turn redraws it.
             final Model restored = reload(model);
-            assertEquals(30.0, restored.getNativeTribalAnger(
-                    restored.getPlayerByName(DUTCH), expected), EXACT);
+            assertEquals(2,
+                    restored.getNativeFavour(expected, EuropeanNation.DUTCH),
+                    EXACT);
             assertEquals(randomState(model), randomState(restored));
         }
         assertTrue(chosen[0] > 0 && chosen[1] > 0 && chosen[2] > 0,
@@ -744,7 +747,7 @@ class LostCityRumorTest {
         step(model, scout(model), RUMOR);
 
         for (final NativeNation nation : NativeNation.values()) {
-            assertEquals(0.0, model.getNativeTribalAnger(dutch(model), nation),
+            assertEquals(5, model.getNativeFavour(nation, EuropeanNation.DUTCH),
                     EXACT);
         }
         final TurnEventLostCityRumor notice = notices(model).get(0);
@@ -771,8 +774,8 @@ class LostCityRumorTest {
 
         assertEquals(List.of(1L, 7L, 8L, 9L),
                 model.save().getNativeRelationOutcomeIds());
-        assertEquals(60.0,
-                model.getNativeTribalAnger(dutch(model), NativeNation.AZTEC),
+        assertEquals(1,
+                model.getNativeFavour(NativeNation.AZTEC, EuropeanNation.DUTCH),
                 EXACT);
         assertEquals(2, notices(model).size());
         // Continue and a later turn apply neither burial again.
@@ -795,8 +798,8 @@ class LostCityRumorTest {
             assertTrue(notice.isDeSotoAverted(), "" + drawn);
             assertTrue(model.isUnitInGame(scout(model)), "" + drawn);
             assertEquals(units, model.getAllUnits().size(), "" + drawn);
-            assertEquals(0.0, model.getNativeTribalAnger(dutch(model),
-                    NativeNation.AZTEC), EXACT, "" + drawn);
+            assertEquals(5, model.getNativeFavour(NativeNation.AZTEC,
+                    EuropeanNation.DUTCH), EXACT, "" + drawn);
             assertTrue(model.save().getNativeRelationOutcomeIds().isEmpty());
             assertFalse(model.getMap().hasLostCityRumorAt(RUMOR));
             assertEquals(afterDraws(seed, 1), randomState(model));

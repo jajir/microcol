@@ -257,7 +257,9 @@
       }
     ],
     "nativeSettlementKnowledge": [],
-    "nativeTribalAnger": [
+    "landOwnership":[{"location":{"x":26,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":25,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":28,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false},{"location":{"x":27,"y":16},"owner":"Dutch","nativeClaim":null,"purchased":false}],
+  "nativeFriendships": [{"nation": "ARAWAK", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "AZTEC", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "INCA", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "TUPI", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "CHEROKEE", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "IROQUOIS", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "SIOUX", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}, {"nation": "APACHE", "favour": {"DUTCH": 5, "FRENCH": 5, "ENGLISH": 5, "SPANISH": 5}, "elapsed": 0, "arrival": 0}],
+  "nativeTribalAnger": [
       {
         "nation": "ARAWAK",
         "european": "DUTCH",

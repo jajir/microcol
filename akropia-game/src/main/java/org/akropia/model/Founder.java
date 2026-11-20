@@ -31,4 +31,11 @@ public enum Founder {
     public Category getCategory() {
         return category;
     }
+
+    /** Founders whose effects exist in the current rules. */
+    public boolean isAvailable() {
+        return this != PETER_MINUIT && this != POCAHONTAS
+                && this != JUAN_DE_SEPULVEDA;
+    }
+
 }

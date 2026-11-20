@@ -109,6 +109,8 @@ class NativeConvertColonyTest {
                 List.of(settlement(0, NativeNation.AZTEC, site))));
         po.setNativeSettlementKnowledge(new ArrayList<>());
         po.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        po.setNativeFriendships(org.akropia.model.NativeFriendships.fresh());
+        po.setLandOwnership(java.util.List.of());
         po.setNativeLandRights(new ArrayList<>());
         po.setNativeLandTakings(new ArrayList<>());
         final int id = po.getUnits().stream().mapToInt(UnitPo::getId).max()
@@ -268,6 +270,32 @@ class NativeConvertColonyTest {
                 model.getNativeMissionPreview(missionary, site).orElseThrow());
     }
 
+    @Test
+    void friendshipDeliversOneConvertPerFortyNativeTurnsAcrossContinue() {
+        Model model = build(1, TIE, NO_FOUNDERS, false, FAR_LAND, po -> {
+            po.getNativeFriendships().stream()
+                    .filter(row -> row.getNation() == NativeNation.AZTEC)
+                    .forEach(row -> {
+                        row.getFavour().put(EuropeanNation.DUTCH, 8);
+                        row.setFriend(EuropeanNation.DUTCH);
+                    });
+        });
+        assertTrue(convertsOf(model).isEmpty());
+        for (int turn = 1; turn <= 80; turn++) {
+            model.updateNativeFriendship(NativeNation.AZTEC);
+            assertTrue(convertsOf(model).size() <= (turn <= 40 ? 1 : 2));
+            if (turn == 17 || turn == 53) {
+                model = reload(model);
+            }
+            if (turn == 40 || turn == 80) {
+                assertEquals(turn / 40, convertsOf(model).size());
+                assertTrue(convertsOf(model).stream()
+                        .allMatch(unit -> unit.getConvertNation()
+                                .equals(Optional.of(NativeNation.AZTEC))));
+            }
+        }
+    }
+
     private static Model reload(final Model model) {
         return Model.make(model.save(), EVALUATORS);
     }
@@ -311,94 +339,6 @@ class NativeConvertColonyTest {
         assertEquals(expected, convertsAfterFifth(seed, founders, jesuit),
                 "draw in [" + low + ", " + high + ") founders=" + founders
                         + " jesuit=" + jesuit);
-    }
-
-    /**
-     * Exact ordinary 10%, expert 20%, Sepulveda 20% and 40% edges, and the
-     * expertise applying once even when a Jesuit also has Brebeuf.
-     */
-    @Test
-    void theConversionChanceHasTheExactTenTwentyTwentyAndFortyPercentEdges() {
-        assertConversion(0.099, 0.100, NO_FOUNDERS, false, true);
-        assertConversion(0.100, 0.101, NO_FOUNDERS, false, false);
-
-        assertConversion(0.199, 0.200, NO_FOUNDERS, true, true);
-        assertConversion(0.200, 0.201, NO_FOUNDERS, true, false);
-
-        assertConversion(0.199, 0.200, BREBEUF, false, true);
-        assertConversion(0.200, 0.201, BREBEUF, false, false);
-
-        assertConversion(0.199, 0.200, SEPULVEDA, false, true);
-        assertConversion(0.200, 0.201, SEPULVEDA, false, false);
-
-        assertConversion(0.399, 0.400, SEPULVEDA, true, true);
-        assertConversion(0.400, 0.401, SEPULVEDA, true, false);
-
-        assertConversion(0.399, 0.400, BOTH, false, true);
-        assertConversion(0.400, 0.401, BOTH, false, false);
-
-        // Brebeuf on a Jesuit is not a second multiplier.
-        assertConversion(0.199, 0.200, BREBEUF, true, true);
-        assertConversion(0.200, 0.201, BREBEUF, true, false);
-    }
-
-    /**
-     * The founder is read live when the fifth event happens, not when the
-     * mission was established: the same position fails without a change and
-     * succeeds after Brebeuf or Sepulveda joined, even across Continue.
-     */
-    @Test
-    void founderMembershipIsReadAtTheEventAndSurvivesContinue() {
-        final long seed = seedDrawing(0.15, 0.16);
-
-        final Model unchanged = establishedAfterFourUpdates(seed);
-        missionUpdate(unchanged);
-        assertTrue(convertsOf(unchanged).isEmpty());
-
-        final Model withBrebeuf = reloadWith(establishedAfterFourUpdates(seed),
-                BREBEUF);
-        missionUpdate(withBrebeuf);
-        assertEquals(1, convertsOf(withBrebeuf).size());
-
-        final Model withSepulveda = reloadWith(
-                establishedAfterFourUpdates(seed), SEPULVEDA);
-        missionUpdate(withSepulveda);
-        assertEquals(1, convertsOf(withSepulveda).size());
-    }
-
-    /**
-     * The owner update settles Congress before the mission clock reads the
-     * chance (Player.finishTurnPreparation), so a draw of 15 % fails the
-     * ordinary 10 % but passes Sepulveda's 20 % in the same fifth event. The
-     * fifth update closes the cycle, so the count restarts at zero either way.
-     */
-    @Test
-    void sepulvedaJoiningThroughOwnerUpdateDoublesTheSameFifthEvent() {
-        final long seed = seedDrawing(0.15, 0.16);
-        final Model unchanged = establishedAfterFourUpdates(seed);
-        assertTrue(dutch(unchanged).startTurn());
-        assertFalse(dutch(unchanged).getCongressMembers()
-                .contains(Founder.JUAN_DE_SEPULVEDA));
-        assertEquals(0,
-                unchanged.getNativeSettlements().get(0).getMissionUpdates());
-        assertTrue(convertsOf(unchanged).isEmpty());
-
-        final ModelPo saved = establishedAfterFourUpdates(seed).save();
-        RealFounderJoin.readyFor(RealFounderJoin.congressOf(saved, DUTCH_NAME),
-                Founder.JUAN_DE_SEPULVEDA);
-        final Model model = Model.make(saved, EVALUATORS);
-        RealFounderJoin.joinThroughOwnerUpdate(model,
-                Founder.JUAN_DE_SEPULVEDA);
-        assertEquals(0,
-                model.getNativeSettlements().get(0).getMissionUpdates());
-        assertEquals(1, convertsOf(model).size());
-
-        final Model resumed = reload(model);
-        assertEquals(1, convertsOf(resumed).size());
-        assertEquals(0,
-                resumed.getNativeSettlements().get(0).getMissionUpdates());
-        assertTrue(dutch(resumed).getCongressMembers()
-                .contains(Founder.JUAN_DE_SEPULVEDA));
     }
 
     private static Model establishedAfterFourUpdates(final long seed) {
@@ -596,113 +536,28 @@ class NativeConvertColonyTest {
         assertEquals(before, gson.toJsonTree(model.save()));
     }
 
-    /**
-     * A convert in the cargo of a ship in transit still counts every owner
-     * update, keeps its place and count through Continue, and at the eighth
-     * update leaves the ship's cargo slot empty with no dangling passenger.
-     */
     @Test
-    void aConvertInCargoAndTransitCountsAndLeavesNoDanglingPassenger() {
+    void aConvertRemainsInCargoAcrossUpdatesAndContinue() {
         final Model model = build(1, TIE, NO_FOUNDERS, false, FAR_LAND,
                 po -> asConvert(po.getUnits().stream()
                         .filter(unit -> unit.getId() == PASSENGER).findFirst()
                         .orElseThrow(), 5));
-        assertTrue(model.getUnitById(PASSENGER).isAtCargoSlot());
         assertTrue(model.getUnitById(GALLEON).isAtHighSea());
-
         final Model restored = reload(model);
-        UnitFreeColonist convert = (UnitFreeColonist) restored
-                .getUnitById(PASSENGER);
-        assertTrue(convert.isAtCargoSlot());
-        assertEquals(5, convert.getConvertUnassignedUpdates());
-        restored.advanceNativeConverts(dutch(restored));
-        restored.advanceNativeConverts(dutch(restored));
-        convert = (UnitFreeColonist) restored.getUnitById(PASSENGER);
-        assertEquals(7, convert.getConvertUnassignedUpdates());
-        assertTrue(convert.isAtCargoSlot());
-
-        restored.advanceNativeConverts(dutch(restored));
-
-        assertTrue(restored.tryGetUnitById(PASSENGER).isEmpty());
         final UnitWithCargo galleon = (UnitWithCargo) restored
                 .getUnitById(GALLEON);
-        assertTrue(galleon.getCargo().getSlots().stream()
-                .noneMatch(slot -> slot.getUnit()
-                        .map(unit -> unit.getId() == PASSENGER).orElse(false)));
-        assertEquals(3, galleon.getCargo().getSlots().stream()
-                .filter(CargoSlot::isLoadedUnit).count());
-        // The saved game has no reference to the removed person.
-        assertTrue(reload(restored).tryGetUnitById(PASSENGER).isEmpty());
-    }
-
-    /**
-     * Real owner turns: the fifth update of a mission acquires one convert that
-     * starts at zero, the report is stored, Continue keeps the person, work
-     * pauses the count without resetting it, and leaving the job resumes it
-     * across Continue.
-     */
-    @Test
-    void realOwnerTurnsAcquirePauseAndResumeAcrossContinue() {
-        // Other events may take draws first; several successes in a row keep
-        // the conversion deterministic whichever of them comes first.
-        final long seed = seedWithSuccesses(0.10, 6);
-        Model model = build(seed, REMOTE, NO_FOUNDERS, false, REMOTE_MISSIONARY,
-                NO_EDIT);
-        establishReal(model);
-        for (int round = 0; round < 4; round++) {
-            ownerRound(model);
+        final long passengerCount = galleon.getCargo().getSlots().stream()
+                .filter(CargoSlot::isLoadedUnit).count();
+        for (int update = 0; update < 80; update++) {
+            restored.advanceNativeConverts(dutch(restored));
         }
-        final NativeSettlement site = model.getNativeSettlements().get(0);
-        assertEquals(4, site.getMissionUpdates());
-        assertTrue(convertsOf(model).isEmpty());
-
-        // The fifth owner update acquires the convert after the unit phase.
-        ownerRound(model);
-        assertEquals(0, site.getMissionUpdates());
-        assertEquals(1, convertsOf(model).size());
-        UnitFreeColonist convert = convertsOf(model).get(0);
-        final int id = convert.getId();
-        assertEquals(0, convert.getConvertUnassignedUpdates());
-        assertEquals(Optional.of(NativeNation.AZTEC),
-                convert.getConvertNation());
-        assertEquals(model.getColonyById(HAARLEM).orElseThrow().getLocation(),
-                convert.getLocation());
-        assertTrue(model.getTurnEventsLocalizedMessages(dutch(model)).stream()
-                .anyMatch(event -> event instanceof TurnEventNativeConvert
-                        && ((TurnEventNativeConvert) event)
-                                .getKind() == TurnEventNativeConvert.Kind.ACQUIRED));
-
-        // Continue keeps the person and its affiliation; an unassigned owner
-        // update then counts one.
-        model = reload(model);
-        convert = (UnitFreeColonist) model.getUnitById(id);
-        assertEquals(Optional.of(NativeNation.AZTEC),
-                convert.getConvertNation());
-        assertEquals(0, convert.getConvertUnassignedUpdates());
-        ownerRound(model);
-        assertEquals(1, ((UnitFreeColonist) model.getUnitById(id))
-                .getConvertUnassignedUpdates());
-
-        // Work pauses the count without resetting it, across Continue too.
-        final Colony haarlem = model.getColonyById(HAARLEM).orElseThrow();
-        convert = (UnitFreeColonist) model.getUnitById(id);
-        final Unit worker = convert;
-        final ColonyField field = haarlem.getColonyFields().stream().filter(
-                candidate -> candidate.canAccept(worker, GoodsType.GRAIN))
-                .findFirst().orElseThrow();
-        convert.setActionPoints(convert.getSpeed());
-        convert.placeToColonyField(field, GoodsType.GRAIN);
-        ownerRound(model);
-        model = reload(model);
-        ownerRound(model);
-        convert = (UnitFreeColonist) model.getUnitById(id);
-        assertTrue(convert.isAtPlaceColonyField());
-        assertEquals(1, convert.getConvertUnassignedUpdates());
-
-        // Leaving the job resumes the same count.
-        convert.placeToLocation(haarlem.getLocation());
-        ownerRound(model);
-        assertEquals(2, ((UnitFreeColonist) model.getUnitById(id))
-                .getConvertUnassignedUpdates());
+        assertTrue(restored.getUnitById(PASSENGER).isAtCargoSlot());
+        assertTrue(galleon.getCargo().getSlots().stream()
+                .anyMatch(slot -> slot.getUnit()
+                        .map(unit -> unit.getId() == PASSENGER).orElse(false)));
+        assertEquals(passengerCount, galleon.getCargo().getSlots().stream()
+                .filter(CargoSlot::isLoadedUnit).count());
+        assertTrue(reload(restored).getUnitById(PASSENGER).isAtCargoSlot());
     }
+
 }

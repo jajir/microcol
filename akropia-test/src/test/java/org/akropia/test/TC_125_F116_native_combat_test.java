@@ -57,9 +57,9 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
     private static final double HILL_ODDS = 3.0 / 5.0;
 
     private static final String LOSS_EN = "A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed colonist loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.";
-    private static final String ANGER_EN = "Attacking a native brave raises the anger of its nation toward you, whoever wins.";
+    private static final String ANGER_EN = "Attacking a native brave lowers its nation’s favour towards you by 3, whoever wins.";
     private static final String LOSS_CS = "Poražený místní bojovník je zničen i s výstrojí. Poražený neozbrojený kolonista zahyne a nebude zajat. Ozbrojený kolonista ztratí koně nebo zbraně; dělo se nejprve poškodí. Oba účastníci spotřebují zbývající pohyb.";
-    private static final String ANGER_CS = "Útok na místního bojovníka zvýší hněv jeho národa vůči vám, ať zvítězí kdokoli.";
+    private static final String ANGER_CS = "Útok na domorodého bojovníka sníží přízeň jeho národa vůči vám o 3, ať zvítězí kdokoli.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -100,8 +100,7 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         // Cancelling leaves units, movement, random state and relations alone.
         attack.cancel();
         attack.verifyGameplayUnchanged();
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                0);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 5);
         combat.verifyRelationOutcomeCount(0);
 
         // Confirming the same attack lets the saved draw decide: the brave is
@@ -114,16 +113,14 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         fog.saveMapEvidence("native-combat-result-en.png");
 
         // The attack angered the Aztecs once, whoever it was fought against.
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
         combat.verifyRelationOutcomeCount(1);
 
         // Continue from disk restores the same position and the single effect.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         combat.verifyBraveDestroyed(SURVIVOR_ID, SOLDIER_ID, SURVIVOR);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
         combat.verifyRelationOutcomeCount(1);
     }
 
@@ -157,8 +154,7 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         // Cancelling changes nothing.
         attack.cancel();
         attack.verifyGameplayUnchanged();
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                0);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 5);
         combat.verifyRelationOutcomeCount(0);
     }
 
@@ -176,7 +172,6 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
                 getContext());
         combat.loadFixture(FIXTURE, SOLDIER_ID, HILL_SOLDIER, HILL_ODDS, false);
         fog.centerFrontier();
-        combat.rememberHomeAlarm(HILL_BRAVE_ID);
 
         // The review shows the hill ambush before the soldier commits.
         attack.chooseAttack(HILL_SOLDIER, HILL_BRAVE);
@@ -194,9 +189,7 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         fog.saveMapEvidence("native-combat-loss-en.png");
 
         // The brave's nation and home settlement were angered exactly once.
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
-        combat.verifyHomeAlarmRaised(10);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
         combat.verifyRelationOutcomeCount(1);
 
         // Continue from disk keeps the result without repeating the effect.
@@ -204,9 +197,7 @@ public class TC_125_F116_native_combat_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         combat.verifySoldierLostWeapons(HILL_BRAVE_ID, HILL_BRAVE, SOLDIER_ID,
                 HILL_SOLDIER);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                10);
-        combat.verifyHomeAlarmRaised(10);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
         combat.verifyRelationOutcomeCount(1);
     }
 }

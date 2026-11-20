@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.akropia.gui.Loc;
-import org.akropia.gui.UnitTypes;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.screen.game.components.StatusBarMessageService;
 import org.akropia.gui.screen.game.gamepanel.ScrollToFocusedTile;
@@ -18,11 +17,8 @@ import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Model;
 import org.akropia.model.NativeAdvisorReport;
-import org.akropia.model.NativeMissionView;
 import org.akropia.model.NativeNation;
-import org.akropia.model.NativeRelationView;
 import org.akropia.model.NativeSettlement;
-import org.akropia.model.NativeTeachingCourse;
 import org.akropia.model.Player;
 import org.akropia.model.Unit;
 
@@ -98,24 +94,11 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
 
     private final Label attitude = new Label();
 
-    private final Label alarmChange = new Label();
-
     private final Label rival = new Label();
-
-    private final Label chief = new Label();
-
-    private final Label mission = new Label();
-
-    private final Label teaching = new Label();
-
-    private final Button stopTeaching = ActionButtons.button(ButtonIcon.STOP);
 
     private final Button showOnMap = ActionButtons.button(ButtonIcon.CENTER);
 
     private final Label unavailable = new Label();
-
-    /** The colonist of the shown course, when it is the player's own. */
-    private Optional<Unit> learner = Optional.empty();
 
     /** The nations of the report read at the last opening. */
     private List<NativeNation> knownNations = List.of();
@@ -163,21 +146,8 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
         none.setWrapText(true);
         attitude.setId(ATTITUDE_ID);
         attitude.setWrapText(true);
-        alarmChange.setId(ALARM_CHANGE_ID);
-        alarmChange.setWrapText(true);
         rival.setId(RIVAL_ID);
         rival.setWrapText(true);
-        chief.setId(CHIEF_ID);
-        chief.setWrapText(true);
-        mission.setId(MISSION_ID);
-        mission.setWrapText(true);
-        teaching.setId(TEACHING_ID);
-        teaching.setWrapText(true);
-        stopTeaching.setId(STOP_TEACHING_ID);
-        stopTeaching.setOnAction(e -> {
-            learner.ifPresent(gameModelController::cancelNativeTeaching);
-            close();
-        });
         showOnMap.setId(SHOW_ON_MAP_ID);
         showOnMap.setOnAction(e -> Optional
                 .ofNullable(
@@ -185,8 +155,8 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
                 .ifPresent(this::centerOnSettlement));
         unavailable.setId(UNAVAILABLE_ID);
         unavailable.setWrapText(true);
-        final VBox details = new VBox(8, none, attitude, alarmChange, rival,
-                chief, mission, teaching, stopTeaching, showOnMap, unavailable);
+        final VBox details = new VBox(8, none, attitude, rival, showOnMap,
+                unavailable);
         details.setPrefWidth(300);
         final HBox main = new HBox(20, settlementList, details);
         final VBox root = new VBox(10, nations, main, buttonBar.getContent());
@@ -228,7 +198,6 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
         setTitle(i18n.get(Loc.nativeSettlementsTitle));
         buttonBar.setButtonText(i18n.get(Loc.close));
         none.setText(i18n.get(Loc.nativeSettlementsNone));
-        stopTeaching.setText(i18n.get(Loc.nativeTeachingStop));
         showOnMap.setText(i18n.get(Loc.nativeAdvisorShowOnMap));
         settlementList.refresh();
         showNations();
@@ -255,107 +224,33 @@ public final class NativeSettlementsDialog extends AbstractMessageWindow {
      * computed here.
      */
     private void showDetails(final NativeAdvisorReport.Settlement row) {
-        final boolean empty = row == null;
-        none.setVisible(empty);
-        none.setManaged(empty);
+        final boolean shown = row != null;
+        none.setVisible(!shown);
+        none.setManaged(!shown);
         unavailable.setVisible(false);
         unavailable.setManaged(false);
-        final Optional<NativeRelationView> view = empty ? Optional.empty()
-                : Optional.of(row.getRelation());
-        final boolean shown = view.isPresent();
         attitude.setVisible(shown);
         attitude.setManaged(shown);
-        alarmChange.setVisible(shown);
-        alarmChange.setManaged(shown);
         rival.setVisible(shown);
         rival.setManaged(shown);
         showOnMap.setVisible(shown);
         showOnMap.setManaged(shown);
-        view.ifPresent(relation -> {
-            attitude.setText(
-                    statusBarMessageService.nativeAttitudeText(relation));
-            alarmChange.setText(
-                    statusBarMessageService.nativeAlarmChangeText(relation));
-            rival.setText(statusBarMessageService.nativeRivalText(relation));
-        });
-        showChief(Optional.ofNullable(row));
-        showMission(empty ? Optional.empty()
-                : gameModelController.getModel().getNativeMissionView(
-                        gameModelController.getHumanPlayer(),
-                        row.getSettlement()));
-        showTeaching(empty ? Optional.empty()
-                : gameModelController.getModel()
-                        .getNativeTeachingCourse(row.getSettlement()));
-    }
-
-    /**
-     * What the chief has told about the selected settlement, or that the chief
-     * has told nothing yet. The line is hidden with no settlement selected.
-     */
-    private void showChief(final Optional<NativeAdvisorReport.Settlement> row) {
-        final boolean shown = row.isPresent();
-        chief.setVisible(shown);
-        chief.setManaged(shown);
-        row.ifPresent(settlement -> chief.setText(settlement.getChiefFacts()
-                .map(statusBarMessageService::nativeChiefFactsText)
-                .orElseGet(() -> i18n.get(Loc.nativeAdvisorChiefNotLearned))));
-    }
-
-    /**
-     * Owner, expertise, the owner's attitude and the progress of the mission,
-     * read from the model. The line stays while the missionary is stationed,
-     * even when it is not on the map.
-     */
-    private void showMission(final Optional<NativeMissionView> view) {
-        final boolean shown = view.isPresent();
-        mission.setVisible(shown);
-        mission.setManaged(shown);
-        view.ifPresent(terms -> mission.setText(i18n.get(
-                Loc.nativeMissionSummary, terms.getOwnerName(),
-                i18n.get(DialogNativeMission
-                        .expertName(terms.isEffectiveExpert())),
-                i18n.get(DialogNativeChief.moodName(terms.getHostility())),
-                terms.getCompletedUpdates(),
-                NativeMissionView.REQUIRED_UPDATES)));
-    }
-
-    /**
-     * Progress of the player's own course at this settlement, with the control
-     * that stops it. Another player's course is not shown here.
-     */
-    private void showTeaching(final Optional<NativeTeachingCourse> course) {
-        final Player human = gameModelController.getHumanPlayer();
-        learner = course
-                .flatMap(shown -> gameModelController.getModel()
-                        .tryGetUnitById(shown.getPupilId()))
-                .filter(unit -> unit.getOwner() == human);
-        final boolean learning = learner.isPresent();
-        teaching.setVisible(learning);
-        teaching.setManaged(learning);
-        stopTeaching.setVisible(learning);
-        stopTeaching.setManaged(learning);
-        course.ifPresent(shown -> {
-            final String skill = i18n
-                    .get(UnitTypes.getUnitName(shown.getSkill()));
-            // A finished or canceled course never reads as still studying.
-            switch (shown.getStage()) {
-            case COMPLETED:
-                teaching.setText(
-                        i18n.get(Loc.nativeTeachingWaitingCompleted, skill));
-                break;
-            case CANCELED:
-                teaching.setText(i18n.get(Loc.nativeTeachingWaitingCanceled));
-                break;
-            default:
-                teaching.setText(i18n.get(Loc.nativeTeachingProgress, skill,
-                        shown.getCompletedUpdates(),
-                        shown.getRequiredUpdates()));
-                break;
-            }
-            stopTeaching.setText(
-                    i18n.get(shown.isAwaitingExit() ? Loc.nativeTeachingLeave
-                            : Loc.nativeTeachingStop));
-        });
+        if (shown) {
+            final Model model = gameModelController.getModel();
+            final NativeNation nation = row.getSettlement().getNation();
+            attitude.setText(model.getPlayers().stream()
+                    .filter(Player::isColonialNation)
+                    .map(player -> i18n.get(Loc.nativeFavour,
+                            player.getDisplayName(),
+                            model.getNativeFavour(nation,
+                                    org.akropia.model.EuropeanNation
+                                            .fromPlayerName(player.getName()))))
+                    .collect(Collectors.joining("\n")));
+            rival.setText(model.getNativeFriend(nation)
+                    .map(friend -> i18n.get(Loc.nativeFriend,
+                            friend.getDisplayName()))
+                    .orElseGet(() -> i18n.get(Loc.nativeNoFriend)));
+        }
     }
 
     /**

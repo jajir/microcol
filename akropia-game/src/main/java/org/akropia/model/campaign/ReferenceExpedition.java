@@ -101,6 +101,8 @@ public final class ReferenceExpedition {
         model.setNativeSettlements(new ArrayList<>());
         model.setNativeSettlementKnowledge(new ArrayList<>());
         model.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        model.setNativeFriendships(org.akropia.model.NativeFriendships.fresh());
+        model.setLandOwnership(java.util.List.of());
         model.setNativeLocalAlarm(
                 NativeRelations.freshLocalAlarm(model.getNativeSettlements()));
         model.setNativeLandRights(new ArrayList<>());

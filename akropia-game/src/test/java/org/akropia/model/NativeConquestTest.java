@@ -268,8 +268,8 @@ class NativeConquestTest {
         return model.save().getCombatRandomState();
     }
 
-    private static double anger(final Model model, final NativeNation nation) {
-        return model.getNativeTribalAnger(dutch(model), nation);
+    private static double favour(final Model model, final NativeNation nation) {
+        return model.getNativeFavour(nation, EuropeanNation.DUTCH);
     }
 
     private static Unit unitAt(final Model model, final Location at) {
@@ -582,7 +582,7 @@ class NativeConquestTest {
         final double chance = chance(new World());
         final long seed = seedWhere(s -> roll(s, 1) < chance / 2);
         final Model model = new World().seed(seed).model();
-        assertEquals(0.0, anger(model, NATION), 1e-9);
+        assertEquals(5.0, favour(model, NATION), 1e-9);
 
         final NativeConquestResult result = attack(model);
 
@@ -602,7 +602,7 @@ class NativeConquestTest {
         assertFalse(event.isCapital());
         assertEquals(1, event.getDefendersDefeated());
         // Settlement destroyed: (20 + 20) tribal anger once, no capital factor.
-        assertEquals(40.0, anger(model, NATION), 1e-9);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
     }
 
     @Test
@@ -641,21 +641,21 @@ class NativeConquestTest {
         assertNotNull(site(model));
         assertEquals(1, bravesOnTarget(model));
         assertEquals(0, conquests(model).size());
-        assertEquals(0.0, anger(model, NATION), 1e-9);
+        assertEquals(5.0, favour(model, NATION), 1e-9);
         assertEquals(random, random(model));
         assertEquals(Integer.MAX_VALUE,
                 dutch(model).getNativeSettlementsDestroyed());
     }
 
     @Test
-    void capitalConquestUsesTheCapitalFactorExactlyOnce() {
+    void capitalConquestCostsTheSameThreeFavour() {
         final double chance = chance(new World().capital(true));
         final long seed = seedWhere(s -> roll(s, 1) < chance / 2);
         final Model model = new World().capital(true).seed(seed).model();
 
         assertTrue(attack(model).isConquered());
 
-        assertEquals(80.0, anger(model, NATION), 1e-9);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
         assertTrue(conquests(model).get(0).isCapital());
     }
 
@@ -695,19 +695,18 @@ class NativeConquestTest {
         assertEquals(NativeNation.ARAWAK, site(model).getNation());
         assertTrue(conquests(model).isEmpty());
         // Attacked but not destroyed: (20) tribal anger once.
-        assertEquals(20.0, anger(model, NATION), 1e-9);
-        assertTrue(model.getNativeLocalAlarm(dutch(model), site(model)) > 0);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
     }
 
     @Test
-    void capitalAttackThatFailsRaisesTheCapitalFactorOnce() {
+    void failedCapitalAttackCostsThreeFavour() {
         final double chance = chance(new World().capital(true));
         final long seed = seedWhere(s -> roll(s, 1) > chance);
         final Model model = new World().capital(true).seed(seed).model();
 
         assertFalse(attack(model).isConquered());
 
-        assertEquals(40.0, anger(model, NATION), 1e-9);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
     }
 
     @Test
@@ -726,7 +725,7 @@ class NativeConquestTest {
         assertEquals(1, bravesOnTarget(model));
         assertTrue(conquests(model).isEmpty());
         // One settlement attack: 20 once, not 20 per brave.
-        assertEquals(20.0, anger(model, NATION), 1e-9);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
     }
 
     @Test
@@ -741,7 +740,7 @@ class NativeConquestTest {
         assertEquals(2, result.getDefendersDefeated());
         assertNull(site(model));
         assertEquals(2, conquests(model).get(0).getDefendersDefeated());
-        assertEquals(40.0, anger(model, NATION), 1e-9);
+        assertEquals(2.0, favour(model, NATION), 1e-9);
     }
 
     // ----- cancel and stale -----
@@ -751,13 +750,13 @@ class NativeConquestTest {
         final Model model = new World().braves(2).seed(77).model();
         final long random = random(model);
         final int points = attacker(model).getActionPoints();
-        final double tribal = anger(model, NATION);
+        final double tribal = favour(model, NATION);
 
         assertEquals(quote(model), quote(model));
 
         assertEquals(random, random(model));
         assertEquals(points, attacker(model).getActionPoints());
-        assertEquals(tribal, anger(model, NATION), 1e-9);
+        assertEquals(tribal, favour(model, NATION), 1e-9);
         assertNotNull(site(model));
         assertEquals(2, bravesOnTarget(model));
         assertTrue(conquests(model).isEmpty());
@@ -771,7 +770,7 @@ class NativeConquestTest {
         final Unit second = shown.getDefenders().get(1);
         final long random = random(model);
         final int points = attacker(model).getActionPoints();
-        final double tribal = anger(model, NATION);
+        final double tribal = favour(model, NATION);
         final double alarm = model.getNativeLocalAlarm(dutch(model),
                 site(model));
 
@@ -783,7 +782,7 @@ class NativeConquestTest {
 
         assertEquals(random, random(model));
         assertEquals(points, attacker(model).getActionPoints());
-        assertEquals(tribal, anger(model, NATION), 1e-9);
+        assertEquals(tribal, favour(model, NATION), 1e-9);
         assertEquals(alarm,
                 model.getNativeLocalAlarm(dutch(model), site(model)), 1e-9);
         assertNotNull(site(model));
@@ -925,48 +924,6 @@ class NativeConquestTest {
         return record;
     }
 
-    @Test
-    void pupilAndMissionaryAreReleasedToTheNearestLegalSquareWithoutSkill() {
-        // The French blocker takes the first square of the ring, so the fixed
-        // coordinate order gives the next one.
-        final World world = new World().capital(true)
-                .extras(scene -> scene
-                        .rawUnit(PUPIL_ID, UnitType.COLONIST, "Dutch", null,
-                                null, NativeTurnScene.at(1, 1))
-                        .rawUnit(MISSIONARY_ID, UnitType.COLONIST, "Dutch",
-                                null, null, NativeTurnScene.at(1, -1))
-                        .rawUnit(FRENCH_BLOCKER_ID, UnitType.COLONIST, "France",
-                                null, null, NativeTurnScene.at(-1, -1)))
-                .tweak(po -> missionary(po, MISSIONARY_ID));
-        final double chance = chance(world);
-        final Model model = world.seed(seedWhere(s -> roll(s, 1) < chance / 2))
-                .model();
-        startCourses(model, PUPIL_ID, MISSIONARY_ID);
-        assertTrue(model.getUnitById(PUPIL_ID).isAtPlaceNativeCourse());
-        assertTrue(model.getUnitById(MISSIONARY_ID).isAtPlaceNativeMission());
-
-        final NativeConquestResult result = attack(model);
-
-        assertTrue(result.isConquered());
-        assertTrue(result.getLosses().isEmpty());
-        for (final int id : new int[] { PUPIL_ID, MISSIONARY_ID }) {
-            final Unit released = model.getUnitById(id);
-            assertTrue(released.isAtPlaceLocation());
-            assertFalse(released.isAtPlaceNativeCourse());
-            assertFalse(released.isAtPlaceNativeMission());
-            assertEquals(NativeTurnScene.at(-1, 0), released.getLocation());
-            // The same unit, and no skill was granted by the cut-short course.
-            assertEquals(UnitType.COLONIST, released.getType());
-        }
-        assertTrue(((UnitFreeColonist) model.getUnitById(MISSIONARY_ID))
-                .isMissionary());
-        assertTrue(losses(model, "Dutch").isEmpty());
-        // The saved game has no dangling course or mission.
-        final Model reloaded = NativeTurnScene.make(model.save());
-        assertTrue(reloaded.getUnitById(PUPIL_ID).isAtPlaceLocation());
-        assertTrue(reloaded.getUnitById(MISSIONARY_ID).isAtPlaceLocation());
-    }
-
     /**
      * A French pupil and missionary in the settlement, a Dutch attack that
      * wins, and every square around the settlement held by a Dutch unit: the
@@ -1044,78 +1001,6 @@ class NativeConquestTest {
         po.getMap().setTrees(Set.of());
     }
 
-    @Test
-    void releaseIsAnEvacuationToTheNearestLegalSquareAcrossWater() {
-        // The ring two squares out is water, so the nearest legal squares are
-        // three out, on land not joined to the settlement's square.
-        final Model model = frenchCoursesBesideDutchAttack(scene -> {
-            NativeTurnScene flooded = scene;
-            for (int dx = -2; dx <= 2; dx++) {
-                for (int dy = -2; dy <= 2; dy++) {
-                    if (Math.max(Math.abs(dx), Math.abs(dy)) == 2) {
-                        flooded = flooded.sea(dx, dy);
-                    }
-                }
-            }
-            return flooded;
-        }, po -> {
-        });
-
-        final NativeConquestResult result = attack(model);
-
-        assertTrue(result.isConquered());
-        assertTrue(result.getLosses().isEmpty());
-        // Lowest X, then lowest Y, of the nearest ring with a legal square;
-        // both units of the same owner may share it.
-        for (final int id : new int[] { PUPIL_ID, MISSIONARY_ID }) {
-            final Unit released = model.getUnitById(id);
-            assertTrue(released.isAtPlaceLocation());
-            assertEquals(NativeTurnScene.at(-3, -3), released.getLocation());
-            assertEquals(UnitType.COLONIST, released.getType());
-        }
-        assertEquals(TARGET_AT, attacker(model).getLocation());
-        assertTrue(losses(model, "France").isEmpty());
-    }
-
-    @Test
-    void trappedPupilAndMissionaryDieAndAreReportedAndPersisted() {
-        // The world has no other land: the eight squares beside the settlement
-        // hold Dutch units, the settlement's own square holds the attacker, and
-        // every other square of the map is water. No square is legal.
-        final Model model = frenchCoursesBesideDutchAttack(scene -> scene,
-                po -> onlyLandAroundTheSettlement(po, 1));
-
-        final NativeConquestResult result = attack(model);
-
-        assertTrue(result.isConquered());
-        assertTrue(result.isTrappedUnitLost());
-        assertEquals(2, result.getLosses().size());
-        assertEquals(PUPIL_ID, result.getLosses().get(0).getUnitId());
-        assertTrue(result.getLosses().get(0).isPupil());
-        assertEquals(MISSIONARY_ID, result.getLosses().get(1).getUnitId());
-        assertFalse(result.getLosses().get(1).isPupil());
-        assertEquals("France", result.getLosses().get(0).getOwnerName());
-        assertTrue(model.tryGetUnitById(PUPIL_ID).isEmpty());
-        assertTrue(model.tryGetUnitById(MISSIONARY_ID).isEmpty());
-        // Each death is its own saved notice of the owner, not the attacker.
-        assertEquals(2, losses(model, "France").size());
-        assertTrue(losses(model, "Dutch").isEmpty());
-        assertEquals(1, conquests(model).size());
-        final TurnEventNativeConquestLoss pupilNotice = losses(model, "France")
-                .get(0);
-        assertEquals(PUPIL_ID, pupilNotice.getUnitId());
-        assertTrue(pupilNotice.isPupil());
-        assertEquals(NATION, pupilNotice.getNation());
-        assertEquals(TARGET_AT, pupilNotice.getLocation());
-        // Save and Continue keep the notices exactly once and load cleanly.
-        final Model reloaded = NativeTurnScene.make(model.save());
-        assertEquals(2, losses(reloaded, "France").size());
-        assertEquals(1, conquests(reloaded).size());
-        assertTrue(reloaded.tryGetUnitById(PUPIL_ID).isEmpty());
-        assertEquals(2,
-                losses(NativeTurnScene.make(reloaded.save()), "France").size());
-    }
-
     private static void missionary(final ModelPo po, final int unitId) {
         for (final UnitPo unit : po.getUnits()) {
             if (unit.getId() == unitId) {
@@ -1149,7 +1034,7 @@ class NativeConquestTest {
                 model.getUnitById(attackerId).getLocation());
         assertTrue(attack(model).isConquered());
         assertEquals(TARGET_AT, model.getUnitById(attackerId).getLocation());
-        final double tribal = anger(model, NATION);
+        final double tribal = favour(model, NATION);
 
         final Model reloaded = NativeTurnScene.make(model.save());
 
@@ -1165,11 +1050,11 @@ class NativeConquestTest {
                 .stream().noneMatch(s -> s.getId() == TARGET_ID));
         assertEquals(0, bravesOnTarget(reloaded));
         assertEquals(1, conquests(reloaded).size());
-        assertEquals(tribal, anger(reloaded, NATION), 1e-9);
+        assertEquals(tribal, favour(reloaded, NATION), 1e-9);
         // A second save and load repeats nothing either.
         final Model again = NativeTurnScene.make(reloaded.save());
         assertEquals(1, conquests(again).size());
-        assertEquals(tribal, anger(again, NATION), 1e-9);
+        assertEquals(tribal, favour(again, NATION), 1e-9);
         assertEquals(TARGET_AT, again.getUnitById(attackerId).getLocation());
     }
 
@@ -1184,7 +1069,7 @@ class NativeConquestTest {
 
         assertNotNull(site(reloaded));
         assertEquals(1, bravesOnTarget(reloaded));
-        assertEquals(20.0, anger(reloaded, NATION), 1e-9);
+        assertEquals(2.0, favour(reloaded, NATION), 1e-9);
         assertTrue(conquests(reloaded).isEmpty());
     }
 }

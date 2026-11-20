@@ -65,7 +65,7 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
     private static final String VALUE_2000_CS = "Hodnota pokladu: 2000 zlatých";
 
     /** Anger of a conquered capital: (20 + 20) twice, from zero. */
-    private static final double CONQUEST_ANGER = 80;
+    private static final int CONQUEST_ANGER = 2;
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -90,7 +90,6 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
 
         // Confirm the conquest; the result names the train and its value.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.confirmAttack();
         conquest.verifyResultMessage(CONQUERED_EN);
         conquest.verifyResultMessage(TRAIN_2000_EN);
@@ -102,7 +101,7 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
         // The train stands on the conquered square and names its value.
         conquest.verifySettlementRemoved(CAPITAL);
         conquest.verifyTreasureTrain(CAPITAL, 2000);
-        conquest.verifyTribalAnger(CONQUEST_ANGER);
+        conquest.verifyFavour(CONQUEST_ANGER);
         conquest.verifyConquestRecords(1);
         GamePage.of(getContext()).selectTile(CAPITAL);
         conquest.verifyTreasurePanel(CAPITAL, VALUE_2000_EN);
@@ -112,7 +111,7 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         conquest.verifyTreasureTrain(CAPITAL, 2000);
-        conquest.verifyTribalAnger(CONQUEST_ANGER);
+        conquest.verifyFavour(CONQUEST_ANGER);
         conquest.verifyConquestRecords(1);
         GamePage.of(getContext()).selectTile(CAPITAL);
         conquest.verifyTreasurePanel(CAPITAL, VALUE_2000_EN);
@@ -133,7 +132,6 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
 
         // The conquest is real, and the result says that no train was left.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.confirmAttack();
         conquest.verifyResultMessage(CONQUERED_EN);
         conquest.verifyResultMessage(NO_TRAIN_EN);
@@ -168,7 +166,6 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
 
         // Without Cortes the capital's train is the ordinary 1000 gold.
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.confirmAttack();
         conquest.verifyResultMessage(CONQUERED_EN);
         conquest.verifyResultMessage(TRAIN_1000_EN);
@@ -204,7 +201,6 @@ public class TC_139_F130_native_treasure_test extends AbstractAkropiaTest {
         fog.centerFrontier();
 
         visit.enterSettlement(SOLDIER_AT, CAPITAL);
-        conquest.startAttackChoice();
         conquest.confirmAttack();
         conquest.verifyResultMessage(CONQUERED_CS);
         conquest.verifyResultMessage(TRAIN_2000_CS);

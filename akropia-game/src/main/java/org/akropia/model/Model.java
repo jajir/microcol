@@ -115,6 +115,8 @@ public class Model {
     /** Land contacts of colonial Europeans with whole native tribes. */
     private final NativeContacts nativeContacts;
     private final NativeRelations nativeRelations;
+    private final NativeFriendships nativeFriendships;
+    private final LandOwnership landOwnership;
 
     /** Paid-incitement orders of native tribes (R-0166). */
     private final NativeIncitements nativeIncitements;
@@ -349,6 +351,21 @@ public class Model {
         learnedNativeSettlements = restoreLearnedNativeSettlements(
                 modelPo.getNativeSettlementKnowledge());
         nativeContacts = NativeContacts.make(modelPo.getNativeContacts());
+        landOwnership = LandOwnership.make(modelPo.getLandOwnership(),
+                at -> map.isValid(at) && !map.getTerrainTypeAt(at).isSea());
+        for (final var title : modelPo.getLandOwnership()) {
+            Preconditions.checkArgument(
+                    title.getOwner() == null
+                            || playerStore.getPlayers().stream()
+                                    .anyMatch(player -> player.getName()
+                                            .equals(title.getOwner())),
+                    "Unknown land owner");
+        }
+        nativeFriendships = NativeFriendships.make(
+                modelPo.getNativeFriendships(),
+                playerStore.getPlayers().stream()
+                        .flatMap(player -> nativeNationOf(player).stream())
+                        .collect(Collectors.toSet()));
         nativeRelations = NativeRelations.make(nativeSettlements,
                 modelPo.getNativeTribalAnger(), modelPo.getNativeLocalAlarm(),
                 modelPo.getNativeArmsSales(),
@@ -788,6 +805,12 @@ public class Model {
         Preconditions.checkArgument(
                 expectedLand == null || expectedLand.equals(land),
                 "Native land used by the founding changed");
+        Preconditions.checkArgument(
+                getFoundingLand(unit).stream().allMatch(
+                        at -> canUseLand(player, at) || purchases.stream()
+                                .anyMatch(quote -> quote.getLocation()
+                                        .equals(at))),
+                "Founding land must be owned, friendly or purchased");
         final Map<NativeSettlement, Integer> treasuries = checkLandPurchases(
                 player, land, purchases);
         final int goldAfter = player.getGold()
@@ -818,11 +841,15 @@ public class Model {
             final EuropeanNation european = nativeEuropean(player);
             purchases.forEach(quote -> nativeLandRights.addPaid(european,
                     quote.getLocation()));
+            purchases.forEach(quote -> acquireUsedLand(player,
+                    quote.getLocation(), true));
             treasuries.forEach(NativeSettlement::setTreasury);
             player.setGold(goldAfter);
         }
         nextColonyId++;
         colonies.add(col);
+        acquireUsedLand(player, location,
+                nativeLandRights.isPaid(nativeEuropean(player), location));
         player.recordRebellionColony(col);
         player.activateCongressAfterFirstColony();
         if (fields.isEmpty()) {
@@ -2000,6 +2027,8 @@ public class Model {
             final Location location) {
         if (founder == null || location == null)
             return false;
+        if (!canAcquireLand(founder.getOwner(), location))
+            return false;
         if (!unitStorage.getUnits().stream().anyMatch(u -> u == founder))
             return false;
         if (!founder.getType().canBuildColony())
@@ -2087,7 +2116,7 @@ public class Model {
     }
 
     boolean isColonyFieldAvailable(final Player owner, final Location at) {
-        return owner != null
+        return owner != null && canAcquireLand(owner, at)
                 && getPlayers().stream().anyMatch(player -> player == owner)
                 && map.isValid(at) && getColonyAt(at).isEmpty()
                 && getUnitsAt(at).stream()
@@ -5777,6 +5806,8 @@ public class Model {
         out.setNativeSettlements(
                 nativeSettlements.toPo(this::isOpenNativeExpedition));
         out.setNativeSettlementKnowledge(saveLearnedNativeSettlements());
+        out.setNativeFriendships(nativeFriendships.save());
+        out.setLandOwnership(landOwnership.save());
         out.setNativeTribalAnger(nativeRelations.saveTribalAnger());
         out.setNativeLocalAlarm(nativeRelations.saveLocalAlarm());
         out.setNativeArmsSales(nativeRelations.saveArmsSales());
@@ -5895,14 +5926,64 @@ public class Model {
      * @param player required colonial player
      * @return content, uneasy, angry or hostile
      */
+    public int getNativeFavour(final NativeNation nation,
+            final EuropeanNation european) {
+        return nativeFriendships.favour(nation, european);
+    }
+
+    public Optional<EuropeanNation> getNativeFriend(final NativeNation nation) {
+        return nativeFriendships.friend(nation);
+    }
+
+    public boolean isNativeFriend(final NativeNation nation,
+            final Player player) {
+        return nativeNationOf(player).filter(
+                friend -> getNativeFriend(nation).equals(Optional.of(friend)))
+                .isPresent();
+    }
+
+    public boolean isNativeEnemy(final NativeNation nation,
+            final Player player) {
+        final Optional<EuropeanNation> european = nativeNationOf(player);
+        if (european.isEmpty()) {
+            return false;
+        }
+        if (getNativeFavour(nation,
+                european.get()) <= NativeFriendships.HOSTILE_MAXIMUM) {
+            return true;
+        }
+        return getNativeFriend(nation)
+                .flatMap(friend -> getPlayers().stream()
+                        .filter(candidate -> nativeNationOf(candidate)
+                                .equals(Optional.of(friend)))
+                        .findFirst())
+                .map(friend -> areHostile(friend, player)).orElse(false);
+    }
+
+    public boolean canNativeAttack(final Unit attacker, final Unit target) {
+        if (!(attacker instanceof UnitNativeBrave)
+                || !target.getOwner().isColonialNation()
+                || !attacker.getType().getAttackableUnitType()
+                        .contains(target.getType())
+                || target instanceof UnitFreeColonist
+                        && ((UnitFreeColonist) target).isMissionary()) {
+            return false;
+        }
+        final NativeNation nation = ((UnitNativeBrave) attacker).getNation();
+        return isNativeEnemy(nation, target.getOwner())
+                && target.isAtPlaceLocation()
+                && nativeSettlements.getAll().stream()
+                        .anyMatch(settlement -> settlement.getNation() == nation
+                                && settlement.getLocation()
+                                        .getDistanceChebyshev(
+                                                target.getLocation()) <= 7);
+    }
+
     public NativeHostility getNativeBraveAttitude(final UnitNativeBrave brave,
             final Player player) {
-        Preconditions.checkNotNull(brave);
-        final EuropeanNation european = nativeEuropean(player);
-        return getNativeBraveHome(brave)
-                .map(home -> nativeRelations.getHostility(home, european))
-                .orElseGet(() -> NativeHostility.of(nativeRelations
-                        .getTribalAnger(brave.getNation(), european)));
+        return isNativeEnemy(brave.getNation(), player)
+                ? NativeHostility.HOSTILE
+                : NativeHostility.CONTENT;
     }
 
     /**
@@ -5915,8 +5996,13 @@ public class Model {
      */
     public NativeHostility getNativeHostility(final Player player,
             final NativeSettlement settlement) {
-        Preconditions.checkNotNull(settlement);
-        return nativeRelations.getHostility(settlement, nativeEuropean(player));
+        final int favour = getNativeFavour(settlement.getNation(),
+                nativeEuropean(player));
+        return favour <= NativeFriendships.HOSTILE_MAXIMUM
+                ? NativeHostility.HOSTILE
+                : isNativeFriend(settlement.getNation(), player)
+                        ? NativeHostility.CONTENT
+                        : NativeHostility.UNEASY;
     }
 
     /**
@@ -5933,24 +6019,20 @@ public class Model {
      */
     public List<NativeVisitChoice> getNativeVisitChoices(final Unit visitor,
             final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
         if (!isEntryAllowed(visitor, settlement)) {
             return List.of();
         }
-        return NativeVisitRules.choices(visitor,
-                getNativeHostility(visitor.getOwner(), settlement),
-                settlement.getTeachingPupilId().isPresent(),
-                settlement.getMissionaryId().isPresent(),
-                isRivalMission(visitor, settlement),
-                isTradeOpen(visitor, settlement),
-                !getNativeIncitementTargets(visitor, settlement).isEmpty(),
-                getNativeConquestQuote(visitor, settlement).isPresent(),
-                NativeTributeRules.isCooling(
-                        settlement.findTributeTurn(
-                                nativeEuropean(visitor.getOwner())),
-                        calendar.getNumberOfPlayedTurns()),
-                getNativeTributeQuote(visitor, settlement).isPresent());
+        final List<NativeVisitChoice> choices = new ArrayList<>();
+        if (visitor instanceof UnitFreeColonist
+                && ((UnitFreeColonist) visitor).isMissionary()) {
+            choices.add(new NativeVisitChoice(NativeVisitAction.MISSION,
+                    NativeVisitChoice.Limit.AVAILABLE));
+        }
+        if (getNativeConquestQuote(visitor, settlement).isPresent()) {
+            choices.add(new NativeVisitChoice(NativeVisitAction.ATTACK,
+                    NativeVisitChoice.Limit.AVAILABLE));
+        }
+        return List.copyOf(choices);
     }
 
     /**
@@ -5965,17 +6047,7 @@ public class Model {
      */
     public Optional<NativeChiefPreview> getNativeChiefPreview(
             final Unit visitor, final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        if (!isChiefAvailable(visitor, settlement)) {
-            return Optional.empty();
-        }
-        final Player owner = visitor.getOwner();
-        final boolean repeat = settlement
-                .findChiefEncounter(nativeEuropean(owner)).isPresent();
-        return Optional
-                .of(NativeChiefPreview.of(getNativeHostility(owner, settlement),
-                        visitor.getType() == UnitType.WAYFARER, repeat));
+        return Optional.empty();
     }
 
     /**
@@ -6066,51 +6138,7 @@ public class Model {
      */
     public Optional<NativeTributeQuote> getNativeTributeQuote(
             final Unit visitor, final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        if (!isEntryAllowed(visitor, settlement)
-                || !NativeVisitRules.canDemandTribute(visitor)) {
-            return Optional.empty();
-        }
-        final Player owner = visitor.getOwner();
-        final EuropeanNation european = nativeEuropean(owner);
-        final int turn = calendar.getNumberOfPlayedTurns();
-        if (NativeTributeRules.isCooling(settlement.findTributeTurn(european),
-                turn)) {
-            return Optional.empty();
-        }
-        // A square holding anything but the settlement's own braves is refused.
-        // An empty square is not refused: a demand is not an attack, so with no
-        // defenders the defense is zero and the demand is accepted.
-        final List<Unit> onSquare = getUnitsAt(settlement.getLocation());
-        if (onSquare.stream()
-                .anyMatch(unit -> !isNativeDefender(unit, settlement))) {
-            return Optional.empty();
-        }
-        double defense = 0;
-        final List<Integer> defenders = new ArrayList<>();
-        for (final Unit defender : onSquare.stream()
-                .sorted(Comparator.comparingInt(Unit::getId))
-                .collect(Collectors.toList())) {
-            final Optional<CombatStrengths> strengths = CombatStrengths
-                    .forSettlementBattle(this, visitor, defender,
-                            settlement.getDefenseBonusPercent(), 0);
-            if (strengths.isEmpty()) {
-                return Optional.empty();
-            }
-            defense += strengths.get().getDefender().getTotal();
-            defenders.add(defender.getId());
-        }
-        final List<Unit> forceUnits = tributeForceUnits(visitor, settlement);
-        final double force = forceUnits.stream()
-                .mapToDouble(CombatStrengths::tributeBase).sum();
-        return Optional.of(new NativeTributeQuote(settlement, visitor.getId(),
-                forceUnits.stream().map(Unit::getId)
-                        .collect(Collectors.toList()),
-                force, defenders, defense, settlement.getTreasury(),
-                nativeRelations.getTribalAnger(settlement.getNation(),
-                        european),
-                nativeRelations.getLocalAlarm(settlement, european), turn));
+        return Optional.empty();
     }
 
     /**
@@ -6265,24 +6293,7 @@ public class Model {
      */
     public Optional<NativeMarketView> getNativeMarketView(final Unit visitor,
             final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        if (!isEntryAllowed(visitor, settlement)) {
-            return Optional.empty();
-        }
-        final EuropeanNation european = nativeEuropean(visitor.getOwner());
-        final boolean contacted = nativeContacts.isContacted(european,
-                settlement.getNation());
-        final NativeMarketView.Admission admission = admissionOf(visitor,
-                settlement, contacted);
-        final boolean open = settlement.findTrade(european)
-                .flatMap(state -> state.openExpedition(visitor)).isPresent();
-        return Optional.of(new NativeMarketView(contacted,
-                !contacted && !visitor.isShip(), admission, open,
-                admission == NativeMarketView.Admission.ADMITTED
-                        ? marketOf(visitor, settlement)
-                        : null,
-                purchaseOf(visitor, settlement)));
+        return Optional.empty();
     }
 
     /**
@@ -8258,9 +8269,12 @@ public class Model {
                 missionary, settlement);
         Preconditions.checkState(
                 current.isPresent() && current.get().equals(shown),
-                "Native mission terms changed");
-        ((AbstractUnit) missionary).beginNativeMission(settlement.getId());
-        settlement.establishMission(missionary.getId());
+                "Native missionary terms changed");
+        nativeFriendships.sendMissionary(settlement.getNation(),
+                nativeEuropean(missionary.getOwner()),
+                missionaryExpert(missionary) ? 2 : 1);
+        destroyUnit(missionary);
+        refreshLandOwnership();
     }
 
     /**
@@ -8276,12 +8290,7 @@ public class Model {
      */
     public Optional<NativeMissionContestView> getNativeMissionContestPreview(
             final Unit visitor, final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        if (!isMissionContestAvailable(visitor, settlement)) {
-            return Optional.empty();
-        }
-        return Optional.of(contestView(visitor, settlement));
+        return Optional.empty();
     }
 
     /**
@@ -8344,18 +8353,7 @@ public class Model {
      */
     public List<EuropeanNation> getNativeIncitementTargets(final Unit visitor,
             final NativeSettlement settlement) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        final List<EuropeanNation> targets = new ArrayList<>();
-        if (!isIncitementEntry(visitor, settlement)) {
-            return targets;
-        }
-        for (final EuropeanNation target : EuropeanNation.values()) {
-            if (isIncitementTarget(visitor, target)) {
-                targets.add(target);
-            }
-        }
-        return targets;
+        return List.of();
     }
 
     /**
@@ -8372,14 +8370,7 @@ public class Model {
     public Optional<NativeIncitementQuote> getNativeIncitementQuote(
             final Unit visitor, final NativeSettlement settlement,
             final EuropeanNation target) {
-        Preconditions.checkNotNull(visitor);
-        Preconditions.checkNotNull(settlement);
-        Preconditions.checkNotNull(target);
-        if (!isIncitementEntry(visitor, settlement)
-                || !isIncitementTarget(visitor, target)) {
-            return Optional.empty();
-        }
-        return Optional.of(incitementQuote(visitor, settlement, target));
+        return Optional.empty();
     }
 
     /**
@@ -8444,6 +8435,35 @@ public class Model {
      *
      * @param nation required native tribe whose turn has started
      */
+    void updateNativeFriendship(final NativeNation nation) {
+        nativeFriendships
+                .advance(nation, () -> 1 + (int) (nextCombatRandom() * 40))
+                .flatMap(friend -> getPlayers().stream()
+                        .filter(player -> nativeNationOf(player)
+                                .equals(Optional.of(friend)))
+                        .findFirst())
+                .ifPresent(owner -> {
+                    final Optional<Colony> destination = nativeSettlements
+                            .getAll().stream()
+                            .filter(settlement -> settlement
+                                    .getNation() == nation)
+                            .sorted(java.util.Comparator
+                                    .comparingInt(NativeSettlement::getId))
+                            .map(settlement -> nearestReachableOwnedColony(
+                                    settlement.getLocation(), owner))
+                            .filter(Optional::isPresent).map(Optional::get)
+                            .findFirst();
+                    if (destination.isPresent()
+                            && unitStorage.canAllocateUnit()) {
+                        final Unit unit = addUnitOutSideColony(
+                                destination.get());
+                        ((UnitFreeColonist) unit).becomeNativeConvert(nation);
+                        addTurnEvent(TurnEventProvider.getNativeConvert(owner,
+                                TurnEventNativeConvert.Kind.ACQUIRED));
+                    }
+                });
+    }
+
     void checkNativeIncitement(final NativeNation nation) {
         Preconditions.checkNotNull(nation);
         nativeIncitements.find(nation).ifPresent(order -> {
@@ -8641,11 +8661,15 @@ public class Model {
     private NativeMissionView missionView(final Unit missionary,
             final NativeSettlement settlement, final int completedUpdates) {
         final Player owner = missionary.getOwner();
-        final EuropeanNation european = nativeEuropean(owner);
-        return new NativeMissionView(european, owner.getDisplayName(),
-                missionaryExpert(missionary),
-                nativeRelations.getHostility(settlement, european),
-                completedUpdates);
+        final java.util.Map<EuropeanNation, Integer> favour = new java.util.EnumMap<>(
+                EuropeanNation.class);
+        for (final Player player : getPlayers()) {
+            nativeNationOf(player).ifPresent(nation -> favour.put(nation,
+                    getNativeFavour(settlement.getNation(), nation)));
+        }
+        return new NativeMissionView(nativeEuropean(owner),
+                owner.getDisplayName(), missionaryExpert(missionary),
+                getNativeHostility(owner, settlement), 0, favour);
     }
 
     /**
@@ -8743,21 +8767,8 @@ public class Model {
      * @param owner required colonial player whose update is starting
      */
     void advanceNativeConverts(final Player owner) {
-        Preconditions.checkNotNull(owner);
-        for (final Unit unit : List.copyOf(unitStorage.getUnits())) {
-            if (unit.getOwner() != owner || !(unit instanceof UnitFreeColonist)
-                    || unit.isAtPlaceColonyField()
-                    || unit.isAtPlaceConstructionSlot()) {
-                continue;
-            }
-            final UnitFreeColonist convert = (UnitFreeColonist) unit;
-            if (convert.isNativeConvert()
-                    && convert.addConvertUnassignedUpdate()) {
-                returnConvertToTribe(convert);
-                addTurnEvent(TurnEventProvider.getNativeConvert(owner,
-                        TurnEventNativeConvert.Kind.RETURNED));
-            }
-        }
+        // Converts keep their new nationality regardless of employment or
+        // friendship.
     }
 
     /**
@@ -8988,9 +8999,7 @@ public class Model {
         }
         final EuropeanNation european = nativeEuropean(player);
         return Optional.of(NativeRelationView.of(
-                nativeRelations.getHostility(settlement, european),
-                nativeRelations.getLocalAlarmChange(settlement, european),
-                visibleNativeProvoker(settlement, player)));
+                getNativeHostility(player, settlement), 0, Optional.empty()));
     }
 
     /**
@@ -9036,9 +9045,7 @@ public class Model {
      */
     private Optional<NativeChiefResult.Information> learnedChiefFacts(
             final NativeSettlement settlement, final EuropeanNation european) {
-        return settlement.isChiefInformed(european)
-                ? Optional.of(chiefInformation(settlement))
-                : Optional.empty();
+        return Optional.empty();
     }
 
     /**
@@ -9049,8 +9056,6 @@ public class Model {
      */
     void observeNativeRelations(final Player european) {
         Preconditions.checkNotNull(european);
-        nativeNationOf(european)
-                .ifPresent(nation -> nativeRelations.observeLocalAlarm(nation));
     }
 
     /**
@@ -9061,17 +9066,6 @@ public class Model {
      */
     void updateNativeRelations(final Player european) {
         Preconditions.checkNotNull(european);
-        final Optional<EuropeanNation> nation = nativeNationOf(european);
-        if (nation.isEmpty()) {
-            return;
-        }
-        final Map<Integer, Double> pressure = new HashMap<>();
-        for (final NativeSettlement settlement : nativeSettlements.getAll()) {
-            pressure.put(settlement.getId(),
-                    nativeLocalPressure(settlement, european));
-        }
-        nativeRelations.applyEuropeanUpdate(nation.get(), pressure,
-                nativeLocalFactor(nation.get(), european));
     }
 
     /**
@@ -9126,9 +9120,21 @@ public class Model {
             final NativeRelationOutcome outcome) {
         Preconditions.checkNotNull(owner);
         Preconditions.checkNotNull(outcome);
-        final EuropeanNation european = nativeEuropean(owner);
-        nativeRelations.applyOutcome(european, outcome,
-                nativeLocalFactor(european, owner));
+        switch (outcome.getKind()) {
+        case UNIT_ATTACK:
+        case SETTLEMENT_ATTACK:
+        case SETTLEMENT_DESTROYED:
+        case BURIAL:
+            final EuropeanNation attacker = nativeEuropean(owner);
+            if (!nativeRelations.recordAttackOutcome(outcome.getActionId())) {
+                return;
+            }
+            nativeFriendships.attacked(outcome.getNation(), attacker);
+            refreshLandOwnership();
+            break;
+        default:
+            break;
+        }
     }
 
     /**
@@ -9448,6 +9454,90 @@ public class Model {
      * @return quote, or empty when the square is not a known claimed land
      *         square
      */
+    public Optional<NativeNation> getNativeLandClaim(final Location at) {
+        return landOwnership.nativeClaim(at)
+                .or(() -> nativeSettlements.getAt(at)
+                        .map(NativeSettlement::getNation))
+                .or(() -> nativeSettlements.getClaimOwner(at)
+                        .map(NativeSettlement::getNation));
+    }
+
+    public Optional<Player> getLandOwner(final Location at) {
+        if (!map.isValid(at) || map.getTerrainTypeAt(at).isSea()) {
+            return Optional.empty();
+        }
+        final Optional<String> european = landOwnership.owner(at);
+        if (european.isPresent()) {
+            return getPlayers().stream().filter(
+                    player -> Optional.of(player.getName()).equals(european))
+                    .findFirst();
+        }
+        return getNativeLandClaim(at).flatMap(nation -> getPlayers().stream()
+                .filter(player -> player instanceof PlayerNative
+                        && ((PlayerNative) player).getNativeNation() == nation)
+                .findFirst());
+    }
+
+    public boolean canUseLand(final Player player, final Location at) {
+        if (!map.isValid(at)) {
+            return false;
+        }
+        if (map.getTerrainTypeAt(at).isSea()) {
+            return true;
+        }
+        final Optional<EuropeanNation> european = nativeNationOf(player);
+        if (european.isEmpty()) {
+            return false;
+        }
+        final Optional<String> owner = landOwnership.owner(at);
+        if (owner.isPresent()) {
+            return owner.equals(Optional.of(player.getName()));
+        }
+        return getNativeLandClaim(at)
+                .map(nation -> isNativeFriend(nation, player)
+                        || nativeLandRights.isPaid(european.get(), at))
+                .orElse(true);
+    }
+
+    public boolean canAcquireLand(final Player player, final Location at) {
+        if (canUseLand(player, at)) {
+            return true;
+        }
+        if (landOwnership.owner(at).isPresent()) {
+            return false;
+        }
+        return getNativeLandClaim(at)
+                .map(nation -> !isNativeEnemy(nation, player)).orElse(false);
+    }
+
+    void captureColonyLand(final Colony colony) {
+        landOwnership.capture(colony.getLocation(),
+                colony.getOwner().getName());
+        refreshLandOwnership();
+    }
+
+    private void refreshLandOwnership() {
+        landOwnership.releaseUnoccupied(
+                (nation, owner) -> getNativeFriend(nation)
+                        .map(friend -> friend.getPlayerName().equals(owner))
+                        .orElse(false),
+                (at, owner) -> colonies.stream().anyMatch(
+                        colony -> colony.getOwner().getName().equals(owner)
+                                && (colony.getLocation().equals(at)
+                                        || colony.hasWorkerAt(at)))
+                        || getUnitsAt(at).stream().anyMatch(unit -> unit
+                                .getOwner().getName().equals(owner)));
+    }
+
+    private void acquireUsedLand(final Player player, final Location at,
+            final boolean purchased) {
+        if (map.getTerrainTypeAt(at).isSea()) {
+            return;
+        }
+        landOwnership.acquire(at, player.getName(),
+                getNativeLandClaim(at).orElse(null), purchased);
+    }
+
     public Optional<NativeLandQuote> quoteNativeLand(final Player player,
             final Location at) {
         Preconditions.checkNotNull(player);
@@ -9457,8 +9547,16 @@ public class Model {
                 || map.getTerrainTypeAt(at).isSea() || !player.isVisible(at)) {
             return Optional.empty();
         }
-        final Optional<NativeSettlement> claimant = nativeSettlements
-                .getClaimOwner(at);
+        if (nativeSettlements.getAt(at).isPresent()) {
+            return Optional.empty();
+        }
+        final Optional<NativeSettlement> claimant = getNativeLandClaim(at)
+                .flatMap(claim -> nativeSettlements.getAll().stream()
+                        .filter(settlement -> settlement.getNation() == claim)
+                        .min(java.util.Comparator.comparingInt(
+                                (NativeSettlement settlement) -> settlement
+                                        .getLocation().getDistanceChebyshev(at))
+                                .thenComparingInt(NativeSettlement::getId)));
         if (claimant.isEmpty() || getNativeSettlementKnownTo(player,
                 claimant.get().getLocation()).isEmpty()) {
             return Optional.empty();
@@ -9466,7 +9564,7 @@ public class Model {
         final NativeLandStatus status;
         if (nativeLandRights.isPaid(nation.get(), at)) {
             status = NativeLandStatus.PAID;
-        } else if (nativeLandWaived(player)) {
+        } else if (canUseLand(player, at)) {
             status = NativeLandStatus.WAIVED;
         } else {
             status = NativeLandStatus.UNPAID;
@@ -9489,7 +9587,8 @@ public class Model {
     public boolean canBuyNativeLand(final NativeLandQuote quote) {
         if (quote == null || !isGameRunning()
                 || getCurrentPlayer() != quote.getPlayer()
-                || quote.getStatus() != NativeLandStatus.UNPAID) {
+                || quote.getStatus() != NativeLandStatus.UNPAID
+                || !canAcquireLand(quote.getPlayer(), quote.getLocation())) {
             return false;
         }
         final Player player = quote.getPlayer();
@@ -9523,6 +9622,7 @@ public class Model {
         final int goldAfter = Math.subtractExact(player.getGold(),
                 quote.getPrice());
         nativeLandRights.addPaid(nativeEuropean(player), quote.getLocation());
+        acquireUsedLand(player, quote.getLocation(), true);
         quote.getClaimant().setTreasury(treasuryAfter);
         player.setGold(goldAfter);
     }
@@ -9538,20 +9638,11 @@ public class Model {
      * @param at    required square
      */
     public void recordNativeLandUse(final Player owner, final Location at) {
-        Preconditions.checkNotNull(owner);
-        Preconditions.checkNotNull(at);
-        final Optional<EuropeanNation> nation = nativeNationOf(owner);
-        if (nation.isEmpty() || nativeLandWaived(owner)) {
-            return;
-        }
-        final Optional<NativeSettlement> claimant = nativeSettlements
-                .getClaimOwner(at);
-        if (claimant.isEmpty() || nativeLandRights.isPaid(nation.get(), at)
-                || nativeLandRights.isTaken(nation.get(), at)) {
-            return;
-        }
-        nativeLandRights.addTaken(nation.get(), at);
-        addNativeLocalAlarm(claimant.get(), owner, NATIVE_UNPAID_TAKING_ALARM);
+        Preconditions.checkArgument(canUseLand(owner, at),
+                "Land is not owned or permitted");
+        acquireUsedLand(owner, at,
+                nativeLandRights.isPaid(nativeEuropean(owner), at));
+        refreshLandOwnership();
     }
 
     /**
@@ -10163,6 +10254,7 @@ public class Model {
         }
         recordRoyalLoss(unit);
         unitStorage.remove(unit);
+        refreshLandOwnership();
     }
 
     public void sellGoods(final CargoSlot cargoSlot, final Goods goods) {
@@ -10365,10 +10457,26 @@ public class Model {
 
     void fireUnitMovedStepFinished(final Unit unit, final Location start,
             final Location end) {
+        refreshLandOwnership();
+        if (unit.isAtPlaceLocation() && unit.getOwner().isColonialNation()
+                && canUseLand(unit.getOwner(), unit.getLocation())) {
+            acquireUsedLand(unit.getOwner(), unit.getLocation(),
+                    nativeLandRights.isPaid(nativeEuropean(unit.getOwner()),
+                            unit.getLocation()));
+        }
+
         listenerManager.fireUnitMovedStepFinished(this, unit, start, end);
     }
 
     void fireUnitMovedToHighSeas(final Unit unit) {
+        refreshLandOwnership();
+        if (unit.isAtPlaceLocation() && unit.getOwner().isColonialNation()
+                && canUseLand(unit.getOwner(), unit.getLocation())) {
+            acquireUsedLand(unit.getOwner(), unit.getLocation(),
+                    nativeLandRights.isPaid(nativeEuropean(unit.getOwner()),
+                            unit.getLocation()));
+        }
+
         listenerManager.fireUnitMovedToHighSeas(this, unit);
     }
 
@@ -10381,10 +10489,19 @@ public class Model {
     }
 
     void fireUnitMovedToConstruction(final Unit unit) {
+        refreshLandOwnership();
         listenerManager.fireUnitMovedToConstruction(this, unit);
     }
 
     void fireUnitMovedToLocation(final Unit unit) {
+        refreshLandOwnership();
+        if (unit.isAtPlaceLocation() && unit.getOwner().isColonialNation()
+                && canUseLand(unit.getOwner(), unit.getLocation())) {
+            acquireUsedLand(unit.getOwner(), unit.getLocation(),
+                    nativeLandRights.isPaid(nativeEuropean(unit.getOwner()),
+                            unit.getLocation()));
+        }
+
         listenerManager.fireUnitMovedToLocation(this, unit);
     }
 
@@ -10533,6 +10650,7 @@ public class Model {
         getTurnEventStore().add(TurnEventProvider
                 .getColonyWasDestroyed(colony.getOwner(), colony, lostShips));
         colonies.remove(colony);
+        refreshLandOwnership();
         // Destruction ends membership; a capture never does (R-0192).
         getPlayers().forEach(
                 player -> player.forgetRebellionColony(colony.getId()));

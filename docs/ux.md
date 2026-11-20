@@ -1,3 +1,20 @@
+## Domorodá přízeň a půda — 20. listopadu 2026
+
+1. Hráč z mapy a přehledu osad pozná národ, přízeň a jeho současného přítele.
+   Půda má samostatně uvedeného vlastníka. Zobrazení respektuje znalost mapy.
+2. Misionář na sousedním políčku nabídne návštěvu s konkrétními změnami přízně
+   a výslovným upozorněním, že se spotřebuje. Zpět a Escape nic nemění.
+   Potvrzení znovu ověří jednotku i vztahy; při změně podmínek akci odmítne.
+3. Neutrální půda nabízí zaplacení nebo zrušení, nikoli bezplatné zabrání.
+   Nepřátelskou půdu nelze nově používat. Původně zaplacená půda zůstává;
+   bezplatná po ztrátě přátelství vyžaduje trvající obsazení.
+4. Osada nenabízí obchod, smlouvání, výuku, náčelníka, tribut ani placené
+   podněcování. Misionář umožňuje přetahovat přízeň i od soupeře.
+5. Implementaci ověřují modelové a hráčské scénáře v Dockeru; nejde o hráčskou
+   studii. Výsledky vlastní [testová evidence](functional-tests.md#native-redesign-2026-11-20).
+   Přesná pravidla vlastní
+   [vztahy a půda](gap-analysis.md#native-and-european-relations).
+
 ## Čitelné datum výpravy — 20. listopadu 2026
 
 1. Krátký zápis `Léto 5 · Rok 1` ukazuje den období, číslovaný 1–21.

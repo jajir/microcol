@@ -9,21 +9,12 @@ import org.akropia.gui.dialog.ChoosePassengerDialog;
 
 import org.akropia.gui.Loc;
 import org.akropia.gui.screen.game.components.StatusBarMessageService;
-import org.akropia.gui.GoodsTypeName;
-import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.dialog.DialogColonyWasCaptured;
 import org.akropia.gui.dialog.DialogMessage;
 import org.akropia.gui.dialog.DialogUnitCantMoveHere;
 import org.akropia.gui.screen.foreigncolony.DialogForeignColonyTrade;
 import org.akropia.gui.screen.nativesettlements.DialogNativeAttack;
-import org.akropia.gui.screen.nativesettlements.DialogNativeChief;
-import org.akropia.gui.screen.nativesettlements.DialogNativeContest;
-import org.akropia.gui.screen.nativesettlements.DialogNativeIncitement;
 import org.akropia.gui.screen.nativesettlements.DialogNativeMission;
-import org.akropia.gui.screen.nativesettlements.DialogNativePurchase;
-import org.akropia.gui.screen.nativesettlements.DialogNativeSale;
-import org.akropia.gui.screen.nativesettlements.DialogNativeTribute;
-import org.akropia.gui.screen.nativesettlements.DialogNativeVisit;
 import org.akropia.gui.event.CenterViewEvent;
 import org.akropia.gui.buttonpanel.Buttons;
 import org.akropia.gui.event.EndMoveEvent;
@@ -44,26 +35,11 @@ import org.akropia.model.CargoSlot;
 import org.akropia.model.Colony;
 import org.akropia.model.ForeignColonyTradeProblem;
 import org.akropia.model.Model;
-import org.akropia.model.GoodsType;
 import org.akropia.model.Location;
-import org.akropia.model.NativeChiefOutcome;
 import org.akropia.model.NativeConquestQuote;
 import org.akropia.model.NativeConquestResult;
-import org.akropia.model.NativeChiefPreview;
-import org.akropia.model.NativeChiefResult;
-import org.akropia.model.NativeMarketView;
-import org.akropia.model.EuropeanNation;
-import org.akropia.model.NativeIncitementOutcome;
-import org.akropia.model.NativeIncitementQuote;
-import org.akropia.model.NativeMissionContestOutcome;
-import org.akropia.model.NativeMissionContestView;
 import org.akropia.model.NativeMissionView;
-import org.akropia.model.NativePurchaseQuote;
-import org.akropia.model.NativeSaleQuote;
 import org.akropia.model.NativeSettlement;
-import org.akropia.model.NativeTributeQuote;
-import org.akropia.model.NativeTributeResult;
-import org.akropia.model.NativeVisitChoice;
 import org.akropia.model.Unit;
 import org.akropia.model.event.ColonyWasCapturedEvent;
 import org.akropia.model.event.GameStartedEvent;
@@ -479,228 +455,14 @@ public final class GamePanelPresenter {
      */
     private void showNativeVisit(final Unit visitor,
             final NativeSettlement settlement) {
-        DialogNativeVisit.FollowUp followUp;
-        // Carried to the next chooser only after a backed-out confirmation.
-        DialogNativeVisit.Selection kept = null;
-        do {
-            final List<NativeVisitChoice> choices = gameModelController
-                    .getModel().getNativeVisitChoices(visitor, settlement);
-            if (choices.isEmpty()) {
-                return;
-            }
-            final NativeMarketView market = gameModelController.getModel()
-                    .getNativeMarketView(visitor, settlement).orElseThrow();
-            // The model checks this shown skill again on confirmation.
-            final org.akropia.model.UnitType shownSkill = settlement
-                    .getTeachableSkill();
-            final DialogNativeVisit dialog = new DialogNativeVisit(viewUtil,
-                    i18n, settlement, choices, visitor.getType(), market,
-                    nativeSaleTerms(visitor, settlement), () -> {
-                        if (gameModelController.startNativeTeaching(visitor,
-                                settlement, shownSkill)) {
-                            // The colonist left the map for the course.
-                            selectedUnitManager.forgetRemovedUnit(visitor);
-                        }
-                    },
-                    gameModelController.getModel()
-                            .getNativeChiefPreview(visitor, settlement)
-                            .orElse(null),
-                    gameModelController.getModel()
-                            .getNativeMissionPreview(visitor, settlement)
-                            .orElse(null),
-                    gameModelController.getModel()
-                            .getNativeMissionContestPreview(visitor, settlement)
-                            .orElse(null),
-                    kept);
-            dialog.showAndWait();
-            followUp = dialog.getFollowUp();
-            kept = null;
-            // A rejected command is explained by the controller and changes
-            // nothing; the next chooser then shows the unchanged state.
-            if (followUp == DialogNativeVisit.FollowUp.INTRODUCE) {
-                gameModelController.introduceNativeContact(visitor, settlement);
-            } else if (followUp == DialogNativeVisit.FollowUp.OPEN_MARKET) {
-                gameModelController.enterNativeMarket(visitor, settlement);
-            } else if (followUp == DialogNativeVisit.FollowUp.HAGGLE) {
-                gameModelController.haggleNativeSale(visitor, settlement,
-                        dialog.getPendingSale());
-            } else if (followUp == DialogNativeVisit.FollowUp.SELL
-                    || followUp == DialogNativeVisit.FollowUp.GIFT) {
-                if (confirmNativeSale(visitor, settlement, followUp,
-                        dialog.getPendingSale())) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.PURCHASE_HAGGLE) {
-                gameModelController.haggleNativePurchase(visitor, settlement,
-                        dialog.getPendingPurchase());
-            } else if (followUp == DialogNativeVisit.FollowUp.BUY) {
-                if (confirmNativePurchase(visitor, settlement,
-                        dialog.getPendingPurchase())) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.DECLINE_PURCHASE) {
-                if (gameModelController.rejectNativePurchase(visitor,
-                        settlement)) {
-                    showNativeMessage(Loc.nativePurchaseDeclined);
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.SCOUT_CHIEF) {
-                if (confirmNativeChief(visitor, settlement,
-                        dialog.getPendingChief())) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.ESTABLISH_MISSION) {
-                if (confirmNativeMission(visitor, settlement,
-                        dialog.getPendingMission())) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.CONTEST_MISSION) {
-                if (confirmNativeContest(visitor, settlement,
-                        dialog.getPendingContest())) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.INCITE) {
-                if (confirmNativeIncitement(visitor, settlement)) {
-                    kept = dialog.getSelection();
-                }
-            } else if (followUp == DialogNativeVisit.FollowUp.ATTACK) {
-                // A confirmed attack is not carried back to the chooser: the
-                // chooser reopens on the actual state after the battle.
-                confirmNativeAttack(visitor, settlement);
-            } else if (followUp == DialogNativeVisit.FollowUp.TRIBUTE) {
-                // A confirmed demand is not carried back either: the chooser
-                // reopens on the actual state after the payment or refusal.
-                confirmNativeTribute(visitor, settlement);
-            }
-        } while (followUp != DialogNativeVisit.FollowUp.NONE);
-    }
-
-    /**
-     * Model reads for the sale controls of the chooser (R-0160). They only ask
-     * the model, so nothing changes while the chooser is open.
-     */
-    private DialogNativeVisit.SaleTerms nativeSaleTerms(final Unit visitor,
-            final NativeSettlement settlement) {
-        return new DialogNativeVisit.SaleTerms() {
-
-            @Override
-            public int maxQuantity(final GoodsType goods, final boolean gift) {
-                return gameModelController.getModel().getNativeMaxSaleQuantity(
-                        visitor, settlement, goods, gift);
-            }
-
-            @Override
-            public Optional<NativeSaleQuote> quote(final GoodsType goods,
-                    final int quantity, final boolean gift) {
-                return gameModelController.getModel().getNativeSaleQuote(
-                        visitor, settlement, goods, quantity, gift);
-            }
-
-            @Override
-            public int maxPurchaseQuantity(final GoodsType goods) {
-                return gameModelController.getModel()
-                        .getNativeMaxPurchaseQuantity(visitor, settlement,
-                                goods);
-            }
-
-            @Override
-            public Optional<NativePurchaseQuote> purchaseQuote(
-                    final GoodsType goods, final int quantity) {
-                return gameModelController.getModel().getNativePurchaseQuote(
-                        visitor, settlement, goods, quantity);
-            }
-
-        };
-    }
-
-    /**
-     * Ask for an explicit confirmation of the exact sale or gift, after the
-     * chooser has closed. Only a confirmed choice reaches the model, which
-     * re-checks it; a closed or cancelled confirmation changes nothing.
-     *
-     * @return whether the player backed out of the confirmation, so the next
-     *         chooser returns to the same offer
-     */
-    private boolean confirmNativeSale(final Unit visitor,
-            final NativeSettlement settlement,
-            final DialogNativeVisit.FollowUp followUp,
-            final NativeSaleQuote offered) {
-        if (offered == null) {
-            return false;
+        final Optional<NativeMissionView> mission = gameModelController
+                .getModel().getNativeMissionPreview(visitor, settlement);
+        if (mission.isPresent()) {
+            confirmNativeMission(visitor, settlement, mission.get());
+        } else if (gameModelController.getModel()
+                .getNativeConquestQuote(visitor, settlement).isPresent()) {
+            confirmNativeAttack(visitor, settlement);
         }
-        final DialogNativeSale confirmation = new DialogNativeSale(viewUtil,
-                i18n, offered);
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return true;
-        }
-        if (followUp == DialogNativeVisit.FollowUp.GIFT) {
-            gameModelController.giftToNative(visitor, settlement, offered);
-        } else {
-            gameModelController.sellToNative(visitor, settlement, offered);
-        }
-        return false;
-    }
-
-    /**
-     * Ask for an explicit confirmation of the exact purchase, after the chooser
-     * has closed (R-0161). Only a confirmed choice reaches the model, which
-     * re-checks it; a closed or cancelled confirmation changes nothing. A
-     * bought purchase is reported, and the chooser then reopens with the new
-     * state.
-     *
-     * @return whether the player backed out of the confirmation, so the next
-     *         chooser returns to the same offer
-     */
-    private boolean confirmNativePurchase(final Unit visitor,
-            final NativeSettlement settlement,
-            final NativePurchaseQuote offered) {
-        if (offered == null) {
-            return false;
-        }
-        final DialogNativePurchase confirmation = new DialogNativePurchase(
-                viewUtil, i18n, offered);
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return true;
-        }
-        if (gameModelController.buyFromNative(visitor, settlement, offered)) {
-            showNativeMessage(Loc.nativePurchaseBought, offered.getQuantity(),
-                    i18n.get(GoodsTypeName
-                            .getNameForGoodsType(offered.getGoods())),
-                    offered.getGold());
-        }
-        return false;
-    }
-
-    /**
-     * Ask for an explicit confirmation of the chief visit after the chooser has
-     * closed (R-0158). The mood and the exact risk are shown there, before the
-     * one draw. Only a confirmed visit reaches the model, which re-checks the
-     * terms; a closed or cancelled confirmation changes nothing. The actual
-     * result is then reported, and a killed scout leaves the selection.
-     *
-     * @return whether the player backed out of the confirmation, so the next
-     *         chooser returns to the same offer
-     */
-    private boolean confirmNativeChief(final Unit visitor,
-            final NativeSettlement settlement, final NativeChiefPreview shown) {
-        if (shown == null) {
-            return false;
-        }
-        final DialogNativeChief confirmation = new DialogNativeChief(viewUtil,
-                i18n, shown);
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return true;
-        }
-        gameModelController.visitNativeChief(visitor, settlement, shown)
-                .ifPresent(result -> {
-                    if (result.getOutcome() == NativeChiefOutcome.DEATH) {
-                        selectedUnitManager.forgetRemovedUnit(visitor);
-                    }
-                    showNativeChiefResult(result);
-                });
-        return false;
     }
 
     /**
@@ -732,99 +494,6 @@ public final class GamePanelPresenter {
     }
 
     /**
-     * Ask for an explicit confirmation of the rival-mission contest after the
-     * chooser has closed (R-0165). Only a confirmed contest reaches the model,
-     * which re-checks the terms and draws once; a closed or cancelled
-     * confirmation changes nothing. Either outcome takes the visitor off the
-     * map, so it leaves the selection.
-     *
-     * @return whether the player backed out of the confirmation, so the next
-     *         chooser returns to the same offer
-     */
-    private boolean confirmNativeContest(final Unit visitor,
-            final NativeSettlement settlement,
-            final NativeMissionContestView shown) {
-        if (shown == null) {
-            return false;
-        }
-        final DialogNativeContest confirmation = new DialogNativeContest(
-                viewUtil, i18n, shown);
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return true;
-        }
-        gameModelController.contestNativeMission(visitor, settlement, shown)
-                .ifPresent(outcome -> {
-                    selectedUnitManager.forgetRemovedUnit(visitor);
-                    showNativeContestResult(outcome);
-                });
-        return false;
-    }
-
-    /**
-     * Ask for the target and an explicit confirmation of the paid incitement
-     * (R-0166), after the chooser has closed. The picker only reads the model's
-     * terms and names; only a confirmed choice reaches the model, which
-     * re-checks the terms, the purse and the order, then pays and draws once.
-     * The actual result is then reported with the exact debit and the order.
-     *
-     * @return whether the player backed out of the confirmation, so the next
-     *         chooser returns to the same offer
-     */
-    private boolean confirmNativeIncitement(final Unit visitor,
-            final NativeSettlement settlement) {
-        final Model model = gameModelController.getModel();
-        final List<EuropeanNation> targets = model
-                .getNativeIncitementTargets(visitor, settlement);
-        if (targets.isEmpty()) {
-            return false;
-        }
-        final DialogNativeIncitement confirmation = new DialogNativeIncitement(
-                viewUtil, i18n, settlement.getNation(), targets,
-                target -> model.getNativeIncitementQuote(visitor, settlement,
-                        target),
-                target -> model.getPlayerByName(target.getPlayerName())
-                        .getDisplayName());
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return true;
-        }
-        final NativeIncitementQuote shown = confirmation.getShownQuote();
-        gameModelController.incite(visitor, settlement, shown)
-                .ifPresent(outcome -> showNativeIncitementResult(outcome,
-                        visitor, settlement, shown));
-        return false;
-    }
-
-    /**
-     * Report the actual result of the incitement: the exact gold now held after
-     * the payment, and on success the tribe's order read from the model.
-     */
-    private void showNativeIncitementResult(
-            final NativeIncitementOutcome outcome, final Unit visitor,
-            final NativeSettlement settlement,
-            final NativeIncitementQuote shown) {
-        final Model model = gameModelController.getModel();
-        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
-        dialog.setTitle(i18n.get(Loc.nativeIncitementTitle));
-        final String target = model
-                .getPlayerByName(shown.getTarget().getPlayerName())
-                .getDisplayName();
-        if (outcome == NativeIncitementOutcome.SUCCESS) {
-            final int turns = model
-                    .getNativeIncitementOrder(settlement.getNation())
-                    .orElseThrow().getRemainingTurns();
-            dialog.setText(
-                    i18n.get(Loc.nativeIncitementSucceeded, shown.getPrice(),
-                            visitor.getOwner().getGold(), target, turns));
-        } else {
-            dialog.setText(i18n.get(Loc.nativeIncitementFailed,
-                    shown.getPrice(), visitor.getOwner().getGold()));
-        }
-        dialog.showAndWait();
-    }
-
-    /**
      * Show the attack terms read from the model and ask for an explicit
      * confirmation (R-0174). Back changes nothing. A confirmed attack reaches
      * the model, which re-checks the frozen terms before its first draw; its
@@ -848,50 +517,6 @@ public final class GamePanelPresenter {
                 .attack(visitor, settlement, confirmation.getShownQuote())
                 .ifPresent(result -> showNativeAttackResult(result, visitor,
                         settlement));
-    }
-
-    /**
-     * Show the tribute terms read from the model and ask for an explicit
-     * confirmation (R-0162). Back changes nothing. A confirmed demand reaches
-     * the model, which re-checks the frozen terms before any change; its actual
-     * result is then reported.
-     */
-    private void confirmNativeTribute(final Unit visitor,
-            final NativeSettlement settlement) {
-        final Optional<NativeTributeQuote> terms = gameModelController
-                .getModel().getNativeTributeQuote(visitor, settlement);
-        if (terms.isEmpty()) {
-            return;
-        }
-        final DialogNativeTribute confirmation = new DialogNativeTribute(
-                viewUtil, i18n, terms.get());
-        confirmation.showAndWait();
-        if (!confirmation.isConfirmed()) {
-            return;
-        }
-        gameModelController
-                .demandNativeTribute(visitor, settlement,
-                        confirmation.getShownQuote())
-                .ifPresent(this::showNativeTributeResult);
-    }
-
-    /**
-     * Report the actual result of the demand: the gold moved, an empty treasury
-     * that paid nothing, or the refusal, whose anger the relations already
-     * show.
-     */
-    private void showNativeTributeResult(final NativeTributeResult result) {
-        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
-        dialog.setTitle(i18n.get(Loc.nativeTributeTitle));
-        if (!result.isAccepted()) {
-            dialog.setText(i18n.get(Loc.nativeTributeResultRefused));
-        } else if (result.getGold() == 0) {
-            dialog.setText(i18n.get(Loc.nativeTributeResultEmpty));
-        } else {
-            dialog.setText(
-                    i18n.get(Loc.nativeTributeResultPaid, result.getGold()));
-        }
-        dialog.showAndWait();
     }
 
     /**
@@ -943,72 +568,6 @@ public final class GamePanelPresenter {
             }
         }
         dialog.setText(text.toString());
-        dialog.showAndWait();
-    }
-
-    /**
-     * Report the actual result of the contest: the rival missionary died and
-     * the visitor holds the mission, or the visitor died and the rival mission
-     * stays.
-     */
-    private void showNativeContestResult(
-            final NativeMissionContestOutcome outcome) {
-        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
-        dialog.setTitle(i18n.get(Loc.nativeContestTitle));
-        dialog.setText(i18n.get(outcome == NativeMissionContestOutcome.SUCCESS
-                ? Loc.nativeContestWon
-                : Loc.nativeContestLost));
-        dialog.showAndWait();
-    }
-
-    /**
-     * Report the actual result of the chief visit: the gold given, the death of
-     * the scout, or the information, which a repeat visit gives again.
-     */
-    private void showNativeChiefResult(final NativeChiefResult result) {
-        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
-        dialog.setTitle(i18n.get(Loc.nativeChiefTitle));
-        dialog.setText(chiefResultText(result));
-        dialog.showAndWait();
-    }
-
-    private String chiefResultText(final NativeChiefResult result) {
-        if (result.getOutcome() == NativeChiefOutcome.GOLD) {
-            return i18n.get(Loc.nativeChiefGold, result.getGold());
-        }
-        if (result.getOutcome() == NativeChiefOutcome.DEATH) {
-            return i18n.get(Loc.nativeChiefDeath);
-        }
-        final NativeChiefResult.Information information = result
-                .getInformation().orElseThrow();
-        final LocalizationHelper names = new LocalizationHelper(i18n);
-        return i18n.get(
-                result.isRepeat() ? Loc.nativeChiefRepeatInformation
-                        : Loc.nativeChiefInformation,
-                chiefList(information.getOfferedGoods().stream()
-                        .map(goods -> i18n
-                                .get(GoodsTypeName.getNameForGoodsType(goods)))
-                        .collect(Collectors.toList())),
-                chiefList(information.getWantedGoods().stream()
-                        .map(goods -> i18n
-                                .get(GoodsTypeName.getNameForGoodsType(goods)))
-                        .collect(Collectors.toList())),
-                names.getUnitName(information.getTeachableSkill()));
-    }
-
-    private String chiefList(final List<String> items) {
-        return items.isEmpty() ? i18n.get(Loc.nativeChiefNone)
-                : String.join(", ", items);
-    }
-
-    /**
-     * Report the outcome of a native market command in a plain message.
-     */
-    private void showNativeMessage(final Loc message,
-            final Object... arguments) {
-        final DialogMessage dialog = new DialogMessage(viewUtil, i18n);
-        dialog.setTitle(i18n.get(Loc.nativeMarketTitle));
-        dialog.setText(i18n.get(message, arguments));
         dialog.showAndWait();
     }
 

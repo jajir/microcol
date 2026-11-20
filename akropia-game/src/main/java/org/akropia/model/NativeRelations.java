@@ -310,6 +310,11 @@ public final class NativeRelations {
      *
      * @return unused positive action ID
      */
+    boolean recordAttackOutcome(final long id) {
+        Preconditions.checkArgument(id > 0, "Invalid native attack outcome");
+        return appliedOutcomes.add(id);
+    }
+
     long nextOutcomeId() {
         return appliedOutcomes.stream().mapToLong(Long::longValue).max()
                 .orElse(0L) + 1;

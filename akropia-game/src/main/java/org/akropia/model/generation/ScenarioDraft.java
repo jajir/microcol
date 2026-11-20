@@ -140,6 +140,8 @@ public final class ScenarioDraft {
         model.setNativeSettlementKnowledge(new ArrayList<>());
         model.setNativeContacts(new ArrayList<>());
         model.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        model.setNativeFriendships(org.akropia.model.NativeFriendships.fresh());
+        model.setLandOwnership(java.util.List.of());
         model.setNativeLocalAlarm(
                 NativeRelations.freshLocalAlarm(model.getNativeSettlements()));
         model.setNativeLandRights(new ArrayList<>());

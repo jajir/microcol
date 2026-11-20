@@ -9,6 +9,25 @@ import org.akropia.model.Location;
 import com.google.common.base.Preconditions;
 
 public class ModelPo {
+    private List<NativeFriendshipPo> nativeFriendships;
+    private List<LandOwnershipPo> landOwnership;
+
+    public List<LandOwnershipPo> getLandOwnership() {
+        return landOwnership;
+    }
+
+    public void setLandOwnership(final List<LandOwnershipPo> value) {
+        landOwnership = value;
+    }
+
+    public List<NativeFriendshipPo> getNativeFriendships() {
+        return nativeFriendships;
+    }
+
+    public void setNativeFriendships(final List<NativeFriendshipPo> value) {
+        nativeFriendships = value;
+    }
+
     private java.util.List<org.akropia.model.FreePlayGoal> freePlayGoals = new java.util.ArrayList<>(
             java.util.List.of(org.akropia.model.FreePlayGoal.INDEPENDENCE));
     private java.util.List<String> establishedNations = new java.util.ArrayList<>();

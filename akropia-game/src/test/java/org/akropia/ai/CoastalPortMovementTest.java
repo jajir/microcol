@@ -86,6 +86,10 @@ class CoastalPortMovementTest {
         ship.setAvailableMoves(6);
         ship.getCargo().getSlots().get(4).setGoodsType(GoodsType.ORE);
         ship.getCargo().getSlots().get(4).setAmount(7);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }

@@ -70,6 +70,16 @@ public final class NativeAdvisorPage extends AbstractScreen {
     }
 
     /** The attitude line of the selected settlement. */
+    public void verifyFavourLine(final String expected) {
+        assertTrue(getLabeledById(NativeSettlementsDialog.ATTITUDE_ID).getText()
+                .contains(expected));
+    }
+
+    public void verifyFriend(final String expected) {
+        assertEquals(expected,
+                getLabeledById(NativeSettlementsDialog.RIVAL_ID).getText());
+    }
+
     public void verifyAttitude(final String expected) {
         assertEquals(expected,
                 getLabeledById(NativeSettlementsDialog.ATTITUDE_ID).getText(),

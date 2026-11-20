@@ -29,10 +29,21 @@ public final class NativeLandGuard {
 
     private final I18n i18n;
 
+    private final Provider<DialogMessage> messages;
+
     @Inject
-    NativeLandGuard(final Provider<NativeLandDialog> dialog, final I18n i18n) {
+    NativeLandGuard(final Provider<NativeLandDialog> dialog, final I18n i18n,
+            final Provider<DialogMessage> messages) {
         this.dialog = Preconditions.checkNotNull(dialog);
         this.i18n = Preconditions.checkNotNull(i18n);
+        this.messages = Preconditions.checkNotNull(messages);
+    }
+
+    private void showUnavailable() {
+        final DialogMessage message = messages.get();
+        message.setText(i18n.get(Loc.nativeLandTitle),
+                i18n.get(Loc.nativeLandUnavailable));
+        message.showAndWait();
     }
 
     /**
@@ -47,6 +58,10 @@ public final class NativeLandGuard {
      */
     public NativeLandDialog.Result proceed(final Model model,
             final Player player, final Location at) {
+        if (!model.canAcquireLand(player, at)) {
+            showUnavailable();
+            return NativeLandDialog.Result.CANCELED;
+        }
         final Optional<NativeLandQuote> quote = model.quoteNativeLand(player,
                 at);
         if (quote.isEmpty()
@@ -70,6 +85,10 @@ public final class NativeLandGuard {
     public Optional<List<NativeLandQuote>> decideFounding(final Model model,
             final Player player, final Unit founder,
             final List<Location> land) {
+        if (land.stream().anyMatch(at -> !model.canAcquireLand(player, at))) {
+            showUnavailable();
+            return Optional.empty();
+        }
         final List<NativeLandQuote> known = land.stream()
                 .map(at -> model.quoteNativeLand(player, at))
                 .flatMap(Optional::stream).collect(Collectors.toList());
@@ -83,8 +102,6 @@ public final class NativeLandGuard {
                 player.getGold())) {
         case PAID:
             return Optional.of(unpaid);
-        case UNPAID:
-            return Optional.of(List.of());
         default:
             return Optional.empty();
         }

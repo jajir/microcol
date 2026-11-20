@@ -100,8 +100,7 @@ class UnitPanel {
             final Label convertLabel = new Label(i18n.get(
                     Loc.unitsPanel_convert,
                     i18n.get(StatusBarMessageService.nationLabel(
-                            convert.getConvertNation().orElseThrow())),
-                    String.valueOf(convert.getConvertUnassignedUpdates())));
+                            convert.getConvertNation().orElseThrow()))));
             convertLabel.setId("unitConvert-" + unit.getId());
             convertLabel.setWrapText(true);
             convertLabel.setMinHeight(Region.USE_PREF_SIZE);

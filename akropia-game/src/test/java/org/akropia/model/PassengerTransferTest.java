@@ -66,6 +66,10 @@ class PassengerTransferTest {
         terrain.put(SHORE, TerrainType.GRASSLAND);
         terrain.put(Location.of(25, 13), TerrainType.OCEAN);
         data.getModel().getMap().setTerrainType(terrain);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
@@ -116,6 +120,10 @@ class PassengerTransferTest {
         Path file = directory.resolve("passenger.akropia");
         dao.saveToFile(file.toString(), data);
         data = dao.loadFromFile(file.toFile());
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         model.startGame();
@@ -206,6 +214,10 @@ class PassengerTransferTest {
         model.endTurn();
         data.setModel(model.save());
         data.getModel().getGameManager().setGameStarted(false);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         String passengerBefore = new Gson().toJson(passenger().save());
@@ -255,6 +267,10 @@ class PassengerTransferTest {
         data.setModel(model.save());
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().setAvailableMoves(0);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertEquals(0, ship().getActionPoints());
@@ -291,6 +307,10 @@ class PassengerTransferTest {
         PORT.getNeighbors().forEach(
                 location -> terrain.put(location, TerrainType.GRASSLAND));
         data.getModel().getMap().setTerrainType(terrain);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         assertFalse(model.isOwnedCoastalPort(ship().getOwner(), PORT));
@@ -328,6 +348,10 @@ class PassengerTransferTest {
                     .forEach(field -> field
                             .setProducedGoodsType(GoodsType.GRAIN));
             data.getModel().getMap().setTerrainType(terrain);
+            data.getModel().getLandOwnership().removeIf(title -> data.getModel()
+                    .getMap().getTerrainMap()
+                    .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                    .isSea());
             model = Model.make(data.getModel(),
                     MissionImpl.getPredefinedGameOverEvaluators());
             assertTrue(model.isOwnedCoastalPort(ship().getOwner(), PORT),
@@ -630,6 +654,10 @@ class PassengerTransferTest {
                 .getTerrainMap();
         terrain.put(LANDING, TerrainType.GRASSLAND);
         data.getModel().getMap().setTerrainType(terrain);
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         model = Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
         for (int id = 13; id <= 16; id++) {

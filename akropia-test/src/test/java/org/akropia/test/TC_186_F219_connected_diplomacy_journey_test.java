@@ -1,5 +1,7 @@
 package org.akropia.test;
 
+import static org.akropia.test.DiplomacyJourneyFixture.MISSIONARY;
+
 import static org.akropia.test.DiplomacyJourneyFixture.AZTEC_BRAVE;
 import static org.akropia.test.DiplomacyJourneyFixture.AZTEC_CAPITAL;
 import static org.akropia.test.DiplomacyJourneyFixture.BRAVE_AT;
@@ -133,10 +135,10 @@ public class TC_186_F219_connected_diplomacy_journey_test
     /** Ledger milestones of the Dutch purse; see the class comment. */
     private static final int DUTCH_AFTER_LAND = 1800;
     private static final int DUTCH_AFTER_NATIVE_SALE = 1850;
-    private static final int DUTCH_AFTER_FIRST_TRADE = 1856;
-    private static final int DUTCH_AFTER_INCITEMENT = 1226;
-    private static final int DUTCH_AFTER_PEACE = 1026;
-    private static final int DUTCH_FINAL = 1032;
+    private static final int DUTCH_AFTER_FIRST_TRADE = 1806;
+    private static final int DUTCH_AFTER_INCITEMENT = 1806;
+    private static final int DUTCH_AFTER_PEACE = 1606;
+    private static final int DUTCH_FINAL = 1612;
 
     /** Ledger milestones of the French purse. */
     private static final int FRENCH_AFTER_FIRST_TRADE = 994;
@@ -145,7 +147,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
     /** Aztec capital treasury after the land payment and after the sale. */
     private static final int TREASURY_AFTER_LAND = 2200;
-    private static final int TREASURY_AFTER_SALE = 2150;
+    private static final int TREASURY_AFTER_SALE = 2200;
 
     /**
      * Aztec anger toward the Dutch after the completed trade at the capital.
@@ -157,7 +159,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
     private static final int FORT_TOOLS = 50;
 
     private static final String CLAIMANT = "This square is claimed by: Egyptians city, capital.";
-    private static final String CONSEQUENCE = "If you use it without paying, the settlement's alarm toward you rises by 5 once at the first use and by 2 each turn while the square stays in use.";
+    private static final String CONSEQUENCE = "Purchased land remains yours even if relations change.";
     private static final String CONFIRMATION_EN = "A Free Colonist learns Expert Farmer after 4 owner updates. Meanwhile the colonist stays with the local peoples and cannot move, work or fight.";
     private static final String REPORT_EN = "A colonist learned Expert Farmer from the local peoples.";
     private static final String GIVE_TWO_OLIVES = "You give: 2 Olives.";
@@ -180,7 +182,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
     @Test
     @Tag("local")
-    void TC_01_contact_land_teaching_trade_incitement_war_capture_peace_and_resumed_trade_with_continue()
+    void TC_01_land_friendship_trade_war_capture_peace_and_resumed_trade_with_continue()
             throws Exception {
         DiplomacyJourneyFixture.prepare(getContext(), SOURCE, PREPARED,
                 Variant.JOURNEY);
@@ -188,11 +190,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         final PlowPage plow = new PlowPage(getContext());
         final NativeLandPage land = new NativeLandPage(getContext());
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final NativeMarketPage market = new NativeMarketPage(getContext());
-        final NativeTeachingPage teaching = new NativeTeachingPage(
-                getContext());
-        final NativeIncitementPage incite = new NativeIncitementPage(
-                getContext());
         final ForeignColonyTradePage trade = new ForeignColonyTradePage(
                 getContext());
         final EuropeanRelationsPage europeans = new EuropeanRelationsPage(
@@ -214,10 +211,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         land.verifyClaimantTreasury(AZTEC_CAPITAL, 2000);
         land.verifyLandStatus(PIONEER_AT, NativeLandStatus.UNPAID);
         land.verifyPaidSquares(8);
-        market.verifyNotIntroduced(EuropeanNation.DUTCH, NativeNation.AZTEC);
-        incite.verifyNoOrder();
-        incite.verifyTribalAnger(DUTCH, UNEASY_ANGER);
-        incite.verifyTribalAnger(FRANCE, 100);
         journey.verifyColonyOwner(HIDDEN_QUEBEC, FRANCE);
         journey.verifyColonyOwner(FORT_ORLEANS, FRANCE);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, true);
@@ -259,38 +252,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
         // Turn 0, contact and teaching: the scout introduces the Dutch to the
         // Aztecs, then learns Expert Farmer and leaves the map for 4 updates.
-        visit.enterSettlement(SCOUT_AT, AZTEC_CAPITAL);
-        market.verifyIntroductionOffered(true);
-        market.introduce();
-        market.verifyIntroduced(EuropeanNation.DUTCH, NativeNation.AZTEC);
-        visit.verifyTeachButtonShown();
-        visit.startTeachingChoice();
-        visit.verifyTeachingConfirmation(CONFIRMATION_EN);
-        visit.confirmTeaching();
-        visit.verifyTeachingClosed();
-        visit.verifyChooserClosed();
-        visit.verifyCourseStarted(SCOUT, AZTEC_CAPITAL);
-
-        // Turn 0, native trade: the uneasy Aztecs admit the wagon and buy all
-        // 50 grain for 50 gold from their treasury; the trade calms the tribe.
-        visit.enterSettlement(WAGON_AT, AZTEC_CAPITAL);
-        market.openMarket();
-        market.verifySaleOffered(WAGON, AZTEC_CAPITAL, GoodsType.GRAIN,
-                WAGON_GRAIN);
-        market.sell();
-        market.verifySaleConfirmation(WAGON, AZTEC_CAPITAL, GoodsType.GRAIN,
-                WAGON_GRAIN);
-        market.confirmDeal();
-        market.verifyHeld(WAGON, GoodsType.GRAIN, 0);
-        market.verifyReceived(AZTEC_CAPITAL, GoodsType.GRAIN, WAGON_GRAIN);
-        visit.escape();
-        visit.verifyChooserClosed();
-        journey.verifyDutchGold(DUTCH_AFTER_NATIVE_SALE);
-        land.verifyClaimantTreasury(AZTEC_CAPITAL, TREASURY_AFTER_SALE);
-        incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
-
-        // Turn 0, trade with France in peace: the frigate sells two olives to
-        // Hidden Quebec at the colony's bid of 3 a piece.
         trade.openShipTrade();
         trade.verifyDialogOpen(true);
         trade.chooseGive(GoodsType.OLIVES);
@@ -308,42 +269,23 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
         // Turn 0, provocation: the missionary pays 630 gold to turn the Aztecs
         // against France, which the draw allows.
+        // A one-shot missionary creates friendship without a payment or
+        // resident mission.
         visit.enterSettlement(MISSIONARY_AT, AZTEC_CAPITAL);
-        incite.startIncitementChoice();
-        visit.verifyChooserClosed();
-        incite.verifyTargetOffered("Phocaea");
-        incite.verifyTargetNotOffered(DUTCH);
-        incite.selectTarget("Phocaea");
-        incite.verifyTerms(INCITEMENT_TERMS);
-        incite.verifyTerms("Your chance: 25%.");
-        incite.confirmIncitement();
-        incite.verifyIncitementResultMessage(INCITEMENT_RESULT);
-        incite.closeIncitementResult();
-        visit.escape();
-        visit.verifyChooserClosed();
-        incite.verifyGold(DUTCH_AFTER_INCITEMENT);
-        incite.verifyOrder(EuropeanNation.FRENCH, 20);
-        incite.verifyTribalAnger(FRANCE, 100);
-        incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
-        incite.verifyBraveDistanceTo(AZTEC_BRAVE, FRENCH_TARGET_AT, 3);
+        final org.akropia.page.NativeMissionPage mission = new org.akropia.page.NativeMissionPage(
+                getContext());
+        mission.confirmMission();
+        mission.verifyMissionApplied(MISSIONARY, AZTEC_CAPITAL, 8);
+        journey.verifyNativeFriend(NativeNation.AZTEC, EuropeanNation.DUTCH);
 
         // Checkpoint A, Save and Continue: the purses, the contact, the course,
         // the order and the unmoved brave all survive, and nothing is replayed.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
-        journey.verifyDutchGold(DUTCH_AFTER_INCITEMENT);
+        journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
         journey.verifyTreatyKept();
-        market.verifyIntroduced(EuropeanNation.DUTCH, NativeNation.AZTEC);
-        visit.verifyCourseStarted(SCOUT, AZTEC_CAPITAL);
-        teaching.openSettlements();
-        teaching.verifyProgress(progressEn(0));
-        teaching.closeSettlements();
-        market.verifyReceived(AZTEC_CAPITAL, GoodsType.GRAIN, WAGON_GRAIN);
         land.verifyClaimantTreasury(AZTEC_CAPITAL, TREASURY_AFTER_SALE);
-        incite.verifyOrder(EuropeanNation.FRENCH, 20);
-        incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
-        incite.verifyBraveDistanceTo(AZTEC_BRAVE, FRENCH_TARGET_AT, 3);
         journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 2);
         trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 2);
         land.verifyLandStatus(PIONEER_AT, NativeLandStatus.PAID);
@@ -352,20 +294,14 @@ public class TC_186_F219_connected_diplomacy_journey_test
         // Turn 1: the brave walks toward the known French colonist beyond the
         // raid radius; the order and the course each count one update.
         game.nextTurnAndCloseDialogs();
-        incite.verifyBraveDistanceTo(AZTEC_BRAVE, FRENCH_TARGET_AT, 2);
-        incite.verifyOrder(EuropeanNation.FRENCH, 19);
-        teaching.verifyLearning(SCOUT, AZTEC_CAPITAL, 1);
         journey.verifyTreatyKept();
-        journey.verifyDutchGold(DUTCH_AFTER_INCITEMENT);
+        journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
 
         // Turn 2: the brave stands beside the colonist with no movement left to
         // attack. Without a declaration the soldier's attack on Fort Orleans
         // is only offered as a declaration of war, which the player cancels.
         game.nextTurnAndCloseDialogs();
-        incite.verifyBraveDistanceTo(AZTEC_BRAVE, FRENCH_TARGET_AT, 1);
-        incite.verifyOrder(EuropeanNation.FRENCH, 18);
-        teaching.verifyLearning(SCOUT, AZTEC_CAPITAL, 2);
         // The French pioneer is still working on its initial square.
         journey.verifyUnitAt(FRENCH_TARGET, FRENCH_TARGET_AT);
         game.panToTile(FORT_AT);
@@ -384,9 +320,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         // Dutch declare war in the relations report; from then on the
         // frigate's attack on the galleon is an ordinary attack.
         game.nextTurnAndCloseDialogs();
-        journey.verifyUnitDestroyed(FRENCH_TARGET);
-        incite.verifyOrder(EuropeanNation.FRENCH, 17);
-        teaching.verifyLearning(SCOUT, AZTEC_CAPITAL, 3);
         europeans.open();
         europeans.review("0-1");
         europeans.confirm();
@@ -421,7 +354,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyColonyListed(DUTCH, FORT_ORLEANS, true);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
-        journey.verifyDutchGold(DUTCH_AFTER_INCITEMENT);
+        journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
 
         // Checkpoint B, Save and Continue: war, ownership, stock, purses and
@@ -437,18 +370,12 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
         journey.verifyUnitAt(SOLDIER, FORT_AT);
-        journey.verifyUnitDestroyed(FRENCH_TARGET);
-        journey.verifyDutchGold(DUTCH_AFTER_INCITEMENT);
+        journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
-        incite.verifyOrder(EuropeanNation.FRENCH, 17);
 
         // Turn 4: the course ends, and the skill is granted once.
-        final ScreenTurnReport report = teaching.nextTurnWithReport();
-        teaching.verifyReportAnnounces(report, REPORT_EN);
-        teaching.closeReport(report);
-        teaching.verifyLearnedAndReleased(SCOUT, AZTEC_CAPITAL, true);
-        incite.verifyOrder(EuropeanNation.FRENCH, 16);
-        journey.verifyDutchGold(DUTCH_AFTER_INCITEMENT);
+        game.nextTurnAndCloseDialogs();
+        journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
 
         // Turn 4, peace: the observer stands beside Hidden Quebec, France
@@ -509,8 +436,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
         journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 4);
         trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 0);
-        teaching.verifyLearnedAndReleased(SCOUT, AZTEC_CAPITAL, true);
-        incite.verifyOrder(EuropeanNation.FRENCH, 16);
     }
 
     @Test
@@ -523,11 +448,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         final PlowPage plow = new PlowPage(getContext());
         final NativeLandPage land = new NativeLandPage(getContext());
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final NativeMarketPage market = new NativeMarketPage(getContext());
-        final NativeTeachingPage teaching = new NativeTeachingPage(
-                getContext());
-        final NativeIncitementPage incite = new NativeIncitementPage(
-                getContext());
         final ForeignColonyTradePage trade = new ForeignColonyTradePage(
                 getContext());
         final EuropeanRelationsPage europeans = new EuropeanRelationsPage(
@@ -547,19 +467,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         land.pay();
         land.verifyDialogClosed();
         journey.verifyDutchGold(DUTCH_AFTER_LAND);
-        visit.enterSettlement(SCOUT_AT, AZTEC_CAPITAL);
-        market.introduce();
-        visit.startTeachingChoice();
-        visit.confirmTeaching();
-        visit.verifyCourseStarted(SCOUT, AZTEC_CAPITAL);
-        visit.enterSettlement(WAGON_AT, AZTEC_CAPITAL);
-        market.openMarket();
-        market.sell();
-        market.confirmDeal();
-        visit.escape();
-        visit.verifyChooserClosed();
-        journey.verifyDutchGold(DUTCH_AFTER_NATIVE_SALE);
-        incite.verifyTribalAnger(DUTCH, ANGER_AFTER_SALE);
         trade.openShipTrade();
         trade.chooseGive(GoodsType.OLIVES);
         trade.setGiveAmount(SOLD_OLIVES);
@@ -567,27 +474,21 @@ public class TC_186_F219_connected_diplomacy_journey_test
         trade.verifyDialogOpen(false);
         journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
+        // A one-shot missionary creates friendship without a payment or
+        // resident mission.
         visit.enterSettlement(MISSIONARY_AT, AZTEC_CAPITAL);
-        incite.startIncitementChoice();
-        incite.selectTarget("Phocaea");
-        incite.verifyTerms(INCITEMENT_TERMS);
-        incite.confirmIncitement();
-        incite.closeIncitementResult();
-        visit.escape();
-        visit.verifyChooserClosed();
-        incite.verifyGold(DUTCH_AFTER_INCITEMENT);
-        incite.verifyOrder(EuropeanNation.FRENCH, 20);
+        final org.akropia.page.NativeMissionPage mission = new org.akropia.page.NativeMissionPage(
+                getContext());
+        mission.confirmMission();
+        mission.verifyMissionApplied(MISSIONARY, AZTEC_CAPITAL, 8);
+        journey.verifyNativeFriend(NativeNation.AZTEC, EuropeanNation.DUTCH);
 
         // Turns 1 to 3: the brave closes in on the French colonist and
         // destroys it on the third native turn; the war is declared and the
         // soldier takes Fort Orleans.
         game.nextTurnAndCloseDialogs();
-        incite.verifyOrder(EuropeanNation.FRENCH, 19);
         game.nextTurnAndCloseDialogs();
-        incite.verifyOrder(EuropeanNation.FRENCH, 18);
         game.nextTurnAndCloseDialogs();
-        journey.verifyUnitDestroyed(FRENCH_TARGET);
-        incite.verifyOrder(EuropeanNation.FRENCH, 17);
         europeans.open();
         europeans.review("0-1");
         europeans.confirm();
@@ -605,9 +506,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
         // Turn 4: the skill is granted, peace is bought once and the trade
         // resumes.
-        final ScreenTurnReport report = teaching.nextTurnWithReport();
-        teaching.verifyReportAnnounces(report, REPORT_EN);
-        teaching.closeReport(report);
+        game.nextTurnAndCloseDialogs();
         europeans.open();
         peace.review();
         peace.verifyQuote(PEACE_PRICE, DUTCH_AFTER_INCITEMENT,
@@ -640,8 +539,6 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
         journey.verifyColonyStock(HIDDEN_QUEBEC, GoodsType.OLIVES, 4);
         trade.verifyCarried(FRIGATE, GoodsType.OLIVES, 0);
-        teaching.verifyLearnedAndReleased(SCOUT, AZTEC_CAPITAL, true);
-        incite.verifyOrder(EuropeanNation.FRENCH, 16);
     }
 
     @Test
@@ -661,8 +558,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
 
         // Start: the Aztecs are hostile toward the Dutch, the brave stands on
         // its hill and an armed soldier stands beside it.
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                HOSTILE_ANGER);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
         journey.verifyUnitAt(AZTEC_BRAVE, BRAVE_AT);
         journey.verifyUnitAt(RAID_SOLDIER, RAID_SOLDIER_AT);
         journey.verifyTreatyKept();

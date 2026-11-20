@@ -893,7 +893,7 @@ public abstract class AbstractUnit implements Unit {
                 // the passive hostility query and the European AI never start
                 // one; the Crown never fights natives.
                 .filter(unit -> owner.isNative()
-                        ? unit.getOwner().isColonialNation()
+                        ? model.canNativeAttack(this, unit)
                         : !unit.getOwner().isNative()
                                 || owner.isColonialNation() && allowDeclaration)
                 // A native battle always has quoted strengths; it never falls
@@ -2151,6 +2151,9 @@ public abstract class AbstractUnit implements Unit {
     public void placeToColonyField(final ColonyField colonyField,
             final GoodsType producedGoodsType) {
         validateColonyField(colonyField, producedGoodsType);
+        Preconditions.checkArgument(
+                model.canUseLand(getOwner(), colonyField.getLocation()),
+                "Land must be purchased before working");
         final int transferCost = colonyTransferCost(colonyField.getColony(),
                 colonyField.getLocation());
         Preconditions.checkState(transferCost >= 0,
@@ -2624,6 +2627,8 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startClearingForest() {
+        Preconditions.checkState(model.canUseLand(owner, getLocation()),
+                "Land must be purchased before improvement");
         Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before clearing forest");
         final UnitActionClearForest next = new UnitActionClearForest();
@@ -2631,6 +2636,7 @@ public abstract class AbstractUnit implements Unit {
             next.setRemainingTurns(
                     UnitActionClearForest.CULTIVATOR_TURNS_TO_CLEAR_FOREST);
         }
+        model.recordNativeLandUse(owner, getLocation());
         setAction(next);
         movementThirds = 0;
         model.fireActionWasStarted(this);
@@ -2644,6 +2650,8 @@ public abstract class AbstractUnit implements Unit {
     }
 
     void startBuildingRoad() {
+        Preconditions.checkState(model.canUseLand(owner, getLocation()),
+                "Land must be purchased before improvement");
         Preconditions.checkState(unitAction.isNoAction() && !hasStandingOrder(),
                 "Cancel go-to before building road");
         final UnitActionBuildRoad next = new UnitActionBuildRoad();
@@ -2651,6 +2659,7 @@ public abstract class AbstractUnit implements Unit {
             next.setRemainingTurns(
                     UnitActionBuildRoad.CULTIVATOR_TURNS_TO_BUILD_ROAD);
         }
+        model.recordNativeLandUse(owner, getLocation());
         setAction(next);
         movementThirds = 0;
         model.fireActionWasStarted(this);
@@ -3050,6 +3059,8 @@ public abstract class AbstractUnit implements Unit {
                 "Unsupported type '%s' for this unit '%s", unitAction.getType(),
                 this);
         if (actionType == UnitActionType.plowField) {
+            Preconditions.checkState(model.canUseLand(owner, getLocation()),
+                    "Land must be purchased before plowing");
             final Optional<PlowProblem> problem = model.getPlowProblem(this);
             Preconditions.checkState(problem.isEmpty(), "Unit cannot plow: %s",
                     problem.orElse(null));
@@ -3059,6 +3070,9 @@ public abstract class AbstractUnit implements Unit {
                 && getType() == UnitType.CULTIVATOR) {
             ((UnitActionPlowField) next).setRemainingTurns(
                     UnitActionPlowField.CULTIVATOR_TURNS_TO_PLOW_FIELD);
+        }
+        if (actionType == UnitActionType.plowField) {
+            model.recordNativeLandUse(owner, getLocation());
         }
         setAction(next);
         movementThirds = 0;

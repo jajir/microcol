@@ -10,7 +10,6 @@ import org.akropia.model.Player;
 import org.akropia.model.Unit;
 
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
 import javafx.scene.control.Label;
 
 /**
@@ -26,19 +25,42 @@ public final class NativeLandPage extends AbstractScreen {
         super(context);
     }
 
+    /** Load the same player journey with a friendly native nation. */
+    public void loadFriendlyFixture(final java.io.File source)
+            throws Exception {
+        final com.google.gson.Gson gson = new com.google.gson.Gson();
+        final com.google.gson.JsonObject game = gson.fromJson(
+                java.nio.file.Files.readString(source.toPath()),
+                com.google.gson.JsonObject.class);
+        for (final var entry : game.getAsJsonObject("model")
+                .getAsJsonArray("nativeFriendships")) {
+            final var row = entry.getAsJsonObject();
+            if ("AZTEC".equals(row.get("nation").getAsString())) {
+                row.getAsJsonObject("favour").addProperty("DUTCH", 8);
+                row.addProperty("friend", "DUTCH");
+            }
+        }
+        final java.nio.file.Path fixture = java.nio.file.Files
+                .createTempFile("native-friendly-land-", ".akropia");
+        try {
+            java.nio.file.Files.writeString(fixture, gson.toJson(game));
+            new AttackPage(getContext()).replaceGame(fixture.toFile());
+        } finally {
+            java.nio.file.Files.deleteIfExists(fixture);
+        }
+    }
+
+    public void verifyLandOwner(final Location at, final String expectedOwner) {
+        assertEquals(expectedOwner,
+                getModel().getLandOwner(at).orElseThrow().getName());
+    }
+
     private Player dutch() {
         return getModel().getPlayerByName(DUTCH);
     }
 
     /** Pay the quoted price and continue with the action. */
     public void pay() {
-        getRobot().clickOn("#nativeLandPay");
-        clickOnButtonWithId("nativeLandConfirm");
-    }
-
-    /** Knowingly continue without paying. */
-    public void continueUnpaid() {
-        getRobot().clickOn("#nativeLandProceed");
         clickOnButtonWithId("nativeLandConfirm");
     }
 
@@ -58,22 +80,9 @@ public final class NativeLandPage extends AbstractScreen {
     }
 
     public void verifyPayEnabled(final boolean expectedEnabled) {
-        final RadioButton pay = getNodeFinder().lookup("#nativeLandPay")
-                .queryAs(RadioButton.class);
-        assertEquals(!expectedEnabled, pay.isDisabled(),
-                "Unexpected state of the pay button");
-        assertTrue(getNodeFinder().lookup("#nativeLandProceed").query()
-                .isVisible(), "Continuing unpaid must stay available");
-        assertTrue(getButtonById("nativeLandCancel").isVisible(),
-                "Canceling must stay available");
-    }
-
-    public void verifyExplicitChoiceRequired() {
-        assertTrue(getButtonById("nativeLandConfirm").isDisabled());
-        assertTrue(!getNodeFinder().lookup("#nativeLandPay")
-                .queryAs(RadioButton.class).isSelected());
-        assertTrue(!getNodeFinder().lookup("#nativeLandProceed")
-                .queryAs(RadioButton.class).isSelected());
+        assertEquals(!expectedEnabled,
+                getButtonById("nativeLandConfirm").isDisabled());
+        assertTrue(getButtonById("nativeLandCancel").isVisible());
     }
 
     public void verifyDialogMessage(final String expectedMessage) {

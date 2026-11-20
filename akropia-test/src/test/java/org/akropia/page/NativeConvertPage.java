@@ -81,6 +81,26 @@ public final class NativeConvertPage extends AbstractScreen {
     }
 
     /**
+     * Load a friendship whose saved random arrival is the fifth native turn.
+     */
+    public void loadFriendshipConvertFixture(final File source)
+            throws Exception {
+        final Gson gson = new Gson();
+        final JsonObject game = readGame(source, gson);
+        final JsonObject model = game.getAsJsonObject("model");
+        for (final var entry : model.getAsJsonArray("nativeFriendships")) {
+            final JsonObject row = entry.getAsJsonObject();
+            if ("AZTEC".equals(row.get("nation").getAsString())) {
+                row.getAsJsonObject("favour").addProperty("DUTCH", 8);
+                row.addProperty("friend", "DUTCH");
+                row.addProperty("elapsed", 0);
+                row.addProperty("arrival", 5);
+            }
+        }
+        replaceGame(gson, game);
+    }
+
+    /**
      * Load the scenario with an ordinary Dutch missionary beside the Aztec
      * capital and the given saved randomness. The natives' anger toward the
      * Dutch starts at zero.
@@ -148,6 +168,15 @@ public final class NativeConvertPage extends AbstractScreen {
         final Gson gson = new Gson();
         final JsonObject game = readGame(source, gson);
         final JsonObject model = game.getAsJsonObject("model");
+        for (final var entry : model.getAsJsonArray("nativeFriendships")) {
+            final JsonObject row = entry.getAsJsonObject();
+            if ("AZTEC".equals(row.get("nation").getAsString())) {
+                row.getAsJsonObject("favour").addProperty("DUTCH", 8);
+                row.addProperty("friend", "DUTCH");
+                row.addProperty("elapsed", 0);
+                row.addProperty("arrival", 6);
+            }
+        }
         model.addProperty("combatRandomState", combatState);
         model.getAsJsonArray("units")
                 .add(unit(convertId, "COLONIST", convertAt, false, 0));

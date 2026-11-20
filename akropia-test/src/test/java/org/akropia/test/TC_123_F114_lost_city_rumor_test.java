@@ -174,8 +174,7 @@ public class TC_123_F114_lost_city_rumor_test extends AbstractAkropiaTest {
                 getContext());
         game.panToTile(START);
         rumor.verifyRumorMarkerDrawn(RUMOR, true);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                0);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 5);
 
         // Entering the marker disturbs the burial site of the nearest nation.
         selectScoutAt(game, START);
@@ -189,8 +188,7 @@ public class TC_123_F114_lost_city_rumor_test extends AbstractAkropiaTest {
         rumor.verifyScoutAt(SCOUT, RUMOR);
         rumor.verifyTreasury(fixture.getTreasury());
         rumor.verifyRumorMarker(RUMOR, false);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                30);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
 
         // Revisiting the used marker adds no second disturbance.
         selectScoutAt(game, RUMOR);
@@ -198,16 +196,14 @@ public class TC_123_F114_lost_city_rumor_test extends AbstractAkropiaTest {
         game.moveMouseAtLocation(BEYOND);
         game.dragMouseAtLocation(RUMOR);
         rumor.verifyNoReportShown();
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                30);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
 
         // Continue keeps the anger and does not apply the disturbance again.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         rumor.verifyRumorMarker(RUMOR, false);
         rumor.verifyRumorNoticeCount(1);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                30);
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC, 2);
     }
 
     @Test

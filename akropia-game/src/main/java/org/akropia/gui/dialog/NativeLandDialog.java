@@ -19,8 +19,6 @@ import com.google.inject.Singleton;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.ToggleGroup;
 import org.akropia.gui.util.ModalActions;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
@@ -41,8 +39,6 @@ public final class NativeLandDialog extends AbstractMessageWindow {
         NOT_ASKED,
         /** Pay; for founding, payment follows when the colony is confirmed. */
         PAID,
-        /** Continue knowingly without paying. */
-        UNPAID,
         /** Nothing was paid and the action must not start. */
         CANCELED
     }
@@ -120,60 +116,33 @@ public final class NativeLandDialog extends AbstractMessageWindow {
                 i18n.get(Loc.nativeLandConsequence));
         final Label note = text("nativeLandNote", noteText);
         final Label message = text("nativeLandMessage", "");
-        final RadioButton pay = new RadioButton(i18n.get(Loc.nativeLandPay));
-        pay.setId("nativeLandPay");
-        final RadioButton proceed = new RadioButton(
-                i18n.get(Loc.nativeLandProceed));
-        proceed.setId("nativeLandProceed");
         final Button cancel = ActionButtons.button(ButtonIcon.CANCEL,
                 i18n.get(Loc.nativeLandCancel));
         cancel.setId("nativeLandCancel");
         cancel.setCancelButton(true);
+        final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM,
+                i18n.get(Loc.nativeLandPay));
+        confirm.setId("nativeLandConfirm");
+        confirm.setDisable(!payable);
         if (!payable) {
-            pay.setDisable(true);
             message.setText(i18n.get(Loc.nativeLandCannotPay));
         }
-        final ToggleGroup choices = new ToggleGroup();
-        pay.setToggleGroup(choices);
-        proceed.setToggleGroup(choices);
-        pay.setWrapText(true);
-        proceed.setWrapText(true);
-        final Button confirm = ActionButtons.button(ButtonIcon.CONFIRM,
-                i18n.get(Loc.nativeLandChoose));
-        confirm.setId("nativeLandConfirm");
-        confirm.setDisable(true);
-        choices.selectedToggleProperty()
-                .addListener((observable, before, selected) -> {
-                    confirm.setDisable(selected == null
-                            || selected == pay && pay.isDisabled());
-                    confirm.setText(
-                            selected == null ? i18n.get(Loc.nativeLandChoose)
-                                    : selected == pay ? pay.getText()
-                                            : proceed.getText());
-                });
         confirm.setOnAction(event -> {
-            if (proceed.isSelected()) {
-                result = Result.UNPAID;
-                close();
-            } else if (pay.isSelected() && !pay.isDisabled()) {
-                try {
-                    if (payment != null) {
-                        payment.run();
-                    }
-                    result = Result.PAID;
-                    close();
-                } catch (IllegalArgumentException
-                        | IllegalStateException rejected) {
-                    pay.setDisable(true);
-                    choices.selectToggle(null);
-                    message.setText(i18n.get(Loc.nativeLandChanged));
+            try {
+                if (payment != null) {
+                    payment.run();
                 }
+                result = Result.PAID;
+                close();
+            } catch (IllegalArgumentException
+                    | IllegalStateException rejected) {
+                confirm.setDisable(true);
+                message.setText(i18n.get(Loc.nativeLandChanged));
             }
         });
         cancel.setOnAction(event -> onCancelDialog());
         root.getChildren().addAll(title, claimant, priceLabel, consequence,
-                note, new VBox(12, pay, proceed), message,
-                new ModalActions(confirm, cancel));
+                note, message, new ModalActions(confirm, cancel));
         init(root);
         setTitle(i18n.get(Loc.nativeLandTitle));
         showAndWait();

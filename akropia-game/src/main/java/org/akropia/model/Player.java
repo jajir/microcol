@@ -958,15 +958,14 @@ public abstract class Player {
         getAllUnits().forEach(unit -> unit.startTurn());
         // Before missions, so a convert delivered by this update starts at zero
         // unassigned updates.
-        model.advanceNativeConverts(this);
         // Before relations: the mission clock reads the attitude as it entered
         // this update. Each fifth nonhostile update is one conversion event.
-        model.resolveNativeConversions(this, model.advanceNativeMissions(this));
+
         // Once per completed own update; load and Continue never reach here.
         model.updateNativeRelations(this);
         // After relations, so a tense settlement cancels on its current
         // attitude.
-        model.advanceNativeTeaching(this);
+
         if (hadFranklin) {
             model.prepareFranklinPeaceOffers(this);
         }

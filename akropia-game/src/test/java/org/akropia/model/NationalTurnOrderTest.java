@@ -58,6 +58,7 @@ class NationalTurnOrderTest {
         }
         data.getModel().getUnits().clear();
         data.getModel().getColonies().clear();
+        data.getModel().getLandOwnership().clear();
         data.getModel().getTurnEvents().clear();
         data.getModel().getEuropeanRelations().clear();
         for (int first = 0; first < nations.size(); first++) {

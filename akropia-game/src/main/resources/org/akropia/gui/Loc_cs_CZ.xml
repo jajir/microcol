@@ -75,7 +75,7 @@
 	<entry key="nativeLandTitle">Místní půda</entry>
 	<entry key="nativeLandClaimedBy">Toto pole si nárokuje: %s.</entry>
 	<entry key="nativeLandPrice">Cena: %s zlata. Máš %s zlata.</entry>
-	<entry key="nativeLandConsequence">Pokud pole využiješ bez zaplacení, poplach sídla vůči tobě stoupne o 5 jednorázově při prvním využití a o 2 každé kolo, dokud je pole využíváno.</entry>
+	<entry key="nativeLandConsequence">Zaplacená půda ti zůstane i při změně vztahů.</entry>
 	<entry key="nativeLandPay">Zaplatit a pokračovat</entry>
 	<entry key="nativeLandProceed">Pokračovat bez zaplacení</entry>
 	<entry key="nativeLandCancel">Zrušit</entry>
@@ -132,7 +132,7 @@
 	<entry key="nativeAttackDefenders">Obránců na poli: %d. Obrana sídla: +%d %%. První bitva: vaše síla %d proti %d, šance na výhru %d %%.</entry>
 	<entry key="nativeAttackSpanishBonus">Bonus Milétu k útoku: +%d %%. Platí jen pro tento útok na místní sídlo.</entry>
 	<entry key="nativeAttackNoSpanish">Bonus Milétu k útoku neplatí.</entry>
-	<entry key="nativeAttackRelations">Pokud se útok provede, vzroste hněv národa a poplach tohoto sídla vůči vašemu národu. Dobytí je zvýší ještě více.</entry>
+	<entry key="nativeAttackRelations">Útok sníží přízeň tohoto národa vůči vám o 3, ať zvítězí kdokoli.</entry>
 	<entry key="nativeAttackConfirmButton">Zaútočit</entry>
 	<entry key="nativeAttackBackButton">Zpět</entry>
 	<entry key="nativeAttackConquered">Přemohli jste %d obránce(ů) a sídlo jste dobyli.</entry>
@@ -238,9 +238,10 @@
 	<entry key="nativeChiefRepeatInformation">Náčelník opakuje tytéž informace. Zboží k prodeji: %s. Zboží, o které mají zájem: %s. Učitelná dovednost: %s. Území do dvou polí je vyznačeno na vaší mapě.</entry>
 	<entry key="nativeChiefNone">žádné</entry>
 	<entry key="nativeChiefRejected">Návštěva náčelníka se změnila, takže se nic nestalo.</entry>
-	<entry key="nativeMissionTitle">Založit misii</entry>
-	<entry key="nativeMissionLine">Vlastník: %s. Misionář: %s. Místní obyvatelé jsou %s. Pokrok: %d z %d kol. Každé kolo sníží jejich obavy z vás o 2, u experta o 4, a zvýší obavy každé známé rivalské země o 1.</entry>
-	<entry key="nativeMissionConfirmButton">Založit</entry>
+	<entry key="nativeMissionTitle">Vyslat misionáře</entry>
+	<entry key="nativeMissionLine">Misionář se při návštěvě spotřebuje. Přízeň národa se jednorázově změní:
+%s</entry>
+	<entry key="nativeMissionConfirmButton">Vyslat misionáře</entry>
 	<entry key="nativeMissionBackButton">Zpět</entry>
 	<entry key="nativeMissionOrdinary">běžný</entry>
 	<entry key="nativeMissionExpert">expert</entry>
@@ -294,7 +295,7 @@
     <entry key="unitsPanel_treasureValue">Hodnota pokladu: %d zlatých</entry>
     <entry key="unitsPanel_occupiedHolds">Obsazené nákladní prostory: %d</entry>
     <entry key="unitsPanel_continental">Vojenská role: kontinentální</entry>
-    <entry key="unitsPanel_convert">Místní konvertita: %s. Nepřiřazená kola: %s z 8.</entry>
+    <entry key="unitsPanel_convert">Místní konvertita: %s.</entry>
     <entry key="unitsPanel_royal">Vojenská role: voják mateřského města</entry>
     <entry key="selectedShipCargo">Náklad vybrané lodi · #%s</entry>
     <entry key="selectShipCargo">Vyberte loď pro zobrazení nákladu</entry>
@@ -322,4 +323,10 @@
     <entry key="close">Zavřít</entry>
     <entry key="nativeLandChoose">Vyberte možnost</entry>
     <entry key="expeditionCalendarIntro">Kolem roku 1000 př. n. l. Rok 1 začíná vaší výpravou. Jedno kolo je jeden den; dvanáct měsíců po sedmi dnech tvoří rok. Řecké názvy měsíců jsou historickou inspirací.</entry>
+	<entry key="nativeFavour">Přízeň k %s: %d/10</entry>
+	<entry key="nativeFriend">Přítel: %s</entry>
+	<entry key="nativeNoFriend">Bez přítele</entry>
+	<entry key="landOwner">Vlastník půdy: %s</entry>
+	<entry key="landUnowned">Půda bez vlastníka</entry>
+    <entry key="nativeLandUnavailable">Tuto půdu nemůžeš využít: patří jinému hráči nebo nepřátelskému domorodému národu.</entry>
 </properties>

@@ -63,7 +63,7 @@ public final class Congress {
         Preconditions.checkArgument(
                 activated
                         ? generation > 0
-                                && (members.size() == Founder.values().length
+                                && (remainingFounders() == 0
                                         || generation < Integer.MAX_VALUE)
                                 && candidates.size() == remainingCategories()
                         : generation == 0 && owls == 0 && members.isEmpty()
@@ -116,11 +116,18 @@ public final class Congress {
         }
     }
 
+    private long remainingFounders() {
+        return List.of(Founder.values()).stream().filter(
+                founder -> founder.isAvailable() && !members.contains(founder))
+                .count();
+    }
+
     private int remainingCategories() {
         int count = 0;
         for (final Founder.Category category : Founder.Category.values()) {
             if (List.of(Founder.values()).stream()
-                    .anyMatch(founder -> founder.getCategory() == category
+                    .anyMatch(founder -> founder.isAvailable()
+                            && founder.getCategory() == category
                             && !members.contains(founder))) {
                 count++;
             }
@@ -133,7 +140,7 @@ public final class Congress {
         for (final Founder.Category category : Founder.Category.values()) {
             final List<Founder> eligible = new ArrayList<>();
             for (final Founder founder : Founder.values()) {
-                if (founder.getCategory() == category
+                if (founder.isAvailable() && founder.getCategory() == category
                         && !members.contains(founder)) {
                     eligible.add(founder);
                 }
@@ -178,7 +185,7 @@ public final class Congress {
     }
 
     int target(final Difficulty difficulty) {
-        if (!activated || members.size() == Founder.values().length) {
+        if (!activated || remainingFounders() == 0) {
             return 0;
         }
         final int factor = RecruitmentPool.factor(difficulty);
@@ -214,7 +221,7 @@ public final class Congress {
         Preconditions.checkState(owls >= target(difficulty), "Not enough owls");
         Preconditions.checkState(generation < Integer.MAX_VALUE,
                 "Knowledge generation exhausted");
-        if (members.size() < Founder.values().length - 1) {
+        if (remainingFounders() > 1) {
             Math.toIntExact(Math.addExact(Math.multiplyExact(
                     Math.multiplyExact(100L, members.size() + 2L),
                     RecruitmentPool.factor(difficulty)), 99L) / 100L);
@@ -226,7 +233,7 @@ public final class Congress {
                 "Founder objective has not been reached");
         Preconditions.checkState(generation < Integer.MAX_VALUE,
                 "Congress generation exhausted");
-        if (members.size() < Founder.values().length - 1) {
+        if (remainingFounders() > 1) {
             Math.toIntExact(Math.addExact(Math.multiplyExact(
                     Math.multiplyExact(100L, members.size() + 2L),
                     RecruitmentPool.factor(difficulty)), 99L) / 100L);

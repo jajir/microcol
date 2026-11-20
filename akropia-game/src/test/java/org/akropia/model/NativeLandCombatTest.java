@@ -116,7 +116,11 @@ class NativeLandCombatTest {
 
         ModelPo build() {
             NativeTurnScene scene = NativeTurnScene.island()
-                    .nativePlayer(NATION);
+                    .nativePlayer(NATION).favour(NATION, EuropeanNation.DUTCH,
+                            nativeAttacks ? 2 : 5);
+            if (!home) {
+                scene.settlement(CAPITAL_ID, NATION, true, -3, -3);
+            }
             if (home) {
                 // The nation needs exactly one capital; the brave's own home
                 // is an ordinary settlement, so no capital factor applies.
@@ -214,7 +218,10 @@ class NativeLandCombatTest {
 
         ModelPo build() {
             final NativeTurnScene scene = NativeTurnScene.freePlay()
-                    .nativePlayer(NATION);
+                    .nativePlayer(NATION)
+                    .favour(NATION, EuropeanNation.DUTCH, 2)
+                    .favour(NATION, EuropeanNation.FRENCH, 2)
+                    .settlement(CAPITAL_ID, NATION, true, -19, 0);
             final ModelPo po = scene.po();
             final List<Location> free = COLONY.getNeighbors().stream()
                     .filter(at -> po.getUnits().stream()
@@ -353,8 +360,7 @@ class NativeLandCombatTest {
         final StringBuilder out = new StringBuilder();
         out.append(saved.getCombatRandomState()).append('|')
                 .append(saved.getNativeRelationOutcomeIds()).append('|')
-                .append(model.getNativeTribalAnger(
-                        model.getPlayerByName("Dutch"), NATION));
+                .append(model.getNativeFavour(NATION, EuropeanNation.DUTCH));
         model.getAllUnits().stream()
                 .sorted(Comparator.comparingInt(Unit::getId)).forEach(
                         unit -> out.append('|').append(unit.getId()).append(':')
@@ -774,36 +780,42 @@ class NativeLandCombatTest {
     }
 
     @Test
-    void confirmedAttackAddsTribalAngerOnceForEitherWinnerAndAcrossReload() {
+    void confirmedAttackCostsThreeFavourOnceForEitherWinnerAndAcrossReload() {
         for (final boolean attackerWins : new boolean[] { true, false }) {
             final Model model = decided(() -> Fight.human().build(),
                     NativeLandCombatTest::islandOrder, attackerWins);
             final Player dutch = model.getPlayerByName("Dutch");
-            assertEquals(0, model.getNativeTribalAnger(dutch, NATION), 1e-9);
+            assertEquals(5, model.getNativeFavour(NATION, EuropeanNation.DUTCH),
+                    1e-9);
             islandOrder(model).execute();
-            assertEquals(10, model.getNativeTribalAnger(dutch, NATION), 1e-9);
+            assertEquals(2, model.getNativeFavour(NATION, EuropeanNation.DUTCH),
+                    1e-9);
             assertEquals(1, model.save().getNativeRelationOutcomeIds().size());
             final Model continued = NativeTurnScene.make(model.save());
-            assertEquals(10, continued.getNativeTribalAnger(
-                    continued.getPlayerByName("Dutch"), NATION), 1e-9);
+            assertEquals(2,
+                    continued.getNativeFavour(NATION, EuropeanNation.DUTCH),
+                    1e-9);
             assertEquals(1,
                     continued.save().getNativeRelationOutcomeIds().size());
         }
     }
 
     @Test
-    void attackOnABraveWithAHomeAlsoRaisesThatSettlementsAlarm() {
+    void attackOnABraveChangesTheWholeNation() {
         final Model model = model(Fight.human().home().build());
         final Player dutch = model.getPlayerByName("Dutch");
         final NativeSettlement home = settlement(model, HOME_ID);
         final NativeSettlement capital = settlement(model, CAPITAL_ID);
         assertEquals(0, model.getNativeLocalAlarm(dutch, home), 1e-9);
         islandOrder(model).execute();
-        assertEquals(10, model.getNativeTribalAnger(dutch, NATION), 1e-9);
+        assertEquals(2, model.getNativeFavour(NATION, EuropeanNation.DUTCH),
+                1e-9);
         // The ordinary home takes the plain unit-attack alarm; other
         // settlements of the nation are untouched.
-        assertEquals(10, model.getNativeLocalAlarm(dutch, home), 1e-9);
-        assertEquals(0, model.getNativeLocalAlarm(dutch, capital), 1e-9);
+        assertEquals(2,
+                model.getNativeFavour(home.getNation(), EuropeanNation.DUTCH));
+        assertEquals(2, model.getNativeFavour(capital.getNation(),
+                EuropeanNation.DUTCH));
         assertEquals(1, model.save().getNativeRelationOutcomeIds().size());
     }
 
@@ -835,7 +847,8 @@ class NativeLandCombatTest {
         final NativeSettlement home = settlement(guarded, HOME_ID);
         assertEquals(NativeTurnScene.at(1, 0), home.getLocation());
         assertEquals(2, guarded.getNativeSettlements().size());
-        assertEquals(10, guarded.getNativeLocalAlarm(dutch, home), 1e-9);
+        assertEquals(2, guarded.getNativeFavour(home.getNation(),
+                EuropeanNation.DUTCH));
         assertEquals(1, guarded.save().getNativeRelationOutcomeIds().size());
         final Model continued = NativeTurnScene.make(guarded.save());
         assertEquals(NativeTurnScene.at(0, 0),
@@ -847,8 +860,8 @@ class NativeLandCombatTest {
     void nativeRaidHasNoRelationEffect() {
         final Model model = model(Fight.raid().build());
         islandOrder(model).execute();
-        assertEquals(0, model.getNativeTribalAnger(
-                model.getPlayerByName("Dutch"), NATION), 1e-9);
+        assertEquals(2, model.getNativeFavour(NATION, EuropeanNation.DUTCH),
+                1e-9);
         final List<Long> outcomes = model.save().getNativeRelationOutcomeIds();
         assertTrue(outcomes == null || outcomes.isEmpty());
     }

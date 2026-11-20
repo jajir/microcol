@@ -129,6 +129,8 @@ final class LostCityRumorFixture {
         po.setNativeSettlements(natives);
         po.setNativeSettlementKnowledge(new ArrayList<>());
         po.setNativeTribalAnger(NativeRelations.freshTribalAnger());
+        po.setNativeFriendships(org.akropia.model.NativeFriendships.fresh());
+        po.setLandOwnership(java.util.List.of());
         po.setNativeLocalAlarm(NativeRelations.freshLocalAlarm(natives));
         po.setNativeLandRights(new ArrayList<>());
         po.setNativeLandTakings(new ArrayList<>());

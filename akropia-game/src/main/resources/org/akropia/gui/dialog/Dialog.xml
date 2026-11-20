@@ -98,7 +98,7 @@
     <entry key="fight_rebelAmbushBonus">Rebel ambush: +%s%%</entry>
     <entry key="fight_causeSupportBonus">Cause support: +%s%%</entry>
     <entry key="fight_nativeLoss">A defeated native brave is destroyed together with its equipment. A defeated unarmed colonist dies and is not captured. An armed colonist loses horses or weapons; artillery is damaged first. Both participants spend their remaining movement.</entry>
-    <entry key="fight_nativeAnger">Attacking a native brave raises the anger of its nation toward you, whoever wins.</entry>
+    <entry key="fight_nativeAnger">Attacking a native brave lowers its nation’s favour towards you by 3, whoever wins.</entry>
     <entry key="fight_nativeArmedBrave">Armed native brave</entry>
     <entry key="fight_nativeMountedBrave">Mounted native brave</entry>
     <entry key="fight_nativeMountedWarrior">Mounted native warrior</entry>

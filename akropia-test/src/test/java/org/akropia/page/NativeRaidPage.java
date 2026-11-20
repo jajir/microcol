@@ -41,7 +41,7 @@ import com.google.gson.JsonObject;
 public final class NativeRaidPage extends AbstractScreen {
 
     /** Tribal anger that makes the Aztec brave hostile to the Dutch. */
-    private static final double HOSTILE_ANGER = 80;
+    private static final double HOSTILE_ANGER = 2;
 
     /** Homeless Aztec survivor, removed so that only one brave can raid. */
     private static final int SURVIVOR_ID = 201;
@@ -156,11 +156,10 @@ public final class NativeRaidPage extends AbstractScreen {
     private static void setAztecAnger(final JsonObject model,
             final double value) {
         for (final JsonElement entry : model
-                .getAsJsonArray("nativeTribalAnger")) {
-            final JsonObject anger = entry.getAsJsonObject();
-            if ("AZTEC".equals(anger.get("nation").getAsString())
-                    && "DUTCH".equals(anger.get("european").getAsString())) {
-                anger.addProperty("value", value);
+                .getAsJsonArray("nativeFriendships")) {
+            final JsonObject row = entry.getAsJsonObject();
+            if ("AZTEC".equals(row.get("nation").getAsString())) {
+                row.getAsJsonObject("favour").addProperty("DUTCH", (int) value);
             }
         }
     }

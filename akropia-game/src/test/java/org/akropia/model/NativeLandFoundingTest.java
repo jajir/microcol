@@ -58,28 +58,17 @@ class NativeLandFoundingTest {
     }
 
     @Test
-    void previewNamesTheColonySquareAndTheFieldTheFounderThenWorks() {
+    void neutralFoundingRequiresPaymentForThePreviewedSquares() {
         final Model model = founderScene(500).toModel();
         final Player dutch = model.getPlayerByName(DUTCH);
         final Unit founder = model.getUnitById(FOUNDER_ID);
         final List<Location> land = model.getFoundingLand(founder);
         assertEquals(2, land.size());
         assertEquals(COLONY_SITE, land.get(0));
-        // The capital's own square is never a claimed square of this test.
         assertNotEquals(SITE, land.get(1));
-
-        // Unpaid founding: the colony square and the first field are both
-        // taken once, 5 each, with no update yet.
-        final Colony colony = model.buildColony(dutch, founder, NAME, land,
-                List.of());
-        assertEquals(land.get(1),
-                colony.getColonyFields().stream()
-                        .filter(ColonyField::isNotEmpty).findFirst()
-                        .orElseThrow().getLocation());
-        assertEquals(2, model.save().getNativeLandTakings().size());
-        assertEquals(10, model.getNativeLocalAlarm(dutch, settlement(model)),
-                EXACT);
-        assertEquals(500, dutch.getGold());
+        assertThrows(IllegalArgumentException.class,
+                () -> model.buildColony(dutch, founder, NAME, land, List.of()));
+        assertNothingChanged(model, 500);
     }
 
     @Test
@@ -149,21 +138,14 @@ class NativeLandFoundingTest {
     }
 
     @Test
-    void minuitFoundingTakesNothingAndCostsNothing() {
+    void legacyFounderCannotBypassNeutralLandPayment() {
         final Model model = founderScene(500).minuitMember(DUTCH).toModel();
         final Player dutch = model.getPlayerByName(DUTCH);
         final Unit founder = model.getUnitById(FOUNDER_ID);
         final List<Location> land = model.getFoundingLand(founder);
-        for (final NativeLandQuote quote : quotes(model, land)) {
-            assertEquals(NativeLandStatus.WAIVED, quote.getStatus());
-            assertEquals(0, quote.getPrice());
-        }
-        model.buildColony(dutch, founder, NAME, land, List.of());
-        assertTrue(model.getColonyAt(COLONY_SITE).isPresent());
-        assertEquals(500, dutch.getGold());
-        assertEquals(0, model.save().getNativeLandTakings().size());
-        assertEquals(0, model.getNativeLocalAlarm(dutch, settlement(model)),
-                EXACT);
+        assertThrows(IllegalArgumentException.class,
+                () -> model.buildColony(dutch, founder, NAME, land, List.of()));
+        assertNothingChanged(model, 500);
     }
 
     @Test

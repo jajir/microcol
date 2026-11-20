@@ -366,7 +366,9 @@ public class GamePage extends AbstractScreen {
 
     public void selectTile(final Location location) {
         Preconditions.checkNotNull(location);
-        moveMouseAtLocation(location);
+        // A retained outcome can cover hover text until this click dismisses
+        // it.
+        hoverTile(location);
         getRobot().clickOn(MouseButton.PRIMARY);
         final javafx.geometry.Point2D point = screenPoint(location);
         getRobot().moveTo(point.getX(), point.getY(), Motion.DEFAULT);

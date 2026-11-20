@@ -8,11 +8,9 @@ import java.util.stream.Collectors;
 
 import org.akropia.gui.screen.game.gamepanel.AnimationLock;
 import org.akropia.model.AttackOrder;
-import org.akropia.model.EuropeanNation;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.NativeHostility;
-import org.akropia.model.NativeIncitementOrder;
 import org.akropia.model.NativeSettlement;
 import org.akropia.model.Path;
 import org.akropia.model.Player;
@@ -85,78 +83,43 @@ public final class NativeRobotPlayer extends AbstractRobotPlayer {
             return;
         }
         final UnitNativeBrave brave = (UnitNativeBrave) unit;
-        if (!pursueIncited(brave) && !raid(brave)) {
+        if (!pursueEnemy(brave)) {
             patrolHome(brave);
         }
     }
 
     /**
-     * Pursues the selected European power of a paid incitement (R-0166). The
-     * candidates are the known units of that power with a legal route beside
-     * them, nearest by the cost of that route and then by stable unit ID. The
-     * brave walks as much of the route as its movement pays and attacks only
-     * when it then stands beside the target. Once such a target exists the
-     * pursuit owns the turn, even if no step is affordable now, so a distant
-     * target never hands the brave back to the ordinary raid. Without an order
-     * or without a known reachable unit it returns false and the ordinary raid
-     * follows.
-     *
-     * @return whether the brave pursued a target
+     * Pursue a visible enemy in the settlement defense radius, using normal
+     * paths.
      */
-    private boolean pursueIncited(final UnitNativeBrave brave) {
-        final Optional<NativeIncitementOrder> order = getModel()
-                .getNativeIncitementOrder(brave.getNation());
-        if (order.isEmpty()) {
-            return false;
-        }
-        for (final Pursuit pursuit : incitedPursuits(brave,
-                order.get().getTarget())) {
-            if (!isStillHostileEnemy(brave, pursuit.target)) {
-                continue;
-            }
-            if (pursuit.route.isEmpty()) {
-                if (attackAdjacent(brave, pursuit.target)) {
-                    return true;
-                }
-                // This unit cannot be fought now; the next nearest is tried.
-                continue;
-            }
-            walk(brave, pursuit.route);
-            if (brave.isAtPlaceLocation() && brave.getLocation()
-                    .isNeighbor(pursuit.target.getLocation())) {
-                attackAdjacent(brave, pursuit.target);
-            }
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * Known units of the selected European power that this brave may attack by
-     * the model's type rule, each with the cheapest legal route beside it. Only
-     * present sight of the whole nation counts, as in the ordinary raid, so a
-     * hidden unit is never chosen, and a unit without a legal route, such as
-     * one on an unreachable islet, is left out. The nearest by route cost comes
-     * first, and equal costs go by stable unit ID.
-     */
-    private List<Pursuit> incitedPursuits(final UnitNativeBrave brave,
-            final EuropeanNation european) {
+    private boolean pursueEnemy(final UnitNativeBrave brave) {
         final List<Pursuit> pursuits = new ArrayList<>();
-        for (final Unit unit : getModel().getAllUnits()) {
-            if (!unit.isAtPlaceLocation() || unit.isShip()
-                    || !brave.getType().getAttackableUnitType()
-                            .contains(unit.getType())
-                    || !isNation(unit.getOwner(), european)
-                    || !getPlayer().isCurrentlyVisible(unit.getLocation())) {
+        for (final Unit target : getModel().getAllUnits()) {
+            if (!getModel().canNativeAttack(brave, target)
+                    || !getPlayer().isCurrentlyVisible(target.getLocation())) {
                 continue;
             }
-            routeBeside(brave, unit).ifPresent(route -> pursuits
-                    .add(new Pursuit(unit, route, routeCost(brave, route))));
+            routeBeside(brave, target).ifPresent(route -> pursuits
+                    .add(new Pursuit(target, route, routeCost(brave, route))));
         }
         pursuits.sort(
                 Comparator.comparingInt((Pursuit pursuit) -> pursuit.costThirds)
                         .thenComparingInt(pursuit -> pursuit.target.getId()));
-        return pursuits;
+        for (final Pursuit pursuit : pursuits) {
+            if (pursuit.route.isEmpty()) {
+                if (attackAdjacent(brave, pursuit.target)) {
+                    return true;
+                }
+            } else {
+                walk(brave, pursuit.route);
+                if (brave.isAtPlaceLocation() && brave.getLocation()
+                        .isNeighbor(pursuit.target.getLocation())) {
+                    attackAdjacent(brave, pursuit.target);
+                }
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -222,15 +185,6 @@ public final class NativeRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * @return whether this owner is the European power of that nation
-     */
-    private static boolean isNation(final Player owner,
-            final EuropeanNation european) {
-        return EuropeanNation.findByPlayerName(owner.getName())
-                .equals(Optional.of(european));
-    }
-
-    /**
      * Whether the brave's nation is hostile to this colonial European, read
      * from the home settlement of the brave, or the tribal anger of a nation
      * whose brave is homeless.
@@ -243,70 +197,14 @@ public final class NativeRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * Tries the nearest known hostile enemy first, then the next one, so a
-     * blocked nearer enemy never hides a reachable farther one.
-     *
-     * @return whether the brave moved or attacked
-     */
-    private boolean raid(final UnitNativeBrave brave) {
-        for (final Unit target : hostileTargets(brave)) {
-            if (!isStillHostileEnemy(brave, target)) {
-                continue;
-            }
-            if (brave.getLocation().isNeighbor(target.getLocation())) {
-                if (attackAdjacent(brave, target)) {
-                    return true;
-                }
-            } else if (approach(brave, target)) {
-                // One legal approach ends the choice; an attack follows only if
-                // the remaining movement still allows it.
-                attackAdjacent(brave, target);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Colonial units of a hostile nation within the raid radius that this brave
-     * may attack by the model's own type rule, nearest first and then by stable
-     * unit ID. Only present sight of the whole nation counts, so a hidden enemy
-     * is never selected, and ships or other types the brave cannot attack never
-     * distract it.
-     */
-    private List<Unit> hostileTargets(final UnitNativeBrave brave) {
-        final Location at = brave.getLocation();
-        final List<Unit> targets = new ArrayList<>();
-        for (int dx = -RAID_RADIUS; dx <= RAID_RADIUS; dx++) {
-            for (int dy = -RAID_RADIUS; dy <= RAID_RADIUS; dy++) {
-                final Location square = Location.of(at.getX() + dx,
-                        at.getY() + dy);
-                if (square.equals(at) || !getModel().getMap().isValid(square)) {
-                    continue;
-                }
-                getPlayer().getObservedUnitsAt(square).stream()
-                        .filter(unit -> !unit.isShip()
-                                && brave.getType().getAttackableUnitType()
-                                        .contains(unit.getType()))
-                        .filter(unit -> isHostile(brave, unit.getOwner()))
-                        .forEach(targets::add);
-            }
-        }
-        targets.sort(Comparator.comparingInt(
-                (Unit unit) -> unit.getLocation().getDistanceChebyshev(at))
-                .thenComparingInt(Unit::getId));
-        return targets;
-    }
-
-    /**
      * Rechecked before every action: the unit may be gone, its owner may no
      * longer be hostile, or the nation may have lost sight of it since the list
      * was made.
      */
     private boolean isStillHostileEnemy(final UnitNativeBrave brave,
             final Unit target) {
-        return brave.isAtPlaceLocation() && target.isAtPlaceLocation()
-                && isHostile(brave, target.getOwner())
+        return brave.isAtPlaceLocation()
+                && getModel().canNativeAttack(brave, target)
                 && getPlayer().isCurrentlyVisible(target.getLocation());
     }
 
@@ -336,32 +234,6 @@ public final class NativeRobotPlayer extends AbstractRobotPlayer {
         }
         waitForAnimations();
         return true;
-    }
-
-    /**
-     * Moves the brave to the square beside the target with the shortest
-     * affordable path, ties broken by coordinate order.
-     *
-     * @return whether the brave moved
-     */
-    private boolean approach(final UnitNativeBrave brave, final Unit target) {
-        Optional<Location> best = Optional.empty();
-        int bestSteps = Integer.MAX_VALUE;
-        for (final Location square : target.getLocation().getNeighbors()
-                .stream().sorted(COORDINATE_ORDER)
-                .collect(Collectors.toList())) {
-            if (!getModel().getMap().isValid(square)) {
-                continue;
-            }
-            final Optional<List<Location>> path = brave.getPath(square);
-            if (path.isPresent() && !path.get().isEmpty()
-                    && brave.canAffordPath(path.get())
-                    && path.get().size() < bestSteps) {
-                best = Optional.of(square);
-                bestSteps = path.get().size();
-            }
-        }
-        return best.isPresent() && moveTo(brave, best.get());
     }
 
     /**

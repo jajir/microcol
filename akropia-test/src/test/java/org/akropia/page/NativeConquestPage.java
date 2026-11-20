@@ -607,10 +607,9 @@ public final class NativeConquestPage extends AbstractScreen {
     /**
      * @param expected exact tribal anger of the Aztecs toward the Dutch
      */
-    public void verifyTribalAnger(final double expected) {
-        assertEquals(expected,
-                getModel().getNativeTribalAnger(dutch(), NativeNation.AZTEC),
-                1e-9);
+    public void verifyFavour(final int expected) {
+        assertEquals(expected, getModel().getNativeFavour(NativeNation.AZTEC,
+                org.akropia.model.EuropeanNation.DUTCH));
     }
 
     /**

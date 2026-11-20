@@ -1006,6 +1006,7 @@ public class Colony {
 
         final Player previousOwner = owner;
         owner = player;
+        model.captureColonyLand(this);
         // A European conqueror keeps liberty and becomes the affiliation; the
         // Crown leaves the last colonial affiliation untouched.
         if (!player.isKing()) {

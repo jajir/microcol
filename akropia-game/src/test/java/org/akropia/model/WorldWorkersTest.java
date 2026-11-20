@@ -30,6 +30,10 @@ class WorldWorkersTest {
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setTrees(Collections.emptySet());
         data.getModel().getMap().setFields(Collections.emptySet());
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         return Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }
@@ -375,6 +379,10 @@ class WorldWorkersTest {
         terrain.put(colonyPo.getLocation().add(secondField.getDirection()),
                 TerrainType.OCEAN);
         saved.getMap().setTerrainType(terrain);
+        saved.getLandOwnership()
+                .removeIf(title -> saved.getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         final Model first = Model.make(saved,
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Model second = Model.make(saved,

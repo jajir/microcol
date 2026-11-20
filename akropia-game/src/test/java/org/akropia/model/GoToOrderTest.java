@@ -92,6 +92,10 @@ class GoToOrderTest {
     }
 
     private Model load(final GameModelPo data) {
+        data.getModel().getLandOwnership()
+                .removeIf(title -> data.getModel().getMap().getTerrainMap()
+                        .getOrDefault(title.getLocation(), TerrainType.OCEAN)
+                        .isSea());
         return Model.make(data.getModel(),
                 MissionImpl.getPredefinedGameOverEvaluators());
     }

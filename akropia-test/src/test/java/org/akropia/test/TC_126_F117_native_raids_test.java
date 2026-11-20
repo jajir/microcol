@@ -60,10 +60,10 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
     private static final Location COLONY = Location.of(24, 16);
 
     /** Anger of the Aztecs toward the Dutch that makes the brave hostile. */
-    private static final double HOSTILE_ANGER = 80;
+    private static final int HOSTILE_ANGER = 2;
 
     /** Anger of the Aztecs toward the Dutch that makes the brave calmer. */
-    private static final double CALM_ANGER = 10;
+    private static final int CALM_ANGER = 5;
 
     /** The Aztec capital, the only Aztec settlement, learned by the Dutch. */
     private static final Location AZTEC_CAPITAL = Location.of(23, 15);
@@ -122,7 +122,7 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         raid.loadFixture(FIXTURE, HOSTILE_ANGER, SOLDIER_ID, SOLDIER);
         fog.centerFrontier();
         natives.verifyBraveLocation(AZTEC_BRAVE_ID, AZTEC_BRAVE);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
                 HOSTILE_ANGER);
 
         // The human ends the turn; the hostile brave raids the soldier beside
@@ -133,10 +133,8 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         raid.verifySoldierLostWeaponsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
                 AZTEC_BRAVE);
         combat.verifyRelationOutcomeCount(0);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
-                RAIDED_ALARM);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                angerAfterDutchUpdate(HOSTILE_ANGER, RAIDED_ALARM));
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
+                HOSTILE_ANGER);
 
         // Continue from disk keeps the raided position without a new raid or
         // another update.
@@ -144,10 +142,8 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         raid.verifySoldierLostWeaponsToRaid(SOLDIER_ID, SOLDIER, AZTEC_BRAVE_ID,
                 AZTEC_BRAVE);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
-                RAIDED_ALARM);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                angerAfterDutchUpdate(HOSTILE_ANGER, RAIDED_ALARM));
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
+                HOSTILE_ANGER);
         combat.verifyRelationOutcomeCount(0);
     }
 
@@ -174,10 +170,8 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         raid.verifyBraveOnHomePatrol(AZTEC_BRAVE_ID);
         natives.verifyBravePatrolledTo(AZTEC_BRAVE_ID, AZTEC_PATROL_STEP);
         combat.verifyRelationOutcomeCount(0);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
-                ARMED_ALARM);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                angerAfterDutchUpdate(CALM_ANGER, ARMED_ALARM));
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
+                CALM_ANGER);
     }
 
     @Test
@@ -208,10 +202,8 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         GamePage.of(getContext()).nextTurnAndCloseDialogs();
         raid.verifyGunDefendedAgainstRaid(AZTEC_BRAVE_ID, GUN_ID, COLONY);
         combat.verifyRelationOutcomeCount(0);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
-                ARMED_ALARM);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                angerAfterDutchUpdate(HOSTILE_ANGER, ARMED_ALARM));
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
+                HOSTILE_ANGER);
 
         // Continue from disk keeps the held gun, the destroyed brave and the
         // relations, without another raid or update.
@@ -219,9 +211,7 @@ public class TC_126_F117_native_raids_test extends AbstractAkropiaTest {
         new FreePlayAuditPage(getContext()).continueGame();
         raid.verifyGunDefendedAgainstRaid(AZTEC_BRAVE_ID, GUN_ID, COLONY);
         combat.verifyRelationOutcomeCount(0);
-        relations.verifyLocalAlarm(EuropeanNation.DUTCH, AZTEC_CAPITAL,
-                ARMED_ALARM);
-        relations.verifyTribalAnger(EuropeanNation.DUTCH, NativeNation.AZTEC,
-                angerAfterDutchUpdate(HOSTILE_ANGER, ARMED_ALARM));
+        relations.verifyFavour(EuropeanNation.DUTCH, NativeNation.AZTEC,
+                HOSTILE_ANGER);
     }
 }

@@ -150,6 +150,37 @@ public final class RightPanelView implements JavaFxComponent {
                             terrain.getResourceOverlay()));
                 }
                 final Player player = gameModelController.getHumanPlayer();
+                if (!terrain.getTerrainType().isSea()) {
+                    sb.append("\n").append(getModel().getLandOwner(location)
+                            .map(owner -> i18n.get(Loc.landOwner,
+                                    owner instanceof org.akropia.model.PlayerNative
+                                            ? ((org.akropia.model.PlayerNative) owner)
+                                                    .getNativeNation()
+                                                    .getDisplayName()
+                                            : owner.getDisplayName()))
+                            .orElseGet(() -> i18n.get(Loc.landUnowned)));
+                }
+                getModel().getNativeSettlementKnownTo(player, location)
+                        .ifPresent(settlement -> {
+                            sb.append("\n").append(
+                                    settlement.getNation().getDisplayName());
+                            if (player.isColonialNation()) {
+                                sb.append("\n").append(i18n.get(
+                                        Loc.nativeFavour,
+                                        player.getDisplayName(),
+                                        getModel().getNativeFavour(
+                                                settlement.getNation(),
+                                                org.akropia.model.EuropeanNation
+                                                        .fromPlayerName(player
+                                                                .getName()))));
+                            }
+                            sb.append("\n").append(getModel()
+                                    .getNativeFriend(settlement.getNation())
+                                    .map(friend -> i18n.get(Loc.nativeFriend,
+                                            friend.getDisplayName()))
+                                    .orElseGet(() -> i18n
+                                            .get(Loc.nativeNoFriend)));
+                        });
                 // Objects come from the player's permitted view: live inside
                 // present sight, remembered snapshot (marked stale) outside.
                 final Optional<ColonySighting> oColony = player
