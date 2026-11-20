@@ -176,18 +176,21 @@ final class StatusBarPresenter implements UpdatableLanguage {
         Preconditions.checkNotNull(calendar);
         final String season = i18n.get(Loc.getTerrainDescription(
                 calendar.getCurrentSeason().orElseThrow()));
-        labelEra.setText(i18n.get(Loc.statusBar_era, calendar.getCurrentYear(),
-                calendar.getDayOfMonth(), calendar.getMonthOfYear(), season));
+        labelEra.setText(i18n.get(Loc.statusBar_era, season,
+                calendar.getDayOfSeason(), calendar.getCurrentYear()));
         final String description = describeDate(calendar);
         labelEra.setAccessibleText(description);
     }
 
     private String describeDate(final Calendar calendar) {
-        return i18n.get(Loc.statusBar_era_description, calendar.getDayOfMonth(),
-                calendar.getMonthName(), calendar.getCurrentYear(),
-                i18n.get(Loc.getTerrainDescription(
-                        calendar.getCurrentSeason().orElseThrow())),
-                calendar.getDaysUntilNextSeason());
+        final int turns = calendar.getDaysUntilNextSeason();
+        final Loc description = turns == 1 ? Loc.statusBar_era_description_one
+                : turns <= 4 ? Loc.statusBar_era_description_few
+                        : Loc.statusBar_era_description;
+        return i18n.get(description, calendar.getDayOfMonth(),
+                calendar.getMonthName(),
+                i18n.get(Loc.getTerrainDescription(calendar.getNextSeason())),
+                turns);
     }
 
     private void setGoldText(final int gold) {

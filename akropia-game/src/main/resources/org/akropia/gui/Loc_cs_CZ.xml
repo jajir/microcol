@@ -12,8 +12,10 @@
 	<entry key="statusBar_tile_start">Zde je </entry>
 	<entry key="statusBar_tile_withUnit">s</entry>
 	<entry key="statusBar_tile_unitCount">s %s jednotkami</entry>
-	<entry key="statusBar_era">Rok %s · %s/%s · %s</entry>
-	<entry key="statusBar_era_description">%s. den měsíce %s · %s. rok výpravy · %s. Počet dní do dalšího období: %s.</entry>
+	<entry key="statusBar_era">%s %s · Rok %s</entry>
+	<entry key="statusBar_era_description">%s. den %su · %s začne za %s tahů.</entry>
+	<entry key="statusBar_era_description_one">%s. den %su · %s začne za %s tah.</entry>
+	<entry key="statusBar_era_description_few">%s. den %su · %s začne za %s tahy.</entry>
 	<entry key="statusBar_gold">Zlato</entry>
 	<entry key="statusBar_gold_description">Počet zlatých mincí, které máš.</entry>
 	<entry key="statusBar_status_description">Zde se ukáže stručná nápověda</entry>

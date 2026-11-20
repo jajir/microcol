@@ -841,11 +841,16 @@ keeps answered questions out of the current catalogue and active requirements.
    are rejected. Bundled scenarios use the current schema directly; old player
    saves are not migrated or rewritten merely by opening them. Historical queries
    use the same round-to-year conversion as the current date.
-6. The status bar shows `Year 3 · 5/8 · Winter` (localized). Hover help and the
-   accessible description give day, Greek month, expedition year, season and days
-   until the next season. The last day of a season has one day remaining. Context
-   help uses the same text. The calendar is informational and has no confirm/cancel
-   action. The in-game identity help explains the historical setting and shortened year.
+6. As agreed on 2026-11-20, the status bar shows `Summer 5 · Year 1`
+   (localized), using the day of the season (1–21), not the day of the month.
+   Hover help and the accessible description show the day of the Greek month
+   and the next season countdown, for example `Day 5 of Metageitnion · Autumn
+   begins in 10 turns.` while the short date reads `Summer 12 · Year 1`.
+   Czech uses `Léto 12 · Rok 1` and `5. den Metageitnionu · Podzim začne za
+   10 tahů.` The last day of a season has one turn remaining. Context help uses
+   the same text in the bottom status area, without a floating tooltip. The
+   calendar is informational and has no confirm/cancel action. The in-game
+   identity help explains the historical setting and shortened year.
 7. Early independence scoring retains its established pacing: at elapsed round `t`,
    the bonus is `max(0, 290 - min(t, 110) - max(0, t - 110) / 4)` with integer division.
    The declaration stores its exact round as well as its displayed expedition year;

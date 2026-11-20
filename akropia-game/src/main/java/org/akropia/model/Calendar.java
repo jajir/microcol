@@ -95,6 +95,14 @@ public final class Calendar {
         return result;
     }
 
+    public int getDayOfSeason() {
+        return numberOfPlayedTurns % DAYS_PER_SEASON + 1;
+    }
+
+    public Season getNextSeason() {
+        return Season.values()[(numberOfPlayedTurns / DAYS_PER_SEASON + 2) % 4];
+    }
+
     public int getDayOfMonth() {
         return numberOfPlayedTurns % DAYS_PER_MONTH + 1;
     }

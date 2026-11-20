@@ -12,8 +12,10 @@
 	<entry key="statusBar_tile_start">This is </entry>
 	<entry key="statusBar_tile_withUnit">with:</entry>
 	<entry key="statusBar_tile_unitCount">with %s units</entry>
-	<entry key="statusBar_era">Year %s · %s/%s · %s</entry>
-	<entry key="statusBar_era_description">Day %s of %s · Year %s of the expedition · %s. Days until the next season: %s.</entry>
+	<entry key="statusBar_era">%s %s · Year %s</entry>
+	<entry key="statusBar_era_description">Day %s of %s · %s begins in %s turns.</entry>
+	<entry key="statusBar_era_description_one">Day %s of %s · %s begins in %s turn.</entry>
+	<entry key="statusBar_era_description_few">Day %s of %s · %s begins in %s turns.</entry>
 	<entry key="statusBar_gold">Gold</entry>
 	<entry key="statusBar_gold_description">How many golden coins do you have.</entry>
 	<entry key="statusBar_status_description">Here will by simple help message</entry>

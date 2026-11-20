@@ -14,6 +14,9 @@ public class CalendarTest {
         for (int day = 0; day < 168; day++) {
             assertEquals(1 + day / 84, calendar.getCurrentYear());
             assertEquals(1 + day % 7, calendar.getDayOfMonth());
+            assertEquals(1 + day % 21, calendar.getDayOfSeason());
+            assertEquals(Calendar.Season.values()[(day / 21 + 2) % 4],
+                    calendar.getNextSeason());
             assertEquals(1 + day % 84 / 7, calendar.getMonthOfYear());
             assertEquals(names[day % 84 / 7], calendar.getMonthName());
             assertEquals(21 - day % 21, calendar.getDaysUntilNextSeason());

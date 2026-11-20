@@ -39,19 +39,22 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
         // Complete the last summer day and inspect the first autumn date.
         GamePage game = WelcomePage.of(getContext()).loadGame();
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
-        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
-        game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1 · 1/4 · Autumn");
+        audit.verifyDisplayedDate("Summer 21 · Year 1");
         audit.hoverCalendar();
         audit.verifyCalendarDescription(
-                "Day 1 of Pyanepsion · Year 1 of the expedition · Autumn. Days until the next season: 21.");
+                "Day 7 of Boedromion · Autumn begins in 1 turn.");
+        game.nextTurnAndCloseDialogs();
+        audit.verifyDisplayedDate("Autumn 1 · Year 1");
+        audit.hoverCalendar();
+        audit.verifyCalendarDescription(
+                "Day 1 of Pyanepsion · Winter begins in 21 turns.");
 
         // Continue retains the exact day and the next round advances one day.
         game.exitToMenu().verifyMainScreen();
         game = audit.continueGame();
-        audit.verifyDisplayedDate("Year 1 · 1/4 · Autumn");
+        audit.verifyDisplayedDate("Autumn 1 · Year 1");
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 1 · 2/4 · Autumn");
+        audit.verifyDisplayedDate("Autumn 2 · Year 1");
     }
 
     @Test
@@ -66,7 +69,7 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
 
         // Continue must neither advance the calendar nor rewrite that file.
         audit.continueGame();
-        audit.verifyDisplayedDate("Year 1 · 7/3 · Summer");
+        audit.verifyDisplayedDate("Summer 21 · Year 1");
         audit.verifyCalendarAndGold(20, 10000);
         audit.verifyAutosaveUnchanged(saved);
         audit.verifyAutosaveLastModifiedTime(modified);
@@ -80,14 +83,17 @@ public class TC_37_F29_calendar_boundaries_test extends AbstractAkropiaTest {
         audit.chooseLoadFile(
                 new File("src/test/scenarios/F29-calendar-late-start.akropia"));
         final GamePage game = WelcomePage.of(getContext()).loadGame();
-        audit.verifyDisplayedDate("Year 1 · 7/12 · Spring");
+        audit.verifyDisplayedDate("Spring 21 · Year 1");
+        audit.hoverCalendar();
+        audit.verifyCalendarDescription(
+                "Day 7 of Skirophorion · Summer begins in 1 turn.");
 
         // Complete a round and preserve the resulting summer through Continue.
         game.nextTurnAndCloseDialogs();
-        audit.verifyDisplayedDate("Year 2 · 1/1 · Summer");
+        audit.verifyDisplayedDate("Summer 1 · Year 2");
         game.exitToMenu().verifyMainScreen();
         audit.continueGame();
-        audit.verifyDisplayedDate("Year 2 · 1/1 · Summer");
+        audit.verifyDisplayedDate("Summer 1 · Year 2");
     }
 
     @Test

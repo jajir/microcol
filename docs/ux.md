@@ -1,3 +1,15 @@
+## Čitelné datum výpravy — 20. listopadu 2026
+
+1. Krátký zápis `Léto 5 · Rok 1` ukazuje den období, číslovaný 1–21.
+   Měsíc se v něm nezobrazuje. Najetí na datum ukáže dole kontextovou nápovědu
+   `5. den Hekatombaionu · Podzim začne za 17 tahů.` Stejný text dostane čtečka
+   obrazovky; samostatný vyskakovací tooltip nevzniká.
+2. Den měsíce a den období jsou různé údaje: `Léto 12 · Rok 1` odpovídá
+   `5. den Metageitnionu · Podzim začne za 10 tahů.` Při přechodu období
+   se den vrátí na 1. Délky tahů, měsíců a let se nemění.
+3. Jde o schválené zjednodušení zobrazení; ověření zaznamenává
+   [funkční evidence](functional-tests.md#season-date-2026-11-20).
+
 ## Pozadí seznamů v dialozích — 19. listopadu 2026
 
 1. Posuvné oblasti vlastních modálních dialogů splývají s krémovým papírovým
@@ -38,8 +50,8 @@ Jde o schválené pravidlo vzhledu, nikoli závěr hráčského testování.
    rozlišuje změnu zdroje a dokončené ověření.
 
 
-Hráč pozná rok, den/měsíc a období ve stavovém řádku. Po najetí na datum získá
-řecký název měsíce a počet dní do dalšího období; tentýž popis je přístupný
+Hráč pozná rok, den období a období ve stavovém řádku. Po najetí na datum získá
+řecký název měsíce a počet tahů do pojmenovaného dalšího období; tentýž popis je přístupný
 asistenčním technologiím. Datum je pouze informace, bez potvrzení či rušení.
 Začínáme kolem roku 1000 př. n. l., ale rok 1 označuje začátek výpravy.
 [Pravidla kalendáře](gap-analysis.md#calendar-and-starting-expeditions) vlastní

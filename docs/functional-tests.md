@@ -1,3 +1,33 @@
+<a id="season-date-2026-11-20"></a>
+
+## Season-first date — 2026-11-20
+
+1. UC-004/UC-005: short status dates use season/day/year; hover and accessible
+   help retain the Greek month and name the next season with remaining turns.
+   Calendar model checks cover season days and next-season conversion across
+   two full years. TC_37 covers season/year boundaries, one-turn countdown and
+   Continue; TC_21 TC_10 covers Czech layout and the three-turn countdown.
+2. Existing status-date assertions in TC_36, TC_115 and TC_181 use the new
+   presentation. Save summaries retain their day/month format.
+3. Model acceptance passed in completion `20261120T071042Z-4c8048539472`,
+   reports `target/verification/run-abwue1wj`: 5,144 checks in 400 reports,
+   zero failures/errors/skips, 163.517 seconds. Candidate based on
+   `a098b2171ec68fa3ad1a00ff50677a70542b123b`.
+4. Targeted Docker UI passed in completion `20261120T071339Z-5a903ecde9a9`,
+   reports `target/docker-ui/run-lT4VOU`: PageVerificationContractTest, TC_37,
+   TC_36 and TC_21 TC_10, all 14 checks in four reports, zero failures/errors/skips,
+   152.676 seconds. The Czech 900 × 700 screenshot was visually reviewed:
+   `Léto 19 · Rok 1` and `5. den Boedromionu · Podzim začne za 3 tahy.` fit clearly.
+5. Fixed smoke passed in completion `20261120T071632Z-dd316f98446c`,
+   reports `target/verification/run-vwcgxvr3`: all 23 checks in 13 reports,
+   zero failures/errors/skips, 287.420 seconds including supervision and cleanup,
+   within the 420-second acceptance budget. All changed game/test sources match
+   both accepted model and smoke snapshots.
+6. Final review checked season-day versus month-day conversion, season/year
+   boundaries, localized countdown forms and accessibility. Shared Java formatting,
+   14 documentation consistency checks, name audit and strict MkDocs passed.
+   Local acceptance is complete; no full regression or publication verification.
+
 <a id="dialog-surfaces-2026-11-19"></a>
 
 ## Dialog paper surfaces — 2026-11-19

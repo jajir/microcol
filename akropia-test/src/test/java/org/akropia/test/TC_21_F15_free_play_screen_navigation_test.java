@@ -229,7 +229,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.verifyLayout(english);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
-        layout.verifyStatusValues("10\u00a0000", "Year 1 · 5/3 · Summer",
+        layout.verifyStatusValues("10\u00a0000", "Summer 19 · Year 1",
                 "Gold 10\u00a0000");
         layout.saveEvidence("R-0267-main-English.png");
         layout.verifyMapTouchesSeparators();
@@ -249,7 +249,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         layout.verifyLayout(czech);
         layout.verifyStatusBar();
         layout.verifyMainScreenSeparators();
-        layout.verifyStatusValues("10\u00a0000", "Rok 1 · 5/3 · Léto",
+        layout.verifyStatusValues("10\u00a0000", "Léto 19 · Rok 1",
                 "Zlato 10\u00a0000");
         layout.saveEvidence("R-0267-main-Czech-small.png");
         layout.verifyMapTouchesSeparators();
@@ -259,7 +259,7 @@ public class TC_21_F15_free_play_screen_navigation_test
         final FreePlayAuditPage calendar = new FreePlayAuditPage(getContext());
         calendar.hoverCalendar();
         calendar.verifyCalendarDescription(
-                "5. den měsíce Boedromion · 1. rok výpravy · Léto. Počet dní do dalšího období: 3.");
+                "5. den Boedromionu · Podzim začne za 3 tahy.");
         layout.saveEvidence("expedition-calendar-czech.png");
 
     }
