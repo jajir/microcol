@@ -20,25 +20,8 @@ class SessionTest(unittest.TestCase):
             with self.assertRaisesRegex(RuntimeError, "never observed"):
                 session.verify_play_evidence(results)
             (results / "actions.jsonl").write_text('{"kind":"observe","frame":"screen.png"}\n')
-            session.verify_play_evidence(results)
-
-    def test_turn_checkpoints_require_consecutive_notes_and_screenshots(self):
-        with tempfile.TemporaryDirectory() as directory:
-            results = Path(directory)
-            (results / "report.md").write_text("Playthrough report")
-            frames = results / "screenshots"
-            frames.mkdir()
-            (frames / "turn.png").write_bytes(b"fixture")
-            notes = [{"kind": "observe"}] + [
-                {"kind": "note", "goal": f"Turn {turn:02}/40", "frame": "turn.png",
-                 "observed": "Next turn", "source": "Visible calendar"} for turn in range(1, 41)]
-            ledger = results / "actions.jsonl"
-            ledger.write_text("\n".join(json.dumps(e) for e in notes if e.get("goal") != "Turn 03/40"))
-            self.assertEqual(2, session.verify_play_evidence(results))
-            ledger.write_text("\n".join(json.dumps(e) for e in notes))
-            self.assertEqual(40, session.verify_play_evidence(results))
-            (frames / "turn.png").unlink()
-            self.assertEqual(0, session.verify_play_evidence(results))
+            with self.assertRaisesRegex(ValueError, "final session"):
+                session.verify_play_evidence(results)
 
     def test_timeout_preserves_evidence_and_excludes_credentials(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -55,7 +38,7 @@ class SessionTest(unittest.TestCase):
             processes[-1].wait.side_effect = [subprocess.TimeoutExpired("codex", 1), 0]
             original = Path.read_text
             def read(path, *args, **kwargs):
-                return "player task" if str(path) == "/opt/ux/player.md" else original(path, *args, **kwargs)
+                return "player task" if str(path) == "/task/player.md" else original(path, *args, **kwargs)
             copyfile = session.shutil.copyfile
             def auth(source, destination, **kwargs):
                 if str(source) == "/auth/auth.json":
@@ -63,7 +46,7 @@ class SessionTest(unittest.TestCase):
                 else:
                     return copyfile(source, destination, **kwargs)
             environment = {"DISPLAY": ":99", "XAUTHORITY": "/tmp/xauth", "UX_MODEL": "selected-model",
-                           "UX_REASONING": "high", "UX_SECONDS": "1", "UX_MAX_ACTIONS": "10"}
+                           "UX_REASONING": "high", "UX_PLAYER": "beginner", "UX_SECONDS": "1", "UX_MAX_ACTIONS": "10"}
             with patch.object(session, "RESULTS", results), patch.object(session.os, "environ", environment), \
                     patch.object(Path, "home", return_value=home), patch.object(Path, "read_text", read), \
                     patch.object(session.sys, "argv", ["session.py", "play"]), patch.object(session.time, "sleep"), \
@@ -81,6 +64,8 @@ class SessionTest(unittest.TestCase):
             self.assertIn('shell_tool = false', config)
             self.assertIn('default_tools_approval_mode = "approve"', config)
             self.assertNotIn("sensitive credentials", config)
+            processes[-1].wait.assert_any_call(timeout=301)
+            self.assertTrue((results / "ux-results.zip").is_file())
 
 
 if __name__ == "__main__":

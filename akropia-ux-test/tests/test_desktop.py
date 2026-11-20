@@ -68,7 +68,7 @@ class DesktopTest(unittest.TestCase):
     def test_player_requires_explicit_model_and_reasoning(self):
         with self.assertRaises(SystemExit):
             run.parse(["play", "--container", "test"])
-        args = run.parse(["play", "--container", "test", "--model", "selected-model", "--reasoning", "high"])
+        args = run.parse(["play", "--container", "test", "--model", "selected-model", "--reasoning", "high", "--player", "strategist"])
         self.assertEqual("selected-model", args.model)
 
     def events(self):

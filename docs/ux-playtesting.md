@@ -1,93 +1,173 @@
 # Průzkumné hraní Codexem
 
-1. [R-0334](requirements/done/R-0334.md) zavádí samostatný projekt
-   [`akropia-ux-test`](../akropia-ux-test/pom.xml). Codex CLI běží v Dockeru
-   vedle skutečné JavaFX hry na Xvfb. Z obrazovky získává PNG a přes MCP ovládá
-   myš a klávesnici. Model používá běžné cloudové připojení Codexu.
-2. Výsledkem je záznam pokusu a podložené UX hypotézy. Nejde o studii lidí,
-   automatický důkaz dohratelnosti, JUnit scénář ani náhradu
-   [lokální přejímky](publishing.md#local-acceptance-policy).
-3. Dohodnutý profil z 28. října 2026: zkušený hráč počítačových her a tahových
-   strategií, který konkrétní pravidla Akropia poznává z obrazovky a hráčské
-   nápovědy. Vlastní odhady musí označit; zkušenost s jinou strategií není
-   dokladem pravidla Akropia. Cíl upřesněný uživatelem je 40 dokončených tahů v jedné nové hře, s průběžnými screenshoty a hodnocením. Podrobné zadání vlastní
-   [`player.md`](../akropia-ux-test/player.md).
+Samostatný projekt [`akropia-ux-test`](../akropia-ux-test/pom.xml) spouští Codex
+CLI vedle skutečné JavaFX hry v Dockeru s Xvfb/Openbox. Hráč vidí snímky a ovládá
+myš a klávesnici přes MCP. Jde o podložená AI pozorování, nikoli lidskou studii,
+důkaz dohratelnosti nebo náhradu [funkční přejímky](publishing.md#local-acceptance-policy).
+
+## Profily hráčů — 20. listopadu 2026
+
+Schválené rozšíření odděluje tři profily. Každý příkaz spustí právě jeden profil;
+ostatní se automaticky nespouštějí. Hráči neznají staré nálezy ani zdrojové kódy.
+Společné instrukce jsou v [`player.md`](../akropia-ux-test/player.md), odlišné cíle
+v adresáři [`players`](../akropia-ux-test/players/strategist.md).
+
+| `--player` | Výchozí herní okno | Zaměření |
+| --- | --- | --- |
+| `strategist` | 45 minut | Zkušený hráč strategií, nováček v Akropii. Free game, skutečný cíl hry, co největší smysluplný pokrok. |
+| `ux-reviewer` | 45 minut | Několik tahů a průzkum dostupných obrazovek, konzistence ovládání, vysvětlení, čitelnost a zpětná vazba. |
+| `beginner` | 40 minut | Běžné počítačové dovednosti bez předpokládané znalosti žánru. Objevování cíle a prvních smysluplných akcí. |
+
+Začátečník je omezený přístup AI, nikoli model zbavený znalostí nebo náhrada lidského
+nováčka. UX průzkumník eviduje i nedostupné a nestihnuté oblasti; netvrdí úplné
+pokrytí všech herních stavů. Připravené pozice pro pozdní obrazovky ani automatické
+navazování rozehraných kampaní tato verze nezavádí.
 
 ## Oddělené prostředí
 
-1. Přebíráme prostředí ze stávajícího UI image: Java, Xvfb, Openbox a kompozitor.
-   Nový image má vlastní entrypoint, Codex CLI, oficiální Python MCP SDK,
-   `scrot`, `xdotool` a `xclip`. Hra vzniká v oddělené build fázi jako stávající
-   spustitelný JAR s jeho závislostmi na Javě 17; hráčská fáze neobsahuje herní zdroje ani vývojářské návody.
-2. Chrome není potřeba. Screenshot obsahuje pixely skutečné virtuální obrazovky
-   v původním rozlišení 1600 × 1200. Vstupy používají stejné souřadnice.
-   Každá akce vrací nový snímek; potvrzení doručení vstupu neprokazuje splnění cíle.
-3. Runtime má vlastní uživatelský profil. Uložené hry, nastavení a diagnostické logy se při
-   normálním ukončení kopírují do výsledků. Běh neotevírá ani nemění hráčovy
-   existující uložené hry. Tato první verze začíná vždy novou relací; automatické
-   navazování dlouhých kampaní není implementované.
-4. Přístupové údaje Codexu se připojují pouze při běhu a nejsou součástí image
-   ani exportovaných výsledků. Shell, web a pluginy jsou pro hráče vypnuté;
-   Codex používá sandbox pouze pro čtení a ovládání poskytuje devět MCP nástrojů. Obrazovka zůstává
-   nedůvěryhodným obsahem, který nemůže změnit zadání.
+1. Prostředí přebírá Java, Xvfb, Openbox a kompozitor ze základního UI image.
+   UX image přidává vlastní entrypoint, Codex CLI, Python MCP, scrot, xdotool a
+   xclip. Hra se sestaví jako spustitelný JAR na Javě 17. Hráčská fáze neobsahuje
+   herní zdroje ani vývojářské návody. Chrome není potřeba.
+2. Snímky obsahují skutečnou plochu 1600 × 1200; souřadnice nejsou přepočítané.
+   Doručení vstupu neprokazuje jeho zamýšlený účinek. Dostupných zůstává devět
+   desktopových MCP nástrojů, bez shellu, webu a pluginů.
+3. Každý běh má čistý soukromý profil. Neotevírá ani nepřepisuje osobní uložené
+   hry uživatele. Při normálním ukončení exportuje herní profil do výsledků.
+4. Přihlašovací údaje jsou připojené jen při běhu a nevstupují do image ani ZIPu.
+   Vybraný prompt se připojí samostatně pouze pro čtení. Jeden kompatibilní image
+   lze použít se všemi třemi profily bez nového sestavování kvůli výběru hráče.
+5. Image nese protokol nástroje `2`. Starý image s pevnou kontrolou 40 tahů
+   nový runner odmítne; je nutné jej jednou znovu sestavit a ověřit.
 
 ## Spuštění
 
-1. Potřebujeme dostupný Docker, hostitelský Python, přihlášený Codex CLI
-   s dostupným `auth.json` a přesné ID původního Codex chatu. Běžný výběr modelu
-   a úrovně reasoning se zachovává; povinné parametry zabraňují skryté změně.
-   Přihlášení z macOS Keychain se automaticky neexportuje.
-2. Projekt se sestavuje výslovně. Jeho přenosné tooling testy spustí
-   `mvn -f akropia-ux-test/pom.xml test`, případně profil `ux-playtesting`.
-   Tyto testy nevolají model, Docker ani běžnou UI regresi.
-3. Nejprve ověřit skutečné prostředí. Příkazy se zadávají v kořeni repozitáře;
-   `TASK_UUID` nahradit přesným ID tohoto chatu:
+Potřebujeme Docker, hostitelský Python, přihlášený Codex CLI s dostupným
+`auth.json` a přesné ID původního Codex chatu. Model a reasoning se zachovávají
+podle volby uživatele; hráčské profily nevybírají jiný model.
 
-   ```sh
-   python3 scripts/codex/run.py --thread TASK_UUID --timeout 1800 ux -- check
-   ```
+Nejprve technická kontrola sestavení a skutečného ovládání:
 
-4. Runner vrátí adresář completion evidence a PID. Po callbacku prohlédnout
-   výsledek a nový adresář `akropia-ux-test/runs/`. Úspěšný `check` ověřuje
-   skutečné MCP obrázky, odmítnutí neplatného vstupu, fokus, Unicode, klávesu,
-   tažení, kolečko, evidenci a start zabalené hry. Kontrolní okno je samostatná
-   technická pomůcka; jeho úspěch není hráčský UX výsledek.
-5. Spustit hráče se zvoleným modelem a reasoning. `IMAGE_ID` je identita
-   úspěšně ověřeného image z `manifest.json`; při změně zdrojů sestavit nový:
+```sh
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 1800 ux -- check
+```
 
-   ```sh
-   python3 scripts/codex/run.py --thread TASK_UUID --timeout 7800 ux -- \
-     play --image IMAGE_ID --model SELECTED_MODEL --reasoning SELECTED_REASONING \
-     --seconds 7200 --actions 1000
-   ```
+Po callbacku zkontrolovat `result.json`, `selfcheck.json`, `session.json` a
+`manifest.json`. Použít neměnné `IMAGE_ID` z tohoto ověřeného sestavení. Následující
+příkazy jsou samostatné alternativy, nikoli povinná série:
 
-6. Limit času platí pro aktivní Codex průchod. Vnější watchdog zahrnuje přípravu
-   a úklid. Akční limit se vztahuje na vstupy včetně čekání; další pozorování a
-   poznámky zůstávají dostupné do konce časového limitu. Výchozí limity jsou 7 200 sekund a 1 000 akcí. Po vyčerpání času je
-   relace neúplná. Nezvyšovat limit ani neopakovat běh jako náhradu za diagnózu.
-7. [Completion runner](ai/completion-callbacks.md) používá společný lokální
-   Docker zámek kvůli zatížení počítače. UX si zachovává vlastní spouštění,
-   data i vyhodnocení; nespouští se automaticky v modelové, smoke ani plné regresi.
-   Zrušení přes SIGTERM supervisoru uklidí pouze kontejnery vlastněné tímto během.
+```sh
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 3300 ux --   play --image IMAGE_ID --player strategist --model SELECTED_MODEL --reasoning SELECTED_REASONING
 
-## Evidence a vyhodnocení
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 3300 ux --   play --image IMAGE_ID --player ux-reviewer --model SELECTED_MODEL --reasoning SELECTED_REASONING
 
-1. `manifest.json` identifikuje revizi, image, nastavení a při sestavení hashe
-   vstupních zdrojů. `session.json` odlišuje dokončení, chybu a vypršení limitu.
-   Ukončení procesu s nulovým kódem samo neznamená úspěch hráčského cíle. `documented_turns` počítá souvislé kontrolní body `Turn 01/40` až `Turn 40/40` s pozorováním, zdrojem a existujícím snímkem. Méně než 40 znamená neúplný běh (kód 2). Pravdivost počtu tahů stále vyžaduje kontrolu herní evidence.
-2. `actions.jsonl` uchovává provedené akce, stav doručení/chyby, snímky před a po
-   akci a poznámky s cílem, očekáváním, pozorováním, zdrojem informace a nálezem.
-   `screenshots/` obsahuje odkazované PNG. Záznam se zapisuje průběžně na disk.
-3. `report.md` je závěrečná česká zpráva Codexu. `codex-events.jsonl`, `codex.log`
-   a logy hry/prostředí slouží následné technické diagnostice. Hráč je při
-   průchodu nečte. `profile/` obsahuje exportovaný profil a uložené pozice.
-4. Výsledky žijí mimo Maven `target`, jsou ignorované Gitem a nejsou automaticky
-   publikované. `mvn clean` je nesmaže. Silové ukončení nebo výpadek hostitele
-   nemusí stihnout závěrečný export profilu; již uložené snímky a události zůstávají.
-5. Vývojář následně rozliší chybu hry, nejasné vysvětlení, nevhodnou strategii
-   a selhání ovládacího nástroje. Nález vyžaduje konkrétní snímek a kroky.
-   Potvrzené opravy mohou dostat vlastní regresní test, ale průzkumný protokol
-   zůstává oddělený od běžné funkční evidence.
+python3 scripts/codex/run.py --thread TASK_UUID --timeout 3000 ux --   play --image IMAGE_ID --player beginner --model SELECTED_MODEL --reasoning SELECTED_REASONING
+```
+
+`--player` je u `play` povinný. `--seconds` může změnit herní okno na 1–7200 sekund;
+`--actions` nastaví nezávislou pojistku 1–1000 vstupů (výchozí 1000). Pro vlastní
+okno přizpůsobit vnější watchdog: herní okno + 300 sekund na závěr + rezerva na
+přípravu a úklid. Maximální okno lze spustit s timeoutem 7800 sekund.
+
+Herní čas začíná před spuštěním hráče, po přípravě kontejneru a startu hry. Zahrnuje
+odpovědi modelu, pozorování a poznámky, proto není srovnatelný s rychlostí lidského
+hráče. Posledních 120 sekund nebo 25 akcí hráč rezervuje pro uložení. Následuje
+samostatný limit 300 sekund na uložení, kontrolní načtení a report, bez dalších
+herních tahů. Povolení vstupů v tomto závěru nelze automaticky omezit jen na ukládání;
+dodržení ověřuje reviewer z evidence. Tvrdé vypršení watchdogu zůstává neúplným během.
+
+Runner používá [completion callbacks](ai/completion-callbacks.md) a společný
+lokální Docker zámek. Zaznamenat adresář a PID, nepollovat opakovaně a po callbacku
+zkontrolovat doklady. UX běhy zůstávají oddělené od model/JUnit a smoke regrese.
+
+## Evidence a hodnocení
+
+1. `manifest.json` uvádí ID běhu, profil, model/reasoning, herní a reportovací
+   rozpočet, revizi a hash image. `prompt.md` a jeho SHA-256 zachycují konkrétní
+   společné a profilové zadání včetně prefixu uložených pozic. Při použití staršího
+   kompatibilního image je autoritou herních zdrojů `image_revision`, ne HEAD runneru.
+2. `record_note` zachovává cíl, očekávání, pozorování, zdroj a snímek. Kategorie
+   `progress` s volitelným `turn` zaznamenává rozhodnutí a skutečné přechody od nuly;
+   počet kol se neodvozuje z kalendáře. Žádný profil nemá povinné minimum 40 tahů.
+3. Kategorie `finding` nese text, klasifikaci `bug`, `unclear`, `contradiction`,
+   `hypothesis`, `tool_error` nebo `positive`, závažnost `high`, `medium`, `low`,
+   `info` a automatické ID `UX-001` atd. ID je jednoznačné společně s ID běhu.
+   `bug` je hráčovo hodnocení, ne potvrzení příčiny v kódu. Počet nálezů není kvóta.
+4. `coverage` uvádí obrazovku/cestu a `tested`, `visited`, `unavailable` nebo
+   `not_reached`. Historie se zachovává; samotné otevření obrazovky není otestování
+   všech akcí. Váhání se dokládá hledáním, návraty, pokusy nebo výslovnou nejistotou,
+   nikoli délkou odpovědi modelu. Protimluv musí mít oba konkrétní podklady.
+5. Poslední poznámka `session` uvádí `time_window`, `victory`, `defeat`, `blocked`
+   nebo `action_limit`. Validátor kontroluje evidenci, souvislost zaznamenaných kol,
+   snímky, pokrytí a rozpočet u příslušného důvodu. Platný časový průzkum může mít
+   nula dokončených kol. `completed` znamená dokončený protokol, nikoli vyhranou hru.
+   `ending_verified: false` a `review_status: pending` vyžadují nezávislé posouzení.
+6. Hráč ukládá ruční pozice přibližně po deseti kolech, před zásadním nevratným
+   krokem a na konci. Report rozlišuje potvrzené uložení a skutečné kontrolní načtení.
+   Předchozí pozice ani původní evidence se nepřepisují.
+7. Každý běh automaticky vytvoří `review.html`, `review.json` a `ux-results.zip`
+   s reporty, časovou osou, citovanými snímky a exportovanými pozicemi. ZIP rozbalit
+   celý a otevřít `review.html`; soubory `.akropia` importovat ve hře. JSON obsahuje
+   kontrolní součty kopií pozic. Archiv není nezávislá přejímka a kompatibilita s
+   jinými revizemi není zaručena. Neobsahuje autentizaci ani interní konverzaci modelu.
+8. `actions.jsonl`, všechny původní snímky, `report.md`, `codex-events.jsonl` a
+   diagnostické logy zůstávají v ignorovaném `akropia-ux-test/runs/`, mimo Maven
+   clean. Pád hostitele nebo silové ukončení může zabránit finálnímu exportu.
+9. Srovnávat stejný profil, revizi/scénář, model, rozpočet a podle možnosti seed.
+   Měřit milníky a úspěšné cesty vedle počtu kol. Staré nálezy se neimportují do
+   nového reportu jako současné chyby; potvrzení opravy vyžaduje nové pozorování.
+
+## Přenosné a živé kontroly
+
+```sh
+mvn -f akropia-ux-test/pom.xml test
+```
+
+Přenosné testy nevolají cloud ani Docker. Ověřují volbu profilů, rozpočty,
+strukturovanou evidenci, odmítnutí neúplných dokladů, bezpečné exporty a zachování
+pozic. Živý `check` navíc ověřuje skutečné X11/MCP vstupy, JavaFX drag-and-drop,
+strukturované poznámky a start zabalené hry. Smysluplnost odlišných profilů se
+ověřuje samostatnými hráčskými piloty; samotný technický check ji neprokazuje.
+
+## Stav rozšíření — 20. listopadu 2026
+
+1. Tři profily lze spouštět jednotlivě pomocí `--player`. Lokální přejímka
+   vychází z pracovní verze nad revizí `f3fdb8d4fc4ddf7a09a0a2a197e3280f3a0989cb`;
+   přesné hashe zdrojů a běhy zachovává `target/ux-profiles-20261120/acceptance.json`.
+   Prošlo 20 testů nástrojů, 5 144 model/JUnit testů
+   (`run-pqtzpa7z`), 11 živých X11/MCP kontrol
+   (`20261120T102123Z-0eeadae3`) a 23 smoke testů (`run-z7_blp5o`).
+   Smoke včetně dokončení trval 295,258 s při limitu 420 s; bez chyb a přeskočení.
+2. Všechny tři úspěšné piloty použily stejný image
+   `sha256:df39878f8069a71e815fee4398e23eefb159a3bb36411660f8b6a1adf94fbb5c`,
+   model `gpt-6-astra`, reasoning `medium`, samostatný čistý profil a novou hru.
+   Výsledky jsou lokálně v `akropia-ux-test/runs/`:
+
+   | Profil | Běh | Tahy | Nálezy včetně pozitivních | Exportované pozice |
+   | --- | --- | ---: | ---: | ---: |
+   | stratég, 45 minut | `20261120T102854Z-ec1bbb4f` | 49 | 6 | 16 |
+   | UX reviewer, 45 minut | `20261120T111441Z-8ea2f33c` | 17 | 9 | 14 |
+   | začátečník, 40 minut | `20261120T120237Z-4d5df49f` | 23 | 8 | 15 |
+
+3. Počty pozic zahrnují ruční uložení i autosave. ZIPy prošly kontrolou integrity
+   a kopie pozic souhlasí s evidovanými SHA-256. Závěrečné screenshoty odpovídají
+   popsanému pokroku: stratég dosáhl 100 % podpory nezávislosti, reviewer 3 %,
+   začátečník 12 %. Všechny běhy skončily časovým oknem, bez vítězství či porážky.
+   Profily poskytly rozdílné průchody: stratég rozvíjel ekonomiku a obranu,
+   reviewer zaznamenal 18 položek pokrytí a začátečník hledal postup v nápovědě.
+   Počet tahů není srovnáním lidských schopností; světy se lišily a latence modelu
+   je součástí časového okna. Jednotlivé nálezy zůstávají hypotézami k samostatnému
+   posouzení, nikoli potvrzenými chybami nebo důkazem úplného pokrytí.
+4. Neúspěšné pokusy zůstávají zachované. Příprava prvního modelového běhu
+   překročila 20 s před startem testů. První živý check odhalil chybné odsazení
+   kontroly za uzavřeným MCP spojením; opravený check prošel. První pilot stratéga
+   `20261120T092937Z-c48f7f5e` odehrál 45 tahů, ale selhal na nesprávně opsaném
+   odkazu na screenshot. Nově se takový odkaz odmítne už při zápisu poznámky,
+   aby jej hráč mohl opravit. Následné kontroly i tři piloty prošly;
+   původní neúspěchy se nepřepisují na úspěch.
+
+Následující říjnová evidence patří historické verzi s pevnými 40 tahy a nedokládá
+aktuální rozšíření. Lokální přejímka neprokazuje publikaci nové distribuce hry.
 
 ## Stav ověření — 28. října 2026
 

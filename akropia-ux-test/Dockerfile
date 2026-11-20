@@ -7,6 +7,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B -ntp -pl akropia-game -am package
 FROM ${UI_IMAGE}
 ARG SOURCE_REVISION
 ARG SOURCE_SHA256
+LABEL org.akropia.ux.protocol="2"
 LABEL org.akropia.ux.revision=${SOURCE_REVISION} org.akropia.ux.source-sha256=${SOURCE_SHA256}
 USER root
 RUN apt-get update && apt-get install -y --no-install-recommends \

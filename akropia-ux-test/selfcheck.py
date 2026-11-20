@@ -125,6 +125,24 @@ async def check():
                         if field in event:
                             assert (RESULTS / "screenshots" / event[field]).is_file()
                 checks.append("durable notes and linked screenshot files")
+                await call("record_note", goal="profile finding", expected="explicit fields",
+                           observed="Unicode nález", source="fixture", finding="Clear feedback",
+                           category="finding", classification="positive", severity="info")
+                await call("record_note", goal="screen coverage", expected="tracked coverage",
+                           observed="fixture tested", source="fixture", category="coverage",
+                           screen="fixture", status="tested")
+                invalid = await client.call_tool("record_note", {"goal": "invalid", "expected": "reject",
+                    "observed": "invalid type", "source": "fixture", "category": "finding"})
+                assert invalid.isError
+                recorded = [json.loads(line) for line in (RESULTS / "actions.jsonl").read_text().splitlines()]
+                invalid = await client.call_tool("record_note", {"goal": "invalid citation",
+                    "expected": "reject before logging", "observed": "unknown screenshot",
+                    "source": "0" * 32})
+                assert invalid.isError
+                assert recorded == [json.loads(line) for line in (RESULTS / "actions.jsonl").read_text().splitlines()]
+                assert any(e.get("finding_id") == "UX-001" for e in recorded)
+                assert any(e.get("screen") == "fixture" and e.get("status") == "tested" for e in recorded)
+                checks.append("structured profile findings and coverage through MCP")
     finally:
         process.terminate()
         process.wait(timeout=5)

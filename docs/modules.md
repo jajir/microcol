@@ -21,6 +21,8 @@ For responsibilities inside the game and test modules, use the
 AI decisions, UI, persistence and the existing cross-layer exceptions.
 
 The optional `ux-playtesting` Maven profile adds [akropia-ux-test](../akropia-ux-test/pom.xml). It owns the isolated Codex desktop player, its tooling checks and Docker lifecycle. It produces independent evidence in `akropia-ux-test/runs/`, outside Maven clean and ordinary regression. It has no game-model or TestFX dependency. See [UX playtesting](ux-playtesting.md).
+Player profiles are separately selectable; each run exports a structured report, a portable HTML gallery and a ZIP with evidence and saved games. See [profile selection](ux-playtesting.md#profily-hracu-20-listopadu-2026).
+
 
 ## Module overview
 

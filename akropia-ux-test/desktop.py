@@ -6,6 +6,7 @@ import struct
 import subprocess
 import time
 import uuid
+from evidence import validate_note, events_in, cited_frames
 from datetime import datetime, timezone
 
 
@@ -41,6 +42,10 @@ class Desktop:
         metadata = {"frame": name, "width": width, "height": height}
         if os.environ.get("UX_DEADLINE"):
             metadata["seconds_remaining"] = max(0, round(float(os.environ["UX_DEADLINE"]) - time.time()))
+        metadata["actions_remaining"] = max(0, self.max_actions - self.actions)
+        if os.environ.get("UX_REPORT_DEADLINE"):
+            metadata["report_seconds_remaining"] = max(0, round(float(os.environ["UX_REPORT_DEADLINE"]) - time.time()))
+            metadata["phase"] = "play" if metadata.get("seconds_remaining", 0) > 0 else "report"
         return metadata, data
 
     def observe(self):
@@ -144,11 +149,17 @@ class Desktop:
             process.terminate()
             process.wait(timeout=5)
 
-    def note(self, goal, expected, observed, source, finding=""):
-        values = dict(goal=goal, expected=expected, observed=observed,
-                      source=source, finding=finding)
-        if any(not isinstance(v, str) or len(v) > 4000 for v in values.values()):
-            raise ValueError("Each note field must be text of at most 4000 characters")
+    def note(self, goal, expected, observed, source, finding="", category="progress",
+             classification="", severity="", turn=None, screen="", status=""):
+        values = dict(goal=goal, expected=expected, observed=observed, source=source,
+                      finding=finding, category=category, classification=classification,
+                      severity=severity, turn=turn, screen=screen, status=status)
+        validate_note(values)
+        cited_frames(source, {p.stem for p in (self.directory / "screenshots").glob("*.png")})
+        if category == "finding":
+            number = 1 + sum(e.get("kind") == "note" and e.get("category") == "finding"
+                             for e in events_in(self.directory))
+            values["finding_id"] = f"UX-{number:03}"
         frame, _ = self.capture()
         self.log({"kind": "note", **frame, **values})
-        return frame
+        return {**frame, **({"finding_id": values["finding_id"]} if "finding_id" in values else {})}

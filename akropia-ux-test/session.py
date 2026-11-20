@@ -7,25 +7,12 @@ import signal
 import subprocess
 import sys
 import time
+import zipfile
+from evidence import verify_play_evidence, package_results
+from profiles import REPORT_SECONDS
 
 RESULTS = Path(os.environ.get("UX_RESULTS", "/results"))
 
-
-def verify_play_evidence(directory):
-    report = directory / "report.md"
-    if not report.is_file() or not report.stat().st_size:
-        raise RuntimeError("Codex finished without a report")
-    ledger = directory / "actions.jsonl"
-    events = [json.loads(line) for line in ledger.read_text().splitlines()] if ledger.exists() else []
-    if not any(e.get("kind") == "observe" or e.get("status") == "delivered" for e in events):
-        raise RuntimeError("Codex never observed the desktop; inspect report.md and codex-events.jsonl")
-    for turn in range(1, 41):
-        if not any(e.get("kind") == "note" and e.get("goal") == f"Turn {turn:02}/40"
-                   and e.get("observed") and e.get("source")
-                   and (directory / "screenshots" / e.get("frame", "missing")).is_file()
-                   for e in events):
-            return turn - 1
-    return 40
 
 
 def main():
@@ -66,6 +53,10 @@ def main():
             codex_home.mkdir(exist_ok=True, mode=0o700)
             shutil.copyfile("/auth/auth.json", codex_home / "auth.json")
             (codex_home / "auth.json").chmod(0o600)
+            play_started = time.time()
+            play_deadline = play_started + int(os.environ["UX_SECONDS"])
+            outcome.update(player=os.environ["UX_PLAYER"], play_started_at=play_started,
+                           play_seconds=int(os.environ["UX_SECONDS"]), report_seconds=REPORT_SECONDS)
             config = '\n'.join([
                 'model = ' + json.dumps(os.environ["UX_MODEL"]),
                 'model_reasoning_effort = ' + json.dumps(os.environ["UX_REASONING"]),
@@ -83,22 +74,20 @@ def main():
                 'UX_MAX_ACTIONS = ' + json.dumps(os.environ.get("UX_MAX_ACTIONS", "100")),
                 'DISPLAY = ' + json.dumps(os.environ["DISPLAY"]),
                 'XAUTHORITY = ' + json.dumps(os.environ["XAUTHORITY"]),
-                'UX_DEADLINE = ' + json.dumps(str(time.time() + int(os.environ["UX_SECONDS"]))),
+                'UX_DEADLINE = ' + json.dumps(str(play_deadline)),
+                'UX_REPORT_DEADLINE = ' + json.dumps(str(play_deadline + REPORT_SECONDS)),
             ]) + '\n'
             (codex_home / "config.toml").write_text(config)
-            prompt = Path("/opt/ux/player.md").read_text()
-            prompt += "\nSession limits: " + os.environ["UX_SECONDS"] + " seconds, " + os.environ["UX_MAX_ACTIONS"] + " actions."
+            prompt = Path("/task/player.md").read_text()
+            prompt += "\nSession limits: " + os.environ["UX_SECONDS"] + " seconds, " + os.environ["UX_MAX_ACTIONS"] + " input actions. Separate report allowance: " + str(REPORT_SECONDS) + " seconds."
             with (RESULTS / "codex-events.jsonl").open("w") as events, (RESULTS / "codex.log").open("w") as log:
                 agent = subprocess.Popen(["codex", "exec", "--skip-git-repo-check", "--json",
                                           "--output-last-message", str(RESULTS / "report.md"), prompt],
                                          stdout=events, stderr=log, start_new_session=True)
                 processes.append(agent)
-                outcome["exit_code"] = agent.wait(timeout=int(os.environ["UX_SECONDS"]))
+                outcome["exit_code"] = agent.wait(timeout=int(os.environ["UX_SECONDS"]) + REPORT_SECONDS)
             if outcome["exit_code"] == 0:
-                outcome["documented_turns"] = verify_play_evidence(RESULTS)
-                if outcome["documented_turns"] != 40:
-                    outcome.update(status="incomplete", exit_code=2,
-                                   error="Fewer than 40 consecutive turn checkpoints; inspect report and screenshots")
+                outcome.update(verify_play_evidence(RESULTS))
         if outcome["exit_code"] == 0:
             outcome["status"] = "completed"
     except subprocess.TimeoutExpired:
@@ -132,6 +121,12 @@ def main():
             outcome.update(status="failed", error="Profile export failed: " + str(error), exit_code=1)
         outcome["elapsed_seconds"] = round(time.monotonic() - began, 3)
         (RESULTS / "session.json").write_text(json.dumps(outcome, indent=2) + "\n")
+        if sys.argv[1:] != ["check"]:
+            try:
+                package_results(RESULTS, outcome)
+            except (OSError, ValueError, KeyError, zipfile.BadZipFile) as error:
+                outcome.update(status="failed", export_error=str(error), exit_code=1)
+                (RESULTS / "session.json").write_text(json.dumps(outcome, indent=2) + "\n")
     return outcome["exit_code"] or 0
 
 

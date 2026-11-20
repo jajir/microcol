@@ -11,6 +11,7 @@ import signal
 import subprocess
 import sys
 import uuid
+from profiles import PLAYERS, REPORT_SECONDS, PROTOCOL, prompt_for
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -47,9 +48,14 @@ def parse(argv):
     parser.add_argument("--image", help="Reuse an already built, identified UX image")
     parser.add_argument("--model")
     parser.add_argument("--reasoning")
-    parser.add_argument("--seconds", type=int, default=7200)
+    parser.add_argument("--player", choices=tuple(PLAYERS))
+    parser.add_argument("--seconds", type=int, help="Play window; defaults to the selected profile")
     parser.add_argument("--actions", type=int, default=1000)
     args = parser.parse_args(argv)
+    if args.mode == "play" and not args.player:
+        parser.error("Select --player strategist, ux-reviewer or beginner")
+    if args.seconds is None:
+        args.seconds = PLAYERS.get(args.player, 2700)
     if not 1 <= args.seconds <= 7200 or not 1 <= args.actions <= 1000:
         parser.error("Use 1–7200 seconds and 1–1000 actions")
     if args.mode == "play" and (not args.model or not args.reasoning):
@@ -64,8 +70,13 @@ def main(argv):
     results.mkdir(parents=True)
     print("UX results: " + str(results), flush=True)
     manifest = {"revision": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
-                "mode": args.mode, "model": args.model, "reasoning": args.reasoning,
+                "mode": args.mode, "player": args.player, "model": args.model, "reasoning": args.reasoning,
+                "run_id": identifier, "report_seconds": REPORT_SECONDS, "protocol": PROTOCOL,
                 "seconds": args.seconds, "max_actions": args.actions, "container": args.container}
+    if args.mode == "play":
+        prompt = prompt_for(args.player) + "\n\nSave prefix: UX " + identifier + "\n"
+        (results / "prompt.md").write_text(prompt)
+        manifest["prompt_sha256"] = hashlib.sha256(prompt.encode()).hexdigest()
     output = results / "manifest.json"
     output.write_text(json.dumps(manifest, indent=2) + "\n")
     def interrupted(signum, frame):
@@ -92,6 +103,8 @@ def main(argv):
         manifest["image_source_sha256"] = labels.get("org.akropia.ux.source-sha256")
         if not manifest["image_revision"] or not manifest["image_source_sha256"]:
             raise ValueError("UX image lacks build provenance; rebuild it before playing")
+        if labels.get("org.akropia.ux.protocol") != PROTOCOL:
+            raise ValueError("UX image protocol is incompatible; rebuild it before playing")
         output.write_text(json.dumps(manifest, indent=2) + "\n")
         # JavaFX loads extracted native libraries from the fresh home directory.
         invocation = ["docker", "create", "--init", "--platform", "linux/amd64", "--name", args.container,
@@ -105,7 +118,9 @@ def main(argv):
             auth = Path(os.environ.get("CODEX_HOME", str(Path.home() / ".codex"))) / "auth.json"
             if not auth.is_file():
                 raise ValueError("Codex auth.json is unavailable; authenticate on the host first")
-            invocation += ["-v", str(auth) + ":/auth/auth.json:ro", "-e", "UX_MODEL=" + args.model,
+            invocation += ["-v", str(auth) + ":/auth/auth.json:ro",
+                           "-v", str(results / "prompt.md") + ":/task/player.md:ro",
+                           "-e", "UX_PLAYER=" + args.player, "-e", "UX_MODEL=" + args.model,
                            "-e", "UX_REASONING=" + args.reasoning]
         invocation += [manifest["image"], args.mode]
         command(*invocation)

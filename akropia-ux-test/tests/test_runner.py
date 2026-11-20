@@ -17,6 +17,7 @@ class RunnerTest(unittest.TestCase):
         self.root = Path(temporary.name)
         self.arguments = ["check", "--container", "akropia-ux-test-owned", "--image", "sha256:tested"]
         self.outputs = ["a" * 40, "sha256:tested", json.dumps({
+            "org.akropia.ux.protocol": "2",
             "org.akropia.ux.revision": "b" * 40,
             "org.akropia.ux.source-sha256": "c" * 64})]
 

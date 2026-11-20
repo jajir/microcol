@@ -1,6 +1,7 @@
 """Only screen-level tools are exposed to the player; MCP uses stdio."""
 import json
 import os
+from typing import Optional
 from mcp.server.fastmcp import FastMCP, Image
 from desktop import Desktop
 
@@ -62,9 +63,19 @@ def wait(seconds: float = 1):
 
 
 @mcp.tool()
-def record_note(goal: str, expected: str, observed: str, source: str, finding: str = ""):
-    """Record concise player observations with a fresh evidence frame. Distinguish guesses."""
-    return desktop.note(goal, expected, observed, source, finding)
+def record_note(goal: str, expected: str, observed: str, source: str, finding: str = "",
+                category: str = "progress", classification: str = "", severity: str = "",
+                turn: Optional[int] = None, screen: str = "", status: str = ""):
+    """Record evidence: progress, finding, coverage or final session outcome.
+
+    finding: classification bug/unclear/contradiction/hypothesis/tool_error/positive,
+    severity high/medium/low/info. coverage: screen and status
+    tested/visited/unavailable/not_reached. session: status
+    time_window/victory/defeat/blocked/action_limit. turn belongs to progress.
+    Findings receive stable run-local IDs. Source cites screenshots/UI evidence.
+    """
+    return desktop.note(goal, expected, observed, source, finding, category,
+                        classification, severity, turn, screen, status)
 
 
 if __name__ == "__main__":
