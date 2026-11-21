@@ -1326,6 +1326,18 @@ nejde o pozorování skutečných hráčů.
 
 ### Odchod třetího obyvatele z opevnění (R-0082)
 
+**Změna pravidel schválená 21. listopadu 2026, dosud neimplementovaná:**
+[Autoritativní pravidlo populace a prázdných měst](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21)
+ruší minimum tří obyvatel po dokončení opevnění. Rozestavěný projekt při
+nedostatku obyvatel čeká na začátku fronty; kladiva se dál hromadí, dokončení
+ani dostavění za peníze není dostupné. Po obnovení populace pokračuje.
+Přeřazení, odchod i rozpuštění posledního obyvatele zachová prázdné město
+během hráčova tahu. Až po stisknutí Next turn hráč potvrzuje zprávu, že
+stále prázdné město zanikne. Doplnění obyvatele během téhož tahu důvod
+zániku odstraní. Nejde o nové herní ověření; následující odstavec popisuje
+původní implementaci a její historickou přejímku.
+
+
 Při tažení chráněného obyvatele ven rozhraní nepovolí přesun a ve stavovém
 řádku vysvětlí minimum tří obyvatel i možnost změnit práci uvnitř kolonie.
 Kontrola se opakuje při dokončení akce; model zůstává autoritou. Čtvrtý
