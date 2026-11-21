@@ -145,28 +145,6 @@ class CoastalPortMovementTest {
         }
     }
 
-    private List<Integer> passengerPoints() {
-        return List.of(model.getUnitById(13).getActionPoints(),
-                model.getUnitById(14).getActionPoints(),
-                model.getUnitById(15).getActionPoints(),
-                model.getUnitById(16).getActionPoints());
-    }
-
-    private void verifyAshoreAtPort(final List<Integer> expectedPoints) {
-        for (int slot = 0; slot < 4; slot++) {
-            assertTrue(ship().getCargo().getSlotByIndex(slot).isEmpty());
-        }
-        assertEquals(Goods.of(GoodsType.ORE, 7),
-                ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
-        for (int id = 13; id <= 16; id++) {
-            final Unit passenger = model.getUnitById(id);
-            assertTrue(passenger.isAtPlaceLocation());
-            assertEquals(PORT, passenger.getLocation());
-            assertEquals(expectedPoints.get(id - 13).intValue(),
-                    passenger.getActionPoints());
-        }
-    }
-
     private Unit prepareGround() {
         prepare(Location.of(26, 14));
         data.setModel(model.save());
@@ -207,15 +185,15 @@ class CoastalPortMovementTest {
         assertEquals(List.of(PORT), path);
         assertTrue(ship().getAvailableLocations().contains(PORT));
         assertEquals(beforeSnapshot, snapshot());
-        List<Integer> beforePoints = passengerPoints();
+        String beforePayload = payload();
         step(PORT);
         assertEquals(PORT, ship().getLocation());
         assertEquals(5, ship().getActionPoints());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
         step(water);
         assertEquals(water, ship().getLocation());
         assertEquals(4, ship().getActionPoints());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
     }
 
     @Test
@@ -241,19 +219,19 @@ class CoastalPortMovementTest {
     @Test
     void testReloadAfterMovement() {
         prepare(Location.of(26, 14));
-        List<Integer> beforePoints = passengerPoints();
+        String beforePayload = payload();
         step(PORT);
         String shipJson = gson.toJson(ship().save());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
         reload();
         assertEquals(PORT, ship().getLocation());
         assertEquals(5, ship().getActionPoints());
         assertEquals(shipJson, gson.toJson(ship().save()));
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
         step(Location.of(26, 14));
         assertEquals(Location.of(26, 14), ship().getLocation());
         assertEquals(4, ship().getActionPoints());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
     }
 
     @Test
@@ -301,15 +279,15 @@ class CoastalPortMovementTest {
     }
 
     @Test
-    void testZeroPointPassengersLandWithoutSpendingPoints() {
+    void testZeroPointPassengersStayAboardWithoutSpendingPoints() {
         prepare(Location.of(26, 14));
         for (int id = 13; id <= 16; id++) {
             ((AbstractUnit) model.getUnitById(id)).setActionPoints(0);
         }
-        List<Integer> beforePoints = passengerPoints();
+        String beforePayload = payload();
         step(PORT);
         assertEquals(5, ship().getActionPoints());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
     }
 
     @Test
@@ -371,11 +349,11 @@ class CoastalPortMovementTest {
     void testAiRouteToCoastalPort() {
         prepare(Location.of(26, 14));
         ((AbstractUnit) ship()).setActionPoints(1);
-        List<Integer> beforePoints = passengerPoints();
+        String beforePayload = payload();
         runAi();
         assertEquals(PORT, ship().getLocation());
         assertEquals(0, ship().getActionPoints());
-        verifyAshoreAtPort(beforePoints);
+        verifyPayload(beforePayload);
     }
 
     @Test

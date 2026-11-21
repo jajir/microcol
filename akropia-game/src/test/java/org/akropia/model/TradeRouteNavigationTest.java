@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.akropia.model.campaign.MissionImpl;
 import org.akropia.model.campaign.po.GameModelPo;
 import org.akropia.model.campaign.po.GameModelPoDao;
@@ -269,9 +271,16 @@ class TradeRouteNavigationTest {
         assertTrue(w.ship.getLocation().getX() > before.getX());
     }
 
-    @Test
-    void twoCompleteCircuitsSellEachGoodsOnceAndDepartFromTheSeaLane() {
+    @ParameterizedTest
+    @ValueSource(booleans = { false, true })
+    void twoCompleteCircuitsSellEachGoodsOnceAndDepartFromTheSeaLane(
+            final boolean disembarkPassenger) {
         final World w = new World();
+        final Unit passenger = w.ship.getCargo().getSlotByIndex(2).getUnit()
+                .orElseThrow();
+        if (disembarkPassenger) {
+            passenger.disembarkToLocation(DELFT_AT);
+        }
         // Circuit one empties three holds in Europe and fills them at Delft;
         // circuit two sells what Delft gave. Nothing is processed twice.
         TradeRoute route = w.model.createTradeRoute(w.dutch, "Circuits",
@@ -300,7 +309,17 @@ class TradeRouteNavigationTest {
         // Delft was reached once between the visits and filled the holds that
         // the first visit freed; the second visit sold them once.
         assertEquals(1, w.soldCount(GoodsType.HORSE));
-        assertEquals(1, w.soldCount(GoodsType.WEAPONS));
+        // Keeping the passenger aboard leaves one less hold for goods.
+        assertEquals(disembarkPassenger ? 1 : 0,
+                w.soldCount(GoodsType.WEAPONS));
+        if (disembarkPassenger) {
+            assertTrue(passenger.isAtPlaceLocation());
+            assertEquals(DELFT_AT, passenger.getLocation());
+        } else {
+            assertTrue(passenger.isAtCargoSlot());
+            assertSame(passenger, w.ship.getCargo().getSlotByIndex(2).getUnit()
+                    .orElseThrow());
+        }
         assertEquals(1, w.shipSteps.stream().filter(DELFT_AT::equals).count());
         // Both outward legs were real departures, and the ship holds neither
         // the sold goods nor anything it never carried.

@@ -529,40 +529,42 @@ class PassengerTransferTest {
     }
 
     @Test
-    void arrivalUnloadsEveryPassengerOnceAndKeepsIdentityGoodsAndPoints() {
+    void arrivalKeepsPassengersIdentityGoodsAndPointsAboard() {
         prepare(Location.of(25, 13), 1);
         for (int id = 13; id <= 16; id++) {
             ((AbstractUnit) model.getUnitById(id)).setActionPoints(1);
         }
         ((AbstractUnit) ship()).setActionPoints(2);
+        final String cargo = new Gson().toJson(ship().save().getCargo());
         model.moveUnit(ship(), org.akropia.model.Path.of(List.of(PORT)));
         assertEquals(PORT, ship().getLocation());
         assertEquals(1, ship().getActionPoints());
+        verifyArrivalPassengersAboard(cargo);
+        reload();
+        assertEquals(PORT, ship().getLocation());
+        verifyArrivalPassengersAboard(cargo);
+        passenger().disembarkToLocation(PORT);
+        assertTrue(passenger().isAtPlaceLocation());
+        assertEquals(PORT, passenger().getLocation());
+        assertEquals(1, passenger().getActionPoints());
+        assertEquals(80, ((UnitFreeColonist) passenger()).getTools());
+        for (int id = 13; id <= 15; id++) {
+            assertTrue(model.getUnitById(id).isAtCargoSlot());
+        }
+    }
+
+    private void verifyArrivalPassengersAboard(final String cargo) {
+        assertEquals(cargo, new Gson().toJson(ship().save().getCargo()));
         for (int id = 13; id <= 16; id++) {
-            Unit landed = model.getUnitById(id);
-            assertEquals(id, landed.getId());
-            assertTrue(landed.isAtPlaceLocation());
-            assertEquals(PORT, landed.getLocation());
-            assertEquals(1, landed.getActionPoints());
+            Unit carried = model.getUnitById(id);
+            assertEquals(id, carried.getId());
+            assertTrue(carried.isAtCargoSlot());
+            assertSame(ship(), carried.getPlaceCargoSlot().getOwnerUnit());
+            assertEquals(1, carried.getActionPoints());
         }
         assertEquals(80, ((UnitFreeColonist) passenger()).getTools());
-        for (int index = 0; index < 4; index++) {
-            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
-        }
         assertEquals(Goods.of(GoodsType.ORE, 7),
                 ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
-        reload();
-        for (int id = 13; id <= 16; id++) {
-            Unit landed = model.getUnitById(id);
-            assertTrue(landed.isAtPlaceLocation());
-            assertEquals(PORT, landed.getLocation());
-            assertEquals(1, landed.getActionPoints());
-        }
-        assertEquals(80, ((UnitFreeColonist) passenger()).getTools());
-        assertEquals(PORT, ship().getLocation());
-        for (int index = 0; index < 4; index++) {
-            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
-        }
     }
 
     @Test
@@ -623,23 +625,21 @@ class PassengerTransferTest {
     }
 
     @Test
-    void laterInvalidPassengerRejectsArrivalBeforeEarlierPassengersLand() {
+    void passengerUnableToDisembarkDoesNotPreventArrival() {
         prepare(Location.of(25, 13), 1);
         ((AbstractUnit) ship()).setActionPoints(2);
-        // Slot order lands 16, 15 and 14 before 13, so 13 is the late failure.
-        onceAfterShipStep(() -> {
-            ((AbstractUnit) model.getUnitById(13))
-                    .setWaitingOrder(UnitActionType.sentry);
-            afterCallback = snapshot();
-        });
-        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
-                org.akropia.model.Path.of(List.of(PORT))));
-        assertEquals(afterCallback, snapshot());
-        assertEquals(Location.of(25, 13), ship().getLocation());
-        assertEquals(2, ship().getActionPoints());
+        ((AbstractUnit) model.getUnitById(13))
+                .setWaitingOrder(UnitActionType.sentry);
+        final String cargo = new Gson().toJson(ship().save().getCargo());
+        model.moveUnit(ship(), org.akropia.model.Path.of(List.of(PORT)));
+        assertEquals(PORT, ship().getLocation());
+        assertEquals(1, ship().getActionPoints());
+        assertEquals(cargo, new Gson().toJson(ship().save().getCargo()));
         for (int id = 13; id <= 16; id++) {
             assertTrue(model.getUnitById(id).isAtCargoSlot());
         }
+        assertEquals(UnitActionType.sentry,
+                model.getUnitById(13).getAction().getType());
     }
 
     /**
@@ -673,7 +673,7 @@ class PassengerTransferTest {
     }
 
     @Test
-    void adjacentDepartureSentryBoardsAndLandsWithTheArrivingShip() {
+    void adjacentDepartureSentryBoardsAndStaysOnTheArrivingShip() {
         prepareSentryOnShore();
         Unit sentry = model.getUnitById(13);
         int tools = ((UnitFreeColonist) sentry).getTools();
@@ -681,41 +681,43 @@ class PassengerTransferTest {
         assertEquals(PORT, ship().getLocation());
         assertEquals(1, ship().getActionPoints());
         assertEquals(13, sentry.getId());
-        assertTrue(sentry.isAtPlaceLocation());
-        assertEquals(PORT, sentry.getLocation());
+        assertTrue(sentry.isAtCargoSlot());
+        assertSame(ship(), sentry.getPlaceCargoSlot().getOwnerUnit());
         assertEquals(UnitActionType.noAction, sentry.getAction().getType());
         assertEquals(0, sentry.getActionPoints());
         assertEquals(tools, ((UnitFreeColonist) sentry).getTools());
         for (int id = 14; id <= 16; id++) {
             Unit landed = model.getUnitById(id);
-            assertTrue(landed.isAtPlaceLocation());
-            assertEquals(PORT, landed.getLocation());
+            assertTrue(landed.isAtCargoSlot());
+            assertSame(ship(), landed.getPlaceCargoSlot().getOwnerUnit());
             assertEquals(1, landed.getActionPoints());
         }
         for (int index = 0; index < 4; index++) {
-            assertTrue(ship().getCargo().getSlotByIndex(index).isEmpty());
+            assertTrue(ship().getCargo().getSlotByIndex(index).getUnit()
+                    .isPresent());
         }
         assertEquals(Goods.of(GoodsType.ORE, 7),
                 ship().getCargo().getSlotByIndex(4).getGoods().orElseThrow());
     }
 
     @Test
-    void invalidCarriedPassengerRejectsArrivalBeforeSentryBoardsOrMoves() {
+    void passengerUnableToDisembarkDoesNotPreventDepartureBoarding() {
         prepareSentryOnShore();
         ((AbstractUnit) model.getUnitById(14))
                 .setWaitingOrder(UnitActionType.sentry);
         Unit sentry = model.getUnitById(13);
-        String before = snapshot();
-        assertThrows(IllegalStateException.class, () -> model.moveUnit(ship(),
-                org.akropia.model.Path.of(List.of(PORT))));
-        assertEquals(before, snapshot());
-        assertEquals(Location.of(25, 13), ship().getLocation());
-        assertEquals(2, ship().getActionPoints());
-        assertTrue(sentry.isAtPlaceLocation());
-        assertEquals(LANDING, sentry.getLocation());
-        assertEquals(UnitActionType.sentry, sentry.getAction().getType());
-        assertEquals(1, sentry.getActionPoints());
-        assertTrue(ship().getCargo().getSlotByIndex(3).isEmpty());
+        model.moveUnit(ship(), org.akropia.model.Path.of(List.of(PORT)));
+        assertEquals(PORT, ship().getLocation());
+        assertEquals(1, ship().getActionPoints());
+        assertTrue(sentry.isAtCargoSlot());
+        assertSame(ship(), sentry.getPlaceCargoSlot().getOwnerUnit());
+        assertEquals(UnitActionType.noAction, sentry.getAction().getType());
+        assertEquals(0, sentry.getActionPoints());
+        assertSame(sentry,
+                ship().getCargo().getSlotByIndex(3).getUnit().orElseThrow());
+        assertTrue(model.getUnitById(14).isAtCargoSlot());
+        assertEquals(UnitActionType.sentry,
+                model.getUnitById(14).getAction().getType());
     }
 
 }

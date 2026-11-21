@@ -617,13 +617,13 @@ class PatrolInterceptionTest {
     }
 
     /**
-     * The entry itself is checked, not only the approach: stepping onto the
-     * owned port beside a patrol still lands the passenger and keeps the goods,
-     * then the stop removes the rest of the movement. One draw is consumed and
-     * Continue neither redraws nor repeats the notice.
+     * The entry itself is checked, not only the approach: stepping onto an
+     * owned port beside a patrol keeps passengers and goods aboard, then the
+     * stop removes the rest of the movement. One draw is consumed and Continue
+     * neither redraws nor repeats the notice.
      */
     @Test
-    void ownedPortEntryIsCheckedBesideAPatrolAndStillUnloads()
+    void ownedPortEntryIsCheckedBesideAPatrolAndKeepsPassengersAboard()
             throws ReflectiveOperationException {
         final long state = stateFor(ShipPatrolRules.Outcome.STOPPED);
         final Model model = harbourGame(APPROACH, PORT_PATROL, state);
@@ -635,9 +635,9 @@ class PatrolInterceptionTest {
         assertEquals(PORT, mover.getLocation());
         assertEquals(0, mover.getMovementThirds());
         final Unit passenger = model.getUnitById(PASSENGER_ID);
-        assertTrue(passenger.isAtPlaceLocation());
-        assertEquals(PORT, passenger.getLocation());
-        assertTrue(unitsOf(mover).stream().allMatch(Optional::isEmpty));
+        assertTrue(passenger.isAtCargoSlot());
+        assertSame(mover, passenger.getPlaceCargoSlot().getOwnerUnit());
+        assertSame(passenger, unitsOf(mover).get(0).orElseThrow());
         assertEquals(goods, goodsOf(mover));
         final List<TurnEventPatrolInterception> notices = interceptionsOf(model,
                 mover);
@@ -651,7 +651,9 @@ class PatrolInterceptionTest {
         final Ship again = (Ship) restored.getUnitById(MOVER_FRENCH_ID);
         assertEquals(PORT, again.getLocation());
         assertEquals(0, again.getMovementThirds());
-        assertEquals(PORT, restored.getUnitById(PASSENGER_ID).getLocation());
+        assertTrue(restored.getUnitById(PASSENGER_ID).isAtCargoSlot());
+        assertSame(again, restored.getUnitById(PASSENGER_ID).getPlaceCargoSlot()
+                .getOwnerUnit());
         assertEquals(goods, goodsOf(again));
         assertEquals(state + GAMMA, savedState(restored));
         final List<TurnEventPatrolInterception> kept = interceptionsOf(restored,
@@ -661,7 +663,7 @@ class PatrolInterceptionTest {
     }
 
     @Test
-    void undetectedPortEntryStillDrawsOnceAndKeepsMovementAndLanding()
+    void undetectedPortEntryStillDrawsOnceAndKeepsMovementAndPassengers()
             throws ReflectiveOperationException {
         final long state = stateFor(ShipPatrolRules.Outcome.UNDETECTED);
         final Model model = harbourGame(APPROACH, PORT_PATROL, state);
@@ -671,7 +673,9 @@ class PatrolInterceptionTest {
         mover.moveOneStep(PORT);
         assertEquals(before - MovementPoints.THIRDS_PER_POINT,
                 mover.getMovementThirds());
-        assertEquals(PORT, model.getUnitById(PASSENGER_ID).getLocation());
+        assertTrue(model.getUnitById(PASSENGER_ID).isAtCargoSlot());
+        assertSame(mover, model.getUnitById(PASSENGER_ID).getPlaceCargoSlot()
+                .getOwnerUnit());
         assertEquals(goods, goodsOf(mover));
         assertEquals(state + GAMMA, savedState(model));
         assertTrue(interceptionsOf(model, mover).isEmpty());
@@ -687,7 +691,9 @@ class PatrolInterceptionTest {
         mover.moveOneStep(PORT);
         assertEquals(before - MovementPoints.THIRDS_PER_POINT,
                 mover.getMovementThirds());
-        assertEquals(PORT, model.getUnitById(PASSENGER_ID).getLocation());
+        assertTrue(model.getUnitById(PASSENGER_ID).isAtCargoSlot());
+        assertSame(mover, model.getUnitById(PASSENGER_ID).getPlaceCargoSlot()
+                .getOwnerUnit());
         assertEquals(state, savedState(model));
         assertTrue(interceptionsOf(model, mover).isEmpty());
     }

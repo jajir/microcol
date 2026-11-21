@@ -1,3 +1,18 @@
+## Cestující při příjezdu do přístavu — 21. listopadu 2026
+1. Hráč může vplout do vlastní pobřežní kolonie při přepravě jednotek do
+   dalšího cíle. Příjezd ponechá jednotky i jejich výbavu a pohybové body
+   na palubě; žádnou automaticky nevylodí ani nezařadí mezi pracovníky.
+2. V detailu kolonie hráč vybere loď a použije existující přetažení konkrétní
+   jednotky z nákladového prostoru mezi jednotky venku. Ostatní cestující
+   zůstanou na palubě. Bez tohoto pokynu příjezd, prohlížení kolonie ani
+   uložení a načtení nepřesunou cestující. Prázdný prostor a jednotka venku
+   ukazují výsledek ručního přesunu; není potřeba nový dialog ani přepínač.
+3. Platí stávající modelové podmínky ručního přesunu. Nemožnost vystoupení
+   konkrétního cestujícího sama nebrání legálnímu vplutí lodě.
+   [Pravidlo CARGO-007](gap-analysis.md#transport-ships-and-atlantic-travel)
+   a [ověření UC-025](functional-tests.md#manual-port-disembarkation-2026-11-21)
+   rozlišují dohodnuté chování a testovou evidenci; hráčská studie neproběhla.
+
 ## Rozbalovací detail terénu — 21. listopadu 2026
 
 1. Hráč vybírá známé políčko na mapě a porovnává jeho možné výnosy.

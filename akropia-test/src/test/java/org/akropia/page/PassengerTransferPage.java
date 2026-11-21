@@ -218,6 +218,12 @@ public final class PassengerTransferPage extends AbstractScreen {
     }
 
     public void verifyAboard(int unitId, int slotIndex, int moves, int tools) {
+        verifyPassengerAboard(unitId, slotIndex, moves, tools);
+        verifyCargoGoods(3, 0, Goods.of(GoodsType.ORE, 7));
+    }
+
+    public void verifyPassengerAboard(int unitId, int slotIndex, int moves,
+            int tools) {
         UnitWithCargo ship = (UnitWithCargo) getModel().getUnitById(3);
         UnitFreeColonist unit = (UnitFreeColonist) getModel()
                 .getUnitById(unitId);
@@ -227,8 +233,6 @@ public final class PassengerTransferPage extends AbstractScreen {
         assertSame(slot, unit.getPlaceCargoSlot().getCargoSlot());
         assertEquals(moves, unit.getActionPoints());
         assertEquals(tools, unit.getTools());
-        assertEquals(Goods.of(GoodsType.ORE, 7),
-                ship.getCargo().getSlotByIndex(0).getGoods().orElseThrow());
     }
 
     public void verifyAshore(int unitId, Location location, int moves,

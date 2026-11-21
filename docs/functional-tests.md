@@ -1,3 +1,102 @@
+<a id="manual-port-disembarkation-2026-11-21"></a>
+## Manual port disembarkation — 2026-11-21
+1. User-approved change to UC-025 / CARGO-007: sailing into an owned coastal
+   colony keeps passengers aboard until an explicit individual transfer.
+   Historical R-0136 automatic-unloading evidence remains historical.
+2. `CoastalPortMovementTest` checks all eight arrival directions, departure,
+   zero-point passengers, AI entry and save/load without changing cargo.
+   `PassengerTransferTest` checks identity, equipment, goods, manual landing,
+   passengers unable to disembark and departure sentries staying aboard.
+   Existing rejected/stale ship movement checks remain in place.
+   `PatrolInterceptionTest` preserves interception, movement and random-draw
+   assertions while checking passengers aboard. `TradeRouteNavigationTest`
+   checks both a retained passenger occupying a hold through two circuits and
+   an explicitly disembarked passenger freeing capacity for goods.
+3. TC38 preserves its five scenario IDs and covers real arrival, Continue,
+   inland rejection, diagonal lake ports, zero-point passengers and explicit
+   transfer of one passenger while another stays aboard. TC29 covers the
+   existing manual passenger-transfer journey. Source-contract checks remain
+   required. Final local acceptance passed as recorded below; no
+   full-regression or publication result is claimed.
+4. Initial model dispatch `20261121T124922Z-c0a974e5d505` (PID 56702)
+   stopped in Docker admission: container-list query exceeded 20 seconds;
+   no test command started (22.097 seconds total). A later server-version
+   probe completed in 1.451 seconds; this does not establish the timeout's
+   cause. Retry `20261121T125031Z-ce386bbcd8fa` (PID 56813) ran 4,893 checks:
+   four failures, two errors, no skips, in 153.984 seconds. Three patrol
+   expectations and one route-capacity expectation still assumed automatic
+   landing; two new passenger checks referenced the wrong unit ID. Tests
+   were corrected, with original failed evidence retained in
+   `target/verification/run-m7ft4szm/`. Model retry
+   `20261121T125428Z-c4eb8445f8ea` (PID 56991, limit 600 seconds) passed
+   **4,894 model/JUnit checks, zero failures/errors/skips**, with 391 complete
+   XML reports in `target/verification/run-rm6aj45p/` (153.991 supervised
+   seconds). Source hashes still match apart from documentation evidence.
+5. Targeted Docker/Xvfb dispatch `20261121T125726Z-2778377c6dfd`
+   (PID 57318, limit 1,800 seconds) selects TC38, TC29, TC45, TC118, TC140
+   and `PageVerificationContractTest`: changed arrival, manual passenger
+   transfers, sentry boarding, automatic routes, multi-hold cargo and the
+   page assertion contract. All **31 checks passed, zero failures/errors/skips**
+   in 465.256 supervised seconds; all six XML reports are retained in
+   `target/docker-ui/run-Zv9Fqd/`. Runtime and test sources still match the
+   model snapshot. Subsequent smoke dispatch
+   `20261121T130537Z-a3f42d110b10` (PID 57591, outer limit 480 seconds;
+   acceptance budget 420 seconds) completed in 288.044 supervised seconds,
+   with 23 checks, one failure, no errors/skips. TC21/05 still expected the
+   passenger automatically ashore after Continue. Its expectation now checks
+   only the ship on the colony tile and the passenger in the original hold,
+   retaining equipment, movement, goods and autosave checks. Failed reports
+   remain in `target/verification/run-i99f62ys/`; targeted TC21/05 and complete
+   smoke reruns are required. Game/model sources and model tests are unchanged;
+   the passing model phase remains valid.
+6. Targeted TC21/05 attempt `20261121T131127Z-e0364f4334e0` (PID 58343,
+   limit 600 seconds) failed in 69.953 seconds: the reused passenger helper
+   additionally required seven ore absent from this fixture. Passenger checks
+   are now separate from the original ore assertion; existing TC29/TC38
+   cargo checks remain unchanged, and TC21 checks its empty goods hold.
+   Evidence: `target/docker-ui/run-4l3s07/`.
+7. Source review identified three more automatic-arrival assumptions:
+   TC13/01, TC30/04 and TC184/01. They now verify arrival aboard and explicitly
+   disembark through the existing colony UI before retaining their original
+   landing, specialist work and Continue assertions. Targeted dispatch
+   `20261121T131305Z-164bc3ed0f85` (PID 58506, limit 1,200 seconds) covers
+   these journeys and the page contract: all **6 checks passed, zero failures,
+   errors or skips**, in 274.360 supervised seconds; four complete reports
+   are in `target/docker-ui/run-x1Ta02/`. The final combined targeted run
+   also repeats all earlier 31 checks and TC21/05 because the shared
+   passenger verification helper changed.
+8. The same source audit found TC27/07 (equipped colonist) and TC165/01
+   (purchased missionary) also relying on arrival unloading. Both now verify
+   arrival aboard and explicitly land through the colony UI before retaining
+   their original equipment, Continue and mission assertions. The queued
+   combined dispatch `20261121T131417Z-935f4e2538c1` (PID 58653) was cancelled
+   while waiting for the local lock after 34.143 seconds; no test command
+   started. Replacement `20261121T131510Z-5e0cb5cff1f2` (PID 58769, limit
+   1,800 seconds) covers TC38, TC29, TC45, TC118, TC140, TC13, TC30/04,
+   TC184, TC21/05, TC27/07, TC165 and `PageVerificationContractTest`.
+   All **37 checks passed, zero failures/errors/skips**, with 12 complete
+   XML reports in `target/docker-ui/run-5uJWl9/`. Supervised execution took
+   876.699 seconds (1,800-second limit), separately from 148.860 seconds
+   waiting for the local lock. Fresh complete smoke dispatch
+   `20261121T133227Z-4a020315015e` (PID 59736, outer limit 480 seconds;
+   acceptance budget 420 seconds) passed **23 smoke/support checks, zero
+   failures/errors/skips**, with 13 complete XML reports in
+   `target/verification/run-1c76vgak/`. Supervised time was **291.288 seconds**,
+   within the 420-second acceptance budget.
+9. Final review preserves rejected/stale movement, manual transfer conditions,
+   cargo balances, equipment, work outcomes and scenario IDs. Shared Java
+   formatting passed on all 13 changed Java files. Game/model executable
+   code and tests match the passing model snapshot; the only later game-module
+   change is a comment correction, verified with identical JDT code tokens.
+   Targeted and smoke checks cover final UI test logic. Two corrected test
+   comments also have identical code tokens to the earlier checked source.
+   Evidence and token comparisons are retained in
+   `target/manual-port-disembarkation/`. Unrelated backlog edits are excluded.
+10. All **14 documentation consistency checks passed**, the naming audit
+    found zero unexplained occurrences, and strict MkDocs passed. Logs are
+    retained in `target/manual-port-disembarkation/`. Remote CI, Pages and
+    game distribution publication were not inspected or claimed verified.
+
 <a id="terrain-disclosure-2026-11-21"></a>
 
 ## Terrain disclosure — 2026-11-21

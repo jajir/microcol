@@ -157,10 +157,15 @@ public class TC_184_F212_expert_farmer_field_test extends AbstractAkropiaTest {
         equipment.showSeaRoute(Location.of(26, 16), COLONY);
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(COLONY);
-        game.waitForNumberOfUnitsAt(COLONY, 2);
+        game.waitForNumberOfUnitsAt(COLONY, 1);
 
-        // The expert steps ashore at the colony centre, still unassigned.
+        // Arrival keeps the expert aboard; explicitly land before assigning
+        // work.
+        equipment.verifyPassenger(103, 102);
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
+        colony.verifyNumberOfUnitsAtPier(0);
+        new org.akropia.page.PassengerTransferPage(getContext())
+                .disembarkInPort(103, 0, false);
         colony.verifyNumberOfUnitsAtPier(1);
         purchase.verifySpecialistState(103, UnitType.EXPERT_FARMER, 3400,
                 PlaceLocation.class);

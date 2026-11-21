@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
 import org.akropia.page.GamePage;
+import org.akropia.page.ColonyScreen;
 import org.akropia.page.PassengerTransferPage;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -15,7 +16,7 @@ import org.testfx.framework.junit5.Start;
 import javafx.stage.Stage;
 
 /**
- * The carrier enters the colony before its passenger steps ashore.
+ * The carrier enters the colony with its passenger aboard until manual landing.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_13_F12_arriving_to_colony_test extends AbstractAkropiaTest {
@@ -50,9 +51,16 @@ public class TC_13_F12_arriving_to_colony_test extends AbstractAkropiaTest {
         gamePage.moveMouseAtLocation(SHIP_LOCATION);
         gamePage.dragMouseAtLocation(COLONY_LOCATION);
 
-        // The ship arrived and its passenger stepped outside the workforce.
-        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 2);
+        // Arrival keeps the passenger aboard until an explicit transfer.
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
         passengers.verifyShip(COLONY_LOCATION, 5);
+        gamePage.getShipAt(COLONY_LOCATION).verifyNumberOfOccupiedCargoSlots(1);
+        ColonyScreen colony = gamePage.openColonyAt(COLONY_LOCATION,
+                "New Amsterdam");
+        passengers.disembarkInPort(4, 1, false);
+        colony.verifyNumberOfUnitsAtPier(1);
+        gamePage = colony.close();
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 2);
         passengers.verifyAshore(4, COLONY_LOCATION, 1, 0);
         passengers.verifyCargoSlotEmpty(3, 1);
 

@@ -61,20 +61,19 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
         passengers.verifyAboard(4, 1, 1, 80);
         passengers.verifyAboard(5, 2, 5, 0);
 
-        // Sailing into the owned colony lands every passenger outside, with
-        // identity, equipment and points unchanged, while goods stay aboard.
+        // Sailing into the owned colony keeps passengers, equipment, points
+        // and goods aboard until the player orders a transfer.
         map.move(WATER, PORT, 3);
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 1, 80);
-        passengers.verifyAshore(5, PORT, 5, 0);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
 
-        // Continue retains the legal port position and the outside passengers
-        // without duplicating anyone.
+        // Continue retains the legal port position and every passenger aboard.
         game.exitToMenu();
         game = new FreePlayAuditPage(getContext()).continueGame();
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 1, 80);
-        passengers.verifyAshore(5, PORT, 5, 0);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
 
         // Escape closes the colony menu normally and leaves that control
         // focused.
@@ -85,11 +84,13 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
         port.verifyColoniesMenuShowing(false);
         port.verifyColoniesMenuFocused();
 
-        // Re-board both passengers from the colony screen, which spends no
-        // movement, so the ordinary shore-landing path below keeps a choice.
+        // Explicitly land one passenger in the colony screen; the other stays
+        // aboard. Re-board the chosen passenger without spending movement.
         final ColonyScreen colony = game.openColonyAt(PORT, "New Amsterdam");
+        passengers.disembarkInPort(4, 1, false);
+        passengers.verifyAshore(4, PORT, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
         passengers.embarkInPort(4, 1, false);
-        passengers.embarkInPort(5, 2, false);
         passengers.verifyAboard(4, 1, 1, 80);
         passengers.verifyAboard(5, 2, 5, 0);
         game = colony.close();
@@ -147,8 +148,8 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
         passengers.closeRejection();
         port.verifyWorldUnchanged();
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 1, 80);
-        passengers.verifyAshore(5, PORT, 5, 0);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
     }
 
     @Test
@@ -200,20 +201,20 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
         port.verifyPreviewCanceled();
         map.move(lake, PORT, 3);
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 1, 80);
-        passengers.verifyAshore(5, PORT, 5, 0);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
         map.move(PORT, lake, 3);
         passengers.verifyShip(lake, 4);
-        passengers.verifyAshore(4, PORT, 1, 80);
-        passengers.verifyAshore(5, PORT, 5, 0);
+        passengers.verifyAboard(4, 1, 1, 80);
+        passengers.verifyAboard(5, 2, 5, 0);
     }
 
     @Test
     @Tag("local")
-    void TC_05_zero_point_passengers_land_outside_and_continue()
+    void TC_05_zero_point_passengers_stay_aboard_and_continue()
             throws Exception {
-        // Passengers without movement points still step ashore on a legal
-        // arrival, while the ship keeps its normal movement cost.
+        // Passengers without movement points stay aboard on a legal arrival,
+        // while the ship keeps its normal movement cost.
         useZeroPointVariant();
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final FogPage map = new FogPage(getContext());
@@ -221,20 +222,16 @@ public class TC_38_F30_coastal_port_movement_test extends AbstractAkropiaTest {
                 getContext());
         map.move(WATER, PORT, 3);
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 0, 80);
-        passengers.verifyAshore(5, PORT, 0, 0);
-        passengers.verifyCargoSlotEmpty(3, 1);
-        passengers.verifyCargoSlotEmpty(3, 2);
+        passengers.verifyAboard(4, 1, 0, 80);
+        passengers.verifyAboard(5, 2, 0, 0);
         passengers.verifyCargoGoods(3, 0, Goods.of(GoodsType.ORE, 7));
 
-        // Continue keeps the same outside passengers and free holds.
+        // Continue keeps the same passengers and occupied holds.
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
         passengers.verifyShip(PORT, 5);
-        passengers.verifyAshore(4, PORT, 0, 80);
-        passengers.verifyAshore(5, PORT, 0, 0);
-        passengers.verifyCargoSlotEmpty(3, 1);
-        passengers.verifyCargoSlotEmpty(3, 2);
+        passengers.verifyAboard(4, 1, 0, 80);
+        passengers.verifyAboard(5, 2, 0, 0);
         passengers.verifyCargoGoods(3, 0, Goods.of(GoodsType.ORE, 7));
     }
 

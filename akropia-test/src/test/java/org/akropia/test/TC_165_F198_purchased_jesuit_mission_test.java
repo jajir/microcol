@@ -144,6 +144,14 @@ public class TC_165_F198_purchased_jesuit_mission_test
         equipment.showSeaRoute(Location.of(26, 16), COLONY);
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(COLONY);
+        game.waitForNumberOfUnitsAt(COLONY, 1);
+        equipment.verifyPassenger(JESUIT, GALLEON);
+        org.akropia.page.ColonyScreen colony = game.openColonyAt(COLONY,
+                "New Amsterdam");
+        colony.verifyNumberOfUnitsAtPier(0);
+        new org.akropia.page.PassengerTransferPage(getContext())
+                .disembarkInPort(JESUIT, 0, false);
+        game = colony.close();
         game.waitForNumberOfUnitsAt(COLONY, 2);
         journey.verifyJesuitLanded(JESUIT, GALLEON, COLONY);
         journey.verifySettlementKnown(CAPITAL);

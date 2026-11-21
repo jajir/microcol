@@ -202,10 +202,15 @@ public class TC_30_F22_expert_purchase_test extends AbstractAkropiaTest {
         equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(Location.of(24, 16));
-        game.waitForNumberOfUnitsAt(Location.of(24, 16), 2);
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
         ColonyScreen colony = game.openColonyAt(Location.of(24, 16),
                 "New Amsterdam");
-        // The purchased expert already stepped ashore on arrival.
+        // Arrival keeps the expert aboard; explicitly land before assigning
+        // work.
+        equipment.verifyPassenger(103, 102);
+        colony.verifyNumberOfUnitsAtPier(0);
+        new org.akropia.page.PassengerTransferPage(getContext())
+                .disembarkInPort(103, 0, false);
         colony.verifyNumberOfUnitsAtPier(1);
         purchase.verifyExpertState(103, 2025, true, PlaceLocation.class);
         equipment.verifyLandedPassenger(103, 102, Location.of(24, 16));

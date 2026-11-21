@@ -135,11 +135,12 @@ public class TC_21_F15_free_play_screen_navigation_test
         audit.verifyContinueButtonEnabled(true);
         game = audit.continueGame();
         game.verifyNumberOfUnitsAt(Location.of(25, 16), 0);
-        game.verifyNumberOfUnitsAt(COLONY, 2);
+        // Only the ship is on the colony tile; its passenger stays aboard.
+        game.verifyNumberOfUnitsAt(COLONY, 1);
         final org.akropia.page.PassengerTransferPage passengers = new org.akropia.page.PassengerTransferPage(
                 getContext());
-        passengers.verifyAshore(4, COLONY, 1, 80);
-        passengers.verifyCargoSlotEmpty(3, 1);
+        passengers.verifyPassengerAboard(4, 1, 1, 80);
+        passengers.verifyCargoSlotEmpty(3, 0);
     }
 
     @Test

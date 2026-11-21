@@ -291,10 +291,14 @@ public class TC_27_F19_europe_equipment_test extends AbstractAkropiaTest {
         equipment.showSeaRoute(Location.of(26, 16), Location.of(24, 16));
         game.moveMouseAtLocation(Location.of(26, 16));
         game.dragMouseAtLocation(Location.of(24, 16));
-        game.waitForNumberOfUnitsAt(Location.of(24, 16), 2);
+        game.waitForNumberOfUnitsAt(Location.of(24, 16), 1);
         org.akropia.page.ColonyScreen colony = game
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
-        // Arrival already landed the passenger; no manual unload is needed.
+        // The passenger stays aboard until explicitly landed with the tools.
+        equipment.verifyPassenger(100, 102);
+        colony.verifyNumberOfUnitsAtPier(0);
+        new org.akropia.page.PassengerTransferPage(getContext())
+                .disembarkInPort(100, 0, false);
         colony.verifyNumberOfUnitsAtPier(1);
         equipment.verifyState(100, 766, false, false, 100, PlaceLocation.class);
         equipment.verifyLandedPassenger(100, 102, Location.of(24, 16));
