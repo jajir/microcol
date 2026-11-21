@@ -329,4 +329,11 @@
 	<entry key="landOwner">Vlastník půdy: %s</entry>
 	<entry key="landUnowned">Půda bez vlastníka</entry>
     <entry key="nativeLandUnavailable">Tuto půdu nemůžeš využít: patří jinému hráči nebo nepřátelskému domorodému národu.</entry>
+    <entry key="terrainExpand">Rozbalit detail terénu</entry>
+    <entry key="terrainCollapse">Sbalit detail terénu</entry>
+    <entry key="terrainPotentialYields">Možné výnosy / tah</entry>
+    <entry key="terrainYieldContext">Před úpravami pracovníka a kolonie.</entry>
+    <entry key="terrainResourceBonus">%s: %s</entry>
+    <entry key="terrainBonusAmount">+%s %s</entry>
+    <entry key="terrainNoYield">Tento terén nic neprodukuje.</entry>
 </properties>

@@ -386,8 +386,8 @@ public final class FogPage extends AbstractScreen {
     }
 
     public void verifyTileDetailsContain(final String expectedText) {
-        assertTrue(getLabeledById("tileName").getText().contains(expectedText),
-                () -> "Tile details: " + getLabeledById("tileName").getText());
+        assertTrue(getLabeledById("tileFacts").getText().contains(expectedText),
+                () -> "Tile details: " + getLabeledById("tileFacts").getText());
     }
 
     public void verifyStatusBarContains(final String expectedText) {

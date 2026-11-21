@@ -47,6 +47,17 @@ final class ResourceFixture {
      */
     static void prepare(final TestContext context, final File source,
             final String name, final int workerId) throws IOException {
+        prepare(context, source, name, workerId, false);
+    }
+
+    static void prepareWool(final TestContext context, final File source,
+            final String name, final int workerId) throws IOException {
+        prepare(context, source, name, workerId, true);
+    }
+
+    private static void prepare(final TestContext context, final File source,
+            final String name, final int workerId, final boolean wool)
+            throws IOException {
         final JsonObject saved = new Gson()
                 .fromJson(Files.readString(source.toPath()), JsonObject.class);
         final JsonObject model = saved.getAsJsonObject("model");
@@ -54,9 +65,14 @@ final class ResourceFixture {
         final JsonObject map = model.getAsJsonObject("map");
         final JsonArray resources = RoadFixture
                 .emptyRows(map.getAsJsonArray("trees"));
-        RoadFixture.set(resources, OLIVES_LOCATION, "ps");
+        RoadFixture.set(resources, OLIVES_LOCATION, wool ? "pc" : "ps");
         RoadFixture.set(resources, GAME_LOCATION, "ga");
         map.add("resources", resources);
+        if (wool) {
+            RoadFixture.set(map.getAsJsonArray("tiles"), OLIVES_LOCATION, "l");
+            RoadFixture.set(map.getAsJsonArray("trees"), OLIVES_LOCATION, "-");
+            RoadFixture.set(map.getAsJsonArray("fields"), OLIVES_LOCATION, "-");
+        }
         final File prepared = new File(System.getProperty("user.home"), name);
         Files.writeString(prepared.toPath(), saved.toString());
         when(context.getClassFromGuice(FileSelectingService.class)

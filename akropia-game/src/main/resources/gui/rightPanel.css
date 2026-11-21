@@ -35,6 +35,24 @@
 	-fx-pref-width: 55px;
 }
 
+#rightPanel .terrain-toggle {
+    -fx-border-image-source: null;
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-padding: 8 0;
+    -fx-alignment: center-left;
+    -fx-graphic-text-gap: 8;
+}
+
+#rightPanel .terrain-toggle:focused {
+    -fx-underline: true;
+}
+
+#terrainDetails {
+    -fx-padding: 8 8 4 0;
+}
+
 /*
  * I can's set automatically width of button to maximum size. 
  */

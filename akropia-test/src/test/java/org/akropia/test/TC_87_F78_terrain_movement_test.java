@@ -161,6 +161,7 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
         final org.akropia.page.RiverPage panel = new org.akropia.page.RiverPage(
                 getContext());
         game.selectTile(Location.of(25, 12));
+        new org.akropia.page.ResourcePage(getContext()).openTerrainDetails();
         panel.verifyStepDescription("Cena kroku: ⅓", "Po navazující cestě");
         panel.verifyStepDescription("Krok není dostupný",
                 "Nedostatek zbývajícího pohybu");

@@ -64,8 +64,20 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
 
         // Inspecting the square names the resource in the right panel.
         gamePage.selectTile(ResourceFixture.OLIVES_LOCATION);
+        resource.verifyTerrainExpanded(false);
+        resource.openTerrainDetails();
+        resource.verifyTerrainExpanded(true);
         resource.verifyInspectedName("Prime olive grove land");
-        gamePage.captureDialog("tileName", "r0274-resource-map.png");
+        resource.verifyTerrainDescription("+2 Olives");
+        resource.verifyTerrainYield(GoodsType.OLIVES, "Olives", 3);
+        resource.verifyTerrainYield(GoodsType.GRAIN, "Grain", 4);
+        resource.verifyTerrainYield(GoodsType.GRAPES, "Grapes", 3);
+        gamePage.captureDialog("rightPanel", "terrain-disclosure-expanded.png");
+        resource.toggleTerrainDetails();
+        resource.verifyTerrainExpanded(false);
+        gamePage.captureDialog("rightPanel",
+                "terrain-disclosure-collapsed.png");
+        resource.openTerrainDetails();
 
         // Only the matching output gains the bonus: grassland olives 1 becomes
         // 3, while grain 4, grapes 3 and clay 0 are unchanged.
@@ -107,6 +119,7 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         // Inspecting the unexplored square does not name its game area.
         gamePage.selectTile(ResourceFixture.GAME_LOCATION);
         resource.verifyInspectionOmits("Game area");
+        resource.verifyTerrainUnavailable();
     }
 
     @Test
@@ -173,5 +186,57 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         gamePage.dragMouseAtLocation(ResourceFixture.GAME_LOCATION);
         resource.verifyMarkerPainted(ResourceFixture.OLIVES_LOCATION,
                 ResourceOverlay.PRIME_OLIVES);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_czech_terrain_disclosure_shows_wool_bonus_and_preserves_game()
+            throws Exception {
+        // Use the selected plains/pasture example and the player's Czech UI.
+        ResourceFixture.prepareWool(getContext(), testFileName,
+                "resource-f82-wool.akropia", WORKER_ID);
+        final org.akropia.page.SettingPage settings = WelcomePage
+                .of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final ResourcePage resource = new ResourcePage(getContext());
+        game.selectTile(ResourceFixture.OLIVES_LOCATION);
+        resource.rememberGame();
+
+        // One click reveals product pictures, names and final terrain yields.
+        resource.verifyTerrainExpanded(false);
+        resource.openTerrainDetails();
+        resource.verifyTerrainExpanded(true);
+        resource.verifyTerrainDescription("+2 Vlna");
+        resource.verifyTerrainYield(GoodsType.GRAIN, "Obilí", 4);
+        resource.verifyTerrainYield(GoodsType.WOOL, "Vlna", 4);
+        resource.verifyTerrainYield(GoodsType.GRAPES, "Hrozny", 1);
+        resource.verifyTerrainYieldCount(3);
+        game.captureDialog("rightPanel", "terrain-disclosure-czech.png");
+
+        // Space on the same focused heading closes the detail without an order.
+        resource.toggleTerrainWithKeyboard();
+        resource.verifyTerrainExpanded(false);
+        resource.verifyGameUnchanged();
+        resource.openTerrainDetails();
+
+        // The open preference follows selection; an ordinary tile has no bonus.
+        game.selectTile(COLONY_LOCATION);
+        resource.verifyTerrainExpanded(true);
+        resource.verifyInspectionOmits("+2");
+        resource.verifyInspectionOmits("pastvina");
+
+        // A low window keeps the final product accessible by scrolling.
+        game.selectTile(ResourceFixture.OLIVES_LOCATION);
+        resource.verifyGameUnchanged();
+        new org.akropia.page.MainScreenLayoutPage(getContext()).resize(1024,
+                400);
+        resource.revealTerrainYield(GoodsType.WOOL);
+        resource.verifyTerrainYieldWithinViewport(GoodsType.WOOL);
+        resource.verifyTerrainYield(GoodsType.WOOL, "Vlna", 4);
+        game.captureDialog("rightPanel", "terrain-disclosure-low.png");
+        resource.toggleTerrainDetails();
+        resource.verifyTerrainExpanded(false);
+        resource.verifyGameUnchanged();
     }
 }

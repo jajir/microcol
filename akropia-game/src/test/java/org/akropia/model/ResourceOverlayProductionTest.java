@@ -28,6 +28,34 @@ class ResourceOverlayProductionTest {
     }
 
     @Test
+    void inspectionBonusUsesTerrainRulesWithoutConsumingDeposits() {
+        final Terrain wool = terrain(TerrainType.PLAINS,
+                ResourceOverlay.PRIME_WOOL);
+        assertEquals(4, output(wool, GoodsType.WOOL));
+        assertEquals(2, wool.getResourceProductionBonus(GoodsType.WOOL));
+        assertEquals(0, wool.getResourceProductionBonus(GoodsType.GRAIN));
+        wool.setHasField(true);
+        assertEquals(5, output(wool, GoodsType.WOOL));
+        assertEquals(2, wool.getResourceProductionBonus(GoodsType.WOOL));
+
+        final Terrain ore = terrain(TerrainType.HILL, ResourceOverlay.ORE);
+        ore.setRiverSize(RiverSize.SMALL);
+        assertEquals(1, ore.getResourceProductionBonus(GoodsType.ORE));
+        ore.setMineralReserve(MineralReserve.EMPTY);
+        assertEquals(0, ore.getResourceProductionBonus(GoodsType.ORE));
+
+        final Terrain silver = terrain(TerrainType.MOUNTAIN,
+                ResourceOverlay.SILVER);
+        silver.setHasRoad(true);
+        silver.setMineralReserve(MineralReserve.of(1, 0));
+        assertEquals(1, silver.getResourceProductionBonus(GoodsType.SILVER));
+        assertEquals(3, output(silver, GoodsType.SILVER));
+        assertEquals(1, silver.getLimitedDepositExtra(GoodsType.SILVER, 100));
+        final Terrain plain = terrain(TerrainType.PLAINS, ResourceOverlay.NONE);
+        assertEquals(0, plain.getResourceProductionBonus(GoodsType.WOOL));
+    }
+
+    @Test
     void everyKindAddsTwoToItsMatchingOutput() {
         // Base outputs come from the aid-card chart: mountain ore 3 and
         // silver 1, hill ore 4, grassland grain 4, olives 1 and grapes 3,

@@ -1,3 +1,95 @@
+<a id="terrain-disclosure-2026-11-21"></a>
+
+## Terrain disclosure — 2026-11-21
+
+1. User-approved variant 2 adds an initially collapsed terrain heading to the
+   existing map panel. The expanded detail lists movement, effective special
+   resource contributions, and product icon/name/final terrain yield. UC-006,
+   UC-007/008/009 and UC-012 cover concealment, output and movement; the minimap
+   and unit-card neighborhood remains covered by TC196 and TC26.
+2. `ResourceOverlayProductionTest` checks the read-only contribution query for
+   a pasture, plowing, a river deposit, a depleted deposit and a road silver
+   deposit with only one bonus unit remaining. Existing terrain rules supply
+   the totals; this change adds no independent GUI production formula.
+3. TC91/01 checks English product names, icons and final quantities, opening
+   and closing, plus screenshots. TC91/02 checks that unknown terrain clears
+   the previous yields and disables disclosure. New TC91/04 covers the Czech
+   plains/pasture example, keyboard closing, persistent expansion across
+   selection, a square without a resource, unchanged saved game state, and
+   scrolling to the final product in a low window.
+   TC87/04 and TC90/01 explicitly open the detail before checking the existing
+   contextual movement prices. Native facts remain outside disclosure (TC112).
+4. Existing production icons are reused through `ImageProvider`; editable
+   vector sources exist in `akropia-game/src/graphics/production-goods/` and
+   the existing goods-atlas export remains unchanged. The disclosure arrow
+   uses a black 2px JavaFX vector path. Runtime screenshots were reviewed
+   and local acceptance passed as recorded below. No remote regression or
+   publication verification was requested.
+5. Preparation attempts `20261121T114456Z-2b29dccfdcdc` and
+   `20261121T115956Z-959d8d371c2b` timed out on the Docker container-list
+   probe (20-second step limit; 22.085 and 22.088 seconds overall). Neither
+   started tests. Docker backend logs show VM startup during the second
+   attempt; the identical container query then succeeded. Both failed
+   attempts remain preserved in the completion logs.
+
+6. Model run `20261121T120108Z-a5d6842cc264` completed 4,893 tests with
+   one failure, zero errors/skips in 152.793 seconds. The button source
+   contract rejected direct construction of the disclosure button. The repair
+   routes its explicit stateful arrow through `ActionButtons.disclosure`;
+   the failed report remains in `target/verification/run-gkmg4gno`.
+
+7. Repaired model run `20261121T120523Z-446335b37b94` passed 4,893 tests
+   with zero failures/errors/skips in 150.067 seconds (reports:
+   `target/verification/run-kma_kzp_`). Targeted UI acceptance followed in the runs below.
+
+8. Targeted UI run `20261121T120810Z-a7ee293dc9a1` completed 27 tests in
+   379.117 seconds with one failure, zero errors/skips. TC91/04 exposed
+   Space being intercepted by the map skip-unit gesture while the terrain
+   heading had focus. The heading now uses the existing navigation-control
+   focus exclusion. Screenshot review also removed its inherited button
+   frame and shortened explanatory copy; reports and original screenshots
+   remain in `target/docker-ui/run-IeSJQs`. Fresh acceptance follows.
+
+9. Final runtime-source model acceptance `20261121T121609Z-d817918e1f0e`
+   passed 4,893 tests with zero failures/errors/skips in 154.959 seconds.
+   Reports: `target/verification/run-hjctiuz5`.
+   The targeted repeat also includes TC11/02/05/12 for Space ownership
+   and unchanged unit navigation.
+
+10. Repeat `20261121T121900Z-f6b23b085b73` completed 30 tests in
+    441.964 seconds: zero failures/skips, one error. Space ownership and
+    all neighboring scenarios passed. TC91/04 compared the entire save
+    after selecting another tile; the sole JSON difference was the expected
+    `focusedField.x` change from 23 to 22. The test now compares after
+    returning to its original selection, retaining the complete save
+    equality check. Runtime source is unchanged. Evidence:
+    `target/docker-ui/run-Hv7dUA`. TC91 and the page contract are repeated;
+    passing unaffected neighboring suites are reused.
+
+11. Final TC91/page-contract repeat `20261121T122744Z-d623f0b8e298`
+    passed all seven checks with zero failures/errors/skips in 100.673
+    seconds (`target/docker-ui/run-EUBbYR`). Together with the unchanged
+    neighboring suites from `run-Hv7dUA`, all 30 selected checks passed.
+    Model results remain applicable because the last repair changed only
+    TC91 test ordering. Reviewed expanded Czech, collapsed English and
+    low-window screenshots: the header is unframed, product icons/names/
+    final values are legible, and the final row scrolls fully into view.
+    The minimap stays visible and unit/land details retain their existing
+    surrounding panel. Smoke acceptance is recorded below.
+
+12. Final smoke/support `20261121T122937Z-d48cc5d73609` passed all
+    23 checks with zero failures/errors/skips in 285.838 seconds, within
+    the 420-second budget (`target/verification/run-903kdci7`). The checked
+    source is `912401ded42d2df0780101c2a75851758a5094f8` plus this task
+    diff; comparison confirmed the game files match the passing model
+    snapshot and all executable changes match the smoke snapshot.
+    The shared Java formatter, 14 documentation consistency tests, naming
+    audit and strict MkDocs passed. Review confirmed shared model math,
+    read-only inspection, focus ownership, preserved unknown-tile concealment
+    and unchanged surrounding controls. Unrelated backlog edits are excluded
+    from this task. These are local acceptance results, not full regression
+    or evidence of a published game distribution.
+
 <a id="native-redesign-2026-11-20"></a>
 
 ## Native diplomacy and land redesign — local acceptance, 2026-11-20

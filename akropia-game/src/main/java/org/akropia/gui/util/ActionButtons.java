@@ -20,6 +20,11 @@ public final class ActionButtons {
         return new Button(text, Objects.requireNonNull(icon).createView());
     }
 
+    /** A disclosure uses its stateful arrow as the explicit action graphic. */
+    public static Button disclosure(final Node arrow) {
+        return new Button("", Objects.requireNonNull(arrow));
+    }
+
     /**
      * Keycaps are the shortcut editor's explicit visual action, without an
      * icon.

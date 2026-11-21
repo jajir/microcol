@@ -262,6 +262,7 @@ public class ScreenGame implements GameScreen {
         for (Node node = mainPanel.getScene()
                 .getFocusOwner(); node != null; node = node.getParent()) {
             if (node == header || "worldMinimap".equals(node.getId())
+                    || "terrainToggle".equals(node.getId())
                     || node == tradeRoutePlanningPanel.getToggle()) {
                 return true;
             }

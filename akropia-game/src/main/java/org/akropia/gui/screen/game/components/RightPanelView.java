@@ -2,7 +2,9 @@ package org.akropia.gui.screen.game.components;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.Loc;
 import org.akropia.gui.MovementText;
 import org.akropia.gui.screen.game.gamepanel.SelectedUnitManager;
@@ -10,8 +12,10 @@ import org.akropia.gui.LocalizationHelper;
 import org.akropia.gui.MainStageBuilder;
 import org.akropia.gui.UnitsPanel;
 import org.akropia.gui.event.model.GameModelController;
+import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.screen.game.gamepanel.TileWasSelectedEvent;
 import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.gui.util.ActionButtons;
 import org.akropia.i18n.I18n;
 import org.akropia.model.ColonySighting;
 import org.akropia.model.Location;
@@ -19,6 +23,7 @@ import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.ResourceOverlay;
 import org.akropia.model.Terrain;
+import org.akropia.model.TerrainProduction;
 import org.akropia.model.Unit;
 
 import com.google.common.base.Preconditions;
@@ -26,7 +31,12 @@ import com.google.inject.Inject;
 
 import javafx.application.Platform;
 import javafx.scene.control.Label;
+import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
@@ -43,6 +53,13 @@ public final class RightPanelView implements JavaFxComponent {
     private final SelectedUnitManager selectedUnitManager;
 
     private final Label tileName;
+    private final Label tileFacts = new Label();
+    private final javafx.scene.shape.SVGPath terrainArrow = new javafx.scene.shape.SVGPath();
+    private final Button terrainToggle = ActionButtons.disclosure(terrainArrow);
+    private final VBox terrainDetails = new VBox(6);
+    private final VBox terrainYields = new VBox();
+    private final ImageProvider imageProvider;
+    private boolean terrainExpanded;
 
     private final UnitsPanel unitsPanel;
 
@@ -58,7 +75,9 @@ public final class RightPanelView implements JavaFxComponent {
             final LocalizationHelper localizationHelper,
             final GameModelController gameModelController,
             final TilePainter tilePainter,
-            final SelectedUnitManager selectedUnitManager) {
+            final SelectedUnitManager selectedUnitManager,
+            final ImageProvider imageProvider) {
+        this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.selectedUnitManager = selectedUnitManager;
         this.i18n = Preconditions.checkNotNull(i18n);
         this.unitsPanel = Preconditions.checkNotNull(unitsPanel);
@@ -74,10 +93,29 @@ public final class RightPanelView implements JavaFxComponent {
 
         final Pane tileImagePane = new Pane(tilePainter.getCanvas());
         tileImagePane.setId("tileImage");
-        gridPane.add(tileImagePane, 0, 0);
 
         tileName = new Label();
         tileName.setId("tileName");
+        terrainToggle.setId("terrainToggle");
+        terrainToggle.getStyleClass().add("terrain-toggle");
+        terrainToggle.setMaxWidth(Double.MAX_VALUE);
+        terrainToggle.setMinWidth(0);
+        terrainToggle.setWrapText(true);
+        terrainArrow.setFill(null);
+        terrainArrow.setStroke(javafx.scene.paint.Color.BLACK);
+        terrainArrow.setStrokeWidth(2);
+        terrainToggle.setOnAction(event -> {
+            terrainExpanded = !terrainExpanded;
+            updateDisclosure();
+        });
+        terrainDetails.setId("terrainDetails");
+        terrainYields.setId("terrainYields");
+        terrainDetails.getChildren().addAll(tileName, terrainYields);
+        terrainDetails.managedProperty().bind(terrainDetails.visibleProperty());
+        tileFacts.setId("tileFacts");
+        tileFacts.setWrapText(true);
+        tileFacts.setMinHeight(Region.USE_PREF_SIZE);
+        tileFacts.managedProperty().bind(tileFacts.visibleProperty());
         final javafx.scene.shape.SVGPath previewFrame = new javafx.scene.shape.SVGPath();
         previewFrame.setId("tilePreviewFrame");
         previewFrame.setContent(
@@ -87,11 +125,16 @@ public final class RightPanelView implements JavaFxComponent {
         previewFrame.setStrokeWidth(2);
         previewFrame.setMouseTransparent(true);
         previewFrame.visibleProperty()
-                .bind(tileName.textProperty().isNotEmpty());
+                .bind(terrainToggle.textProperty().isNotEmpty());
         tileImagePane.getChildren().add(previewFrame);
 
         tileName.setMinHeight(Region.USE_PREF_SIZE);
-        gridPane.add(tileName, 1, 0);
+        final HBox heading = new HBox(tileImagePane, terrainToggle);
+        HBox.setHgrow(terrainToggle, Priority.ALWAYS);
+        final VBox summary = new VBox(8, heading, terrainDetails, tileFacts);
+        summary.setId("terrainSummary");
+        VBox.setMargin(tileFacts, new javafx.geometry.Insets(0, 0, 0, 55));
+        gridPane.add(summary, 0, 0, 2, 1);
 
         gridPane.add(unitsPanel.getNode(), 0, 1, 2, 1);
         tileName.setWrapText(true);
@@ -113,6 +156,7 @@ public final class RightPanelView implements JavaFxComponent {
         scrollPaneGamePanel.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         // Keep the content width stable when the scrollbar appears.
         scrollPaneGamePanel.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+        updateDisclosure();
 
     }
 
@@ -120,6 +164,12 @@ public final class RightPanelView implements JavaFxComponent {
         Platform.runLater(() -> {
             unitsPanel.clear();
             tileName.setText("");
+            terrainToggle.setText("");
+            tileFacts.setText("");
+            tileFacts.setVisible(false);
+            terrainYields.getChildren().clear();
+            terrainToggle.setDisable(true);
+            updateDisclosure();
         });
         tilePainter.clear();
     }
@@ -138,17 +188,7 @@ public final class RightPanelView implements JavaFxComponent {
             if (isDiscovered(location)) {
                 final Terrain terrain = getTerrainAt(location);
                 tilePainter.setTerrain(terrain, location);
-                sb.append(localizationHelper
-                        .getTerrainName(terrain.getTerrainType()));
-                sb.append("");
-                sb.append("\n");
-                sb.append(movementDescription(location, terrain));
-                // Only a discovered square names its special resource.
-                if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
-                    sb.append("\n");
-                    sb.append(localizationHelper.getResourceOverlayName(
-                            terrain.getResourceOverlay()));
-                }
+                refreshTerrain(location, terrain);
                 final Player player = gameModelController.getHumanPlayer();
                 if (!terrain.getTerrainType().isSea()) {
                     sb.append("\n").append(getModel().getLandOwner(location)
@@ -206,10 +246,78 @@ public final class RightPanelView implements JavaFxComponent {
                 }
             } else {
                 tilePainter.setHiddenTerrain(location);
-                sb.append(i18n.get(Loc.unitsPanel_unexplored));
+                terrainToggle.setText(i18n.get(Loc.unitsPanel_unexplored));
+                terrainToggle.setDisable(true);
+                tileName.setText(i18n.get(Loc.unitsPanel_unexplored));
+                terrainYields.getChildren().clear();
             }
-            tileName.setText(sb.toString());
+            tileFacts.setText(sb.toString().strip());
+            tileFacts.setVisible(!tileFacts.getText().isEmpty());
+            updateDisclosure();
         });
+    }
+
+    private void updateDisclosure() {
+        final boolean expanded = terrainExpanded && !terrainToggle.isDisabled();
+        terrainDetails.setVisible(expanded);
+        terrainArrow.setContent(expanded ? "M1 1 L5 5 L9 1" : "M1 1 L5 5 L1 9");
+        terrainArrow.setVisible(!terrainToggle.isDisabled());
+        terrainToggle.setAccessibleHelp(
+                i18n.get(expanded ? Loc.terrainCollapse : Loc.terrainExpand));
+    }
+
+    private void refreshTerrain(final Location location,
+            final Terrain terrain) {
+        final String name = localizationHelper
+                .getTerrainName(terrain.getTerrainType());
+        terrainToggle.setText(name);
+        terrainToggle.setDisable(false);
+        String description = name + "\n"
+                + movementDescription(location, terrain);
+        if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
+            final String bonuses = terrain.getResourceOverlay().getOutputs()
+                    .stream()
+                    .map(goods -> i18n.get(Loc.terrainBonusAmount,
+                            terrain.getResourceProductionBonus(goods),
+                            i18n.get(GoodsTypeName.getNameForGoodsType(goods))))
+                    .collect(Collectors.joining(", "));
+            description += "\n" + i18n.get(Loc.terrainResourceBonus,
+                    localizationHelper.getResourceOverlayName(
+                            terrain.getResourceOverlay()),
+                    bonuses);
+        }
+        tileName.setText(description);
+        terrainYields.getChildren().clear();
+        final Label title = new Label(i18n.get(Loc.terrainPotentialYields));
+        final Label context = new Label(i18n.get(Loc.terrainYieldContext));
+        context.setWrapText(true);
+        context.setMinHeight(Region.USE_PREF_SIZE);
+        terrainYields.getChildren().addAll(title, context);
+        for (final TerrainProduction production : terrain.getProduction()) {
+            final ImageView icon = new ImageView(
+                    imageProvider.getGoodsTypeImage(production.getGoodsType()));
+            icon.setFitWidth(45);
+            icon.setFitHeight(45);
+            final Label product = new Label(i18n.get(GoodsTypeName
+                    .getNameForGoodsType(production.getGoodsType())));
+            product.setWrapText(true);
+            product.setMinWidth(0);
+            product.setMinHeight(Region.USE_PREF_SIZE);
+            final Region space = new Region();
+            HBox.setHgrow(space, Priority.ALWAYS);
+            final Label amount = new Label(
+                    Integer.toString(production.getProduction()));
+            amount.setMinWidth(Region.USE_PREF_SIZE);
+            final HBox row = new HBox(6, icon, product, space, amount);
+            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            row.setId("terrainYield-" + production.getGoodsType().name());
+            row.getStyleClass().add("terrain-yield-row");
+            terrainYields.getChildren().add(row);
+        }
+        if (terrain.getProduction().isEmpty()) {
+            terrainYields.getChildren()
+                    .add(new Label(i18n.get(Loc.terrainNoYield)));
+        }
     }
 
     private String movementDescription(final Location location,

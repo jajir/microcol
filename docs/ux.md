@@ -1,3 +1,28 @@
+## Rozbalovací detail terénu — 21. listopadu 2026
+
+1. Hráč vybírá známé políčko na mapě a porovnává jeho možné výnosy.
+   Schválená varianta 2 zachovává minimapu, náhled políčka, vlastnictví,
+   informace o sídle a karty jednotek. Název terénu se šipkou je tlačítko;
+   kliknutí nebo klávesa Space rozbalí či sbalí detail. Šipka míří doprava
+   při zavření a dolů při otevření. Výchozí stav je zavřený, volba otevření
+   se zachovává při změně vybraného políčka.
+2. Detail obsahuje název terénu, dosavadní cenu pohybu (včetně kontextové
+   ceny konkrétního kroku) a případný zvláštní zdroj s číselným příspěvkem.
+   Následují nenulové výnosy: herní ikona, název produktu a konečné číslo
+   zarovnané vpravo. Bez výnosu je uvedeno výslovné vysvětlení.
+3. Jde o možné výnosy terénu za tah, nikoli současný přírůstek skladu.
+   Čísla zahrnují aktuální les, orbu, cestu, říční pravidla, zdroj a omezení
+   zbývající zásobou ložiska. Nezahrnují profesi ani úpravy kolonie;
+   jeden pracovník volí jeden produkt. Popisek připomíná úpravy pracovníka
+   a kolonie.
+   Vyčerpaný zdroj zachovává jméno s nulovým příspěvkem, aby nezmizela
+   jeho identita. Prohlížení nic nespotřebovává ani nepřiděluje práci.
+4. Neprozkoumané políčko ukazuje pouze neznámý terén a nepovolí rozbalení;
+   předchozí výnosy se vymažou. Delší detail se posouvá ve stávající oblasti
+   pod minimapou. Nevzniká vyskakovací bublina ani nový dialog.
+5. Toto je schválené chování, nikoli hráčská studie. Ověření a případná
+   omezení zaznamenává [funkční evidence](functional-tests.md#terrain-disclosure-2026-11-21).
+
 ## Domorodá přízeň a půda — 20. listopadu 2026
 
 1. Hráč z mapy a přehledu osad pozná národ, přízeň a jeho současného přítele.

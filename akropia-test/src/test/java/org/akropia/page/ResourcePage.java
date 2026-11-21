@@ -27,9 +27,105 @@ import javafx.scene.paint.Color;
 public final class ResourcePage extends AbstractScreen {
 
     private static final String TILE_NAME_ID = "tileName";
+    private String savedGame;
 
     public ResourcePage(final TestContext context) {
         super(context);
+    }
+
+    public void openTerrainDetails() {
+        final javafx.scene.Node details = getNodeFinder()
+                .lookup("#terrainDetails").query();
+        if (!details.isVisible()) {
+            toggleTerrainDetails();
+        }
+    }
+
+    public void toggleTerrainDetails() {
+        revealGameContent(getNodeFinder().lookup("#terrainToggle").query());
+        getRobot().clickOn("#terrainToggle");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void toggleTerrainWithKeyboard() {
+        getRobot().push(javafx.scene.input.KeyCode.SPACE);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void rememberGame() {
+        getRobot().interact(() -> savedGame = new com.google.gson.Gson()
+                .toJson(getModel().save()));
+    }
+
+    public void revealTerrainYield(final GoodsType goods) {
+        revealGameContent(getNodeFinder()
+                .lookup("#terrainYield-" + goods.name()).query());
+    }
+
+    public void verifyTerrainYieldWithinViewport(final GoodsType goods) {
+        final javafx.scene.Node row = getNodeFinder()
+                .lookup("#terrainYield-" + goods.name()).query();
+        final javafx.scene.Node viewport = getNodeFinder()
+                .lookup("#mapDetailsScroll .viewport").query();
+        final javafx.geometry.Bounds visible = viewport
+                .localToScene(viewport.getBoundsInLocal());
+        final javafx.geometry.Bounds bounds = row
+                .localToScene(row.getBoundsInLocal());
+        assertTrue(visible.contains(bounds),
+                "Product icon, name and quantity must fit in the scrolled viewport");
+    }
+
+    public void verifyGameUnchanged() {
+        getRobot().interact(() -> assertEquals(savedGame,
+                new com.google.gson.Gson().toJson(getModel().save())));
+    }
+
+    public void verifyTerrainExpanded(final boolean expected) {
+        assertEquals(expected,
+                getNodeFinder().lookup("#terrainDetails").query().isVisible());
+        assertEquals(expected,
+                getNodeFinder().lookup("#terrainDetails").query().isManaged());
+        final javafx.scene.shape.SVGPath arrow = (javafx.scene.shape.SVGPath) getLabeledById(
+                "terrainToggle").getGraphic();
+        assertEquals(expected ? "M1 1 L5 5 L9 1" : "M1 1 L5 5 L1 9",
+                arrow.getContent());
+    }
+
+    public void verifyTerrainYield(final GoodsType goods, final String name,
+            final int amount) {
+        final javafx.scene.layout.HBox row = getNodeFinder()
+                .lookup("#terrainYield-" + goods.name())
+                .queryAs(javafx.scene.layout.HBox.class);
+        assertTrue(
+                getNodeFinder().lookup("#terrainDetails").query().isVisible());
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) row
+                .getChildren().get(0);
+        assertEquals(getContext().getClassFromGuice(ImageProvider.class)
+                .getGoodsTypeImage(goods), icon.getImage());
+        assertEquals(name,
+                ((javafx.scene.control.Label) row.getChildren().get(1))
+                        .getText());
+        assertEquals(Integer.toString(amount),
+                ((javafx.scene.control.Label) row.getChildren().get(3))
+                        .getText());
+    }
+
+    public void verifyTerrainYieldCount(final int expected) {
+        assertEquals(expected, getNodeFinder().lookup("#terrainYields").query()
+                .lookupAll(".terrain-yield-row").size());
+    }
+
+    public void verifyTerrainUnavailable() {
+        assertTrue(
+                getNodeFinder().lookup("#terrainToggle").query().isDisabled());
+        assertFalse(
+                getNodeFinder().lookup("#terrainDetails").query().isVisible());
+        verifyTerrainYieldCount(0);
+    }
+
+    public void verifyTerrainDescription(final String expected) {
+        assertTrue(getLabeledById(TILE_NAME_ID).getText().contains(expected),
+                getLabeledById(TILE_NAME_ID).getText());
     }
 
     /**

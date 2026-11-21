@@ -289,7 +289,7 @@ public final class WorldMinimapPage extends AbstractScreen {
             final Node tile = node("tileImage");
             assertTrue(b.getMaxY() < tile.localToScene(tile.getLayoutBounds())
                     .getMinY());
-            final Label terrain = (Label) node("tileName");
+            final Region terrain = (Region) node("terrainToggle");
             assertTrue(
                     terrain.getHeight() >= terrain
                             .prefHeight(terrain.getWidth()) - .5,
@@ -528,17 +528,15 @@ public final class WorldMinimapPage extends AbstractScreen {
                     .localToScene(node("worldMinimap").getLayoutBounds());
             final Bounds tile = node("tileImage")
                     .localToScene(node("tileImage").getLayoutBounds());
-            final Bounds name = node("tileName")
-                    .localToScene(node("tileName").getLayoutBounds());
+            final Bounds summary = node("terrainSummary")
+                    .localToScene(node("terrainSummary").getLayoutBounds());
             final Node units = getRobot().lookup(".unitPanel").query()
                     .getParent();
             final Bounds list = units.localToScene(units.getLayoutBounds());
             final double topGap = mini.getMinY() + 4 - panel.getMinY();
             assertEquals(16, topGap, 1);
             assertEquals(topGap, tile.getMinY() - (mini.getMaxY() - 4), 1);
-            assertEquals(topGap,
-                    list.getMinY() - Math.max(tile.getMaxY(), name.getMaxY()),
-                    1);
+            assertEquals(topGap, list.getMinY() - summary.getMaxY(), 1);
         });
     }
 

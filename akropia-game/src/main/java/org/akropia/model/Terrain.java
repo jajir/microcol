@@ -170,6 +170,20 @@ public class Terrain {
     }
 
     /**
+     * Effective contribution of the printed resource to this terrain's output,
+     * including river rules, improvements and the remaining deposit limit.
+     * Reading it never consumes the reserve.
+     *
+     * @param goodsType output to inspect
+     * @return additional units supplied by this square's resource
+     */
+    public int getResourceProductionBonus(final GoodsType goodsType) {
+        return getTerrainProduction(goodsType).getProduction()
+                - getUnlimitedTerrainProduction(goodsType, false)
+                        .getProduction();
+    }
+
+    /**
      * Limit the extra output of a finite deposit to the units its reserve still
      * holds. Other outputs are not limited.
      *

@@ -81,6 +81,7 @@ public class TC_90_F81_river_effects_test extends AbstractAkropiaTest {
         // Inspect the adjacent step without spending movement or issuing an
         // order.
         gamePage.selectTile(SMALL_LOCATION);
+        new ResourcePage(getContext()).openTerrainDetails();
         river.verifyStepDescription("Step cost: ⅓", "Along the river");
         gamePage.selectTile(SOURCE_LOCATION);
         gamePage.moveMouseAtLocation(SOURCE_LOCATION);

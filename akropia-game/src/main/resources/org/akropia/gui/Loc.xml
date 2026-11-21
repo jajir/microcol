@@ -329,4 +329,11 @@
 	<entry key="landOwner">Land owner: %s</entry>
 	<entry key="landUnowned">Unowned land</entry>
     <entry key="nativeLandUnavailable">You cannot use this land: it belongs to another player or to a hostile native nation.</entry>
+    <entry key="terrainExpand">Expand terrain details</entry>
+    <entry key="terrainCollapse">Collapse terrain details</entry>
+    <entry key="terrainPotentialYields">Potential yields / turn</entry>
+    <entry key="terrainYieldContext">Before worker and colony modifiers.</entry>
+    <entry key="terrainResourceBonus">%s: %s</entry>
+    <entry key="terrainBonusAmount">+%s %s</entry>
+    <entry key="terrainNoYield">No production on this terrain.</entry>
 </properties>
