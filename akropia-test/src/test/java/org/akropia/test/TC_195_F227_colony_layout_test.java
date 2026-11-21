@@ -31,6 +31,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .openColonyAt(Location.of(24, 16), "New Amsterdam");
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
+        layout.openSection("area");
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
@@ -89,6 +90,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         // The warehouse remains reachable at the original window width.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         layout.verifyCompactBuildings(46, 22, 32, 12);
+        layout.openSection("area");
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.selectTile(0, 1);
         layout.verifyTileClickKeepsScroll();
@@ -129,6 +131,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 .openColonyAt(Location.of(26, 16), "Delft");
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
+        layout.openSection("area");
         layout.verifyMapTileSize(Tile.TILE_WIDTH_IN_PX);
         layout.verifyLayout("Delft", 0);
         layout.verifyConditionalActions(true, false);
@@ -283,8 +286,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         final ColonyLayoutPage layout = new ColonyLayoutPage(getContext());
         final ColonyJobPage jobs = new ColonyJobPage(getContext());
         new GameBarWidthPage(getContext()).resizeContent(1440, 1000);
-        layout.rememberWorkspaceGeometry();
-        layout.verifyEmptyConstructionMeters();
+        layout.verifyExclusiveSection(null);
         jobs.rememberWorld();
         layout.verifySimplifiedCards();
         layout.verifySectionOrder("colony-card-area",
@@ -292,12 +294,13 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 "colony-cargo-depot");
         jobs.verifyWorldUnchanged();
 
-        // The editors open below three summaries and the always-visible depot.
+        // Only the selected section opens; the depot stays available.
         layout.openSection("construction");
         layout.verifyDetail("constructionAdd");
         layout.verifyConstructionLists();
+        layout.verifyEmptyConstructionMeters();
         layout.verifyNoSectionSeparators();
-        layout.verifyStableWorkspaceGeometry();
+        layout.verifyExclusiveSection("construction");
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-construction.png");
         layout.openSection("school");
@@ -305,7 +308,9 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifySchoolInputs();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-school.png");
-        layout.verifyStableWorkspaceGeometry();
+        layout.verifyExclusiveSection("school");
+        layout.openSection("school");
+        layout.verifyExclusiveSection(null);
         final GamePage game = town.closeWithEscape();
         town.verifyClosed();
         game.openColonyWithKeyboard(0, "New Amsterdam");
@@ -316,7 +321,7 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         game.openColonyWithKeyboard(0, "New Amsterdam");
         layout.openSection("area");
         layout.verifyDetail("colony-field-name");
-        layout.verifyStableWorkspaceGeometry();
+        layout.verifyExclusiveSection("area");
         jobs.verifyWorldUnchanged();
         new InGameLayoutPage(getContext())
                 .saveEvidence("colony-five-overviews.png");

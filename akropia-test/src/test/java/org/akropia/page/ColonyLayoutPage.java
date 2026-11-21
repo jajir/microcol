@@ -176,7 +176,7 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void leaveActions() {
-        getRobot().moveTo(getLabeledById("colony-field-name"));
+        getRobot().moveTo(getLabeledById("colony-politics"));
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -209,6 +209,10 @@ public final class ColonyLayoutPage extends AbstractScreen {
     private double scrollBeforeTileClick;
 
     public void selectTile(final int column, final int row) {
+        if (!getButtonById("colony-section-area").getPseudoClassStates()
+                .contains(javafx.css.PseudoClass.getPseudoClass("selected"))) {
+            openSection("area");
+        }
         final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
                 .queryAs(Canvas.class);
         revealGameContent(canvas);
@@ -323,43 +327,27 @@ public final class ColonyLayoutPage extends AbstractScreen {
         });
     }
 
-    private double workspaceHeight;
-    private double workspaceWidth;
-    private boolean workspaceScrollbar;
-
-    public void rememberWorkspaceGeometry() {
-        WaitForAsyncUtils.waitForFxEvents();
+    public void verifyExclusiveSection(final String expected) {
         getRobot().interact(() -> {
-            final javafx.scene.control.ScrollPane scroll = getNodeFinder()
-                    .lookup(".screen-scroll")
-                    .queryAs(javafx.scene.control.ScrollPane.class);
-            scroll.applyCss();
-            scroll.layout();
-            workspaceHeight = scroll.getContent().getLayoutBounds().getHeight();
-            workspaceWidth = scroll.getViewportBounds().getWidth();
-            workspaceScrollbar = scroll.lookupAll(".scroll-bar").stream()
-                    .map(node -> (javafx.scene.control.ScrollBar) node)
-                    .anyMatch(bar -> bar
-                            .getOrientation() == javafx.geometry.Orientation.VERTICAL
-                            && bar.isVisible());
-        });
-    }
-
-    public void verifyStableWorkspaceGeometry() {
-        getRobot().interact(() -> {
-            final javafx.scene.control.ScrollPane scroll = getNodeFinder()
-                    .lookup(".screen-scroll")
-                    .queryAs(javafx.scene.control.ScrollPane.class);
-            assertEquals(workspaceHeight,
-                    scroll.getContent().getLayoutBounds().getHeight(), 1,
-                    "Tab changes keep the reserved page height");
-            assertEquals(workspaceWidth, scroll.getViewportBounds().getWidth(),
-                    1, "Tab changes do not shift the viewport width");
-            assertEquals(workspaceScrollbar, scroll.lookupAll(".scroll-bar")
-                    .stream().map(node -> (javafx.scene.control.ScrollBar) node)
-                    .anyMatch(bar -> bar
-                            .getOrientation() == javafx.geometry.Orientation.VERTICAL
-                            && bar.isVisible()));
+            for (final String section : List.of("area", "construction",
+                    "school")) {
+                final VBox card = getNodeFinder()
+                        .lookup("#colony-card-" + section).queryAs(VBox.class);
+                final Node body = card.getChildren().get(1);
+                assertEquals(section.equals(expected), body.isVisible(),
+                        section);
+                assertEquals(section.equals(expected), body.isManaged(),
+                        section);
+                assertEquals(section.equals(expected),
+                        getButtonById("colony-section-" + section)
+                                .getPseudoClassStates()
+                                .contains(javafx.css.PseudoClass
+                                        .getPseudoClass("selected")));
+            }
+            final Node detail = getNodeFinder().lookup("#colony-detail")
+                    .query();
+            assertEquals(expected != null, detail.isVisible());
+            assertEquals(expected != null, detail.isManaged());
         });
     }
 
@@ -414,6 +402,14 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void verifyConstructionLists() {
+        final Node projects = getNodeFinder().lookup("#constructionProjects")
+                .query();
+        final Node queue = getNodeFinder().lookup("#constructionQueue").query();
+        assertEquals(
+                projects.localToScene(projects.getBoundsInLocal()).getMinY(),
+                queue.localToScene(queue.getBoundsInLocal()).getMinY(), 0.5);
+        assertEquals(projects.getBoundsInLocal().getHeight(),
+                queue.getBoundsInLocal().getHeight(), 0.5);
         for (String id : java.util.List.of("constructionProjects",
                 "constructionQueue")) {
             final javafx.scene.control.ListView<?> list = getNodeFinder()

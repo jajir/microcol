@@ -154,16 +154,32 @@ public class QueueDialog extends AbstractMessageWindow {
         feedback.setWrapText(true);
         detail.setMinHeight(78);
         feedback.setMinHeight(48);
-        final VBox choices = new VBox(8, projectsTitle, projects, detail, add);
-        final VBox current = new VBox(8, queueTitle, hammerPool, queue,
-                new HBox(8, up, down), remove, rush);
-        choices.setPrefWidth(420);
-        HBox.setHgrow(choices, Priority.ALWAYS);
-        HBox.setHgrow(current, Priority.ALWAYS);
-        current.setPrefWidth(310);
-        VBox.setVgrow(projects, Priority.ALWAYS);
-        VBox.setVgrow(queue, Priority.ALWAYS);
-        final HBox panels = new HBox(16, choices, current);
+        final javafx.scene.layout.GridPane panels = new javafx.scene.layout.GridPane();
+        panels.setHgap(16);
+        panels.setVgap(8);
+        for (int i = 0; i < 2; i++) {
+            final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
+            column.setPercentWidth(50);
+            column.setHgrow(Priority.ALWAYS);
+            panels.getColumnConstraints().add(column);
+        }
+        panels.add(projectsTitle, 0, 0);
+        panels.add(queueTitle, 1, 0);
+        panels.add(hammerPool, 1, 1);
+        panels.add(projects, 0, 2);
+        panels.add(queue, 1, 2);
+        panels.add(detail, 0, 3);
+        final javafx.scene.layout.FlowPane queueActions = new javafx.scene.layout.FlowPane(
+                8, 8, up, down, remove);
+        panels.add(queueActions, 1, 3);
+        panels.add(add, 0, 4);
+        panels.add(rush, 1, 4);
+        javafx.scene.layout.GridPane.setVgrow(projects, Priority.ALWAYS);
+        javafx.scene.layout.GridPane.setVgrow(queue, Priority.ALWAYS);
+        javafx.scene.layout.GridPane.setValignment(detail,
+                javafx.geometry.VPos.TOP);
+        javafx.scene.layout.GridPane.setValignment(queueActions,
+                javafx.geometry.VPos.TOP);
         closeButton.setId("constructionClose");
         closeButton.setCancelButton(true);
         closeButton.setOnAction(event -> close());

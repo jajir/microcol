@@ -39,3 +39,7 @@
 #statsSidebar, #statsSidebar > .viewport { -fx-background-color: transparent; }
 .colony-advisor .scroll-pane { -fx-background-color: transparent; }
 #colonyAdvisorFeedback { -fx-max-width: 430; -fx-text-fill: #211a10; -fx-background-color: #f6eddb; }
+
+/* The overview and each foreign power use the shared paper surface. */
+#foreignPowers { -fx-background-color: #fff9ec; -fx-padding: 10; }
+.foreign-power-section { -fx-background-color: #f6eddb; -fx-padding: 12; }

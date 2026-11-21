@@ -95,6 +95,15 @@ public class ColonyScreen extends AbstractScreen {
                 getLabeledById("colony-field-yield").getText());
     }
 
+    public void showSurroundingArea() {
+        final Button toggle = getButtonById("colony-section-area");
+        if (!toggle.getPseudoClassStates()
+                .contains(javafx.css.PseudoClass.getPseudoClass("selected"))) {
+            clickOnButtonWithId("colony-section-area");
+            WaitForAsyncUtils.waitForFxEvents();
+        }
+    }
+
     public void showWarehouse() {
         revealGameContent(getNodeFinder().lookup(".colony-stock").query());
     }
@@ -117,7 +126,7 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     /**
-     * The warehouse row keeps its expected number of goods side by side, each
+     * The warehouse grid keeps its expected number of equal goods cells, each
      * with a usable width inside the window.
      */
     public void verifyWarehouseGoodsLayout(final int expectedGoodsPanels,
@@ -128,10 +137,22 @@ public class ColonyScreen extends AbstractScreen {
         for (int index = 0; index < panels.size(); index++) {
             final VBox panel = panels.get(index);
             final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
-            assertEquals(
-                    panels.get(0).localToScene(panels.get(0).getBoundsInLocal())
-                            .getMinY(),
-                    bounds.getMinY(), 0.5, "All warehouse goods share one row");
+            assertEquals(panels.get(0).getWidth(), panel.getWidth(), 0.5,
+                    "Equal cell widths");
+            assertEquals(panels.get(0).getHeight(), panel.getHeight(), 0.5,
+                    "Equal cell heights");
+            final Node name = panel.lookup(".goods-name");
+            final Node values = panel.lookup(".goods-values");
+            final javafx.scene.text.Text drawnName = (javafx.scene.text.Text) name
+                    .lookup(".text");
+            assertEquals(((Label) name).getText(), drawnName.getText(),
+                    "Product names are not truncated");
+            assertTrue(drawnName.getLayoutBounds()
+                    .getHeight() <= name.getLayoutBounds().getHeight() + 1);
+            assertEquals(panels.get(0).lookup(".goods-name").getLayoutY(),
+                    name.getLayoutY(), 0.5);
+            assertEquals(panels.get(0).lookup(".goods-values").getLayoutY(),
+                    values.getLayoutY(), 0.5);
             assertTrue(bounds.getWidth() >= minimumGoodsWidth);
             assertTrue(bounds.getMinX() >= 0
                     && bounds.getMaxX() <= panel.getScene().getWidth());
@@ -665,6 +686,7 @@ public class ColonyScreen extends AbstractScreen {
                         && field.getGoodsTypeProduction(GoodsType.GRAIN) > 0)
                 .findAny().get();
         final Pane worker = getUnitsAtPier().get(indexOfUnitAtPier);
+        showSurroundingArea();
         final Canvas fields = getNodeFinder().lookup("#colony-field-map")
                 .queryAs(Canvas.class);
         revealGameContent(worker, fields);
@@ -686,6 +708,7 @@ public class ColonyScreen extends AbstractScreen {
             final org.akropia.model.Direction direction) {
         final Node worker = getNodeFinder().lookup("#colonyUnit-" + unitId)
                 .query();
+        showSurroundingArea();
         final Node fieldMap = getNodeFinder().lookup("#colony-field-map")
                 .query();
         revealGameContent(worker, fieldMap);
@@ -773,6 +796,7 @@ public class ColonyScreen extends AbstractScreen {
         final ColonyField source = colony.getColonyFields().stream().filter(
                 field -> field.getUnit().map(Unit::getId).orElse(-1) == unitId)
                 .findFirst().orElseThrow();
+        showSurroundingArea();
         final javafx.scene.Node canvas = getNodeFinder()
                 .lookup("#colony-field-map").query();
         final Point2D start = findPlaceOfField(source);
@@ -974,6 +998,7 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     private Point2D findPlaceOfField(final ColonyField colonyField) {
+        showSurroundingArea();
         final Canvas canvas = getNodeFinder().lookup("#colony-field-map")
                 .queryAs(Canvas.class);
         revealGameContent(canvas);
@@ -1052,6 +1077,7 @@ public class ColonyScreen extends AbstractScreen {
     public void moveFieldWorkerToBuilding(final int unitId,
             final String buildingId) {
         final Node building = getNodeFinder().lookup("#" + buildingId).query();
+        showSurroundingArea();
         final Node canvas = getNodeFinder().lookup("#colony-field-map").query();
         revealGameContent(canvas, building);
         getRobot()

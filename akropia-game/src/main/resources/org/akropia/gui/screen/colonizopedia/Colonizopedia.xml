@@ -30,7 +30,17 @@
 	<entry key="topic_combat_body">Attacks come from an adjacent square and must be confirmed; the confirmation names the defender you selected. Attacking a rival at peace first needs an explicit declaration of war. Land battles use the final strengths of both sides, and those strengths set the chance of winning. A naval battle can damage or sink a ship, and passengers and goods follow the loss rules. A colony falls only after its armed defenders are beaten. If only civilians remain, their group defence must be beaten too, and then the whole colony with its workers passes to the attacker. An accepted attack uses the movement of both sides; survivors regain it on their next turn.</entry>
 
 	<entry key="topic_independence_title">Independence</entry>
-	<entry key="topic_independence_body">Declaring independence is a separate confirmation. It needs enough national support and at least one owned coastal colony. The confirmation shows the consequences first, and cancelling it changes nothing. After a declaration, colonies whose local support is at least half mobilize some of their armed veterans on their square for the new nation. Rebel support is shown for each colony and as a national value.</entry>
+	<entry key="topic_independence_body">Requirements
+You need enough national support and at least one owned coastal colony. Rebel support is shown for each colony and as a national value.
+
+How to declare
+Choose the independence action. Review its consequences in the confirmation, then confirm the declaration.
+
+Consequences
+After a declaration, colonies whose local support is at least half mobilize some of their armed veterans on their square for the new nation.
+
+Canceling the confirmation
+Cancel before confirming to leave the game unchanged.</entry>
 
 	<entry key="topic_scoring_title">Statistics and score</entry>
 	<entry key="topic_scoring_body">Press R to open Statistics. It shows line graphs of the recorded turns of this game: Gold (the treasury), Military (military strength), Wealth (the economy value of goods), Score and city-state relations. Score is recorded for each turn as Wealth plus Military plus Gold. It is a turn record, not your final result. Not available yet: a final score at the end of a game, the population and Knowledge parts of the score, the difficulty adjustment, and the Hall of Fame of best results. Leaving a game does not record a score. Revolution victory and loss at game end are also not complete yet.</entry>

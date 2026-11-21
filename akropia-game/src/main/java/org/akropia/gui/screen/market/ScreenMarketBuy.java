@@ -23,10 +23,12 @@ public class ScreenMarketBuy extends AbstractScreenMarket {
         this.marketBuyPanel = Preconditions.checkNotNull(marketBuyPanel);
         marketView.setMenuPanel(marketBuyPanel);
         marketView.setToolbar(marketBuyPanel.getToolbar());
+        marketBuyPanel.setCloseHandler(marketView::close);
     }
 
     public void init(final ScreenMarketBuyContext screenMarketContext) {
         marketBuyPanel.init(Preconditions.checkNotNull(screenMarketContext));
+        marketBuyPanel.updateLanguage(getI18n());
         updateTitle(screenMarketContext.getGoodsType());
     }
 

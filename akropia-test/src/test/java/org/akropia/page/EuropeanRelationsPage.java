@@ -402,8 +402,9 @@ public final class EuropeanRelationsPage extends AbstractScreen {
 
     /** The comparison table stays inside the window, scrolling if needed. */
     public void verifyForeignTableFits() {
-        final ScrollPane scroll = getNodeFinder().lookup("#foreignPowersScroll")
-                .queryAs(ScrollPane.class);
+        final javafx.scene.layout.GridPane scroll = getNodeFinder()
+                .lookup("#foreignPowers")
+                .queryAs(javafx.scene.layout.GridPane.class);
         final Bounds bounds = scroll.localToScene(scroll.getBoundsInLocal());
         assertTrue(
                 bounds.getMinX() >= 0
@@ -413,6 +414,37 @@ public final class EuropeanRelationsPage extends AbstractScreen {
                 bounds.getMinY() >= 0
                         && bounds.getMaxY() <= scroll.getScene().getHeight(),
                 "Foreign power table must fit the window");
+        assertEquals(2, scroll.getColumnConstraints().size());
+        final java.util.List<String> expected = getModel()
+                .getForeignPowerComparisons(getModel().getPlayers().stream()
+                        .filter(org.akropia.model.Player::isHuman).findFirst()
+                        .orElseThrow())
+                .stream().map(power -> "foreignSection-" + power.getName())
+                .collect(java.util.stream.Collectors.toList());
+        final Node first = getNodeFinder().lookup("#" + expected.get(0))
+                .query();
+        final javafx.scene.layout.VBox parent = (javafx.scene.layout.VBox) first
+                .getParent();
+        assertEquals(expected, parent.getChildren().stream().map(Node::getId)
+                .collect(java.util.stream.Collectors.toList()));
+        double bottom = -1;
+        for (final Node section : parent.getChildren()) {
+            final Bounds sectionBounds = section
+                    .localToScene(section.getBoundsInLocal());
+            assertTrue(sectionBounds.getMinY() >= bottom);
+            bottom = sectionBounds.getMaxY();
+            for (final Node node : section.lookupAll(".label")) {
+                final Label label = (Label) node;
+                final javafx.scene.text.Text shown = (javafx.scene.text.Text) label
+                        .lookup(".text");
+                assertEquals(label.getText(), shown.getText(),
+                        "Foreign power details must remain complete");
+                assertTrue(
+                        shown.getLayoutBounds().getHeight() <= label.getHeight()
+                                + 1,
+                        "Foreign power details need enough height");
+            }
+        }
     }
 
     public void verifyColonyAndForce(final String owner, final Location forceAt,

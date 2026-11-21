@@ -2,8 +2,6 @@ package org.akropia.gui.screen.market;
 
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.gui.screen.Screen;
-import org.akropia.gui.screen.ShowScreenEvent;
 import org.akropia.gui.screen.europe.ChooseGoods;
 import org.akropia.gui.screen.europe.Europe;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
@@ -33,6 +31,11 @@ import javafx.scene.layout.VBox;
 public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
     final static int MIN_VALUE = 0;
+    private Runnable closeHandler;
+
+    void setCloseHandler(final Runnable closeHandler) {
+        this.closeHandler = Preconditions.checkNotNull(closeHandler);
+    }
 
     private final VBox mainPanel;
 
@@ -89,8 +92,8 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
         mainPanel = new VBox();
         mainPanel.getStyleClass().add("mainPanel");
-
         slider = new Slider();
+        slider.setId("marketSlider");
         slider.setLabelFormatter(
                 new SimpleStringConverter(this::converToString));
         slider.setMin(MIN_VALUE);
@@ -110,11 +113,14 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
         buttonsBar.getButtonNo().setOnAction(this::onUserClickCancel);
         buttonsBar.getButtonYes().setOnAction(this::onUserClickSell);
         buttonsBar.getButtonYes().requestFocus();
+        buttonsBar.getButtonNo().setCancelButton(true);
+        buttonsBar.getButtonYes().setDefaultButton(true);
 
         final Row row1 = new Row(labelPricePerPiece, labelPricePerPieceValue);
         final Row row2 = new Row(labelSelected, labelSelectedValue);
         final Row row3 = new Row(labelKingTax, labelKingTaxValue);
         final Row row4 = new Row(labelTotal, labelTotalValue);
+        row4.getContent().getStyleClass().add("market-total");
 
         mainPanel.getChildren().addAll(labelHowMuch, slider, row1.getContent(),
                 row2.getContent(), row3.getContent(), row4.getContent());
@@ -126,7 +132,7 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
 
     @SuppressWarnings("unused")
     private void onUserClickCancel(final ActionEvent event) {
-        eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        closeHandler.run();
     }
 
     @SuppressWarnings("unused")
@@ -151,7 +157,7 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
                                     getActualValue().getType()))),
                     StatusBarMessageEvent.Source.EUROPE));
         }
-        eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        closeHandler.run();
     }
 
     void init(final ScreenMarketSellContext screenMarketContext) {
@@ -171,6 +177,7 @@ public class MarketSellPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void updateSelectedAmount() {
+        buttonsBar.getButtonYes().setDisable(actualValue.isZero());
         shownQuote = gameModelController.getHumanPlayer()
                 .quoteEuropeTrade(getActualValue(), false);
         labelPricePerPiece.setText(i18n.get(Market.pricePerPiece,

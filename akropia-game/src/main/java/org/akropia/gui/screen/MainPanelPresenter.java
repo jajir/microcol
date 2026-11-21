@@ -71,6 +71,9 @@ public final class MainPanelPresenter {
      */
     private final Map<GameScreen, GameScreen> origins = new HashMap<>();
 
+    private final ScreenMarketBuy screenMarketBuy;
+    private final ScreenMarketSell screenMarketSell;
+    private final ScreenEurope screenEurope;
     private final ScreenGame screenGame;
     private final ScreenMenu screenMenu;
     private final ScreenCampaign screenCampaign;
@@ -112,6 +115,9 @@ public final class MainPanelPresenter {
         this.developerMode = Preconditions.checkNotNull(developerMode);
         this.shortcuts = Preconditions.checkNotNull(shortcuts);
         this.eventBus = Preconditions.checkNotNull(eventBus);
+        this.screenMarketBuy = screenMarketBuy;
+        this.screenMarketSell = screenMarketSell;
+        this.screenEurope = screenEurope;
         this.view = Preconditions.checkNotNull(view);
         this.i18n = Preconditions.checkNotNull(i18n);
         this.screenGame = Preconditions.checkNotNull(screenGame);
@@ -176,18 +182,6 @@ public final class MainPanelPresenter {
                     }
                     return null;
                 }, event -> {
-                    if (Screen.MARKET_BUY == event.getScreen()) {
-                        screenMarketBuy.init(event.getContext());
-                        return screenMarketBuy;
-                    }
-                    return null;
-                }, event -> {
-                    if (Screen.MARKET_SELL == event.getScreen()) {
-                        screenMarketSell.init(event.getContext());
-                        return screenMarketSell;
-                    }
-                    return null;
-                }, event -> {
                     if (Screen.STATISTICS == event.getScreen()) {
                         return screenStatistics;
                     }
@@ -234,6 +228,22 @@ public final class MainPanelPresenter {
 
     @Subscribe
     private void onShowScreen(final ShowScreenEvent event) {
+        if (event.getScreen() == Screen.MARKET_BUY
+                || event.getScreen() == Screen.MARKET_SELL) {
+            // Let the drag/drop gesture finish before entering a modal event
+            // loop.
+            javafx.application.Platform.runLater(() -> {
+                if (event.getScreen() == Screen.MARKET_BUY) {
+                    screenMarketBuy.init(event.getContext());
+                    screenMarketBuy.showAndWait();
+                } else {
+                    screenMarketSell.init(event.getContext());
+                    screenMarketSell.showAndWait();
+                }
+                screenEurope.repaint();
+            });
+            return;
+        }
         if (Screen.EDITOR == event.getScreen() && !developerMode.isEnabled()) {
             // The map editor exists only in developer mode (R-0435).
             return;

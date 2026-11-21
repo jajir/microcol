@@ -1,3 +1,21 @@
+## Vizuální přehled uložených her — 21. listopadu 2026
+
+1. Řádek seznamu ukazuje stručný název bez přípony (automatické pozice mají
+   lokalizované označení), herní datum a čas uložení. Dlouhý název se v seznamu
+   zkrátí; úplný fyzický název souboru je nad vybraným náhledem a v přístupném
+   popisu názvu. Výběr ani prohlížení soubor nemění. Toto nahrazuje dřívější
+   pravidlo samotných plných názvů v řádcích a skrytého názvu detailu.
+2. Nové náhledy mají pevné plátno 960 × 540, zobrazované nejvýše 480 × 270.
+   Obdélník zahrnující všechna objevená pole se do něj vystředí se zachováním
+   poměru stran. Neprozkoumané díry zůstávají zakryté, volné okraje jsou papírové.
+   Bez objevených polí je náhled celý neznámý. Nezobrazuje jednotky ani sídla.
+3. Náhled vzniká při zápisu pozice a pro současnou hru; otevření staršího
+   souboru jeho uložený obrázek nepřepisuje. Chybějící nebo vadný náhled
+   zachovává dosavadní textové vysvětlení a možnost načíst platnou hru.
+4. Načíst, přepsat, smazat a zrušit zachovávají existující potvrzení a ochrany.
+   [Evidence](functional-tests.md#visual-mitigations-2026-11-21) rozlišuje
+   implementaci od dokončeného místního ověření.
+
 ## Otevření ukládání klávesovou zkratkou — 13. listopadu 2026
 
 1. ⌘S na macOS a Ctrl+S na ostatních platformách nejprve dokončí zpracování klávesy a potom otevřou ukládací stránku. Naplánované a probíhající otevření mají společnou ochranu proti duplicitním požadavkům; před otevřením se znovu ověří dostupnost hry.

@@ -30,7 +30,17 @@
 	<entry key="topic_combat_body">Útok vede ze sousedního pole a musí být potvrzen; potvrzení uvádí vybraného obránce. Útok na soupeře ve míru nejdřív vyžaduje výslovné vyhlášení války. Pozemní bitvy používají konečnou sílu obou stran a ta určuje šanci na výhru. Námořní bitva může loď poškodit nebo potopit; pro cestující a zboží platí pravidla ztráty. Kolonie padne až po porážce ozbrojených obránců. Zůstanou-li jen civilisté, musí se porazit i jejich skupinová obrana, a pak celá kolonie s pracovníky přejde na útočníka. Přijatý útok spotřebuje pohyb obou stran; přeživší jej obnoví v dalším tahu.</entry>
 
 	<entry key="topic_independence_title">Nezávislost</entry>
-	<entry key="topic_independence_body">Vyhlášení samostatné polis je samostatné potvrzení. Vyžaduje dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Potvrzení nejdřív ukáže důsledky a zrušení nic nezmění. Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.</entry>
+	<entry key="topic_independence_body">Podmínky
+Potřebuješ dost podpory národa a alespoň jednu vlastní pobřežní kolonii. Podpora povstalců se ukazuje u každé kolonie i jako národní hodnota.
+
+Postup vyhlášení
+Zvol vyhlášení samostatné polis. V potvrzení si přečti důsledky a potom vyhlášení potvrď.
+
+Důsledky
+Po vyhlášení se kolonie, kde je místní podpora alespoň poloviční, mobilizují: část ozbrojených veteránů na svém poli přejde na nový národ.
+
+Zrušení potvrzení
+Zrušením před potvrzením zůstane hra beze změny.</entry>
 
 	<entry key="topic_scoring_title">Statistiky a skóre</entry>
 	<entry key="topic_scoring_body">Klávesou R otevřete statistiky. Ukazují čárové grafy zaznamenaných tahů této hry: Zlato (pokladna), Vojenská síla, Bohatství (hospodářská hodnota zboží), Score a městské vztahy. Score se za každý tah zaznamenává jako Bohatství plus Vojenská síla plus Zlato; jde o záznam tahu, ne o váš konečný výsledek. Zatím není dostupné: konečné skóre na konci hry, části skóre za obyvatele a Poznání, úprava podle obtížnosti a síň slávy nejlepších výsledků. Odchod ze hry skóre nezapisuje. Konec hry výhrou či prohrou v revoluci také zatím není úplný.</entry>

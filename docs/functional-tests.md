@@ -1,3 +1,93 @@
+## Visual mitigations 2026-11-21
+
+1. Scope: approved VD-01, VD-03–10 and VD-14–16. UC-033/036/042/043/050/056/068/069/071/113/114/119
+   cover colony presentation, construction, education, home-port trade, help,
+   diplomacy and save browsing. Existing gameplay assertions remain; page actions
+   explicitly open the now-collapsed surroundings before using fields.
+2. Local acceptance is complete: **4,896 model/JUnit checks, 80 targeted checks
+   and 23 smoke/support checks**, all with zero failures/errors/skips in their
+   final reports. The initial model phase took 152.992 s; the final model phase
+   after runtime repairs is recorded below. Targeted scenarios cover `TC_195_F227_colony_layout_test`,
+   `TC_32_F24_construction_eligibility_test`, `TC_68_F59_education_test`,
+   `TC_06_F06_buy_and_sell_goods_test`, `TC_144_F135_foreign_power_report_test`,
+   `TC_144_F135_foreign_power_locked_test`, `TC_33_F25_european_relations_test`,
+   `TC_100_F91_colonizopedia_test`, and selected save/browser and town-commons journeys.
+   `SavePreviewTest` covers fixed bounds, centering, aspect ratio, unseen holes,
+   empty exploration and one known tile. Final selection and results follow below.
+3. First model gate attempt `20261121T140147Z-1b97809f4c6c` did not start tests:
+   Docker admission's container-list query timed out after 20 seconds; execution
+   elapsed 22.081 seconds including diagnostics. Saved evidence remains in the
+   completion directory. After opening Docker, `docker info` succeeded in 0.53 s;
+   this does not establish the original cause. Second model attempt:
+   `20261121T140356Z-13d9c3c558cc`, verifier `target/verification/run-1vrp7o0_/`.
+4. Initial targeted Docker run `20261121T140809Z-72a1784e59d0`, PID 61920,
+   results `target/docker-ui/run-S0Hq90/`, timeout 3,600 s. Early colony reports
+   identified a scroll-position regression after removing reserved detail height,
+   and test actions targeting a now-hidden field label. The repair keeps the
+   selected detail's reserved height while a closed detail remains unmanaged;
+   hover tests use the always-visible politics label. The rerun is recorded below.
+5. Inspection of the initial Docker screenshots also found clipped long relation
+   names caused by the former narrow-label limit. Relations now use available
+   width and reserve wrapped text height; the foreign-power layout check verifies
+   complete rendered labels. Fixed resource cells, aligned construction lists and
+   the four independence-help sections were inspected in the same screenshots.
+6. The initial targeted run completed in 1,067.763 s: 75 checks, three failures,
+   ten errors, no skips. In addition to the colony issues above, construction
+   drag actions assumed both ends fit in one viewport; they now reveal the source,
+   start the drag, then reveal the destination. Two purchase outcomes were cleared
+   by navigating back to the already-visible home port; closing the modal now
+   repaints that port without resetting its status message. Save-browser, help,
+   education and diplomatic-action selections passed in this initial snapshot.
+   Market and save-browser screenshots were also inspected.
+7. Fresh model dispatch after these repairs: `20261121T142714Z-cab930f3e94b`,
+   PID 64148, timeout 600 s, passed **4,896 tests, zero failures/errors/skips**
+   in 156.542 s. All 391 XML reports are retained in
+   `target/verification/run-6nebw6u1/`; game sources and model tests match that
+   snapshot. The later change to the UI drag helper is covered by the final UI run.
+8. Targeted rerun `20261121T143012Z-9ae863fe2246`, PID 64651, timeout 3,600 s,
+   repeats the initial selection and adds `TC_57_F48_founder_construction_test`
+   and `TC_185_F218_connected_production_network_test` for construction and shared
+   worker actions. It completed in 1,369.341 s with **80 checks, one failure,
+   no errors/skips**, in `target/docker-ui/run-2bPGae/`. All selected scenarios
+   except TC32/12 passed. The remaining drag helper scrolled the carpenter canvas
+   before the drag gesture was detected, changing the slot coordinates; it now
+   starts the gesture before revealing its destination. Game/model sources are
+   unchanged, so the passing model phase remains valid. Updated screenshots
+   confirm complete diplomatic labels and exclusive colony sections.
+9. Targeted construction rerun `20261121T145356Z-0052c2d58f12`, PID 65752,
+   timeout 1,200 s, selects TC32, TC57, TC185 and `PageVerificationContractTest`.
+   It completed in 459.975 s with 20 checks, one failure, no errors/skips;
+   reports are in `target/docker-ui/run-SgbH7P/`. TC32/12 still fails at the same
+   worker-departure assertion, so the gesture-order explanation above was not yet
+   confirmed as the complete cause. Diagnostic run `20261121T150235Z-c80252928cab`
+   (PID 66096, limit 600 s) isolates that scenario with screenshots before/after
+   dragging and drag-event tracing. Subsequent results follow below.
+10. Diagnostic runs `20261121T150235Z-c80252928cab` (58.470 s,
+    `target/docker-ui/run-CavWoo/`) and `20261121T150429Z-7af1e6160ae7`
+    (59.623 s, `target/docker-ui/run-oNIRLt/`) each preserve the same single
+    failure. The second trace establishes that `DRAG_DETECTED` occurred only
+    after revealing the destination, at canvas-local `(22,169)` instead of the
+    worker slot. A five-pixel mouse move had not started the native drag. The
+    helper now moves twelve pixels within the worker slot before scrolling;
+    diagnostic listeners and screenshot calls were removed. Isolated verification
+    `20261121T150612Z-6f0780ac4a73` (PID 66377, limit 600 s) passed its single
+    scenario without failures/errors/skips in 65.533 s; report:
+    `target/docker-ui/run-jHmakk/`.
+11. Final construction-neighborhood dispatch `20261121T150735Z-da5b13ef0a4a`
+    (PID 66815, limit 1,200 s) repeats TC32, TC57, TC185 and the page contract
+    on the corrected test helper. All **20 checks passed, zero failures/errors/skips**
+    in 467.465 s; four complete reports are in `target/docker-ui/run-AABcrE/`.
+    Together with the unchanged passing selections in `run-2bPGae`, all 80
+    targeted checks have passing reports. Historical failed runs remain failed.
+12. Smoke dispatch `20261121T151535Z-f85b3ec92d6f` (PID 67198, outer timeout
+    480 s, acceptance budget 420 s) runs the fixed smoke/support selection.
+    All **23 checks passed, zero failures/errors/skips**, in 288.248 supervised
+    seconds, below the 420-second limit. All 13 XML reports are retained in
+    `target/verification/run-3ksxwckx/`; all executable sources and tests match its
+    snapshot. Scoped Java formatting, source review, 14 documentation tooling
+    tests, the name audit and strict MkDocs build passed. These are local results;
+    no full-regression or distribution-publication result is claimed.
+
 <a id="manual-port-disembarkation-2026-11-21"></a>
 ## Manual port disembarkation — 2026-11-21
 1. User-approved change to UC-025 / CARGO-007: sailing into an owned coastal

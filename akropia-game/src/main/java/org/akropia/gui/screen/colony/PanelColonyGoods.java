@@ -43,7 +43,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final javafx.scene.layout.GridPane mainPanel = new javafx.scene.layout.GridPane();
+    private final javafx.scene.layout.TilePane mainPanel = new javafx.scene.layout.TilePane();
 
     private final ChooseGoodsDialog chooseGoods;
 
@@ -66,20 +66,15 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         this.transferWarning = Preconditions.checkNotNull(transferWarning);
         this.i18n = Preconditions.checkNotNull(i18n);
-        for (int index = 0; index < GoodsType.GOOD_TYPES.size(); index++) {
-            final javafx.scene.layout.ColumnConstraints column = new javafx.scene.layout.ColumnConstraints();
-            column.setPercentWidth(100.0 / GoodsType.GOOD_TYPES.size());
-            mainPanel.getColumnConstraints().add(column);
-        }
+        mainPanel.setPrefTileWidth(96);
+        mainPanel.setPrefTileHeight(110);
+        mainPanel.setHgap(4);
+        mainPanel.setVgap(6);
         panelColonyGoods = GoodsType.GOOD_TYPES.stream().map(goodsType -> {
             final PanelColonyGood out = new PanelColonyGood(
                     imageProvider.getGoodsTypeImage(goodsType), goodsType,
                     eventBus, i18n);
-            final int index = mainPanel.getChildren().size();
-            mainPanel.add(out.getContent(), index, 0);
-            javafx.scene.layout.GridPane.setHgrow(out.getContent(),
-                    javafx.scene.layout.Priority.ALWAYS);
-            out.getContent().setMaxWidth(Double.MAX_VALUE);
+            mainPanel.getChildren().add(out.getContent());
             return out;
         }).collect(ImmutableList.toImmutableList());
         content.getStyleClass().add("panel-colony-goods-column");

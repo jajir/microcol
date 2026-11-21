@@ -169,7 +169,10 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
-    /** Visible rows contain the full physical filename and no metadata. */
+    /**
+     * Rows expose the full filename accessibly and show progress plus save
+     * time.
+     */
     public void verifyFilenameList() {
         WaitForAsyncUtils.waitForFxEvents();
         assertTrue(getNodeFinder().lookup("#savedGamesFilter").queryAll()
@@ -181,6 +184,22 @@ public final class SavedGamesPage extends AbstractScreen {
                         .getItem();
                 assertEquals(entry.file.getName(),
                         ((javafx.scene.control.Label) cell.lookup(".label"))
+                                .getAccessibleText());
+                final javafx.scene.layout.VBox text = (javafx.scene.layout.VBox) cell
+                        .lookup(".label").getParent();
+                assertEquals(3, text.getChildren().size());
+                assertFalse(
+                        ((javafx.scene.control.Label) text.getChildren().get(1))
+                                .getText().isBlank());
+                final String expectedTime = java.time.format.DateTimeFormatter
+                        .ofLocalizedDateTime(java.time.format.FormatStyle.SHORT)
+                        .withLocale(getContext()
+                                .getClassFromGuice(org.akropia.i18n.I18n.class)
+                                .getCurrentLocale())
+                        .format(java.time.Instant.ofEpochMilli(entry.modified)
+                                .atZone(java.time.ZoneId.systemDefault()));
+                assertEquals(expectedTime,
+                        ((javafx.scene.control.Label) text.getChildren().get(2))
                                 .getText());
                 assertNotNull(cell.lookup("#deleteSaveRow"));
             }
@@ -373,12 +392,16 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
-    /** The preview title is hidden while its accessible text is retained. */
-    public void verifyHiddenDetailName(final String name) {
+    /** The detail displays the complete filename or the current-game title. */
+    public void verifyDetailName(final String name) {
         WaitForAsyncUtils.waitForFxEvents();
-        assertEquals(name, getLabeledById("savedGameDetailName").getText());
-        assertFalse(getLabeledById("savedGameDetailName").isVisible());
-        assertFalse(getLabeledById("savedGameDetailName").isManaged());
+        assertEquals(
+                list().getSelectionModel().getSelectedItem() == null ? name
+                        : list().getSelectionModel().getSelectedItem().file
+                                .getName(),
+                getLabeledById("savedGameDetailName").getText());
+        assertTrue(getLabeledById("savedGameDetailName").isVisible());
+        assertTrue(getLabeledById("savedGameDetailName").isManaged());
     }
 
     /**
@@ -390,8 +413,8 @@ public final class SavedGamesPage extends AbstractScreen {
                 list().getSelectionModel().getSelectedItem().getName());
         final javafx.scene.Node title = getNodeFinder()
                 .lookup("#savedGameDetailName").query();
-        assertFalse(title.isVisible());
-        assertFalse(title.isManaged());
+        assertTrue(title.isVisible());
+        assertTrue(title.isManaged());
         for (final String id : java.util.List.of("deleteSave", "importSave")) {
             assertTrue(getNodeFinder().lookup("#" + id).queryAll().isEmpty());
         }
@@ -406,8 +429,8 @@ public final class SavedGamesPage extends AbstractScreen {
                 .lookup("#savedGameDetail")
                 .queryAs(javafx.scene.layout.Region.class);
         assertEquals(
-                detail.localToScene(detail.getBoundsInLocal()).getMinY()
-                        + detail.getInsets().getTop(),
+                title.localToScene(title.getBoundsInLocal()).getMaxY()
+                        + ((javafx.scene.layout.VBox) detail).getSpacing(),
                 preview.localToScene(preview.getBoundsInLocal()).getMinY(), 2);
         verifyFilenameList();
         verifyPaperFileControls();
@@ -752,7 +775,7 @@ public final class SavedGamesPage extends AbstractScreen {
             assertEquals(1, input.getBorder().getImages().size());
             assertTrue(input.getBorder().getImages().get(0).getImage().getUrl()
                     .endsWith("trade-route-name-frame.png"));
-            assertFalse(getLabeledById("savedGameDetailName").isManaged());
+            assertTrue(getLabeledById("savedGameDetailName").isManaged());
         }
     }
 

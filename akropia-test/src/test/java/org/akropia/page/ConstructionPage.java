@@ -25,12 +25,18 @@ public final class ConstructionPage extends AbstractScreen {
     }
 
     public void open() {
-        clickOnButtonWithId("colony-section-construction");
+        if (!getButtonById("colony-section-construction").getPseudoClassStates()
+                .contains(javafx.css.PseudoClass.getPseudoClass("selected"))) {
+            clickOnButtonWithId("colony-section-construction");
+        }
         picker = getButtonById("constructionAdd");
     }
 
     public void openWithKeyboard() {
-        pressWithKeyboard("colony-section-construction");
+        if (!getButtonById("colony-section-construction").getPseudoClassStates()
+                .contains(javafx.css.PseudoClass.getPseudoClass("selected"))) {
+            pressWithKeyboard("colony-section-construction");
+        }
         picker = getButtonById("constructionAdd");
     }
 
@@ -173,10 +179,11 @@ public final class ConstructionPage extends AbstractScreen {
     public void assignCarpenter(final int unitId) throws Exception {
         final javafx.scene.canvas.Canvas canvas = carpenterCanvas();
         revealGameContent(
-                getNodeFinder().lookup("#colonyUnit-" + unitId).query(),
-                canvas);
-        getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY)
-                .dropTo(canvas.localToScreen(51, 16));
+                getNodeFinder().lookup("#colonyUnit-" + unitId).query());
+        getRobot().drag("#colonyUnit-" + unitId, MouseButton.PRIMARY);
+        getRobot().moveBy(12, 0);
+        revealGameContent(canvas);
+        getRobot().dropTo(canvas.localToScreen(51, 16));
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof org.akropia.model.PlaceConstructionSlot);
@@ -187,9 +194,14 @@ public final class ConstructionPage extends AbstractScreen {
         final javafx.scene.canvas.Canvas canvas = carpenterCanvas();
         final javafx.scene.Node outside = getNodeFinder()
                 .lookup("#colony-outside-area").query();
-        revealGameContent(canvas, outside);
+        revealGameContent(canvas);
         getRobot().drag(canvas.localToScreen(16 + 35 * slot, 16),
-                MouseButton.PRIMARY).dropTo(outside);
+                MouseButton.PRIMARY);
+        // Start the drag on this slot before scrolling changes its coordinates.
+        getRobot().moveBy(12, 0);
+        WaitForAsyncUtils.waitForFxEvents();
+        revealGameContent(outside);
+        getRobot().dropTo(outside);
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -315,9 +327,13 @@ public final class ConstructionPage extends AbstractScreen {
 
     public void verifyEmptyProgress() {
         verifyStatus(
-                "Nothing is being built in this colony. Click Construction, "
-                        + "then choose a project in the panel below. Construction needs "
-                        + "at least one worker in the Lumber Mill and enough lumber.");
+                "Choose a project below. Work needs a carpenter and lumber.");
+        final javafx.scene.control.Label instruction = (javafx.scene.control.Label) getLabeledById(
+                "constructionStatus");
+        final javafx.scene.text.Text rendered = (javafx.scene.text.Text) instruction
+                .lookup(".text");
+        assertEquals(instruction.getText(), rendered.getText(),
+                "The complete instruction is visible");
         for (String id : List.of("constructionWork", "constructionTools")) {
             assertTrue(getNodeFinder().lookup("#" + id + "Bar").queryAll()
                     .isEmpty());

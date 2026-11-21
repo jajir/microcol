@@ -141,6 +141,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         GamePage game = WelcomePage.of(getContext()).loadGame();
         ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
+        construction.open();
         construction.verifyStatus("Requires discovery: Large workshops.");
         colony.rememberWorld();
         construction.open();
@@ -153,6 +154,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         game = colony.close();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyAt(COLONY, "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Requires discovery: Large workshops.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 503);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
@@ -163,6 +165,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         game.exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame().openColonyAt(COLONY,
                 "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Requires discovery: Large workshops.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 503);
     }

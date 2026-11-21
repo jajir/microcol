@@ -144,6 +144,14 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         // A mouse click selects a topic and shows its own text.
         help.selectTopicWithMouse(DIPLOMACY);
         help.verifySelectedTopic(DIPLOMACY, DIPLOMACY_PART);
+        // Independence separates prerequisites, confirmation, consequences and
+        // cancellation.
+        help.selectTopicWithMouse(INDEPENDENCE);
+        help.verifyBodyContains("Requirements\n");
+        help.verifyBodyContains("How to declare\n");
+        help.verifyBodyContains("Consequences\n");
+        help.verifyBodyContains("Canceling the confirmation\n");
+        help.captureDialog("colonizopediaPage", "visual-independence-help.png");
         help.closeWithOk();
         help.verifyDialogClosed();
     }

@@ -76,7 +76,6 @@ import org.akropia.gui.screen.game.gamepanel.UnitMovedListener;
 import org.akropia.gui.screen.game.gamepanel.VisibleAreaService;
 import org.akropia.gui.screen.goals.GoalsButtonsPanelController;
 import org.akropia.gui.screen.goals.ScreenGoalsPresenter;
-import org.akropia.gui.screen.market.ScreenMarketPresenter;
 import org.akropia.gui.screen.menu.ButtonsPanelPresenter;
 import org.akropia.gui.screen.menu.ButtonsPanelView;
 import org.akropia.gui.screen.menu.ExitGameListener;
@@ -244,7 +243,6 @@ public final class AkropiaModule extends AbstractModule {
         bind(RecruiteUnitsDialog.class).in(Singleton.class);
         bind(BuyUnitsDialog.class).in(Singleton.class);
         bind(PanelEuropeDockBehavior.class).in(Singleton.class);
-        bind(ScreenMarketPresenter.class).asEagerSingleton();
 
         /**
          * Turn report.

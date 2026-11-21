@@ -4,8 +4,6 @@ import org.akropia.gui.dialog.DialogEuropeGoldChanged;
 import org.akropia.gui.dialog.DialogEuropePriceChanged;
 import org.akropia.gui.dialog.DialogEuropeTradeChanged;
 import org.akropia.gui.dialog.DialogGoodsTransferChanged;
-import org.akropia.gui.screen.Screen;
-import org.akropia.gui.screen.ShowScreenEvent;
 import org.akropia.gui.screen.europe.ChooseGoods;
 import org.akropia.gui.screen.europe.QuickBuyShortcut;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
@@ -39,6 +37,11 @@ import javafx.scene.layout.VBox;
 public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     final static int MIN_VALUE = 0;
+    private Runnable closeHandler;
+
+    void setCloseHandler(final Runnable closeHandler) {
+        this.closeHandler = Preconditions.checkNotNull(closeHandler);
+    }
 
     private final VBox mainPanel;
 
@@ -153,12 +156,16 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         buttonsBar.getButtonNo().setOnAction(this::onUserClickCancel);
         buttonsBar.getButtonYes().setOnAction(this::onUserClickBuy);
         buttonsBar.getButtonYes().requestFocus();
+        buttonsBar.getButtonNo().setCancelButton(true);
+        buttonsBar.getButtonYes().setDefaultButton(true);
 
         final Row row1 = new Row(labelPricePerPiece, labelPricePerPieceValue);
         final Row row2 = new Row(labelSelected, labelSelectedValue);
         final Row row3 = new Row(labelKingTax, labelKingTaxValue);
         final Row row4 = new Row(labelTotal, labelTotalValue);
+        row4.getContent().getStyleClass().add("market-total");
         final Row row5 = new Row(labelRemaining, labelRemainingValue);
+        row5.getContent().getStyleClass().add("market-remaining");
 
         mainPanel.getChildren().addAll(labelHowMuch, labelLimit, slider,
                 row1.getContent(), row2.getContent(), row3.getContent(),
@@ -174,7 +181,7 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
 
     @SuppressWarnings("unused")
     private void onUserClickCancel(final ActionEvent event) {
-        eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        closeHandler.run();
     }
 
     @SuppressWarnings("unused")
@@ -188,7 +195,7 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
         try {
             final Goods bought = screenMarketContext.getTargetCargoSlot()
                     .buyFromEuropePort(limit, amount);
-            eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+            closeHandler.run();
             eventBus.post(
                     StatusBarMessageEvent.outcome(
                             MarketPurchaseText.bought(i18n, bought,
@@ -202,7 +209,7 @@ public class MarketBuyPanel implements JavaFxComponent, UpdatableLanguage {
             // hold changed since the quantity was chosen, nothing was charged
             dialogGoodsTransferChanged.showAndWait();
         }
-        eventBus.post(new ShowScreenEvent(Screen.EUROPE));
+        closeHandler.run();
     }
 
     private void showChange(

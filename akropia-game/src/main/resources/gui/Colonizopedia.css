@@ -72,3 +72,5 @@
 #colonizopediaPage .help-topic-title {
     -fx-padding: 0 0 10 0;
 }
+
+.help-topic-title { -fx-padding: 0 0 12 0; }

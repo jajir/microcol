@@ -131,6 +131,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         // prime timber, with no worker and no Prime Timber bonus on lumber.
         ColonyScreen newAmsterdam = game.openColonyAt(NEW_AMSTERDAM,
                 "New Amsterdam");
+        newAmsterdam.showSurroundingArea();
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
         // The commons row is whole and readable and the goods row is intact.
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
@@ -143,6 +144,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game = newAmsterdam.close();
 
         ColonyScreen delft = game.openColonyAt(DELFT, "Delft");
+        delft.showSurroundingArea();
         delft.verifyTownCommons(EN_DELFT);
         final int oreBefore = delft.stockOf(GoodsType.ORE);
         game = delft.close();
@@ -151,6 +153,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         // is.
         game.panToTile(HAARLEM);
         ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
+        haarlem.showSurroundingArea();
         haarlem.verifyTownCommons(EN_HAARLEM);
         game = haarlem.close();
 
@@ -159,6 +162,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game.nextTurnAndCloseDialogs();
         delft = game.openColonyAt(DELFT, "Delft");
         delft.verifyWarehouseStock(GoodsType.ORE, oreBefore + 4);
+        delft.showSurroundingArea();
         delft.verifyTownCommons(EN_DELFT);
         game = delft.close();
 
@@ -167,6 +171,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game = new FreePlayAuditPage(getContext()).continueGame();
         delft = game.openColonyAt(DELFT, "Delft");
         delft.verifyWarehouseStock(GoodsType.ORE, oreBefore + 4);
+        delft.showSurroundingArea();
         delft.verifyTownCommons(EN_DELFT);
         delft.close();
     }
@@ -181,6 +186,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
 
         final ColonyScreen newAmsterdam = game.openColonyAt(NEW_AMSTERDAM,
                 "New Amsterdam");
+        newAmsterdam.showSurroundingArea();
         newAmsterdam.verifyTownCommons(CS_NEW_AMSTERDAM);
         new GameBarWidthPage(getContext()).resizeContent(1000, 925);
         newAmsterdam.showWarehouse();
@@ -202,6 +208,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         // Press I for the colonies menu, arrow down to New Amsterdam, Enter.
         ColonyScreen newAmsterdam = game.openColonyWithKeyboard(0,
                 "New Amsterdam");
+        newAmsterdam.showSurroundingArea();
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
         newAmsterdam.verifyTownCommonsNotEllipsized(EN_NEW_AMSTERDAM);
         final int grapesBefore = newAmsterdam.stockOf(GoodsType.GRAPES);
@@ -209,6 +216,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         // Escape leaves the colony; opening it again by keys changes nothing.
         game = newAmsterdam.closeWithEscape();
         newAmsterdam = game.openColonyWithKeyboard(0, "New Amsterdam");
+        newAmsterdam.showSurroundingArea();
         newAmsterdam.verifyTownCommons(EN_NEW_AMSTERDAM);
         newAmsterdam.verifyWarehouseStock(GoodsType.GRAPES, grapesBefore);
         newAmsterdam.closeWithEscape();
@@ -226,6 +234,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         game.panToTile(HAARLEM);
         ColonyScreen haarlem = game.openColonyAt(HAARLEM, "Haarlem");
         haarlem.verifyNumberOfUnitsOnFields(0);
+        haarlem.showSurroundingArea();
         haarlem.verifyTownCommons(EN_HAARLEM);
         haarlem.verifyFoodAccounting(3, 6);
         haarlem.verifyThatProductionIs(GoodsType.GRAIN, -3);
@@ -257,6 +266,7 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
         haarlem.verifyGoodsForecast(GoodsType.GRAIN, 131, -3);
         haarlem.verifyGoodsForecast(GoodsType.LUMBER, 6, 6);
         haarlem.verifyWarehouseStock(GoodsType.LUMBER, 6);
+        haarlem.showSurroundingArea();
         haarlem.verifyTownCommons(EN_HAARLEM);
         haarlem.close();
     }

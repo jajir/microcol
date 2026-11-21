@@ -159,6 +159,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyStocksAndPopulation(64, 19, 4);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 1);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
+        construction.open();
         construction.verifyStatus("Waiting for tools: 1.");
         construction.captureDialog("colony-section-construction",
                 "construction-waiting.png");
@@ -176,6 +177,7 @@ public class TC_32_F24_construction_eligibility_test
         colony = game.openColonyWithKeyboard(0, "New Amsterdam");
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 64);
+        construction.open();
         construction.verifyStatus("Waiting for tools: 1.");
 
         // Continue, opening and rebuilding the report add no reminder.
@@ -201,6 +203,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "WAREHOUSE"),
                 List.of(0, 1), 70);
         construction.verifyStocksAndPopulation(70, 19, 4);
+        construction.open();
         construction.verifyStatus("Waiting for tools: 1.");
 
         // Bring the final tool; the turn completes only the first project
@@ -220,6 +223,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyProjectOffered("IRON_WORKS", false);
         construction.cancel();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 0));
+        construction.open();
         construction.verifyStatus("Construction in progress.");
         game = colony.closeWithEscape();
         game.exitToMenu();
@@ -320,8 +324,10 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("LUMBER_MILL"), List.of(0), 58);
         construction.cancel();
         construction.verifyPickerClosed();
+        construction.open();
         construction.verifyResourceProgress("constructionTools", "Není potřeba",
                 "", "", 0, false);
+        construction.open();
         construction.verifyForecast("Odhad tahů: 1 (při současné produkci).");
         new InGameLayoutPage(getContext())
                 .saveEvidence("construction-czech-panel.png");
@@ -383,6 +389,7 @@ public class TC_32_F24_construction_eligibility_test
         ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
                 .openColonyWithKeyboard(0, "New Amsterdam");
         ConstructionPage construction = new ConstructionPage(getContext());
+        construction.open();
         construction.verifyStatus("Requires: Blacksmith shop.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 240);
         construction.verifyStocksAndPopulation(240, 100, 3);
@@ -391,6 +398,7 @@ public class TC_32_F24_construction_eligibility_test
         GamePage game = colony.closeWithEscape();
         game.nextTurnAndCloseDialogs();
         colony = game.openColonyWithKeyboard(0, "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Requires: Blacksmith shop.");
         construction.verifyQueue(List.of("IRON_WORKS"), List.of(9), 243);
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 100));
@@ -429,6 +437,7 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyQueue(List.of("BLACKSMITHS_SHOP"), List.of(0), 64);
         construction.verifyStocksAndPopulation(64, 19, 4);
         construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 0);
+        construction.open();
         construction.verifyStatus("Čeká na 1 nástrojů.");
     }
 

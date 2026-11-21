@@ -42,6 +42,21 @@ public class AbstractScreenMarket extends AbstractScreen {
         assertEquals(expectedTotal, getLabeledById("marketTotal").getText());
     }
 
+    public void verifyModal(final int expectedGold) {
+        final javafx.scene.Node root = getNodeFinder().lookup("#marketDialog")
+                .query();
+        final javafx.stage.Stage dialog = (javafx.stage.Stage) root.getScene()
+                .getWindow();
+        assertEquals(javafx.stage.Modality.WINDOW_MODAL, dialog.getModality());
+        assertEquals(getContext().getPrimaryStage(), dialog.getOwner());
+        assertEquals(expectedGold,
+                getModel().getPlayers().stream()
+                        .filter(org.akropia.model.Player::isHuman).findFirst()
+                        .orElseThrow().getGold());
+        org.junit.jupiter.api.Assertions.assertNotNull(getContext()
+                .getPrimaryStage().getScene().lookup("#europeMarketGoods"));
+    }
+
     public void verifyNumberOfSliders(final int expectedCount) {
         assertEquals(expectedCount,
                 getNodeFinder().lookup(".slider").queryAll().size());

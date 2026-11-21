@@ -1,7 +1,7 @@
 package org.akropia.gui.screen.market;
 
-import org.akropia.gui.screen.AbstractScreenMenu;
-import org.akropia.gui.screen.GameScreen;
+import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.gui.util.UpdatableLanguage;
 import org.akropia.gui.screen.menu.ScreenMenu;
 import org.akropia.i18n.I18n;
 
@@ -13,8 +13,8 @@ import javafx.scene.layout.Region;
 /**
  * Screen with market in Europe. It allows to buy various goods.
  */
-public abstract class AbstractScreenMarket extends AbstractScreenMenu
-        implements GameScreen {
+public abstract class AbstractScreenMarket
+        implements JavaFxComponent, UpdatableLanguage {
 
     private final MarketView marketView;
 
@@ -35,14 +35,8 @@ public abstract class AbstractScreenMarket extends AbstractScreenMenu
         return marketView.getContent();
     }
 
-    @Override
-    public void beforeShow() {
-        marketView.beforeShow();
-    }
-
-    @Override
-    public void beforeHide() {
-        marketView.beforeHide();
+    public void showAndWait() {
+        marketView.showAndWait();
     }
 
     protected I18n getI18n() {

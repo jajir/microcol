@@ -206,6 +206,7 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyCourse(NEW_AMSTERDAM, TEACHER, STUDENT,
                 UnitType.MASTER_CARPENTER, 2, 4);
         colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION, "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Waiting for tools: 20.");
         game = colony.close();
 
@@ -300,6 +301,7 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 6);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.HAMMERS, 64);
         colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION, "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Waiting for tools: 14.");
         game = colony.close();
 
@@ -320,6 +322,7 @@ public class TC_185_F218_connected_production_network_test
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.ORE, 42);
         ledger.verifyStock(NEW_AMSTERDAM, GoodsType.TOOLS, 18);
         colony = game.openColonyAt(NEW_AMSTERDAM_LOCATION, "New Amsterdam");
+        construction.open();
         construction.verifyStatus("Waiting for tools: 2.");
         game = colony.close();
 

@@ -1,3 +1,36 @@
+## Úpravy z vizuálního přehledu — 21. listopadu 2026
+
+1. Schválený rozsah VD-01, VD-03–10 a VD-14–16 zachovává papírové plochy,
+   písmo a černou propisku. VD-02 a VD-11–13 nejsou součástí změny.
+2. Buňky skladu mají společné rozměry: ikona, prostor pro název a řádek
+   zásoby se změnou za tah. Celé buňky se při nedostatku šířky zalomí.
+   Sdílené pochodně a sovy nadále zobrazují jen produkci; nulové změny
+   a herní pravidla se nemění. Přetažení obchodovatelného zboží zůstává dostupné.
+3. Při otevření kolonie jsou Okolí, Construction a School skryté.
+   Přepínač otevře jedinou část včetně jejího souhrnu a zavře ostatní;
+   opětovné stisknutí ji skryje. Přepnutí nic nepřesouvá ani neruší frontu
+   či výuku. Depo zůstává dostupné. Toto nahrazuje dřívější výchozí Okolí.
+   Rezervace výšky otevřeného detailu brání poskakování při výběru pole.
+4. Výstavba používá krátkou úplnou instrukci a společné řádky pro nadpisy,
+   souhrn, oba seznamy, podpůrné informace a akce. Přidání projektu stále
+   vyžaduje potvrzení a modelové ověření.
+5. Diplomacie nahoře ukazuje mocnost a vztah na papírovém podkladu.
+   Pod tabulkou následují vždy viditelné sekce mocností ve stejném pořadí,
+   s údaji nebo důvodem jejich utajení a se vztahy a dostupnými akcemi.
+   Stránka používá společné posouvání; neznámé údaje se neodhalují.
+6. Článek Nezávislost odděluje podmínky, postup, důsledky a zrušení potvrzení.
+   Čtení ani zrušení nepotvrzené deklarace nemění hru.
+7. Volba množství při nákupu a částečném prodeji je modální dialog nad
+   domovským přístavem. Používá společný ručně kreslený rám, dva sloupce
+   ceny včetně odvodu a odlišený součet a zůstatek. Zrušit a Escape nic
+   neobchodují; potvrzení zachovává ověření původní nabídky modelem.
+   Rychlý nákup i přímý prodej zůstávají dostupné dosavadními gesty.
+8. Vnější položky trhu mají doplněný levý a pravý odstup; názvy, ceny,
+   pořadí ani způsob ovládání pásu se nemění.
+9. Seznam a náhledy pozic vlastní [pravidla ukládání](save-load-navigation.md#vizualni-prehled-ulozenych-her-21-listopadu-2026).
+   Jde o schválené chování, nikoli hráčskou studii. Skutečnou přejímku
+   vlastní [testová evidence](functional-tests.md#visual-mitigations-2026-11-21).
+
 ## Cestující při příjezdu do přístavu — 21. listopadu 2026
 1. Hráč může vplout do vlastní pobřežní kolonie při přepravě jednotek do
    dalšího cíle. Příjezd ponechá jednotky i jejich výbavu a pohybové body

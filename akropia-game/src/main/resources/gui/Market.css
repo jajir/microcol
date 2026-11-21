@@ -1,8 +1,8 @@
-.column0 { -fx-min-width: 250; }
-/* Tick labels are centred on the track ends; the padding keeps "Nothing" and
-   "Maximum: 100 pcs" inside the panel. */
-.in-game-page .slider { -fx-min-height: 70; }
-.in-game-page #marketSlider { -fx-padding: 0 96 0 48; }
-.in-game-page .mainPanel { -fx-max-width: 700; }
-/* Keep wrapped glyphs inside the limit label at fractional font widths. */
-.in-game-page #marketLimit { -fx-padding: 0 2 0 2; }
+/* The shared modal frame owns the contour and paper surface. */
+.market-dialog { -fx-padding: 18; }
+.market-dialog .slider { -fx-min-height: 70; -fx-padding: 0 96 0 48; }
+.market-dialog .mainPanel { -fx-spacing: 6; -fx-padding: 0; -fx-border-width: 0; -fx-background-color: transparent; }
+.market-dialog #marketLimit { -fx-padding: 0 2 0 2; }
+.market-dialog .market-price-row { -fx-padding: 2 8; }
+.market-dialog .market-total { -fx-padding: 10 8 4 8; -fx-background-color: #f6eddb; }
+.market-dialog .market-remaining { -fx-padding: 4 8 10 8; -fx-background-color: #f6eddb; }

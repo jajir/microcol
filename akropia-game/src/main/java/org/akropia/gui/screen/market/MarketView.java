@@ -1,44 +1,47 @@
 package org.akropia.gui.screen.market;
 
-import org.akropia.gui.screen.ScreenLifeCycle;
-import org.akropia.gui.util.InGamePage;
+import org.akropia.gui.util.AbstractMessageWindow;
 import org.akropia.gui.util.JavaFxComponent;
+import org.akropia.gui.util.ViewUtil;
+import org.akropia.i18n.I18n;
 import com.google.inject.Inject;
+import javafx.scene.control.Label;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
-/** European trade uses the same frame and live balance as the port. */
-public final class MarketView implements JavaFxComponent, ScreenLifeCycle {
-    private final InGamePage page;
+/** Shared modal frame for a quoted purchase or sale. */
+public final class MarketView extends AbstractMessageWindow
+        implements JavaFxComponent {
+    private final Label title = new Label();
+    private final VBox content = new VBox(12, title);
 
     @Inject
-    MarketView(final InGamePage page) {
-        this.page = page;
+    MarketView(final ViewUtil viewUtil, final I18n i18n) {
+        super(viewUtil, i18n);
+        content.setId("marketDialog");
+        content.getStyleClass().add("market-dialog");
+        content.setPrefWidth(700);
+        title.setWrapText(true);
+        title.setId("marketTitle");
+        init(content);
     }
 
     public void setMenuPanel(final JavaFxComponent panel) {
-        panel.getContent().getStyleClass().add("report-content");
-        page.setContent(panel.getContent());
+        content.getChildren().add(panel.getContent());
     }
 
     public void setToolbar(final Region toolbar) {
-        page.setToolbar(toolbar);
+        content.getChildren().add(toolbar);
     }
 
-    public void setTitle(final String title) {
-        page.setTitle(title);
+    @Override
+    public void setTitle(final String text) {
+        super.setTitle(text);
+        title.setText(text);
     }
 
     @Override
     public Region getContent() {
-        return page.getContent();
-    }
-
-    @Override
-    public void beforeShow() {
-        page.beforeShow();
-    }
-
-    @Override
-    public void beforeHide() {
+        return content;
     }
 }

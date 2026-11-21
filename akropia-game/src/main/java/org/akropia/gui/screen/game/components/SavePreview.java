@@ -42,27 +42,7 @@ public final class SavePreview {
             final WorldMap world = model.getMap();
             final Location size = world.getMapSize();
             final byte[] tiles = MinimapTiles.knownTiles(player, world);
-            final double scale = Math.min(
-                    (double) GameModelPoDao.MAX_PREVIEW_WIDTH / size.getX(),
-                    (double) GameModelPoDao.MAX_PREVIEW_HEIGHT / size.getY());
-            final int width = Math.max(1,
-                    Math.min(GameModelPoDao.MAX_PREVIEW_WIDTH,
-                            (int) Math.floor(size.getX() * scale)));
-            final int height = Math.max(1,
-                    Math.min(GameModelPoDao.MAX_PREVIEW_HEIGHT,
-                            (int) Math.floor(size.getY() * scale)));
-            final BufferedImage image = new BufferedImage(width, height,
-                    BufferedImage.TYPE_INT_RGB);
-            for (int y = 0; y < height; y++) {
-                final int row = Math.min(size.getY() - 1, (int) (y / scale));
-                for (int x = 0; x < width; x++) {
-                    final int column = Math.min(size.getX() - 1,
-                            (int) (x / scale));
-                    image.setRGB(x, y,
-                            rgb(MinimapTiles.COLORS[tiles[row * size.getX()
-                                    + column]]));
-                }
-            }
+            final BufferedImage image = renderTiles(tiles, size);
             final ByteArrayOutputStream out = new ByteArrayOutputStream();
             ImageIO.write(image, "png", out);
             return out.toByteArray();
@@ -71,6 +51,53 @@ public final class SavePreview {
             LOGGER.warn("Unable to draw the saved-game preview", unavailable);
             return null;
         }
+    }
+
+    static BufferedImage renderTiles(final byte[] tiles, final Location size) {
+        final int width = GameModelPoDao.MAX_PREVIEW_WIDTH;
+        final int height = GameModelPoDao.MAX_PREVIEW_HEIGHT;
+        final BufferedImage image = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
+        int left = size.getX(), top = size.getY(), right = -1, bottom = -1;
+        for (int y = 0; y < size.getY(); y++) {
+            for (int x = 0; x < size.getX(); x++) {
+                if (tiles[y * size.getX() + x] != 0) {
+                    left = Math.min(left, x);
+                    right = Math.max(right, x);
+                    top = Math.min(top, y);
+                    bottom = Math.max(bottom, y);
+                }
+            }
+        }
+        final int background = rgb(
+                right < 0 ? MinimapTiles.COLORS[0] : Color.web("#fff9ec"));
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                image.setRGB(x, y, background);
+            }
+        }
+        if (right < 0) {
+            return image;
+        }
+        final int columns = right - left + 1;
+        final int rows = bottom - top + 1;
+        final double scale = Math.min((double) width / columns,
+                (double) height / rows);
+        final int drawnWidth = Math.max(1, (int) Math.round(columns * scale));
+        final int drawnHeight = Math.max(1, (int) Math.round(rows * scale));
+        final int offsetX = (width - drawnWidth) / 2;
+        final int offsetY = (height - drawnHeight) / 2;
+        for (int y = 0; y < drawnHeight; y++) {
+            final int sourceY = top + Math.min(rows - 1, (int) (y / scale));
+            for (int x = 0; x < drawnWidth; x++) {
+                final int sourceX = left
+                        + Math.min(columns - 1, (int) (x / scale));
+                image.setRGB(offsetX + x, offsetY + y,
+                        rgb(MinimapTiles.COLORS[tiles[sourceY * size.getX()
+                                + sourceX]]));
+            }
+        }
+        return image;
     }
 
     private static int rgb(final Color color) {

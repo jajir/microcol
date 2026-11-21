@@ -14,8 +14,6 @@ import org.akropia.gui.screen.colony.DialogTradeRouteCargo;
 import org.akropia.gui.screen.load.ScreenLoad;
 import org.akropia.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.akropia.gui.screen.congress.ScreenCongress;
-import org.akropia.gui.screen.market.ScreenMarketBuy;
-import org.akropia.gui.screen.market.ScreenMarketSell;
 import org.akropia.gui.screen.menu.ScreenMenu;
 import org.akropia.gui.screen.menu.ScreenFreePlay;
 import org.akropia.gui.screen.setting.ScreenSetting;
@@ -51,8 +49,6 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
             final ScreenLoad screenLoad, final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
-            final ScreenMarketBuy screenMarketBuy,
-            final ScreenMarketSell screenMarketSell,
             final ScreenStatistics screenStatistics,
             final ScreenTurnReport screenTurnReport,
             final ScreenGoals screenGoals, final ScreenEditor screenEditor,
@@ -70,8 +66,6 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenSetting));
         screens.add(Preconditions.checkNotNull(screenLoad));
         screens.add(Preconditions.checkNotNull(screenColony));
-        screens.add(Preconditions.checkNotNull(screenMarketBuy));
-        screens.add(Preconditions.checkNotNull(screenMarketSell));
         screens.add(Preconditions.checkNotNull(screenStatistics));
         screens.add(Preconditions.checkNotNull(screenTurnReport));
         screens.add(Preconditions.checkNotNull(screenGoals));

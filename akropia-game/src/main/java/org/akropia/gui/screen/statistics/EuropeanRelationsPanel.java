@@ -15,7 +15,6 @@ import org.akropia.model.Player;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 
@@ -25,6 +24,7 @@ final class EuropeanRelationsPanel extends VBox {
     private final ViewUtil viewUtil;
     private final I18n i18n;
     private final VBox rows = new VBox(12);
+    private final java.util.Map<String, VBox> powerSections = new java.util.LinkedHashMap<>();
     private final VBox support = new VBox(4);
     private final Label comparisonsTitle = new Label();
     private final GridPane comparisons = new GridPane();
@@ -38,23 +38,21 @@ final class EuropeanRelationsPanel extends VBox {
         this.i18n = i18n;
         setId("europeanRelations");
         getStyleClass().add("relations-report");
-        final ScrollPane scroll = new ScrollPane(rows);
-        scroll.setFitToWidth(true);
-        scroll.setPrefViewportHeight(320);
-        scroll.setPrefViewportWidth(400);
         feedback.setId("relationsFeedback");
         feedback.setWrapText(true);
         support.setId("rebelSupport");
         comparisons.setId("foreignPowers");
         comparisons.setHgap(12);
         comparisons.setVgap(6);
-        final ScrollPane comparisonScroll = new ScrollPane(comparisons);
-        comparisonScroll.setId("foreignPowersScroll");
-        comparisonScroll.setPrefViewportHeight(150);
-        comparisonScroll.setPrefViewportWidth(520);
+        comparisons.setMaxWidth(Double.MAX_VALUE);
+        final javafx.scene.layout.ColumnConstraints nameColumn = new javafx.scene.layout.ColumnConstraints();
+        nameColumn.setPercentWidth(65);
+        final javafx.scene.layout.ColumnConstraints relationColumn = new javafx.scene.layout.ColumnConstraints();
+        relationColumn.setPercentWidth(35);
+        comparisons.getColumnConstraints().setAll(nameColumn, relationColumn);
         comparisonsTitle.setId("foreignPowersTitle");
-        getChildren().addAll(support, comparisonsTitle, comparisonScroll,
-                scroll, feedback);
+        getChildren().addAll(support, comparisonsTitle, comparisons, rows,
+                feedback);
     }
 
     /** Read-only own support values; no rival or hidden colony is listed. */
@@ -67,7 +65,8 @@ final class EuropeanRelationsPanel extends VBox {
                 national.getDisplayPercent(), national.getPopulation()));
         nationalLabel.setId("nationalSupport");
         nationalLabel.setWrapText(true);
-        nationalLabel.setMaxWidth(380);
+        nationalLabel.setMaxWidth(Double.MAX_VALUE);
+        nationalLabel.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         support.getChildren().add(nationalLabel);
         final List<org.akropia.model.Colony> colonies = model.getColonies(own);
         if (colonies.isEmpty()) {
@@ -82,7 +81,8 @@ final class EuropeanRelationsPanel extends VBox {
                             colony.getRebelSupport().getDisplayPercent()));
             row.setId("supportColony-" + colony.getId());
             row.setWrapText(true);
-            row.setMaxWidth(380);
+            row.setMaxWidth(Double.MAX_VALUE);
+            row.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
             support.getChildren().add(row);
         }
         refreshMercenary(model, own);
@@ -129,10 +129,9 @@ final class EuropeanRelationsPanel extends VBox {
     private void refreshComparisons(final Model model) {
         comparisonsTitle.setText(i18n.get(Stats.foreignTitle));
         comparisons.getChildren().clear();
+        powerSections.clear();
         final List<Stats> headers = List.of(Stats.foreignPower,
-                Stats.foreignRelation, Stats.foreignPopulation,
-                Stats.foreignColonies, Stats.foreignAverageSize,
-                Stats.foreignMilitary, Stats.foreignNaval, Stats.foreignTrade);
+                Stats.foreignRelation);
         for (int column = 0; column < headers.size(); column++) {
             final Label header = new Label(i18n.get(headers.get(column)));
             header.getStyleClass().add("relation-names");
@@ -146,6 +145,13 @@ final class EuropeanRelationsPanel extends VBox {
                     "foreignPower-" + key), 0, row);
             comparisons.add(cell(relationText(power.getRelation()),
                     "foreignRelation-" + key), 1, row);
+            final VBox section = new VBox(8);
+            section.setId("foreignSection-" + key);
+            section.getStyleClass().add("foreign-power-section");
+            section.getChildren().add(cell(label(power.getDisplayName(), key),
+                    "foreignHeading-" + key));
+            powerSections.put(key, section);
+            rows.getChildren().add(section);
             if (power.getFigures().isPresent()) {
                 final ForeignPowerComparison.Figures figures = power
                         .getFigures().get();
@@ -156,12 +162,22 @@ final class EuropeanRelationsPanel extends VBox {
                         number(figures.getMilitaryStrength()),
                         number(figures.getNavalStrength()),
                         String.valueOf(figures.getTradeRevenue()));
+                final List<Stats> metrics = List.of(Stats.foreignPopulation,
+                        Stats.foreignColonies, Stats.foreignAverageSize,
+                        Stats.foreignMilitary, Stats.foreignNaval,
+                        Stats.foreignTrade);
+                final GridPane facts = new GridPane();
+                facts.setHgap(16);
+                facts.setVgap(6);
                 for (int column = 0; column < values.size(); column++) {
-                    comparisons.add(
+                    facts.add(new Label(i18n.get(metrics.get(column))), 0,
+                            column);
+                    facts.add(
                             cell(values.get(column),
                                     "foreign-" + key + "-" + column),
-                            column + 2, row);
+                            1, column);
                 }
+                section.getChildren().add(facts);
             } else {
                 final boolean locked = power
                         .getDisclosure() == ForeignPowerComparison.Disclosure.LOCKED;
@@ -169,8 +185,7 @@ final class EuropeanRelationsPanel extends VBox {
                         i18n.get(locked ? Stats.foreignLocked
                                 : Stats.foreignUncontacted),
                         "foreignWithheld-" + key);
-                comparisons.add(withheld, 2, row);
-                GridPane.setColumnSpan(withheld, headers.size() - 2);
+                section.getChildren().add(withheld);
             }
             row++;
         }
@@ -189,6 +204,7 @@ final class EuropeanRelationsPanel extends VBox {
         final Label label = new Label(text);
         label.setId(id);
         label.setWrapText(true);
+        label.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
         return label;
     }
 
@@ -233,7 +249,8 @@ final class EuropeanRelationsPanel extends VBox {
                 final Label names = new Label(
                         label(first) + " — " + label(second));
                 names.setWrapText(true);
-                names.setMaxWidth(380);
+                names.setMaxWidth(Double.MAX_VALUE);
+                names.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
                 names.getStyleClass().add("relation-names");
                 final int wait = model.getWarDeclarationWait(first, second);
                 final Label status = new Label(
@@ -246,6 +263,8 @@ final class EuropeanRelationsPanel extends VBox {
                                                 ? Stats.relationAlliance
                                                 : Stats.relationWar));
                 status.getStyleClass().add("relation-state");
+                status.setWrapText(true);
+                status.setMinHeight(javafx.scene.layout.Region.USE_PREF_SIZE);
                 row.getChildren().addAll(names, status);
                 if (actor.isHuman() && (actor == first || actor == second)
                         && state == EuropeanRelationState.PEACE) {
@@ -334,7 +353,13 @@ final class EuropeanRelationsPanel extends VBox {
                             event -> demandTribute(model, actor, target));
                     row.getChildren().add(tribute);
                 }
-                rows.getChildren().add(row);
+                final Player sectionPlayer = first == game.getHumanPlayer()
+                        ? second
+                        : first;
+                final VBox section = powerSections.get(sectionPlayer.getName());
+                if (section != null) {
+                    section.getChildren().add(row);
+                }
             }
         }
         if (rows.getChildren().isEmpty()) {

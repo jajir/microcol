@@ -50,7 +50,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     private QueueDialog activeQueue;
     private final Provider<DialogEducation> education;
     private final java.util.Map<String, Button> sections = new java.util.LinkedHashMap<>();
-    private String selected = "area";
+    private String selected;
+    private final java.util.Map<String, Region> summaries = new java.util.LinkedHashMap<>();
+
     private final java.util.List<Region> detailSizes = new java.util.ArrayList<>();
     private boolean sizingScheduled;
 
@@ -175,7 +177,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
                 overview, detail);
         mainPanel.getStyleClass().add("colony-layout");
         mainPanel.setMinWidth(860);
-        selectSection("area");
+        selectSection(null);
         updateLanguage(i18n);
 
         mainPanel.getStylesheets().add(MainStageBuilder.STYLE_SHEET_AKROPIA);
@@ -213,15 +215,14 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
      * @param colony required colony to show
      */
     void showColony(final Colony colony) {
-        if (this.colony != colony)
-            selectSection("area");
         this.colony = Preconditions.checkNotNull(colony);
         panelColonyName.setColony(colony);
         goods.setColony(colony);
         detailSizes.clear();
-        detailSizes.add(queue.get().embedded(() -> selectSection("area")));
+        detailSizes.add(queue.get().embedded(() -> selectSection(null)));
         detailSizes.add(
-                education.get().embedded(colony, () -> selectSection("area")));
+                education.get().embedded(colony, () -> selectSection(null)));
+        selectSection(null);
         reserveDetailHeight();
         repaint();
     }
@@ -264,7 +265,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         title.setMaxWidth(Double.MAX_VALUE);
         title.setMinWidth(0);
         title.setWrapText(true);
-        title.setOnAction(event -> selectSection(key));
+        title.setOnAction(
+                event -> selectSection(key.equals(selected) ? null : key));
+        summaries.put(key, body);
         sections.put(key, title);
         final HBox header = new HBox(title);
         header.setMinHeight(Region.USE_PREF_SIZE);
@@ -308,34 +311,31 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
     }
 
     private void selectSection(final String key) {
-        if (key.equals(selected) && !detail.getChildren().isEmpty())
+        if (java.util.Objects.equals(key, selected)
+                && !detail.getChildren().isEmpty())
             return;
         selected = key;
         activeQueue = null;
-        detail.getChildren().setAll(colonyFields.getContent());
-        colonyFields.getContent().setVisible(key.equals("area"));
-        colonyFields.getContent().setManaged(key.equals("area"));
-
+        detail.getChildren().clear();
+        summaries.forEach((name, body) -> {
+            body.setVisible(name.equals(key));
+            body.setManaged(name.equals(key));
+        });
         sections.forEach((name, button) -> button.pseudoClassStateChanged(
                 javafx.css.PseudoClass.getPseudoClass("selected"),
                 name.equals(key)));
-        switch (key) {
-        case "area":
-            break;
-        case "construction":
-            if (colony != null) {
-                activeQueue = queue.get();
-                detail.getChildren()
-                        .add(activeQueue.embedded(() -> selectSection("area")));
-            }
-            break;
-        case "school":
-            if (colony != null)
-                detail.getChildren().add(education.get().embedded(colony,
-                        () -> selectSection("area")));
-            break;
-        default:
-            detail.getChildren().add(new Label(i18n.get(ColonyMsg.peopleHint)));
+        detail.setVisible(key != null);
+        detail.setManaged(key != null);
+        reserveDetailHeight();
+        if ("area".equals(key)) {
+            detail.getChildren().add(colonyFields.getContent());
+        } else if ("construction".equals(key) && colony != null) {
+            activeQueue = queue.get();
+            detail.getChildren()
+                    .add(activeQueue.embedded(() -> selectSection(null)));
+        } else if ("school".equals(key) && colony != null) {
+            detail.getChildren().add(education.get().embedded(colony,
+                    () -> selectSection(null)));
         }
     }
 

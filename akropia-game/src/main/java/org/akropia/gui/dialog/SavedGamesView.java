@@ -101,11 +101,17 @@ public final class SavedGamesView {
             private final Label filename = new Label();
             private final Button delete = ActionButtons
                     .button(ButtonIcon.DELETE);
-            private final VBox title = new VBox(filename);
+            private final Label progress = new Label();
+            private final Label savedAt = new Label();
+            private final VBox title = new VBox(2, filename, progress, savedAt);
             private final HBox row = new HBox(16, title, delete);
             {
                 prefWidthProperty().bind(list.widthProperty().subtract(28));
-                filename.setWrapText(true);
+                filename.setWrapText(false);
+                progress.setWrapText(true);
+                savedAt.setWrapText(true);
+                progress.setMinHeight(Region.USE_PREF_SIZE);
+                savedAt.setMinHeight(Region.USE_PREF_SIZE);
                 if (saving) {
                     filename.setOnMouseEntered(event -> saveHelp
                             .accept(texts.get(SavedGameText.saveFileHint)));
@@ -150,7 +156,12 @@ public final class SavedGamesView {
                 setText(null);
                 setGraphic(!empty && entry != null ? row : null);
                 if (entry != null && !empty) {
-                    filename.setText(entry.file.getName());
+                    filename.setText(entry.kind == Kind.MANUAL ? filename(entry)
+                            : texts.get(kindText(entry.kind)));
+                    filename.setAccessibleText(entry.file.getName());
+                    progress.setText(describeDate(entry.metadata == null ? null
+                            : entry.metadata.getSummary()));
+                    savedAt.setText(formatTime(texts, entry.modified));
                 }
             }
         });
@@ -347,8 +358,8 @@ public final class SavedGamesView {
     }
 
     private void showDetail(final Entry entry) {
-        detailName.setVisible(!saving && entry == null);
-        detailName.setManaged(!saving && entry == null);
+        detailName.setVisible(true);
+        detailName.setManaged(true);
         if (saving && entry == null) {
             detailName.setText(texts.get(SavedGameText.currentGame));
             showPreview(Optional.ofNullable(currentImage),
@@ -366,7 +377,7 @@ public final class SavedGamesView {
             summary.setText("");
             return;
         }
-        detailName.setText(displayName(entry));
+        detailName.setText(entry.file.getName());
         if (entry.metadata == null) {
             previewBox.setVisible(false);
             previewBox.setManaged(false);
@@ -492,12 +503,7 @@ public final class SavedGamesView {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
         try {
-            String year = value.getYear() + " · " + value.getDay() + "/"
-                    + value.getMonth();
-            if (value.getSeason() != null) {
-                year += " " + texts.get(Loc.getTerrainDescription(
-                        Calendar.Season.valueOf(value.getSeason())));
-            }
+            final String year = gameDate(value);
             final String mission = CampaignNames.defaultCampaign.toString()
                     .equals(value.getCampaignName())
                             ? texts.get(SavedGameText.campaign) + " · "
@@ -521,6 +527,25 @@ public final class SavedGamesView {
         } catch (RuntimeException invalid) {
             return texts.get(SavedGameText.summaryMissing) + saved;
         }
+    }
+
+    private String describeDate(final SaveSummaryPo value) {
+        try {
+            return value == null ? texts.get(SavedGameText.summaryMissing)
+                    : texts.get(SavedGameText.summaryYear, gameDate(value));
+        } catch (RuntimeException ex) {
+            return texts.get(SavedGameText.summaryMissing);
+        }
+    }
+
+    private String gameDate(final SaveSummaryPo value) {
+        String date = value.getYear() + " · " + value.getDay() + "/"
+                + value.getMonth();
+        if (value.getSeason() != null) {
+            date += " " + texts.get(Loc.getTerrainDescription(
+                    Calendar.Season.valueOf(value.getSeason())));
+        }
+        return date;
     }
 
     private String savedDetails(final Entry entry) {

@@ -519,6 +519,7 @@ public final class ColonyJobPage extends AbstractScreen {
         final ColonyScreen screen = ColonyScreen.of(getContext(), colonyName);
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
+        screen.showSurroundingArea();
         revealGameContent(building,
                 getNodeFinder().lookup("#colony-field-map").query());
         getRobot().drag(slotPoint(buildingId, slot), MouseButton.PRIMARY)

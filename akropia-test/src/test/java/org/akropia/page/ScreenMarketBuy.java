@@ -109,6 +109,22 @@ public class ScreenMarketBuy extends AbstractScreenMarket {
         assertEquals(tax, getLabeledById("marketTax").getText());
         assertEquals(total, getLabeledById("marketTotal").getText());
         assertEquals(goldLeft, getLabeledById("marketRemaining").getText());
+        final javafx.stage.Stage dialog = (javafx.stage.Stage) getLabeledById(
+                "marketTotal").getScene().getWindow();
+        assertEquals(javafx.stage.Modality.WINDOW_MODAL, dialog.getModality());
+        assertEquals(getContext().getPrimaryStage(), dialog.getOwner());
+        double right = -1;
+        for (final String id : List.of("marketUnitPrice", "marketGross",
+                "marketTax", "marketTotal", "marketRemaining")) {
+            final Labeled value = getLabeledById(id);
+            final double x = value.localToScene(value.getBoundsInLocal())
+                    .getMaxX();
+            if (right >= 0) {
+                assertEquals(right, x, 0.5,
+                        "All quote amounts share a right edge");
+            }
+            right = x;
+        }
     }
 
     /**

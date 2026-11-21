@@ -20,7 +20,7 @@
     <entry key="cancel">Close / cancel selection</entry>
     <entry key="changed">The colony has changed. Select a project again to review its current requirements.</entry>
     <entry key="added">Added to the queue.</entry>
-    <entry key="emptyHelp">Nothing is being built in this colony. Click Construction, then choose a project in the panel below. Construction needs at least one worker in the Lumber Mill and enough lumber.</entry>
+    <entry key="emptyHelp">Choose a project below. Work needs a carpenter and lumber.</entry>
     <entry key="empty">No construction selected.</entry>
     <entry key="hammers">Hammers: %s / %s (+%s/turn)</entry>
     <entry key="tools">Tools: %s / %s</entry>
