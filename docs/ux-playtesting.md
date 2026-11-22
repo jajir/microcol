@@ -15,7 +15,7 @@ v adresáři [`players`](../akropia-ux-test/players/strategist.md).
 | `--player` | Výchozí herní okno | Zaměření |
 | --- | --- | --- |
 | `strategist` | 45 minut | Zkušený hráč strategií, nováček v Akropii. Free game, skutečný cíl hry, co největší smysluplný pokrok. |
-| `ux-reviewer` | 45 minut | Několik tahů a průzkum dostupných obrazovek, konzistence ovládání, vysvětlení, čitelnost a zpětná vazba. |
+| `ux-reviewer` | 45 minut | Cesty hráče, hledání informací, nejistota při hraní a samostatná vizuální kontrola UI; bez cílového počtu tahů. |
 | `beginner` | 40 minut | Běžné počítačové dovednosti bez předpokládané znalosti žánru. Objevování cíle a prvních smysluplných akcí. |
 
 Začátečník je omezený přístup AI, nikoli model zbavený znalostí nebo náhrada lidského
@@ -39,6 +39,31 @@ navazování rozehraných kampaní tato verze nezavádí.
    lze použít se všemi třemi profily bez nového sestavování kvůli výběru hráče.
 5. Image nese protokol nástroje `2`. Starý image s pevnou kontrolou 40 tahů
    nový runner odmítne; je nutné jej jednou znovu sestavit a ověřit.
+
+## UX/UI reviewer — 22. listopadu 2026
+
+Profil `ux-reviewer` má nadále výchozí okno 45 minut, bez cílového počtu tahů.
+Hraní slouží k dosažení konkrétních situací. Před hledáním zaznamená hráčův cíl,
+potřebnou informaci a očekávané místo; poté skutečné kroky, návraty, přečtenou
+nápovědu a to, co umožnilo pokračovat nebo zůstalo nejasné. Nenalezená informace
+znamená „nenašel jsem ji na těchto místech“, nikoli důkaz, že ve hře neexistuje.
+
+Každá dosažená podstatně odlišná obrazovka dostane samostatnou vizuální kontrolu:
+hierarchie a oddělení sekcí, zarovnání, mezery, čitelnost, zalamování, barvy,
+konzistence ovládání a viditelnost odezvy. Srovnání obrazovek odkazuje na oba
+snímky. Vizuální očekávání hráč odvozuje z viditelné hry, nikoli z nepřístupných
+projektových dokumentů. Pokrytí rozlišuje ovládání, vizuální kontrolu a pouhou
+návštěvu; záznam fungujícího tlačítka sám neprokazuje kontrolu designu.
+
+Report má čtyři skupiny: **překážky při hraní**, **hledání informací**,
+**vizuální problémy UI** a **povedené interakce**. Každý nález zachovává ID,
+obrazovku, cíl, očekávání, postup hledání, výsledek, dopad a screenshoty.
+Doporučení je označeno zvlášť od pozorování; opakovaný problém má jedno ID
+s odkazy mezi skupinami. Není předepsaný minimální počet nálezů.
+
+Změna upravuje pouze text profilu a zachovává společný protokol poznámek,
+časové rezervy, ukládání i profily `strategist` a `beginner`. Listopadové piloty
+níže ověřovaly předchozí zadání; nedokládají kvalitu výstupu této úpravy.
 
 ## Spuštění
 
