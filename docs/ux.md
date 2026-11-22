@@ -3,7 +3,9 @@
 1. Schválený rozsah VD-01, VD-03–10 a VD-14–16 zachovává papírové plochy,
    písmo a černou propisku. VD-02 a VD-11–13 nejsou součástí změny.
 2. Buňky skladu mají společné rozměry: ikona, prostor pro název a řádek
-   zásoby se změnou za tah. Celé buňky se při nedostatku šířky zalomí.
+   zásoby se změnou za tah. Od 22. listopadu 2026 mají buňky šířku 68 logických
+   pixelů, takže se všech 19 položek vejde do jednoho řádku při dostupné šířce
+   1 364 pixelů. Celé buňky se při nedostatku šířky zalomí.
    Sdílené pochodně a sovy nadále zobrazují jen produkci; nulové změny
    a herní pravidla se nemění. Přetažení obchodovatelného zboží zůstává dostupné.
 3. Při otevření kolonie jsou Okolí, Construction a School skryté.
