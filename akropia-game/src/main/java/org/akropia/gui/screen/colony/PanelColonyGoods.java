@@ -43,7 +43,20 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final javafx.scene.layout.FlowPane mainPanel = new javafx.scene.layout.FlowPane();
+    private final javafx.scene.layout.FlowPane mainPanel = new javafx.scene.layout.FlowPane() {
+        @Override
+        protected void layoutChildren() {
+            final double goodsWidth = getManagedChildren().stream()
+                    .mapToDouble(child -> snapSizeX(
+                            Math.max(child.minWidth(-1), child.prefWidth(-1))))
+                    .sum();
+            final double availableWidth = getWidth() - snappedLeftInset()
+                    - snappedRightInset();
+            setHgap(Math.max(4, Math.floor((availableWidth - goodsWidth)
+                    / Math.max(1, getManagedChildren().size() - 1))));
+            super.layoutChildren();
+        }
+    };
 
     private final ChooseGoodsDialog chooseGoods;
 

@@ -4,7 +4,8 @@
    písmo a černou propisku. VD-02 a VD-11–13 nejsou součástí změny.
 2. Buňky skladu obsahují ikonu, celý název a hned pod ním řádek zásoby
    se změnou za tah. Od 22. listopadu 2026 se jejich šířka řídí obsahem
-   s minimem 45 logických pixelů a mezerou 4 pixely mezi položkami.
+   s minimem 45 logických pixelů. Volná šířka panelu se rovnoměrně rozdělí
+   do mezer mezi položkami; při zúžení mezery klesnou na minimum 4 pixely.
    Název nemá rezervovaný prázdný druhý řádek. Celé buňky se při nedostatku
    šířky zalomí; krátké názvy nezabírají stejnou šířku jako dlouhé.
    Sdílené pochodně a sovy nadále zobrazují jen produkci; nulové změny
