@@ -27,8 +27,8 @@
 .colony-harbor .harbor-cargo { -fx-spacing: 3; }
 .colony-stock { -fx-padding: 6 0 0 0; -fx-border-width: 0; }
 .panel-colony-goods-column { -fx-min-width: 720; }
-.panel-colony-goods { -fx-pref-tile-width: 68; -fx-alignment: top-center; }
-.warehouseGoods { -fx-min-width: 68; -fx-pref-width: 68; -fx-max-width: 68; -fx-alignment: top-center; }
+.panel-colony-goods { -fx-alignment: top-center; }
+.warehouseGoods { -fx-min-width: 45; -fx-alignment: top-center; }
 .warehouseGoods .amount { -fx-text-fill: #25231f; }
 .warehouseGoods .diff { -fx-text-fill: #25231f; }
 .warehouseGoods .diffPositive { -fx-text-fill: #316b2f; }

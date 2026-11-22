@@ -88,16 +88,9 @@ public final class PanelColonyGood implements JavaFxComponent {
         mainPanel.getStyleClass().add("warehouseGoods");
         mainPanel.getChildren().add(paneImage);
         name.getStyleClass().add("goods-name");
-        name.setWrapText(true);
         name.setAlignment(Pos.TOP_CENTER);
-        name.setMinHeight(44);
-        name.setPrefHeight(44);
-        name.setMaxHeight(44);
         name.setMaxWidth(Double.MAX_VALUE);
         hlabels.setMinHeight(22);
-        mainPanel.setMinSize(96, 110);
-        mainPanel.setPrefSize(96, 110);
-        mainPanel.setMaxSize(96, 110);
         mainPanel.getChildren().addAll(name, hlabels);
         mainPanel.setAlignment(Pos.TOP_CENTER);
         paneImage.setMinSize(image.getWidth(), image.getHeight());

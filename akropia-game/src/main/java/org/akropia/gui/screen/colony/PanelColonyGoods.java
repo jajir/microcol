@@ -43,7 +43,7 @@ public final class PanelColonyGoods implements JavaFxComponent {
 
     private final List<PanelColonyGood> panelColonyGoods;
 
-    private final javafx.scene.layout.TilePane mainPanel = new javafx.scene.layout.TilePane();
+    private final javafx.scene.layout.FlowPane mainPanel = new javafx.scene.layout.FlowPane();
 
     private final ChooseGoodsDialog chooseGoods;
 
@@ -66,8 +66,6 @@ public final class PanelColonyGoods implements JavaFxComponent {
         this.chooseGoods = Preconditions.checkNotNull(chooseGoods);
         this.transferWarning = Preconditions.checkNotNull(transferWarning);
         this.i18n = Preconditions.checkNotNull(i18n);
-        mainPanel.setPrefTileWidth(96);
-        mainPanel.setPrefTileHeight(110);
         mainPanel.setHgap(4);
         mainPanel.setVgap(6);
         panelColonyGoods = GoodsType.GOOD_TYPES.stream().map(goodsType -> {
