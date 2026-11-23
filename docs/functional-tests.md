@@ -302,6 +302,59 @@
     retained in `target/manual-port-disembarkation/`. Remote CI, Pages and
     game distribution publication were not inspected or claimed verified.
 
+<a id="terrain-detail-correction-2026-11-23"></a>
+## Terrain detail correction — 2026-11-23
+
+1. UC-006, UC-007/008/009 and UC-012 retain their existing rules. The terrain
+   heading is the only terrain name; the expanded detail uses “Move cost”
+   and “Base turn yield” (with Czech translations), without the extra yield
+   explanation. A fixed 14px graphic area contains the existing black 2px
+   vector arrow when selection updates the expanded heading.
+2. TC91/01 and TC91/04 check the English/Czech text, absence of the duplicate
+   name and extra yield paragraph, and rendered pixels on both arrow arms
+   after changing tiles. Existing product, keyboard, concealment, scrolling
+   and unchanged-game assertions remain. TC26/11 expects the renamed cost;
+   TC90/01 and TC196 cover contextual movement and the panel neighborhood.
+3. Model acceptance: completion `20261123T085823Z-7a30680d2d26`, source based
+   on `ac147dde`, reports `target/verification/run-osv8kiso`: **4,929 tests,
+   0 failures, 0 errors, 0 skips**, 152.193 supervised seconds. Changed game
+   sources match the tested snapshot.
+4. First targeted run `20261123T090120Z-5a45b703f293`, reports
+   `target/docker-ui/run-bIayfH`: **16 tests, 0 failures, 1 error, 0 skips**,
+   234.361 supervised seconds. TC91/01's new assertion incorrectly expected
+   the base “Move cost” while inspecting a neighboring tile with a selected
+   unit. The existing contextual movement behavior is retained; the failed
+   run remains failed. Final local acceptance is recorded below; this
+   is not a full-regression or publication result.
+5. Second targeted run `20261123T090559Z-6a5e5a6a3fc8`, reports
+   `target/docker-ui/run-6j2wlt`: **16 tests, 0 failures, 1 error, 0 skips**,
+   231.124 supervised seconds. The diagnostic assertion showed “Step
+   unavailable”: the scenario initially selects a ship beside land. TC91/01
+   now explicitly selects its land worker before checking a step price,
+   instead of assuming the initially selected unit. Game code is unchanged;
+   the model result remains applicable. Both failed attempts are preserved.
+6. Final targeted run `20261123T091041Z-4451ff0f8879`, reports
+   `target/docker-ui/run-2gDqlO`: **16 tests, 0 failures, 0 errors, 0 skips**,
+   236.241 supervised seconds. Selection: all TC91 (4), all TC196 (7),
+   TC26/11, TC90/01 and `PageVerificationContractTest` (3). The final pixel
+   check covers both upper arrow tips after selection changes. Reviewed
+   English expanded/collapsed and Czech normal/low-window screenshots;
+   no duplicate terrain name or extra yield explanation remains. Base cost
+   is checked on the colony tile; a selected land worker retains “Step cost”
+   on neighboring land.
+7. Fixed smoke/support selection passed: completion
+   `20261123T091458Z-4d883d340d9f`, reports
+   `target/verification/run-pi84ft03`: **23 tests, 0 failures, 0 errors,
+   0 skips**, 289.214 supervised seconds (within the 420-second limit).
+   All changed executable files match the smoke source snapshot. The
+   shared Java formatter was applied to the five changed Java files.
+8. Documentation acceptance: 14 consistency tests passed, naming audit
+   reported zero unexplained occurrences, and strict MkDocs passed. Logs:
+   `target/tile-detail-fix/`. Local screenshot review and test acceptance
+   do not establish full-regression success or a published distribution;
+   remote CI and publication were not inspected.
+
+
 <a id="terrain-disclosure-2026-11-21"></a>
 
 ## Terrain disclosure — 2026-11-21

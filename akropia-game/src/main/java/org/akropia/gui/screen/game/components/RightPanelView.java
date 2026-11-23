@@ -40,6 +40,7 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 
 /**
  * Draw right panel containing info about selected tile and selected unit.
@@ -55,7 +56,9 @@ public final class RightPanelView implements JavaFxComponent {
     private final Label tileName;
     private final Label tileFacts = new Label();
     private final javafx.scene.shape.SVGPath terrainArrow = new javafx.scene.shape.SVGPath();
-    private final Button terrainToggle = ActionButtons.disclosure(terrainArrow);
+    private final StackPane terrainArrowSpace = new StackPane(terrainArrow);
+    private final Button terrainToggle = ActionButtons
+            .disclosure(terrainArrowSpace);
     private final VBox terrainDetails = new VBox(6);
     private final VBox terrainYields = new VBox();
     private final ImageProvider imageProvider;
@@ -101,6 +104,11 @@ public final class RightPanelView implements JavaFxComponent {
         terrainToggle.setMaxWidth(Double.MAX_VALUE);
         terrainToggle.setMinWidth(0);
         terrainToggle.setWrapText(true);
+        // Keep the graphic bounds stable when the arrow changes direction.
+        terrainArrowSpace.setMinSize(14, 14);
+        terrainArrowSpace.setPrefSize(14, 14);
+        terrainArrowSpace.setMaxSize(14, 14);
+        terrainArrow.setId("terrainArrow");
         terrainArrow.setFill(null);
         terrainArrow.setStroke(javafx.scene.paint.Color.BLACK);
         terrainArrow.setStrokeWidth(2);
@@ -272,8 +280,7 @@ public final class RightPanelView implements JavaFxComponent {
                 .getTerrainName(terrain.getTerrainType());
         terrainToggle.setText(name);
         terrainToggle.setDisable(false);
-        String description = name + "\n"
-                + movementDescription(location, terrain);
+        String description = movementDescription(location, terrain);
         if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
             final String bonuses = terrain.getResourceOverlay().getOutputs()
                     .stream()
@@ -289,10 +296,7 @@ public final class RightPanelView implements JavaFxComponent {
         tileName.setText(description);
         terrainYields.getChildren().clear();
         final Label title = new Label(i18n.get(Loc.terrainPotentialYields));
-        final Label context = new Label(i18n.get(Loc.terrainYieldContext));
-        context.setWrapText(true);
-        context.setMinHeight(Region.USE_PREF_SIZE);
-        terrainYields.getChildren().addAll(title, context);
+        terrainYields.getChildren().add(title);
         for (final TerrainProduction production : terrain.getProduction()) {
             final ImageView icon = new ImageView(
                     imageProvider.getGoodsTypeImage(production.getGoodsType()));

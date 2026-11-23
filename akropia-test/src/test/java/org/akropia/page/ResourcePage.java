@@ -85,10 +85,58 @@ public final class ResourcePage extends AbstractScreen {
                 getNodeFinder().lookup("#terrainDetails").query().isVisible());
         assertEquals(expected,
                 getNodeFinder().lookup("#terrainDetails").query().isManaged());
-        final javafx.scene.shape.SVGPath arrow = (javafx.scene.shape.SVGPath) getLabeledById(
-                "terrainToggle").getGraphic();
+        final javafx.scene.shape.SVGPath arrow = getNodeFinder()
+                .lookup("#terrainArrow")
+                .queryAs(javafx.scene.shape.SVGPath.class);
         assertEquals(expected ? "M1 1 L5 5 L9 1" : "M1 1 L5 5 L1 9",
                 arrow.getContent());
+    }
+
+    public void verifyTerrainPresentation(final String yieldTitle,
+            final String moveCost) {
+        getRobot().interact(() -> {
+            final javafx.scene.control.Labeled toggle = getLabeledById(
+                    "terrainToggle");
+            assertFalse(
+                    getLabeledById(TILE_NAME_ID).getText()
+                            .contains(toggle.getText()),
+                    "Terrain name appears only in the heading");
+            assertTrue(
+                    getLabeledById(TILE_NAME_ID).getText().contains(moveCost),
+                    getLabeledById(TILE_NAME_ID).getText());
+            final javafx.scene.layout.VBox yields = getNodeFinder()
+                    .lookup("#terrainYields")
+                    .queryAs(javafx.scene.layout.VBox.class);
+            assertEquals(yieldTitle,
+                    ((javafx.scene.control.Label) yields.getChildren().get(0))
+                            .getText());
+            assertEquals(yields.lookupAll(".terrain-yield-row").size() + 1,
+                    yields.getChildren().size(),
+                    "Yield heading has no extra explanation");
+            final javafx.scene.Node arrow = getNodeFinder()
+                    .lookup("#terrainArrow").query();
+            final javafx.geometry.Bounds bounds = arrow
+                    .localToScene(arrow.getBoundsInLocal());
+            final Image scene = arrow.getScene().snapshot(null);
+            int left = 0;
+            int right = 0;
+            for (int y = (int) Math.floor(bounds.getMinY()); y < Math
+                    .floor(bounds.getCenterY()); y++) {
+                for (int x = (int) Math.floor(bounds.getMinX()); x < Math
+                        .ceil(bounds.getMaxX()); x++) {
+                    if (scene.getPixelReader().getColor(x, y)
+                            .getBrightness() < .3) {
+                        if (x < bounds.getCenterX()) {
+                            left++;
+                        } else {
+                            right++;
+                        }
+                    }
+                }
+            }
+            assertTrue(left >= 2 && right >= 2,
+                    "Both arrow tips must be painted: " + left + "/" + right);
+        });
     }
 
     public void verifyTerrainYield(final GoodsType goods, final String name,

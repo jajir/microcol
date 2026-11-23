@@ -312,7 +312,7 @@
   <entry key="workUnavailable">Práce už není dostupná. Obnovte výběr.</entry>
   <entry key="workingFor">Pracuje pro %s</entry>
   <entry key="fishermanOf">Rybář kolonie %s. Práci spravujete v kolonii.</entry>
-    <entry key="baseTerrainCost">Základní cena terénu: %s</entry>
+    <entry key="baseTerrainCost">Cena pohybu: %s</entry>
     <entry key="stepCost">Cena kroku: %s</entry>
     <entry key="stepUnavailable">Krok není dostupný</entry>
     <entry key="stepAlongRoad">Po navazující cestě</entry>
@@ -331,8 +331,7 @@
     <entry key="nativeLandUnavailable">Tuto půdu nemůžeš využít: patří jinému hráči nebo nepřátelskému domorodému národu.</entry>
     <entry key="terrainExpand">Rozbalit detail terénu</entry>
     <entry key="terrainCollapse">Sbalit detail terénu</entry>
-    <entry key="terrainPotentialYields">Možné výnosy / tah</entry>
-    <entry key="terrainYieldContext">Před úpravami pracovníka a kolonie.</entry>
+    <entry key="terrainPotentialYields">Základní výnos za tah</entry>
     <entry key="terrainResourceBonus">%s: %s</entry>
     <entry key="terrainBonusAmount">+%s %s</entry>
     <entry key="terrainNoYield">Tento terén nic neprodukuje.</entry>

@@ -82,10 +82,13 @@
    kliknutí nebo klávesa Space rozbalí či sbalí detail. Šipka míří doprava
    při zavření a dolů při otevření. Výchozí stav je zavřený, volba otevření
    se zachovává při změně vybraného políčka.
-2. Detail obsahuje název terénu, dosavadní cenu pohybu (včetně kontextové
-   ceny konkrétního kroku) a případný zvláštní zdroj s číselným příspěvkem.
+2. Název terénu je pouze v záhlaví vedle šipky. Detail obsahuje cenu pohybu
+   (včetně kontextové ceny konkrétního kroku) a případný zvláštní zdroj
+   s číselným příspěvkem. Základní cena má popisek „Move cost“ / „Cena pohybu“.
    Následují nenulové výnosy: herní ikona, název produktu a konečné číslo
-   zarovnané vpravo. Bez výnosu je uvedeno výslovné vysvětlení.
+   zarovnané vpravo. Jediný nadpis výnosů je „Base turn yield“ /
+   „Základní výnos za tah“, bez další vysvětlující věty (úprava 23. listopadu
+   2026). Bez výnosu je uvedeno výslovné vysvětlení.
 3. Jde o možné výnosy terénu za tah, nikoli současný přírůstek skladu.
    Čísla zahrnují aktuální les, orbu, cestu, říční pravidla, zdroj a omezení
    zbývající zásobou ložiska. Nezahrnují profesi ani úpravy kolonie;

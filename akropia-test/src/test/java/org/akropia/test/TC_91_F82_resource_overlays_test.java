@@ -63,6 +63,8 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
                 ResourceOverlay.PRIME_OLIVES);
 
         // Inspecting the square names the resource in the right panel.
+        // Select a land worker so the neighboring land has a step price.
+        gamePage.selectMapUnit(WORKER_ID);
         gamePage.selectTile(ResourceFixture.OLIVES_LOCATION);
         resource.verifyTerrainExpanded(false);
         resource.openTerrainDetails();
@@ -72,6 +74,14 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         resource.verifyTerrainYield(GoodsType.OLIVES, "Olives", 3);
         resource.verifyTerrainYield(GoodsType.GRAIN, "Grain", 4);
         resource.verifyTerrainYield(GoodsType.GRAPES, "Grapes", 3);
+        resource.verifyTerrainPresentation("Base turn yield", "Step cost:");
+        // Keep the expanded arrow and heading intact while inspecting another
+        // tile.
+        gamePage.selectTile(COLONY_LOCATION);
+        resource.verifyTerrainExpanded(true);
+        resource.verifyTerrainPresentation("Base turn yield", "Move cost:");
+        gamePage.selectTile(ResourceFixture.OLIVES_LOCATION);
+        resource.verifyTerrainPresentation("Base turn yield", "Step cost:");
         gamePage.captureDialog("rightPanel", "terrain-disclosure-expanded.png");
         resource.toggleTerrainDetails();
         resource.verifyTerrainExpanded(false);
@@ -225,6 +235,8 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         resource.verifyTerrainExpanded(true);
         resource.verifyInspectionOmits("+2");
         resource.verifyInspectionOmits("pastvina");
+        resource.verifyTerrainPresentation("Základní výnos za tah",
+                "Cena pohybu:");
 
         // A low window keeps the final product accessible by scrolling.
         game.selectTile(ResourceFixture.OLIVES_LOCATION);

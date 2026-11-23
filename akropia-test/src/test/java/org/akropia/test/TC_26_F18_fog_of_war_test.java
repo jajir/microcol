@@ -414,12 +414,12 @@ public class TC_26_F18_fog_of_war_test extends AbstractAkropiaTest {
         fog.inspect(marked);
         fog.verifyUnknownMark(marked, false);
         fog.verifyRevealedPixels(marked);
-        fog.verifyRightPanelContains("Base terrain cost:");
+        fog.verifyRightPanelContains("Move cost:");
         fog.move(south, START, 3);
         fog.inspect(marked);
         fog.verifyCurrentSight(marked, false);
         fog.verifyRevealedPixels(marked);
-        fog.verifyRightPanelContains("Base terrain cost:");
+        fog.verifyRightPanelContains("Move cost:");
         fog.verifyUnitLocation(3, START);
     }
 }

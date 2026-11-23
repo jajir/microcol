@@ -30,7 +30,7 @@ public enum Loc implements MessageKeyResource {
     turnReport_title, turnReport_caption, turnReport_noEvents, no_2_7p, no_3_7p,
     no_4_7p, no_5_7p, and, withColony, colonyLastSeen, adjustAmountOfGoods,
     moveCost, baseTerrainCost, stepCost, stepUnavailable, stepAlongRoad,
-    terrainExpand, terrainCollapse, terrainPotentialYields, terrainYieldContext,
+    terrainExpand, terrainCollapse, terrainPotentialYields,
     terrainResourceBonus, terrainBonusAmount, terrainNoYield, stepAlongRiver,
     stepInsufficientMovement, difficulty, lostCityRumorStatus,
     nativeSettlementStatus, nativeCapitalStatus, nativeBraveHome,

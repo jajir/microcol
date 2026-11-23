@@ -312,7 +312,7 @@
   <entry key="workUnavailable">Work is no longer available. Refresh the selection.</entry>
   <entry key="workingFor">Works for %s</entry>
   <entry key="fishermanOf">Fisherman of %s. Manage work in the colony.</entry>
-    <entry key="baseTerrainCost">Base terrain cost: %s</entry>
+    <entry key="baseTerrainCost">Move cost: %s</entry>
     <entry key="stepCost">Step cost: %s</entry>
     <entry key="stepUnavailable">Step unavailable</entry>
     <entry key="stepAlongRoad">Along a connected road</entry>
@@ -331,8 +331,7 @@
     <entry key="nativeLandUnavailable">You cannot use this land: it belongs to another player or to a hostile native nation.</entry>
     <entry key="terrainExpand">Expand terrain details</entry>
     <entry key="terrainCollapse">Collapse terrain details</entry>
-    <entry key="terrainPotentialYields">Potential yields / turn</entry>
-    <entry key="terrainYieldContext">Before worker and colony modifiers.</entry>
+    <entry key="terrainPotentialYields">Base turn yield</entry>
     <entry key="terrainResourceBonus">%s: %s</entry>
     <entry key="terrainBonusAmount">+%s %s</entry>
     <entry key="terrainNoYield">No production on this terrain.</entry>
