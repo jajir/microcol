@@ -276,7 +276,9 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.waitUntilUnitIsAt(3, GoToFixture.COLONY);
         goTo.verifyNoDestination(3);
         ScreenTurnReport report = game.openTurnReport();
-        report.verifyEventMessageCount("arrived at port New Amsterdam", 1);
+        report.verifyEventMessageCount(
+                "arrived at port New Amsterdam. Arrival does not disembark passengers automatically.",
+                1);
         report.close();
 
         // Loading the completed voyage neither moves the ship nor repeats the
@@ -286,7 +288,9 @@ public class TC_103_F94_persistent_go_to_test extends AbstractAkropiaTest {
         goTo.verifyLocation(3, GoToFixture.COLONY);
         goTo.verifyNoDestination(3);
         report = game.openTurnReport();
-        report.verifyEventMessageCount("arrived at port New Amsterdam", 1);
+        report.verifyEventMessageCount(
+                "arrived at port New Amsterdam. Arrival does not disembark passengers automatically.",
+                1);
         report.close();
     }
 

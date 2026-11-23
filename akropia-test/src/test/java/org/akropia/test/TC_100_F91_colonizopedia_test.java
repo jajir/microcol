@@ -51,7 +51,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String SCORING_HALL_OF_FAME = "Hall of Fame";
     private static final String SCORING_FORMULA = "Wealth plus Military plus Gold";
     private static final String SCORING_END = "are also not complete yet";
-    private static final String CARGO_ASHORE = "step ashore";
+    private static final String CARGO_ABOARD = "passengers remain aboard";
     private static final String CARGO_LIMIT = "at most 100 units";
     private static final String NO_RESULTS = "No topic matches this search. Clear the search to see all topics.";
 
@@ -60,7 +60,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
     private static final String DIPLOMACY_CZ = "Diplomacie";
     private static final String PRODUCTION_CZ = "Výroba a stavba";
     private static final String MOVEMENT_PART_CZ = "pohybové body";
-    private static final String CARGO_ASHORE_CZ = "na břeh";
+    private static final String CARGO_ABOARD_CZ = "zůstávají cestující na palubě";
     private static final String SCORING_NOT_AVAILABLE_CZ = "Zatím není dostupné";
     private static final String IDENTITIES_CZ = "Městské státy a místní národy";
     private static final String[] TOPICS_CZ = { IDENTITIES_CZ, MOVEMENT_CZ,
@@ -175,7 +175,10 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         // Another body-only word finds the cargo topic and its passenger text.
         help.typeSearch("ashore");
         help.verifyTopicTitles(CARGO);
-        help.verifyBodyContains(CARGO_ASHORE);
+        help.verifyBodyContains(CARGO_ABOARD);
+        help.verifyBodyContains("drag that passenger from its hold");
+        help.verifyBodyContains(
+                "Unloading goods into the warehouse does not disembark passengers.");
         help.verifyBodyContains(CARGO_LIMIT);
 
         // The title matches regardless of letter case.
@@ -276,7 +279,9 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifyTopicTitles(DIPLOMACY_CZ, "Poznání a historické předlohy");
         help.typeSearch("breh");
         help.verifyTopicTitles(CARGO_CZ);
-        help.verifyBodyContains(CARGO_ASHORE_CZ);
+        help.verifyBodyContains(CARGO_ABOARD_CZ);
+        help.verifyBodyContains("přetáhněte ho z nákladového prostoru");
+        help.verifyBodyContains("Vyložení zboží do skladu cestující nevylodí.");
         help.typeSearch("vyroba");
         help.verifyTopicTitles(PRODUCTION_CZ);
 

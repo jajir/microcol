@@ -126,8 +126,8 @@ public class ColonyScreen extends AbstractScreen {
     }
 
     /**
-     * The warehouse grid keeps its expected number of equal goods cells, each
-     * with a usable width inside the window.
+     * The warehouse grid keeps its expected number of naturally sized goods
+     * cells, each with a usable width inside the window.
      */
     public void verifyWarehouseGoodsLayout(final int expectedGoodsPanels,
             final double minimumGoodsWidth) {
@@ -137,8 +137,8 @@ public class ColonyScreen extends AbstractScreen {
         for (int index = 0; index < panels.size(); index++) {
             final VBox panel = panels.get(index);
             final Bounds bounds = panel.localToScene(panel.getBoundsInLocal());
-            assertEquals(panels.get(0).getWidth(), panel.getWidth(), 0.5,
-                    "Equal cell widths");
+            assertEquals(Math.max(minimumGoodsWidth, panel.prefWidth(-1)),
+                    panel.getWidth(), 0.5, "Content-sized cell width");
             assertEquals(panels.get(0).getHeight(), panel.getHeight(), 0.5,
                     "Equal cell heights");
             final Node name = panel.lookup(".goods-name");

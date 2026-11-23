@@ -143,6 +143,7 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         outside.getStyleClass().add("colony-unit-scroll");
         final Label outsideTitle = new Label();
         outsideTitle.setId("colony-outside-title");
+        outsideTitle.setWrapText(true);
         final VBox outsideArea = new VBox(6, outsideTitle, outside);
         outsideArea.setId("colony-outside-area");
         VBox.setMargin(outsideArea, new Insets(3, 0, 0, 0));

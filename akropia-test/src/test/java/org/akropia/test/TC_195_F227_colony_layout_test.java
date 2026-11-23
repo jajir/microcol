@@ -368,11 +368,15 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.verifyAvailableContainers(6);
         layout.verifyDepotSpacing();
         layout.hoverDepot();
-        town.verifyThatStatusBarContains("The depot transfers goods and units");
+        town.verifyThatStatusBarContains("Passengers stay aboard on arrival.");
+        town.verifyThatStatusBarContains(
+                "Drag a passenger from the ship to the area below");
         layout.hoverContainer();
         town.verifyThatStatusBarContains("Transport people, goods or animals");
         layout.hoverDepot();
-        town.verifyThatStatusBarContains("The depot transfers goods and units");
+        town.verifyThatStatusBarContains("Passengers stay aboard on arrival.");
+        town.verifyThatStatusBarContains(
+                "Drag a passenger from the ship to the area below");
 
         // Selecting or pressing a differently sized carrier keeps both icons
         // still.

@@ -63,6 +63,16 @@
    [Pravidlo CARGO-007](gap-analysis.md#transport-ships-and-atlantic-travel)
    a [ověření UC-025](functional-tests.md#manual-port-disembarkation-2026-11-21)
    rozlišují dohodnuté chování a testovou evidenci; hráčská studie neproběhla.
+4. Upřesnění nápovědy podle A-UX-006 (23. listopadu 2026): český i anglický
+   článek „Náklad a cestující“, nápověda depa a hlášení příjezdu do vlastní
+   kolonie výslovně rozlišují příjezd lodi od ručního vylodění. Prázdné
+   okolí vysvětluje, že cestující na palubě do tohoto seznamu nepatří,
+   a ukazuje přetažení z nákladového prostoru. Dialog vykládání je označen
+   jako vyložení zboží; nápověda je odlišuje od přesunu cestujícího.
+   Vylodění nepřiděluje práci; ostatní cestující zůstávají na lodi. Delší
+   pokyn se zalamuje.
+   Tato úprava textů sama nedokládá vyřešení potíží s přetahováním
+   hlášených při hráčském testu.
 
 ## Rozbalovací detail terénu — 21. listopadu 2026
 

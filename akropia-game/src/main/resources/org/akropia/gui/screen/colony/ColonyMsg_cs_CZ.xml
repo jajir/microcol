@@ -9,7 +9,7 @@
 	<entry key="colonyName">Kliknutím přejmenujete kolonii.</entry>
 	<entry key="buttonClose">Zavřít detail kolonie a vrátit se zpět na hlavní mapu.</entry>
 
-	<entry key="unloadCaption">Vyložení nákladu</entry>
+	<entry key="unloadCaption">Vyložení zboží</entry>
 	<entry key="unloadLimited">Ve skladu je místo jen pro %s jednotek tohoto zboží. Vyberte množství nebo přesun zrušte. Zbytek zůstane na lodi.</entry>
 	<entry key="unloadFood">Lze přijmout až %s jednotek jídla. Vyberte množství k vyložení nebo přesun zrušte. Růst populace se vyhodnotí při příští aktualizaci kolonie po spotřebě jídla.</entry>
 	<entry key="unloadFull">Sklad je pro toto zboží plný. Nic se nevyložilo. Uvolněte místo a zkuste to znovu.</entry>
@@ -131,8 +131,8 @@
   <entry key="overviewPolitics">Obyvatelstvo %s · Svoboda %s%% · Král %s%%</entry>
   <entry key="emptyCargo">Prázdný náklad</entry>
   <entry key="emptyHarbor">V překladišti není žádná přepravní jednotka.</entry>
-    <entry key="emptyOutside">Mimo kolonii není žádná jednotka.</entry>
-    <entry key="depotHelp">Depo slouží k překládání zboží a jednotek mezi skladem, kolonií, loděmi a povozy.</entry>
+    <entry key="emptyOutside">Na břehu není žádná jednotka. Cestující na palubě se zde nezobrazují. Pro vylodění vyberte loď a přetáhněte sem cestujícího z nákladového prostoru.</entry>
+    <entry key="depotHelp">Cestující při příjezdu zůstávají na palubě. Pro vylodění je přetáhněte z lodi do prostoru pod ní.</entry>
     <entry key="containerHelp">V přepravním kontejneru můžete převážet lidi, zboží nebo zvířata. Náklad do něj přetáhněte.</entry>
   <entry key="emptySchool">Žádná probíhající výuka. Kliknutím vyberte učitele a žáka.</entry>
   <entry key="buildingSection">Výstavba</entry>

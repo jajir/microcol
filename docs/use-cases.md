@@ -1,3 +1,11 @@
+## UC-025/114: nápověda k ručnímu vylodění — 23. listopadu 2026
+1. A-UX-006: česká i anglická nápověda a popisky rozlišují příjezd lodi,
+   ruční přesun cestujícího na břeh a vyložení zboží. Postup vlastní
+   [UX pravidla](ux.md#cestujici-pri-prijezdu-do-pristavu-21-listopadu-2026).
+2. TC100/02, /05, TC103/06, TC195/07–08 a stávající TC29/TC38 pokrývají
+   texty a související hráčskou cestu. Stav přejímky zaznamenává
+   [testová evidence](functional-tests.md#manual-disembarkation-help-2026-11-23).
+
 ## UC-043/044/045: okamžitá obnova po dostavění — 23. listopadu 2026
 
 1. Nákup dokončení aktualizuje kartu budovy, související produkci, zásoby,

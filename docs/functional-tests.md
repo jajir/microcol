@@ -1,3 +1,68 @@
+<a id="manual-disembarkation-help-2026-11-23"></a>
+## Manual disembarkation help (A-UX-006) — 2026-11-23
+1. Scope: UC-025 and UC-114. English and Czech help, depot guidance, the
+   empty outside-units area and colony-arrival reports explain that passengers
+   remain aboard until individually dragged ashore. The warehouse warning is
+   titled “Unload goods”; help does not refer to the retired unload button.
+   The empty-area instruction wraps. Gameplay transfer rules are unchanged.
+2. TC100/02 and /05 check the manual-transfer explanation and goods distinction
+   in both languages. TC103/06 checks the arrival guidance before and after
+   Continue. TC195/07 checks depot guidance and the empty-area text; /08 retains
+   the actual empty-area drop journey. TC29 and TC38 cover passenger transfer,
+   retained passengers, cancellation, movement limits and Continue. TC19/01
+   covers the goods-transfer dialog neighborhood.
+3. Model/JUnit before the UI follow-up: **4,929 checks in 391 complete reports,
+   zero failures/errors/skips**, 157.969 s; the separate lock wait was 39.916 s.
+   Completion `20261123T081710Z-0dda787522f7`, PID 33891, timeout 600 s;
+   reports: `target/verification/run-dnjgnmho/`. All changed executable files
+   match the source snapshot based on `8f7db3b3`. The earlier model run
+   `20261123T081517Z-58fd757b2898` also passed 4,929 checks (152.506 s), but
+   preceded the wording correction and is not final-source acceptance.
+4. Targeted Docker/Xvfb dispatch `20261123T082046Z-a7d1a4d30675`, PID 34944,
+   timeout 1,800 s: TC19/01, all TC29 and TC38, TC100/02 and /05, TC103/06,
+   all TC195 and `PageVerificationContractTest`. Completed in 385.755 s:
+   **29 checks, two failures, one error, zero skips**; reports:
+   `target/docker-ui/run-DAoxRl/`. TC195/01 and /02 expected equal goods-cell
+   widths despite the content-sized layout agreed on 2026-11-22. TC195/07
+   observed a 7 px icon shift after pointer movement; the long depot help
+   expands the wrapping status bar. The depot hint was shortened to the
+   passenger instruction. The shared goods check now verifies each cell's
+   content-based preferred width with the existing 45 px minimum, preserving
+   checks for text, overlap, bounds, alignment and game results.
+5. Baseline diagnosis dispatch `20261123T082902Z-5e01f683e6d1`, PID 36513,
+   timeout 600 s, uses a separate archive of `8f7db3b3` under
+   `target/a-ux-006/baseline/` to run unchanged TC195/01 and /02. Both failed
+   with the same 47 px versus 45 px equal-width assertion, with no errors or
+   skips, in 73.483 s. Reports:
+   `target/a-ux-006/baseline/target/docker-ui/run-NHQQkD/`. This confirms the
+   obsolete equal-width checks predate the help change. Historical failed
+   evidence remains failed. Final-source model retry
+   `20261123T083026Z-0ef6abb0f3ec`,
+   PID 36754, timeout 600 s, passed **4,929 checks in 391 complete reports,
+   zero failures/errors/skips**, in 151.030 s, without lock waiting. Reports:
+   `target/verification/run-eev8nbiq/`; all changed executable files match
+   the final source snapshot and saved hashes in `target/a-ux-006/source.json`.
+6. Final UI retry `20261123T083319Z-b19c1051dbdd`, PID 37477, timeout 1,800 s,
+   repeated the full previous selection plus TC106/03 and TC109/01–02, the
+   other callers of the shared goods-layout verification. **All 32 checks in
+   nine complete reports passed, zero failures/errors/skips**, in 471.003 s.
+   Reports: `target/docker-ui/run-sg3LrX/`. Changed-source hashes still match.
+   Visual review of `warehouse-qa/depot-outside-drop-highlight.png` confirms
+   the outside-area instruction is fully visible and wraps inside its drop
+   target. The geometry checks pass with the shorter depot hint.
+7. Smoke `20261123T084130Z-793562fd9853`, PID 38234, passed **23 checks in
+   13 complete reports, zero failures/errors/skips**, in 295.555 s within
+   the 420 s acceptance budget (outer timeout 480 s). Reports:
+   `target/verification/run-qki7sllj/`. All changed executable files match
+   the smoke source snapshot, the accepted model snapshot and saved hashes.
+8. The shared Eclipse formatter was applied to every changed Java file.
+   Final source review, 14 documentation consistency tests, the name audit,
+   strict MkDocs and scoped diff checks passed. This is local acceptance;
+   no full regression, remote CI, Pages or game-distribution publication
+   was checked. The original A-UX-006 player difficulty is not claimed to
+   have been reproduced or resolved by changing these texts; the existing
+   manual-transfer journeys passed.
+
 <a id="project-completion-events-2026-11-23"></a>
 ## Project completion events — 2026-11-23
 

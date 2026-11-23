@@ -444,7 +444,8 @@ public final class ColonyLayoutPage extends AbstractScreen {
                     getLabeledById("europe-cargo-title").getText());
             assertTrue(getNodeFinder().lookup("#colony-depot-empty").queryAll()
                     .isEmpty());
-            assertEquals("No units outside colony.",
+            assertEquals(
+                    "No units ashore. Passengers aboard are not listed here. To disembark, select a ship and drag a passenger here from its hold.",
                     getLabeledById("colony-outside-title").getText());
             assertTrue(getNodeFinder().lookup("#colony-outside-empty")
                     .queryAll().isEmpty());
