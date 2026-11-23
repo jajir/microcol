@@ -83,8 +83,11 @@
    při zavření a dolů při otevření. Výchozí stav je zavřený, volba otevření
    se zachovává při změně vybraného políčka.
 2. Název terénu je pouze v záhlaví vedle šipky. Detail obsahuje cenu pohybu
-   (včetně kontextové ceny konkrétního kroku) a případný zvláštní zdroj
-   s číselným příspěvkem. Základní cena má popisek „Move cost“ / „Cena pohybu“.
+   (včetně kontextové ceny konkrétního kroku), u pevniny řádek vlastnictví
+   a případný zvláštní zdroj s číselným příspěvkem. Od 23. listopadu 2026
+   je „Unowned land“ nebo konkrétní vlastník součástí rozbaleného detailu
+   mezi cenou pohybu a bonusem, nikoli pod výnosy. Základní cena má popisek
+   „Move cost“ / „Cena pohybu“.
    Následují nenulové výnosy: herní ikona, název produktu a konečné číslo
    zarovnané vpravo. Jediný nadpis výnosů je „Base turn yield“ /
    „Základní výnos za tah“, bez další vysvětlující věty (úprava 23. listopadu

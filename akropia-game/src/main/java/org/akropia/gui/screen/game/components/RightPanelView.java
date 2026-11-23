@@ -198,16 +198,6 @@ public final class RightPanelView implements JavaFxComponent {
                 tilePainter.setTerrain(terrain, location);
                 refreshTerrain(location, terrain);
                 final Player player = gameModelController.getHumanPlayer();
-                if (!terrain.getTerrainType().isSea()) {
-                    sb.append("\n").append(getModel().getLandOwner(location)
-                            .map(owner -> i18n.get(Loc.landOwner,
-                                    owner instanceof org.akropia.model.PlayerNative
-                                            ? ((org.akropia.model.PlayerNative) owner)
-                                                    .getNativeNation()
-                                                    .getDisplayName()
-                                            : owner.getDisplayName()))
-                            .orElseGet(() -> i18n.get(Loc.landUnowned)));
-                }
                 getModel().getNativeSettlementKnownTo(player, location)
                         .ifPresent(settlement -> {
                             sb.append("\n").append(
@@ -281,6 +271,15 @@ public final class RightPanelView implements JavaFxComponent {
         terrainToggle.setText(name);
         terrainToggle.setDisable(false);
         String description = movementDescription(location, terrain);
+        if (!terrain.getTerrainType().isSea()) {
+            description += "\n" + getModel().getLandOwner(location)
+                    .map(owner -> i18n.get(Loc.landOwner,
+                            owner instanceof org.akropia.model.PlayerNative
+                                    ? ((org.akropia.model.PlayerNative) owner)
+                                            .getNativeNation().getDisplayName()
+                                    : owner.getDisplayName()))
+                    .orElseGet(() -> i18n.get(Loc.landUnowned));
+        }
         if (terrain.getResourceOverlay() != ResourceOverlay.NONE) {
             final String bonuses = terrain.getResourceOverlay().getOutputs()
                     .stream()

@@ -71,6 +71,7 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         resource.verifyTerrainExpanded(true);
         resource.verifyInspectedName("Prime olive grove land");
         resource.verifyTerrainDescription("+2 Olives");
+        resource.verifyTerrainOwnershipOrder("Land owner:", "+2 Olives");
         resource.verifyTerrainYield(GoodsType.OLIVES, "Olives", 3);
         resource.verifyTerrainYield(GoodsType.GRAIN, "Grain", 4);
         resource.verifyTerrainYield(GoodsType.GRAPES, "Grapes", 3);
@@ -79,9 +80,14 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         // tile.
         gamePage.selectTile(COLONY_LOCATION);
         resource.verifyTerrainExpanded(true);
+        resource.verifyTerrainOwnershipOrder("Land owner:", "");
         resource.verifyTerrainPresentation("Base turn yield", "Move cost:");
         gamePage.selectTile(ResourceFixture.OLIVES_LOCATION);
         resource.verifyTerrainPresentation("Base turn yield", "Step cost:");
+        // Known unowned land keeps ownership below movement and above yields.
+        gamePage.selectTile(Location.of(20, 12));
+        resource.verifyTerrainOwnershipOrder("Unowned land", "");
+        gamePage.selectTile(ResourceFixture.OLIVES_LOCATION);
         gamePage.captureDialog("rightPanel", "terrain-disclosure-expanded.png");
         resource.toggleTerrainDetails();
         resource.verifyTerrainExpanded(false);

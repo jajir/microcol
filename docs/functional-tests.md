@@ -1,3 +1,49 @@
+<a id="terrain-ownership-order-2026-11-23"></a>
+## Terrain ownership order — 2026-11-23
+
+1. UC-006: the expanded terrain detail places land ownership immediately
+   after movement information and before the optional resource bonus and
+   base turn yields. Both unowned land and European/native owners use the
+   same position; sea and unexplored tiles retain their existing behavior.
+   The player expands or collapses the detail with the existing terrain
+   heading. See the [terrain UX contract](ux.md#rozbalovaci-detail-terenu-21-listopadu-2026).
+2. `TC_91_F82/TC_01` checks owned land with a bonus, owned land without a
+   bonus and known unowned land. The existing TC91 scenarios retain fog,
+   production, Continue, Czech text, keyboard and small-window checks.
+   `TC_112_F103/TC_01` checks native ownership in the terrain detail while
+   settlement relationship facts remain in their existing section.
+3. Model/JUnit acceptance on base `602faa595318b595ca96d7b2143c01ab9d9aa97a`
+   plus this change passed **4,929 tests, zero failures/errors/skips** in
+   154.241 seconds: `target/verification/run-o5b2ww04/`, completion
+   `20261123T215657Z-3a06c465fb46`.
+4. The first targeted run, `target/docker-ui/run-5s1ZNS/` (completion
+   `20261123T220120Z-4fae04c7c741`), finished 8 checks with 1 failure and
+   zero errors/skips in 131.932 supervisor seconds. The new unowned-land
+   check selected sea at `(22,11)`, correctly lacking an ownership row.
+   The scenario now selects the fixture's known, unowned grassland at
+   `(20,12)`. Production code is unchanged; the failed evidence is retained.
+5. The identical targeted selection passed on retry: **8 checks, zero
+   failures/errors/skips**, 134.905 supervisor seconds, complete reports in
+   `target/docker-ui/run-9FDr4L/`, completion `20261123T220501Z-63e4a31e35e1`.
+   Selection: all four `TC_91_F82_resource_overlays_test` scenarios, the one
+   `TC_112_F103_native_settlement_identity_test` scenario and all three
+   `PageVerificationContractTest` checks. Reviewed the English and Czech
+   captured panels: movement, owner, resource bonus, then yields, without
+   clipping. Model/JUnit evidence remains applicable because only the UI
+   test coordinate changed after that run.
+6. The fixed smoke/support gate passed **23 checks in all 13 expected
+   suites, zero failures/errors/skips**, in 282.814 seconds against the
+   420-second budget: `target/verification/run-przw12jj/`, completion
+   `20261123T220736Z-8a90c60bf8b3` (285.611 supervisor seconds). All executable
+   source, tests, assets and configuration match the tested snapshot;
+   subsequent edits only record documentation evidence.
+7. Java changes were formatted with the shared Eclipse profile and reviewed.
+   All 14 documentation consistency checks, the name audit (zero unexplained
+   occurrences), strict MkDocs and `git diff --check` passed. Logs:
+   `target/terrain-ownership-order/`. The unrelated backlog edit is excluded.
+   This is local acceptance; full regression, remote CI, Pages and game
+   distribution publication were not run or verified.
+
 <a id="regression-45100048199-2026-11-23"></a>
 ## Regression run 45100048199 repair — 2026-11-23
 

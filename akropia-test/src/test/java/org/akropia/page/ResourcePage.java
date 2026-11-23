@@ -171,6 +171,24 @@ public final class ResourcePage extends AbstractScreen {
         verifyTerrainYieldCount(0);
     }
 
+    public void verifyTerrainOwnershipOrder(final String expectedOwner,
+            final String expectedBonus) {
+        final String description = getLabeledById(TILE_NAME_ID).getText();
+        final int ownerIndex = description.indexOf(expectedOwner);
+        assertTrue(ownerIndex > description.indexOf("\n"), description);
+        assertTrue(description.indexOf("\n") > 0, description);
+        assertFalse(
+                getLabeledById("tileFacts").getText().contains(expectedOwner),
+                "Ownership appears only in terrain details");
+        if (!expectedBonus.isEmpty()) {
+            assertTrue(description.indexOf(expectedBonus) > ownerIndex,
+                    description);
+        } else {
+            assertFalse(description.substring(ownerIndex).contains("\n"),
+                    description);
+        }
+    }
+
     public void verifyTerrainDescription(final String expected) {
         assertTrue(getLabeledById(TILE_NAME_ID).getText().contains(expected),
                 getLabeledById(TILE_NAME_ID).getText());
