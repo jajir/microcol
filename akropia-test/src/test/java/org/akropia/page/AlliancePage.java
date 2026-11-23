@@ -219,7 +219,7 @@ public final class AlliancePage extends AbstractScreen {
     public void verifyObligations() {
         final String text = getLabeledById("allianceObligations").getText();
         assertTrue(text.contains("cannot attack each other"));
-        assertTrue(text.contains("seaRaiders"));
+        assertTrue(text.contains("sea raiders"));
         assertTrue(text.contains("without capturing them"));
         assertTrue(text.contains("workers, cargo or sight"));
         assertTrue(text.contains("go to war against anyone who attacks"));

@@ -256,7 +256,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
                     .format(java.time.Instant.ofEpochMilli(entry.get().modified)
                             .atZone(java.time.ZoneId.systemDefault()));
             assertEquals(file.getName(),
-                    ((Label) cell.lookup(".label")).getText());
+                    ((Label) cell.lookup(".label")).getAccessibleText());
             getRobot().interact(
                     () -> list.getSelectionModel().select(entry.get()));
             org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
@@ -915,8 +915,9 @@ public final class FreePlayAuditPage extends AbstractScreen {
                                 .flatMap(construction -> construction
                                         .getConstructionSlots().stream())
                                 .filter(slot -> !slot.isEmpty()).count());
-        assertTrue(getNodeFinder().lookup(".constructionPaneCarpenter").query()
-                .isVisible(), "Construction must be discoverable");
+        revealGameContent(getButtonById("colony-section-construction"));
+        assertTrue(isCssIdVisible("colony-section-construction"),
+                "The construction section must be discoverable while collapsed");
         assertTrue(getButtonById("colony-section-construction")
                 .isFocusTraversable());
         assertTrue(

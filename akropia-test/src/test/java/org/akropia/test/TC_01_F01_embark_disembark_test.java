@@ -126,7 +126,15 @@ public class TC_01_F01_embark_disembark_test extends AbstractAkropiaTest {
         gamePage.moveMouseAtLocation(SHORE_SEE_LOCATION);
         gamePage.dragMouseAtLocation(COLONY_LOCATION);
 
-        // Arrival lands both passengers outside; the carrier's holds are free.
+        // Arrival keeps both passengers aboard until the player lands them.
+        gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 1);
+        gamePage.getShipAt(COLONY_LOCATION).verifyNumberOfOccupiedCargoSlots(2);
+        colonyScreen = gamePage.openColonyAt(COLONY_LOCATION, "Delft");
+        passengers.disembarkInPort(25, 0, false);
+        passengers.verifyCargoSlotEmpty(3, 0);
+        passengers.disembarkInPort(24, 1, false);
+        passengers.verifyCargoSlotEmpty(3, 1);
+        colonyScreen.close();
         gamePage.verifyNumberOfUnitsAt(COLONY_LOCATION, 3);
         gamePage.getShipAt(COLONY_LOCATION).verifyNumberOfOccupiedCargoSlots(0);
     }

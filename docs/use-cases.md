@@ -1,3 +1,13 @@
+## Regresní opravy podle současných pravidel — 23. listopadu 2026
+
+1. TC01 a TC101 ověřují ruční vylodění v přístavu včetně zachování pasažérů
+   na lodi při příjezdu. TC132/01–05 zachovávají identifikátory, ale podle
+   [aktuálních pravidel domorodých vztahů](gap-analysis.md#native-and-european-relations)
+   ověřují nedostupnost zrušené návštěvy náčelníka a nezměněný herní stav.
+2. Rozsah původních selhání, související scénáře a skutečné výsledky přejímky
+   jsou v [regresní evidenci](functional-tests.md#regression-45100048199-2026-11-23).
+   Nová herní pravidla tento úkol nezavádí.
+
 ## UC-025/114: nápověda k ručnímu vylodění — 23. listopadu 2026
 1. A-UX-006: česká i anglická nápověda a popisky rozlišují příjezd lodi,
    ruční přesun cestujícího na břeh a vyložení zboží. Postup vlastní

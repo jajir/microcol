@@ -20,61 +20,16 @@ import org.testfx.framework.junit5.Start;
 
 import javafx.stage.Stage;
 
-/**
- * The chief of a native capital, visited by a scout (R-0158). Each scenario
- * starts from a fixture whose saved random state gives the named first draw, so
- * the outcome is explicit. The mood and the exact risk are shown before the
- * draw, the reported result is recorded for the Dutch nation, and information
- * marks the land within two squares of the capital on the Dutch map. A repeat
- * visit by the wayfarer, or after Save and Continue, repeats the information
- * without a draw. The model rules for each distribution, the gold caps, the
- * death cleanup, the map delta and the stale terms are checked in the model
- * tests.
- */
+/** Retired chief encounters remain unavailable after the native redesign. */
 @ExtendWith(ApplicationExtension.class)
 public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
-
-    /** Current-schema scenario shared with the native market tests. */
     private static final File FIXTURE = new File(
             "src/test/scenarios/F106-native-turns.akropia");
-
-    /** The Aztec capital; its treasury caps the gold at two hundred. */
     private static final Location CAPITAL = Location.of(23, 15);
-
-    /** The gold cap of a capital, as the model applies it. */
-    private static final int CAPITAL_GOLD = 200;
-
-    /**
-     * Ordinary scout, land square north-west of the capital. The colony New
-     * Amsterdam (24,16), the Dutch frigate (25,16) with sight two and the Aztec
-     * braves block the east side, and their sight already explores the land
-     * east and south-east of the capital, so both scouts stand on the north
-     * side: their sight of two squares ends at row 16, and the squares below
-     * stay unexplored until the chief tells about them.
-     */
     private static final int SCOUT_ID = 300;
     private static final Location SCOUT_AT = Location.of(22, 14);
-
-    /** Wayfarer, land square north of the capital. */
     private static final int SEASONED_ID = 303;
     private static final Location SEASONED_AT = Location.of(23, 14);
-
-    /**
-     * Land square two from the capital (row 17) that no Dutch unit or colony
-     * sees at the start: the scouts see to row 16, the colony and the frigate
-     * and the outdoor worker start at column 22. It is unexplored until the
-     * information reveals it.
-     */
-    private static final Location FAR_LAND = Location.of(21, 17);
-
-    /** Land square three from the capital (row 18): never revealed. */
-    private static final Location UNKNOWN_LAND = Location.of(21, 18);
-
-    private static final String CONTENT_EN = "The local peoples are content. Chances: information 70.0%, gold 25.0%, death 5.0%.";
-
-    private static final String REPEAT_EN = "The local peoples are content. This nation has met their chief before, so you learn the same information again. Nothing is drawn, and no gold or risk applies.";
-
-    private static final String CONTENT_CS = "Místní obyvatelé jsou spokojení. Šance: informace 70.0%, zlato 25.0%, smrt 5.0%.";
 
     @Start
     private void start(final Stage stage) throws Exception {
@@ -85,201 +40,99 @@ public class TC_132_F123_chief_encounter_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_01_information_marks_the_land_and_a_repeat_visit_by_another_scout_draws_nothing_across_continue()
+    void TC_01_information_is_not_offered_and_exploration_survives_continue()
             throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final FogPage fog = new FogPage(getContext());
         visit.loadChiefFixture(FIXTURE, SCOUT_ID, SCOUT_AT, SEASONED_ID,
                 SEASONED_AT, NativeChiefOutcome.INFORMATION);
-        fog.centerFrontier();
-        visit.verifyLandExplored(FAR_LAND, false);
-        visit.verifyLandExplored(UNKNOWN_LAND, false);
-
-        // The ordinary scout reads the mood and the exact risk before any draw.
+        new FogPage(getContext()).centerFrontier();
+        // The former chief gesture offers no chief action and cannot draw a
+        // reward or risk.
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SCOUT_AT, CAPITAL);
-        visit.verifyChiefButtonShown();
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(CONTENT_EN);
-        visit.captureChief("native-chief-en.png");
-        final int treasury = visit.treasury(CAPITAL);
-        final int gold = visit.gold();
-
-        // The first draw is information: the report names it, and the land
-        // within two squares becomes explored, while the land beyond stays
-        // unknown.
-        visit.confirmChief();
-        visit.verifyChiefResultMessage(NativeChiefOutcome.INFORMATION, 0,
-                false);
-        visit.closeChiefResult();
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.INFORMATION);
-        visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
-        visit.verifyLandExplored(FAR_LAND, true);
-        visit.verifyLandExplored(UNKNOWN_LAND, false);
-        visit.verifyChiefScoutAlive(SCOUT_ID, SCOUT_AT);
-        visit.escape();
+        visit.verifyChiefUnavailable(SCOUT_ID, CAPITAL);
         visit.verifyChooserClosed();
-
-        // A repeat visit by the wayfarer repeats the information only.
-        visit.enterSettlement(SEASONED_AT, CAPITAL);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(REPEAT_EN);
-        visit.confirmChief();
-        visit.verifyChiefResultMessage(NativeChiefOutcome.INFORMATION, 0, true);
-        visit.closeChiefResult();
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.INFORMATION);
-        visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
-        visit.verifyLandExplored(FAR_LAND, true);
-        visit.verifyLandExplored(UNKNOWN_LAND, false);
-        visit.escape();
-        visit.verifyChooserClosed();
-
-        // Save and Continue keep the record and the explored land.
+        // Saving and continuing cannot restore the retired interaction.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.INFORMATION);
-        visit.verifyLandExplored(FAR_LAND, true);
-        visit.verifyLandExplored(UNKNOWN_LAND, false);
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SEASONED_AT, CAPITAL);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(REPEAT_EN);
-        visit.backFromChief();
-        visit.escape();
+        visit.verifyChiefUnavailable(SEASONED_ID, CAPITAL);
         visit.verifyChooserClosed();
     }
 
     @Test
     @Tag("local")
-    void TC_02_gold_pays_the_capital_cap_once_and_creates_no_money()
+    void TC_02_gold_is_not_offered_and_treasuries_stay_unchanged()
             throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final FogPage fog = new FogPage(getContext());
         visit.loadChiefFixture(FIXTURE, SCOUT_ID, SCOUT_AT, SEASONED_ID,
                 SEASONED_AT, NativeChiefOutcome.GOLD);
-        fog.centerFrontier();
-
+        new FogPage(getContext()).centerFrontier();
+        // The former chief gesture offers no chief action and cannot draw a
+        // reward or risk.
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SCOUT_AT, CAPITAL);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(CONTENT_EN);
-        final int treasury = visit.treasury(CAPITAL);
-        final int gold = visit.gold();
-        visit.confirmChief();
-        visit.verifyChiefResultMessage(NativeChiefOutcome.GOLD, CAPITAL_GOLD,
-                false);
-        visit.closeChiefResult();
-
-        // The capital pays two hundred once: the treasury loses exactly what
-        // the player gains, and the land stays unknown.
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.GOLD);
-        visit.verifyChiefGold(CAPITAL, treasury, gold, CAPITAL_GOLD);
-        visit.verifyLandExplored(FAR_LAND, false);
-        visit.verifyChiefScoutAlive(SCOUT_ID, SCOUT_AT);
-        visit.escape();
+        visit.verifyChiefUnavailable(SCOUT_ID, CAPITAL);
         visit.verifyChooserClosed();
     }
 
     @Test
     @Tag("local")
-    void TC_03_death_removes_the_scout_and_keeps_the_record_across_continue()
-            throws Exception {
+    void TC_03_retired_death_draw_cannot_kill_a_scout() throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final FogPage fog = new FogPage(getContext());
         visit.loadChiefFixture(FIXTURE, SCOUT_ID, SCOUT_AT, SEASONED_ID,
                 SEASONED_AT, NativeChiefOutcome.DEATH);
-        fog.centerFrontier();
-
+        new FogPage(getContext()).centerFrontier();
+        // The former chief gesture offers no chief action and cannot draw a
+        // reward or risk.
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SCOUT_AT, CAPITAL);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(CONTENT_EN);
-        final int treasury = visit.treasury(CAPITAL);
-        final int gold = visit.gold();
-        visit.confirmChief();
-        visit.verifyChiefResultMessage(NativeChiefOutcome.DEATH, 0, false);
-        visit.closeChiefResult();
-
-        // The scout is gone, nothing is paid and the land stays unknown.
-        visit.verifyChiefScoutLost(SCOUT_ID);
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.DEATH);
-        visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
-        visit.verifyLandExplored(FAR_LAND, false);
+        visit.verifyChiefUnavailable(SCOUT_ID, CAPITAL);
         visit.verifyChooserClosed();
-
-        // After Save and Continue the scout stays lost, and the wayfarer
-        // repeats the information without a new draw.
+        // Saving and continuing cannot restore the retired interaction.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();
-        visit.verifyChiefScoutLost(SCOUT_ID);
-        visit.verifyChiefRecorded(CAPITAL, NativeChiefOutcome.DEATH);
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SEASONED_AT, CAPITAL);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(REPEAT_EN);
-        visit.confirmChief();
-        visit.verifyChiefResultMessage(NativeChiefOutcome.INFORMATION, 0, true);
-        visit.closeChiefResult();
-        visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
-        visit.verifyLandExplored(FAR_LAND, true);
-
-        // The wayfarer survives, so its chooser opens again with the
-        // chief still offered; Escape closes it.
-        visit.verifyChiefScoutAlive(SEASONED_ID, SEASONED_AT);
-        visit.verifyChiefButtonShown();
-        visit.escape();
+        visit.verifyChiefUnavailable(SEASONED_ID, CAPITAL);
         visit.verifyChooserClosed();
     }
 
     @Test
     @Tag("local")
-    void TC_04_cancelled_visit_changes_nothing() throws Exception {
+    void TC_04_seasoned_scout_also_cannot_visit_a_chief() throws Exception {
         WelcomePage.of(getContext()).loadGame();
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final FogPage fog = new FogPage(getContext());
         visit.loadChiefFixture(FIXTURE, SCOUT_ID, SCOUT_AT, SEASONED_ID,
                 SEASONED_AT, NativeChiefOutcome.INFORMATION);
-        fog.centerFrontier();
-
-        visit.rememberMovement(SCOUT_ID);
-        visit.enterSettlement(SCOUT_AT, CAPITAL);
-        final int treasury = visit.treasury(CAPITAL);
-        final int gold = visit.gold();
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(CONTENT_EN);
-        visit.backFromChief();
-
-        // Nothing is recorded, paid, explored or moved, and the scout keeps its
-        // movement.
-        visit.verifyChiefButtonShown();
-        visit.verifyChiefNotRecorded(CAPITAL);
-        visit.verifyChiefGold(CAPITAL, treasury, gold, 0);
-        visit.verifyLandExplored(FAR_LAND, false);
-        visit.verifyVisitorUnmoved(SCOUT_ID, SCOUT_AT);
-        visit.escape();
+        new FogPage(getContext()).centerFrontier();
+        // The former chief gesture offers no chief action and cannot draw a
+        // reward or risk.
+        visit.rememberRetiredVisit();
+        visit.enterSettlement(SEASONED_AT, CAPITAL);
+        visit.verifyChiefUnavailable(SEASONED_ID, CAPITAL);
         visit.verifyChooserClosed();
     }
 
     @Test
     @Tag("local")
-    void TC_05_czech_confirmation_and_chooser_fit() throws Exception {
+    void TC_05_retired_chief_action_is_absent_in_czech() throws Exception {
         final SettingPage settings = WelcomePage.of(getContext()).openSetting();
         settings.setCzechLanguage();
         settings.goBack().loadGame();
         final NativeVisitPage visit = new NativeVisitPage(getContext());
-        final FogPage fog = new FogPage(getContext());
         visit.loadChiefFixture(FIXTURE, SCOUT_ID, SCOUT_AT, SEASONED_ID,
                 SEASONED_AT, NativeChiefOutcome.INFORMATION);
-        fog.centerFrontier();
-
+        new FogPage(getContext()).centerFrontier();
+        // The former chief gesture offers no chief action and cannot draw a
+        // reward or risk.
+        visit.rememberRetiredVisit();
         visit.enterSettlement(SCOUT_AT, CAPITAL);
-        visit.verifyChooserFits(900, 750);
-        visit.startChiefChoice();
-        visit.verifyChiefConfirmation(CONTENT_CS);
-        visit.captureChief("native-chief-cs.png");
-        visit.backFromChief();
-        visit.verifyChooserFits(900, 750);
-        visit.captureChooser("native-chief-cs-chooser.png");
-        visit.escape();
+        visit.verifyChiefUnavailable(SCOUT_ID, CAPITAL);
         visit.verifyChooserClosed();
     }
-
 }

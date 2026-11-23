@@ -480,7 +480,7 @@ public class TC_101_F92_four_nation_expedition_loop_test
         trip.verifyShipAt(LANE);
         trip.verifyPassengerAboard(recruitId);
 
-        // Sail west one turn per leg; entering the port lands the recruit.
+        // Sail west one turn per leg; the recruit stays aboard in port.
         for (int leg = 0; leg < route.homeward.size(); leg++) {
             trip.verifyPlayedTurns(back + leg);
             trip.sailTo(game, route.homeward.get(leg));
@@ -489,6 +489,11 @@ public class TC_101_F92_four_nation_expedition_loop_test
                 game.nextTurnAndCloseDialogs();
             }
         }
+        trip.verifyPassengerAboard(recruitId);
+        game.openColonyAt(SITE, route.colonyName);
+        new org.akropia.page.PassengerTransferPage(getContext())
+                .disembarkInPort(recruitId, 0, false);
+        ColonyScreen.of(getContext(), route.colonyName).close();
         trip.verifyUnitAt(recruitId, SITE);
         trip.verifyShipCargo(0, Goods.of(GoodsType.WINE, 0));
         game.verifyNumberOfUnitsAt(SITE, 2);

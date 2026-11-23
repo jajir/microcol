@@ -26,7 +26,7 @@ public class TC_64_F55_naval_combat_test extends AbstractAkropiaTest {
     private static final Location DEFENDER = Location.of(21, 10);
     private static final File FIXTURE = new File(
             "src/test/scenarios/F55-naval-combat.akropia");
-    private static final String DRAKE_ATTACKER = "Base: 8\nAttack: +50%\nSeaRaiders under Francis Drake: +50%\nFinal strength: 16";
+    private static final String DRAKE_ATTACKER = "Base: 8\nAttack: +50%\nSea Raiders under Francis Drake: +50%\nFinal strength: 16";
     private static final String GALLEON_DEFENDER = "Base: 10\nFinal strength: 10";
 
     @Start

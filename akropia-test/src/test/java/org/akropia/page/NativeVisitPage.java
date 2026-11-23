@@ -362,7 +362,33 @@ public final class NativeVisitPage extends AbstractScreen {
                 .queryButton();
     }
 
-    /** The chooser offers the chief to this visitor now. */
+    private JsonElement beforeRetiredVisit;
+
+    public void rememberRetiredVisit() {
+        beforeRetiredVisit = new Gson().toJsonTree(getModel().save());
+        beforeRetiredVisit.getAsJsonObject().remove("focusedField");
+    }
+
+    public void verifyChiefUnavailable(final int scoutId,
+            final Location settlement) {
+        assertFalse(isCssIdVisible(CHIEF_BUTTON_ID));
+        assertFalse(isCssIdVisible(CHIEF_CONTENT_ID));
+        assertTrue(getModel()
+                .getNativeChiefPreview(getModel().getUnitById(scoutId),
+                        knownSettlement(settlement))
+                .isEmpty());
+        final JsonObject after = new Gson().toJsonTree(getModel().save())
+                .getAsJsonObject();
+        // Selecting the visitor changes the saved map focus, not the game
+        // rules.
+        assertEquals(
+                new Gson().toJsonTree(
+                        getModel().getUnitById(scoutId).getLocation()),
+                after.remove("focusedField"));
+        assertEquals(beforeRetiredVisit, after,
+                "A retired chief visit must not change gold, exploration, units or random state");
+    }
+
     public void verifyChiefButtonShown() {
         assertTrue(isCssIdShown(CHIEF_BUTTON_ID));
     }

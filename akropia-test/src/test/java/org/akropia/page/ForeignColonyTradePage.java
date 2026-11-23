@@ -174,6 +174,11 @@ public final class ForeignColonyTradePage extends AbstractScreen {
                 player.setDeclarationYear(rebellion
                         ? Calendar.make(model.getCalendar()).getCurrentYear()
                         : null);
+                player.setDeclarationTurn(
+                        rebellion
+                                ? Calendar.make(model.getCalendar())
+                                        .getNumberOfPlayedTurns()
+                                : null);
                 // A declaration fixes the colonies the nation owns now
                 // (R-0192).
                 player.setRebellionColonyIds(

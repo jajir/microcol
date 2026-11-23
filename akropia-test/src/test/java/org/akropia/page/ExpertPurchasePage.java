@@ -223,9 +223,11 @@ public final class ExpertPurchasePage extends AbstractScreen {
                 .filter(javafx.scene.canvas.Canvas.class::isInstance)
                 .map(javafx.scene.canvas.Canvas.class::cast).findFirst()
                 .orElseThrow();
-        revealGameContent(worker, slots);
+        revealGameContent(worker);
         getRobot().drag(worker, javafx.scene.input.MouseButton.PRIMARY)
-                .dropTo(slots.localToScreen(16, 16));
+                .moveBy(12, 0);
+        revealGameContent(slots);
+        getRobot().dropTo(slots.localToScreen(16, 16));
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId)
                         .getPlace() instanceof org.akropia.model.PlaceConstructionSlot);
@@ -233,7 +235,8 @@ public final class ExpertPurchasePage extends AbstractScreen {
     }
 
     public void hoverSmithy() {
-        getRobot().moveTo(".outside").moveTo("#id_blacksmith");
+        revealGameContent(getNodeFinder().lookup("#id_blacksmith").query());
+        getRobot().moveTo("#id_blacksmith");
         WaitForAsyncUtils.waitForFxEvents();
     }
 
@@ -252,10 +255,13 @@ public final class ExpertPurchasePage extends AbstractScreen {
                 .filter(node -> node instanceof javafx.scene.canvas.Canvas)
                 .findFirst().orElseThrow();
         // Use the non-overlapping part of the worker icon in each painted slot.
+        revealGameContent(canvas);
         javafx.geometry.Point2D source = canvas.localToScreen(16 + 35 * slot,
                 16);
         getRobot().drag(source, javafx.scene.input.MouseButton.PRIMARY)
-                .dropTo(".outside");
+                .moveBy(12, 0);
+        revealGameContent(getNodeFinder().lookup(".outside").query());
+        getRobot().dropTo(".outside");
         WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
                 () -> getModel().getUnitById(unitId).isAtPlaceLocation());
         WaitForAsyncUtils.waitForFxEvents();

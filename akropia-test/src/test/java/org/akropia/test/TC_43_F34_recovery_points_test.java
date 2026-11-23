@@ -69,7 +69,8 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         audit.openRecoveryChooser();
         audit.verifyRecoveryOption(RecoverySlot.LATEST_POSITION, false,
                 "Unavailable");
-        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true, "1511");
+        audit.verifyRecoveryOption(RecoverySlot.LATEST_TURN, true,
+                "1/4 Autumn");
         audit.verifyRecoveryOption(RecoverySlot.PREVIOUS_DECADE, false,
                 "Not available");
         audit.cancelRecovery();

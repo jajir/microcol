@@ -574,8 +574,8 @@ public final class EuropeHarborPage extends AbstractScreen {
             final javafx.scene.layout.Region frame = getNodeFinder()
                     .lookup("#europeMarketFrame")
                     .queryAs(javafx.scene.layout.Region.class);
-            assertEquals(12, frame.getPadding().getLeft(), 0.1);
-            assertEquals(12, frame.getPadding().getRight(), 0.1);
+            assertEquals(0, frame.getPadding().getLeft(), 0.1);
+            assertEquals(0, frame.getPadding().getRight(), 0.1);
             final List<Node> goods = getListOfNodes(".panelGoods");
             assertEquals(16, goods.size());
             for (final Node good : goods) {

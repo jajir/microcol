@@ -212,6 +212,8 @@ public class TC_143_F134_las_casas_converts_test extends AbstractAkropiaTest {
         // refused field-to-building drop and verify the complete state.
         jobs.rememberWorld();
         jobs.assignIndoorFromField(WORKER_ID, "id_blacksmith");
+        jobs.verifyMessage("This worker cannot take that job now");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
         jobs.verifyWorldUnchanged();
         jobs.verifyFieldJob(WORKER_ID, FIELD_AT, Goods.of(GoodsType.LUMBER, 8));
         final GamePage afterColony = ColonyScreen.of(getContext(), COLONY_NAME)

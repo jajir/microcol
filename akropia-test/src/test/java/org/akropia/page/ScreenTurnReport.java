@@ -254,8 +254,14 @@ public class ScreenTurnReport extends AbstractScreen {
         assertTrue(button.isVisible() && !button.isDisabled());
     }
 
-    public GamePage showOnMap(final org.akropia.model.Location at) {
+    public GamePage showOnMap(final org.akropia.model.Location at)
+            throws Exception {
+        revealGameContent(getMapButton(at));
         getRobot().clickOn(getMapButton(at), MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitFor(5, java.util.concurrent.TimeUnit.SECONDS,
+                () -> isCssIdVisible(
+                        org.akropia.gui.screen.game.components.ButtonsGamePanel.BUTTON_NEXT_TURN_ID)
+                        && getContext().getArea().isLocationVisible(at));
         WaitForAsyncUtils.waitForFxEvents();
         return GamePage.of(getContext());
     }

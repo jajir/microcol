@@ -1,3 +1,89 @@
+<a id="regression-45100048199-2026-11-23"></a>
+## Regression run 45100048199 repair — 2026-11-23
+
+1. The [failed GitHub run](https://github.com/jajir/microcol/actions/runs/45100048199)
+   checked `332c61d45d3605b01f94eb1c2f431b5dd4d06ba9`: 4,896 model checks
+   passed; UI reported 819 passes, 26 failures and 18 errors, without skips.
+   All 44 unsuccessful scenarios in 24 classes are retained in the local
+   inventory `target/regression-45100048199/inventory.json`, with their original
+   XML and public summary. That historical run remains failed.
+2. Repairs follow current agreed behavior: port arrivals retain passengers until
+   manual disembarkation; retired chief encounters stay unavailable; declared
+   nations in fixtures carry an explicit declaration turn. TC132 keeps its five
+   scenario IDs and now checks absence of the retired action and preservation
+   of game state, including Continue and Czech UI. Existing gameplay outcomes
+   remain checked for cargo, work, trade, construction and save/load.
+3. The Europe goods panel no longer adds a second horizontal inset inside the
+   shared content width. Page helpers reveal scrolled controls before input,
+   start drags before scrolling their destination, identify recovery filenames
+   through their accessible text, and wait for report-to-map navigation.
+   Text expectations use the current translated names. Existing changes after
+   the failing revision are checked as part of the current source, rather than
+   credited as repairs without running their affected scenarios.
+4. Model/JUnit phase on `df5f797802b9c2634b5a64e42caa353302981ba1` plus
+   the Europe CSS repair passed **4,929 checks, zero failures/errors/skips** in
+   151.568 verifier seconds: `target/verification/run-h127wo63/`, completion
+   `20261123T101231Z-09da0d71f713`. The earlier unchanged-source model run
+   `run-occn36lv` also passed 4,929 checks; it predates the CSS correction.
+5. First targeted run `20261123T101523Z-2be8a69d9821` completed in 3,525.127
+   supervised seconds (5,400-second limit): **160 tests, 9 failures, 5 errors,
+   zero skips**, in `target/docker-ui/run-exTj9F/`. It selected every affected
+   class, plus TC29, TC133, TC180 and `PageVerificationContractTest`; the exact
+   selection is retained in `target/regression-45100048199/selection.txt`.
+   Original worker assignment, colony goods layout, construction, fishing,
+   voyage navigation and all five expedition loops passed on the current source.
+6. The first run exposed remaining test assumptions: the TC01 colony is Delft;
+   selecting a scout changes only the saved map focus; construction is
+   discoverable through its section button while collapsed; the turn-21
+   checkpoint is dated 1/4 Autumn; rejected convert work needs its message
+   dismissed before leaving the colony. The hired expert's return drag now
+   starts before scrolling, and price-alignment checks expect the corrected
+   zero extra inset. Native retirement checks still compare the entire game
+   state and separately verify the expected selected field.
+7. Targeted retry `20261123T111641Z-41d2a7dd1a78` (PID 49569, limit 3,600 s)
+   selects all eight failing classes, TC50 after its drag-helper cleanup, TC06
+   as another caller of the price checks, and `PageVerificationContractTest`.
+   Exact selection: `target/regression-45100048199/selection-retry.txt`.
+   Its results are recorded below. Model/game sources remain the
+   same as the passing model phase. Full local regression is not part of this
+   repair request; publication remains separate from local acceptance below.
+8. Retry `20261123T111641Z-41d2a7dd1a78` completed in 1,057.914 supervised
+   seconds: **58 tests, zero failures, three errors, zero skips**, in
+   `target/docker-ui/run-dXoQl0/`. Harbor alignment/prices, recovery dates,
+   the collapsed construction entry point, expert drag and convert rejection
+   all passed. Wide and narrow Czech harbor screenshots were inspected:
+   market, cargo, headings and bars share the intended content edges, with
+   readable prices and accessible scrolling groups.
+9. The remaining three errors were test actions: TC01 re-embarks passenger 25
+   before 24, so the return-port actions must use that actual hold order;
+   TC132 pressed Escape after an unavailable action, opening the game menu
+   before its save/continue step. The corrected TC01 additionally checks both
+   vacated holds. Final small retry `20261123T113521Z-ea4e1f7675a5` (PID 50726,
+   limit 900 s) passed **14 tests, zero failures/errors/skips** in 185.502
+   supervised seconds; reports: `target/docker-ui/run-CQsIXR/`.
+10. Targeted acceptance combines the latest passing reports for **172 distinct
+    tests**, preserving earlier passing results only where the exercised source
+    is unchanged. All **44 original unsuccessful scenarios** map to passing
+    evidence (TC132 by preserved scenario ID). The per-test mapping, exact
+    selections and report paths are retained in
+    `target/regression-45100048199/targeted-acceptance.json`. Review confirmed
+    every game file still matches the passing model snapshot; final changed
+    Java/CSS hashes are retained alongside that mapping.
+11. Fixed smoke/support run `20261123T113934Z-d352509e1488` passed **23
+    checks, zero failures/errors/skips** in **288.600 supervised seconds**,
+    within the **420-second total acceptance budget**. Reports and source
+    snapshot: `target/verification/run-x05e2_r2/`. Final game, test and tooling
+    files match this snapshot; no executable changes followed.
+12. Local acceptance is complete: **4,929 model/JUnit checks, 172 distinct
+    targeted UI/support checks and 23 fixed smoke/support checks**, all
+    with zero failures/errors/skips in their accepted reports. Scoped shared
+    Java formatting, source review, 14 documentation consistency checks, naming
+    audit and strict MkDocs passed. The unrelated backlog edit is excluded.
+    Checked source is `df5f797802b9c2634b5a64e42caa353302981ba1` plus this repair
+    diff. Historical failed attempts remain failed. This is local acceptance,
+    not a new full-regression or distribution-publication claim.
+
+
 <a id="manual-disembarkation-help-2026-11-23"></a>
 ## Manual disembarkation help (A-UX-006) — 2026-11-23
 1. Scope: UC-025 and UC-114. English and Czech help, depot guidance, the

@@ -172,7 +172,7 @@ public class TC_182_F210_forest_clearing_defense_test
         clear.verifyForestAt(FOREST, false);
         clear.verifyClearedAt(FOREST, true);
         clear.verifyTerrainOutput(FOREST, 0, 0);
-        clear.verifyUnitWork(FOREST, 0, UnitActionType.noAction, 0, 80);
+        clear.verifyUnitWork(FOREST, 0, UnitActionType.noAction, 1, 80);
 
         // Save and Continue keeps the cleared square.
         gamePage.exitToMenu();
