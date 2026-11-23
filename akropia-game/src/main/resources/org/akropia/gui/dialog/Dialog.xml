@@ -27,8 +27,8 @@
 
 	<entry key="gameOver_caption">Game over.</entry>
 
-	<entry key="destroyColony_caption">Do you want do destroy colony?</entry>
-	<entry key="destroyColony_question">When you leave colony with last unit than colony will be destroyed.</entry>
+	<entry key="destroyColony_caption">Abandon empty colonies?</entry>
+	<entry key="destroyColony_question">These colonies have no residents and will disappear when you end the turn: %s. Their buildings, stocks and construction queues will be lost. Cancel to return and assign residents.</entry>
 
 	<entry key="colonyWasCaptured_caption">You captured colony</entry>
 	<entry key="colonyWasCaptured_text1">You captured colony '</entry>
@@ -111,7 +111,7 @@
     <entry key="fight_workerName">Field worker of %s</entry>
     <entry key="fight_workerCaptured">%s: a field worker of colony %s was captured.</entry>
     <entry key="fight_revereExit">%s: the armed worker keeps its weapons and joins the garrison outside the colony.</entry>
-    <entry key="destroyColony_confirm">Abandon colony</entry>
+    <entry key="destroyColony_confirm">Abandon and end turn</entry>
     <entry key="turnWait_title">Other players are playing</entry>
     <entry key="turnWait_message">Other players are playing, please wait.</entry>
 </properties>

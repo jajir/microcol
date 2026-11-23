@@ -468,6 +468,22 @@ class CoastalBatteryTest {
                 .map(construction -> facility(construction.getType()))
                 .forEach(second.getConstructions()::add);
         second.getConstructions().add(facility(ConstructionType.FORT));
+        // A staffed fort survives the computer owner's end-turn cleanup.
+        final int workerId = data.getUnits().stream().mapToInt(UnitPo::getId)
+                .max().orElseThrow() + 1;
+        final UnitPo worker = unit(workerId, UnitType.COLONIST,
+                second.getOwnerName(), SECOND_PORT);
+        worker.setWorkUpdates(0);
+        worker.setMissionary(false);
+        worker.setPlaceMap(null);
+        worker.setPlaceConstructionSlot(
+                new org.akropia.model.store.PlaceConstructionSlotPo());
+        data.getUnits().add(worker);
+        final org.akropia.model.store.ConstructionSlotPo slot = new org.akropia.model.store.ConstructionSlotPo();
+        slot.setWorkerId(workerId);
+        second.getConstructions().stream().filter(
+                building -> building.getType() == ConstructionType.TOWN_HALL)
+                .findFirst().orElseThrow().setSlots(List.of(slot));
         return second;
     }
 

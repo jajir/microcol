@@ -35,6 +35,9 @@ public interface Unit {
 
     boolean canReturnToWorkingColony();
 
+    /** Whether the priced colony transfer is blocked by movement alone. */
+    boolean isColonyTransferWaitingForMovement(Colony colony, Location target);
+
     void returnToWorkingColony();
 
     /**
@@ -181,13 +184,6 @@ public interface Unit {
     boolean isAtPlaceNativeMission();
 
     boolean isAtPlaceColonyField();
-
-    /**
-     * Whether a voluntary order may remove this resident from its colony.
-     *
-     * @return true for nonresidents or when the colony permits departure
-     */
-    boolean canLeaveColony();
 
     List<TerrainType> getMoveableTerrainTypes();
 

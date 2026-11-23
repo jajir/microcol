@@ -617,11 +617,11 @@ class RivalExpansionCycleTest {
     }
 
     @Test
-    void fortifiedColonyKeepsItsHigherMinimum() {
-        // A stockade needs more than three residents before one may leave.
+    void completedStockadeUsesTheSameStrategicResidentReserve() {
+        // Completed defenses impose no additional departure minimum.
         prepare(new Setup().stockade().crew(GoodsType.GRAIN, GoodsType.GRAIN));
         turnStarted();
-        assertNoRelease(3);
+        assertEquals(FOUNDER_ID, assertReleased().getFounderId());
 
         prepare(new Setup().stockade().crew(GoodsType.GRAIN, GoodsType.GRAIN,
                 GoodsType.GRAIN));

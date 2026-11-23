@@ -60,14 +60,12 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         assertTrue(colony().wasConstructionBuilded(ConstructionType.STOCKADE));
     }
 
-    public void verifyWorker(int id, ConstructionType building,
-            boolean mayLeave) {
+    public void verifyWorker(int id, ConstructionType building) {
         Unit unit = getModel().getUnitById(id);
         assertTrue(unit.isAtPlaceConstructionSlot());
         assertTrue(colony().getConstructionByType(building)
                 .getConstructionSlots()
                 .contains(unit.getPlaceConstruction().getConstructionSlot()));
-        assertEquals(mayLeave, unit.canLeaveColony());
     }
 
     public void verifyOutside(int id) {
@@ -93,4 +91,46 @@ public final class FortifiedPopulationPage extends AbstractScreen {
     public void verifyBoarded(int id) {
         assertTrue(getModel().getUnitById(id).isAtCargoSlot());
     }
+
+    public void requestAbandonment() {
+        clickOnButtonWithId("nextTurn");
+    }
+
+    public void verifyEmptyColonyQuestion(final String name) {
+        final String text = getLabeledById("empty-colonies-question").getText();
+        assertTrue(text.contains(name), text);
+        assertTrue(text.contains("no residents"), text);
+        assertTrue(getButtonById("buttonNo").isCancelButton());
+    }
+
+    public void cancelEmptyColony() {
+        clickOnButtonWithId("buttonNo");
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void confirmEmptyColony() throws Exception {
+        final GamePage.TurnStartRouting routing = new GamePage.TurnStartRouting(
+                getModel(), getModel().getCalendar().getNumberOfPlayedTurns());
+        final com.google.common.eventbus.EventBus events = getContext()
+                .getClassFromGuice(com.google.common.eventbus.EventBus.class);
+        events.register(routing);
+        try {
+            clickOnButtonWithId("buttonYes");
+            routing.await();
+            awaitTurnPresentation();
+        } finally {
+            events.unregister(routing);
+        }
+        if (!getModel().isGameFinished() && !getContext()
+                .getClassFromGuice(
+                        org.akropia.gui.screen.turnreport.TeService.class)
+                .getMessages().isEmpty()) {
+            ScreenTurnReport.of(getContext()).close();
+        }
+    }
+
+    public void verifyColonyAbsent(final int id) {
+        assertTrue(getModel().getColonyById(id).isEmpty());
+    }
+
 }

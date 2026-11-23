@@ -5570,14 +5570,7 @@ public class Model {
                     || !residence.get().isValid()) {
                 return Optional.of(DisbandProblem.RECEIVING_COLONY_INVALID);
             }
-            // Removing the last resident would destroy the colony and its
-            // warehouse as a side effect, so it is refused.
-            if (residence.get().getUnitsInsideColony().size() <= 1) {
-                return Optional.of(DisbandProblem.LAST_COLONY_RESIDENT);
-            }
-            if (!unit.canLeaveColony()) {
-                return Optional.of(DisbandProblem.MINIMUM_RESIDENTS);
-            }
+
         }
         return Optional.empty();
     }
@@ -10090,19 +10083,49 @@ public class Model {
         }
     }
 
+    /** Empty cities owned by the actor who is about to end its turn. */
+    public List<Colony> getEmptyColoniesBeforeEndTurn() {
+        return getColonies().stream()
+                .filter(colony -> colony.getOwner() == getCurrentPlayer()
+                        && colony.getPopulation() == 0)
+                .collect(java.util.stream.Collectors.toList());
+    }
+
     public synchronized void endTurn() {
+        checkGameRunning();
+        endTurn(getCurrentPlayer().isComputer()
+                ? getEmptyColoniesBeforeEndTurn()
+                : List.of());
+    }
+
+    /** Confirmation is valid only for the exact still-empty cities shown. */
+    public synchronized void endTurn(
+            final List<Colony> confirmedEmptyColonies) {
         Preconditions.checkState(!endingTurn,
-                "Cannot start or end game while ending a turn.");
+                "Cannot start or end game while ending turn.");
         checkGameRunning();
         gameManager.checkCurrentPlayer(getCurrentPlayer());
+        final List<Colony> confirmed = List.copyOf(confirmedEmptyColonies);
+        checkEmptyColonyConfirmation(confirmed);
         endingTurn = true;
         try {
             if (listenerManager.fireBeforeEndTurn(this)) {
+                checkEmptyColonyConfirmation(confirmed);
+                confirmed.forEach(this::destroyColony);
                 gameManager.endTurn();
             }
         } finally {
             endingTurn = false;
         }
+    }
+
+    private void checkEmptyColonyConfirmation(final List<Colony> confirmed) {
+        final List<Colony> empty = getEmptyColoniesBeforeEndTurn();
+        Preconditions.checkState(
+                confirmed.size() == empty.size()
+                        && new java.util.HashSet<>(confirmed)
+                                .equals(new java.util.HashSet<>(empty)),
+                "Confirm abandonment of the current empty colonies before ending the turn");
     }
 
     void checkGameRunning() {

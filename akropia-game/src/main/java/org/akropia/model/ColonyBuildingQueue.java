@@ -372,6 +372,9 @@ public class ColonyBuildingQueue {
                     return Optional.of(UnavailableReason.MISSING_PREDECESSOR);
                 }
             }
+            if (colony.getPopulation() < type.getRequiredColonyPopulation()) {
+                return Optional.of(UnavailableReason.POPULATION);
+            }
             if (type.getRequiredFounder().isPresent()
                     && !colony.getOwner().getCongressMembers()
                             .contains(type.getRequiredFounder().get())) {

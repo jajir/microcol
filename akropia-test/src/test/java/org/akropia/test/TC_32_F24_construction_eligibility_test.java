@@ -565,4 +565,49 @@ public class TC_32_F24_construction_eligibility_test
         construction.verifyPickerClosed();
     }
 
+    @Test
+    @Tag("local")
+    void TC_13_population_pauses_head_and_rush_but_keeps_shared_work()
+            throws Exception {
+        // Admit a shop with four residents and place a cheaper project behind
+        // it.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        ColonyScreen colony = game.openColonyWithKeyboard(0, "New Amsterdam");
+        ConstructionPage construction = new ConstructionPage(getContext());
+        org.akropia.page.ConstructionRushPage rush = new org.akropia.page.ConstructionRushPage(
+                getContext());
+        construction.assignCarpenter(4);
+        rush.addTools(1);
+        construction.open();
+        construction.select("BLACKSMITHS_SHOP");
+        construction.confirm();
+        construction.select("LUMBER_MILL");
+        construction.confirm();
+        construction.cancel();
+        // One carpenter leaves; the head remains blocked at three residents.
+        construction.moveCarpenterOutside(0);
+        construction.verifyStatus("Requires 4 residents; currently 3.");
+        construction.open();
+        rush.open();
+        rush.verifyUnavailable("Requires 4 residents; currently 3.");
+        rush.cancel();
+        construction.cancel();
+        game = colony.closeWithEscape();
+        game.nextTurnAndCloseDialogs();
+        colony = game.openColonyWithKeyboard(0, "New Amsterdam");
+        construction.verifyQueue(List.of("BLACKSMITHS_SHOP", "LUMBER_MILL"),
+                List.of(0, 1), 61);
+        construction.verifyStocksAndPopulation(61, 20, 3);
+        construction.verifyBuilding(ConstructionType.LUMBER_MILL, 0);
+        construction.verifyStatus("Requires 4 residents; currently 3.");
+        // Returning the worker resumes the original head automatically.
+        construction.assignCarpenter(200);
+        game = colony.closeWithEscape();
+        game.nextTurnAndCloseDialogs();
+        game.openColonyWithKeyboard(0, "New Amsterdam");
+        construction.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
+        construction.verifyQueue(List.of("LUMBER_MILL"), List.of(1), 3);
+        construction.verifyStocksAndPopulation(3, 0, 4);
+    }
+
 }

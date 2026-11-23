@@ -495,7 +495,7 @@ class WorldWorkersTest {
     }
 
     @Test
-    void fishingCancellationHonorsTheFortifiedPopulationMinimum() {
+    void fishingCancellationIsAllowedBelowFormerFortifiedMinimum() {
         final var saved = fixture(true).save();
         final var colony = saved.getColonies().get(0);
         final var stockade = new ConstructionPo();
@@ -512,8 +512,9 @@ class WorldWorkersTest {
                 MissionImpl.getPredefinedGameOverEvaluators());
         final Unit fisherman = model.getUnitById(0);
         final String before = new Gson().toJson(model.save());
-        assertFalse(fisherman.canLeaveColony());
-        assertThrows(IllegalStateException.class, fisherman::cancelColonyWork);
-        assertEquals(before, new Gson().toJson(model.save()));
+        fisherman.cancelColonyWork();
+        assertTrue(fisherman.getWorkingColony().isEmpty());
+        assertFalse(fisherman.isFishing());
+        assertEquals(2, model.getColonyById(0).orElseThrow().getPopulation());
     }
 }

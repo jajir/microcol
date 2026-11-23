@@ -149,6 +149,7 @@ class ColonyDestructionTest {
         colony.getUnitsInsideColony()
                 .forEach(worker -> worker.placeToLocation(Location.of(19, 11)));
 
+        model.destroyColony(colony);
         assertEquals(Location.of(22, 11), docked.getLocation());
         assertEquals(Location.of(21, 11), enemy.getLocation());
         assertEquals(0,

@@ -161,8 +161,13 @@ class ColonyBreedingTest {
                 .getInWarehouseAfter() < 0);
         assertEquals(0, colony.getGoodsStats().getStatsByType(GoodsType.HORSE)
                 .getRowProduction());
+        final int horses = colony.getWarehouse().getGoods(GoodsType.HORSE)
+                .getAmount();
         colony.startTurn();
-        assertFalse(colony.isValid());
+        assertTrue(colony.isValid());
+        assertEquals(0, colony.getPopulation());
+        assertEquals(horses,
+                colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount());
     }
 
     @Test

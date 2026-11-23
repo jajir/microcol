@@ -359,7 +359,7 @@ public final class ColonyField {
     void empty(final boolean validate) {
         placeColonyField = null;
         if (validate) {
-            colony.verifyNumberOfUnitsOptionallyDestroyColony();
+            colony.populationChanged();
         }
     }
 

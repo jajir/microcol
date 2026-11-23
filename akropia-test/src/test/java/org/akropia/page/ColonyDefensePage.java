@@ -311,8 +311,9 @@ public final class ColonyDefensePage extends AbstractScreen {
     }
 
     /** The fortification rule still refuses a voluntary exit of the unit. */
-    public void verifyVoluntaryExitRefused(final int unitId) {
-        assertFalse(getModel().getUnitById(unitId).canLeaveColony());
+    public void verifyResidentRetainsWork(final int unitId) {
+        assertTrue(
+                getModel().getUnitById(unitId).getWorkingColony().isPresent());
     }
 
     public void verifyStoredWeapons(final int expected) {

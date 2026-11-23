@@ -300,13 +300,9 @@ class ColonyAdvisorReportTest {
         assertEquals(ProjectState.COMPLETES, status.getProject().getState());
     }
 
-    /**
-     * Famine that takes the last resident ends the colony. On a centre that
-     * gives no food one resident eats 2 and produces nothing, so one stored
-     * food is exactly one short; the real update then removes the colony.
-     */
+    /** The last famine victim leaves an empty city awaiting confirmation. */
     @Test
-    void theLastResidentLostToFamineIsReportedAndTheUpdateRemovesTheColony() {
+    void theLastResidentLostToFamineLeavesAnEmptyCityInTheAdvisor() {
         loadDelft(withoutCommonsFood());
         leaveOneResident();
         setFoodAfterResidents(delft, -1);
@@ -319,16 +315,20 @@ class ColonyAdvisorReportTest {
                 model.getColonyAdvisorReport(owner), delft);
         assertEquals(before, snapshot());
         assertTrue(status.isFamine());
-        assertEquals(Uncertainty.COLONY_LOST, status.getUncertainty());
+        assertEquals(Uncertainty.EMPTY_COLONY, status.getUncertainty());
         assertEquals(0, status.getNewColonists());
         assertEquals(1, status.getPopulation());
         // The stock shown is the stock now.
         assertEquals(1, lineOf(status, GoodsType.GRAIN).getStock());
 
         delft.startTurn();
-        assertFalse(delft.isValid());
-        assertTrue(model.getColonyAdvisorReport(owner).getColonies().stream()
-                .noneMatch(other -> other.getColony() == delft));
+        assertTrue(delft.isValid());
+        final ColonyStatus empty = statusOf(model.getColonyAdvisorReport(owner),
+                delft);
+        assertEquals(0, empty.getPopulation());
+        assertEquals(0, empty.getNewColonists());
+        assertEquals(Uncertainty.EMPTY_COLONY, empty.getUncertainty());
+
     }
 
     /**

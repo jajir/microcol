@@ -11,6 +11,6 @@ public enum ColonyAdvisorText implements MessageKeyResource {
     tableGood, tableStock, tableOutput, tableUsed, tableOther, tableChange,
     tableNext, outputBlocked, nextLost, projectNone, projectWaitingHammers,
     projectWaitingTools, projectCompletes, projectBlocked, projectStock, open,
-    colonyUnavailable, unknownValue, uncertainLost, uncertainColonyLost,
-    uncertainStorage, projectUncertain, projectColonyLost;
+    colonyUnavailable, unknownValue, uncertainLost, uncertainEmptyColony,
+    uncertainStorage, projectUncertain, projectEmptyColony;
 }

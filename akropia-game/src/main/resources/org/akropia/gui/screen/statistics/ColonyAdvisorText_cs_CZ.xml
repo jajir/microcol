@@ -27,8 +27,8 @@
   <entry key="colonyUnavailable">Tato kolonie už není vaše. Přehled byl obnoven.</entry>
   <entry key="unknownValue">?</entry>
   <entry key="uncertainLost">Při nedostatku jídla přijde náhodný kolonista o život, takže výroba, spotřeba, projekt a příští stav záleží na tom, kdo to bude. Nezobrazují se jako přesné.</entry>
-  <entry key="uncertainColonyLost">Při nedostatku jídla přijde o život poslední kolonista, takže kolonie sama při dalším tahu zanikne.</entry>
+  <entry key="uncertainEmptyColony">Město je prázdné nebo při hladomoru ztratí posledního obyvatele. Zánik vyžaduje potvrzení při ukončení tahu; přidělením obyvatele město zachováte.</entry>
   <entry key="uncertainStorage">Projekt se při dalším tahu dokončí a změní sklad nebo celnici, takže změna a příští stav se nezobrazují jako přesné.</entry>
   <entry key="projectUncertain">Projekt %s záleží na tom, který kolonista při dalším tahu přijde o život.</entry>
-  <entry key="projectColonyLost">Projekt %s zanikne, pokud kolonie při dalším tahu zanikne.</entry>
+  <entry key="projectEmptyColony">Projekt %s zůstane v prázdném městě pozastavený, dokud se nevrátí obyvatel nebo nepotvrdíte zánik.</entry>
 </properties>

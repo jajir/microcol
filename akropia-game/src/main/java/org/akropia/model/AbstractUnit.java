@@ -167,8 +167,7 @@ public abstract class AbstractUnit implements Unit {
     public boolean canCancelColonyWork() {
         return model.isTurnPreparationComplete()
                 && getWorkingColony().or(this::getFishingColony)
-                        .filter(colony -> colony.canWorkerActHere(this)
-                                && canLeaveColony())
+                        .filter(colony -> colony.canWorkerActHere(this))
                         .isPresent()
                 && (isFishing() ? canReturnToWorkingColony()
                         : isAtPlaceColonyField());
@@ -193,8 +192,8 @@ public abstract class AbstractUnit implements Unit {
     public boolean canReturnToWorkingColony() {
         return getWorkingColony().or(this::getFishingColony)
                 .filter(colony -> colony.canWorkerActHere(this)
-                        && colonyTransferCost(colony, colony.getLocation()) >= 0
-                        && canLeaveColony())
+                        && colonyTransferCost(colony,
+                                colony.getLocation()) >= 0)
                 .isPresent();
     }
 
@@ -231,6 +230,13 @@ public abstract class AbstractUnit implements Unit {
         }
         owner.revealMapForUnit(this);
         model.fireUnitMovedToLocation(this);
+    }
+
+    @Override
+    public boolean isColonyTransferWaitingForMovement(final Colony colony,
+            final Location target) {
+        return colonyTransferCost(colony,
+                target) == COLONY_TRANSFER_INSUFFICIENT_MOVEMENT;
     }
 
     static final int COLONY_TRANSFER_INSUFFICIENT_MOVEMENT = -2;
@@ -1453,7 +1459,7 @@ public abstract class AbstractUnit implements Unit {
                 slot.store(cargoPlace);
                 model.fireUnitEmbarked(defender, slot);
             }
-            colony.verifyNumberOfUnitsOptionallyDestroyColony();
+            colony.populationChanged();
             return;
         }
         if (winnerAttacker && kind == ColonyDefense.Kind.FIELD
@@ -1740,8 +1746,6 @@ public abstract class AbstractUnit implements Unit {
      */
     @Override
     public void placeToCargoSlot(final PlaceCargoSlot placeCargoSlot) {
-        Preconditions.checkState(canLeaveColony(),
-                "Fortified colony needs three residents");
         Preconditions.checkNotNull(placeCargoSlot, "Place cargo slot is null");
         Preconditions.checkArgument(
                 owner.equals(placeCargoSlot.getCargoSlotOwner()),
@@ -1823,8 +1827,6 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(
                 !(this instanceof Ship) || !((Ship) this).isDamaged(),
                 "Ship is damaged");
-        Preconditions.checkState(canLeaveColony(),
-                "Fortified colony needs three residents");
         place.destroy();
         place = new PlaceEuropePort(this, Preconditions.checkNotNull(port));
         retainProcessedTradeRouteVisitAt(null);
@@ -1930,8 +1932,6 @@ public abstract class AbstractUnit implements Unit {
                 "Ship is damaged");
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before moving");
-        Preconditions.checkState(canLeaveColony(),
-                "Fortified colony needs three residents");
         retainProcessedTradeRouteVisitAt(target);
         final boolean resident = isColonyResident();
         if (place instanceof PlaceLocation) {
@@ -2136,10 +2136,6 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(structureSlot);
-        Preconditions.checkState(
-                canLeaveColony()
-                        || isAlreadyInSameColony(structureSlot.getColony()),
-                "Fortified colony needs three residents");
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(),
@@ -2162,10 +2158,6 @@ public abstract class AbstractUnit implements Unit {
         Preconditions.checkState(unitAction.getType() != UnitActionType.fortify,
                 "Cancel fortification before assigning colony work");
         Preconditions.checkNotNull(colonyField);
-        Preconditions.checkState(
-                canLeaveColony()
-                        || isAlreadyInSameColony(colonyField.getColony()),
-                "Fortified colony needs three residents");
         Preconditions.checkState(!isAtEuropePort(),
                 "Unit can't skip from europe port to map");
         Preconditions.checkState(!isAtEuropePier(),
@@ -2186,11 +2178,6 @@ public abstract class AbstractUnit implements Unit {
         return getColony()
                 .filter(colony -> colony == colonyWhereWillBeUnitPlaced)
                 .isPresent();
-    }
-
-    @Override
-    public boolean canLeaveColony() {
-        return getColony().map(Colony::canVoluntarilyLoseResident).orElse(true);
     }
 
     /**

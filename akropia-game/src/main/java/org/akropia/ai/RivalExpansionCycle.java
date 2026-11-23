@@ -316,8 +316,7 @@ final class RivalExpansionCycle {
      */
     private boolean canRelease(final Colony colony, final Unit founder) {
         final List<Unit> residents = colony.getUnitsInsideColony();
-        if (residents.size() - 1 < MINIMUM_RESIDENTS
-                || !founder.canLeaveColony()) {
+        if (residents.size() - 1 < MINIMUM_RESIDENTS) {
             return false;
         }
         // The offers list a current-field grain choice for any field that could

@@ -71,6 +71,14 @@ public class TC_09_F09_famine_destroy_colony_test extends AbstractAkropiaTest {
         // Perform next turn and ignore turn events dialog.
         gamePage.nextTurnAndCloseDialogs();
 
+        // Famine leaves the empty colony until the player confirms next turn.
+        gamePage.openColonyAt(Location.of(22, 12), "Delft").close();
+        final org.akropia.page.FortifiedPopulationPage population = new org.akropia.page.FortifiedPopulationPage(
+                getContext());
+        population.requestAbandonment();
+        population.verifyEmptyColonyQuestion("Delft");
+        population.confirmEmptyColony();
+        population.verifyColonyAbsent(1);
         // Verify colony doesn't exists anymore.
         gamePage.selectTile(Location.of(22, 12));
         gamePage.verifyMapRemainsVisibleAt(Location.of(22, 12));

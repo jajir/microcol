@@ -888,18 +888,19 @@ class ColonyDefenseTest {
     }
 
     @Test
-    void capturingTheLastResidentRemovesTheColonyThroughTheSharedRules()
+    void capturingTheLastResidentKeepsTheEmptyCityUntilItsOwnersTurnEnd()
             throws ReflectiveOperationException {
         build(spec());
         attacker.placeToLocation(FIELD);
         attacker.getOwner().revealMapForUnit(attacker);
         final Unit worker = model.getUnitById(4);
         fightAt(WEST_FIELD, true);
-        assertTrue(model.getColonyById(0).isEmpty());
+        assertEquals(0, model.getColonyById(0).orElseThrow().getPopulation());
         assertSame(dutch, worker.getOwner());
         assertEquals(FIELD, worker.getLocation());
         final Model restored = reloaded();
-        assertTrue(restored.getColonyById(0).isEmpty());
+        assertEquals(0,
+                restored.getColonyById(0).orElseThrow().getPopulation());
         assertSame(restored.getPlayerByName("Dutch"),
                 restored.getUnitById(4).getOwner());
     }
@@ -1012,9 +1013,7 @@ class ColonyDefenseTest {
         final Unit militia = model.getUnitById(4);
         assertEquals(3, quebec.getPopulation());
         // A voluntary exit is still refused by the fortification rule.
-        assertFalse(militia.canLeaveColony());
-        assertThrows(IllegalStateException.class,
-                () -> militia.placeToLocation(COLONY));
+        assertTrue(militia.getWorkingColony().isPresent());
         assertTrue(quote().getColonyDefense().orElseThrow().isRevereExit());
         fight(false);
         // The battle result is a forced exit: only the last resident stays.
@@ -1026,9 +1025,7 @@ class ColonyDefenseTest {
         assertTrue(quebec.wasConstructionBuilded(ConstructionType.STOCKADE));
         // The public guard keeps protecting the remaining residents.
         final Unit remaining = quebec.getUnitsInsideColony().get(0);
-        assertFalse(remaining.canLeaveColony());
-        assertThrows(IllegalStateException.class,
-                () -> remaining.placeToLocation(COLONY));
+        assertTrue(remaining.getWorkingColony().isPresent());
         // Save and Continue keep the garrison soldier and the capped liberty.
         final Colony restored = reloaded().getColonyById(0).orElseThrow();
         assertEquals(2, restored.getPopulation());

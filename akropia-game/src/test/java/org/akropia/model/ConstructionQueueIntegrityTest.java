@@ -146,6 +146,15 @@ class ConstructionQueueIntegrityTest {
         assertEquals(3, colony.getUnitsInsideColony().size());
         colony.getWarehouse().addGoods(Goods.of(GoodsType.TOOLS, 1));
         queue.startTurn();
+        assertEquals(20,
+                colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+        assertEquals(List.of(item, following), queue.getBuildingQueue());
+        assertEquals(ColonyBuildingQueue.UnavailableReason.POPULATION,
+                queue.getCompletionUnavailableReason().orElseThrow());
+        resident.placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.TOWN_HALL)
+                        .getSlotAt(0));
+        queue.startTurn();
         assertEquals(0,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertFalse(colony.getConstructions().stream()

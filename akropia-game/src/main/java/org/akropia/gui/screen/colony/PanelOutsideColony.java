@@ -2,14 +2,10 @@ package org.akropia.gui.screen.colony;
 
 import java.util.Optional;
 
-import org.akropia.gui.dialog.DialogDestroyColony;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.BackgroundHighlighter;
 import org.akropia.gui.util.ClipboardEval;
 import org.akropia.gui.util.JavaFxComponent;
-import org.akropia.i18n.I18n;
-import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
-import org.akropia.gui.screen.game.components.StatusBarMessageEvent.Source;
 import org.akropia.model.Colony;
 import org.akropia.model.Unit;
 import org.slf4j.Logger;
@@ -39,31 +35,18 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     private final GameModelController gameModelController;
 
-    private final ColonyDialogCallback colonyDialog;
-
-    private final DialogDestroyColony dialogDestroyColony;
-
     private final EventBus eventBus;
 
     private final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory;
 
     private Colony colony;
 
-    private final I18n i18n;
-
     @Inject
     public PanelOutsideColony(final GameModelController gameModelController,
-            final ColonyDialogCallback colonyDialog,
-            final DialogDestroyColony dialogDestroyColony,
             final EventBus eventBus,
-            final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory,
-            final I18n i18n) {
-        this.i18n = Preconditions.checkNotNull(i18n);
+            final PanelOutsideColonyUnitFactory panelOutsideColonyUnitFactory) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
-        this.colonyDialog = Preconditions.checkNotNull(colonyDialog);
-        this.dialogDestroyColony = Preconditions
-                .checkNotNull(dialogDestroyColony);
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.panelOutsideColonyUnitFactory = Preconditions
                 .checkNotNull(panelOutsideColonyUnitFactory);
@@ -95,13 +78,7 @@ final class PanelOutsideColony implements JavaFxComponent {
     }
 
     private void onDragOver(final DragEvent event) {
-        final Optional<Unit> unit = ClipboardEval
-                .make(gameModelController.getModel(), event.getDragboard())
-                .getUnit();
-        if (unit.isPresent() && !unit.get().canLeaveColony()) {
-            showDepartureProblem(ColonyMsg.fortifiedMinimum);
-            event.consume();
-        } else if (isItUnit(event.getDragboard())) {
+        if (isItUnit(event.getDragboard())) {
             event.acceptTransferModes(TransferMode.MOVE);
             event.consume();
         }
@@ -109,9 +86,8 @@ final class PanelOutsideColony implements JavaFxComponent {
 
     private boolean isItUnit(final Dragboard db) {
         return ClipboardEval.make(gameModelController.getModel(), db)
-                .filterUnit(unit -> unit.canLeaveColony()
-                        && (!unit.isAtCargoSlot() || unit
-                                .canUnitDisembarkAt(colony.getLocation())))
+                .filterUnit(unit -> !unit.isAtCargoSlot()
+                        || unit.canUnitDisembarkAt(colony.getLocation()))
                 .getUnit().isPresent();
     }
 
@@ -122,10 +98,12 @@ final class PanelOutsideColony implements JavaFxComponent {
                 .getUnit();
         if (oUnit.isPresent()) {
             final Unit unit = oUnit.get();
-            if (!unit.canLeaveColony()) {
+            if (unit.isColonyTransferWaitingForMovement(colony,
+                    colony.getLocation())) {
                 event.setDropCompleted(false);
                 event.consume();
-                showDepartureProblem(ColonyMsg.fortifiedMinimum);
+                ColonyWorkDropRejectedEvent.afterDrag(event, eventBus,
+                        ColonyMsg.fieldInsufficientMovement);
                 return;
             }
             try {
@@ -140,14 +118,6 @@ final class PanelOutsideColony implements JavaFxComponent {
                     }
                     eventBus.post(
                             new UnitMovedOutsideColonyEvent(unit, colony));
-                } else if (colony.isLastUnitIncolony(unit)) {
-                    if (dialogDestroyColony
-                            .showWaitAndReturnIfYesWasSelected()) {
-                        unit.placeToMap(colony.getLocation());
-                        eventBus.post(
-                                new UnitMovedOutsideColonyEvent(unit, colony));
-                        colonyDialog.close();
-                    }
                 } else {
                     unit.placeToMap(colony.getLocation());
                     eventBus.post(
@@ -156,20 +126,18 @@ final class PanelOutsideColony implements JavaFxComponent {
             } catch (IllegalStateException rejected) {
                 event.setDropCompleted(false);
                 event.consume();
-                showDepartureProblem(
-                        unit.canLeaveColony() ? ColonyMsg.jobChanged
-                                : ColonyMsg.fortifiedMinimum);
+                final ColonyMsg reason = unit
+                        .isColonyTransferWaitingForMovement(colony,
+                                colony.getLocation())
+                                        ? ColonyMsg.fieldInsufficientMovement
+                                        : ColonyMsg.jobChanged;
+                ColonyWorkDropRejectedEvent.afterDrag(event, eventBus, reason);
                 return;
             }
             event.acceptTransferModes(TransferMode.MOVE);
             event.setDropCompleted(true);
             event.consume();
         }
-    }
-
-    private void showDepartureProblem(final ColonyMsg message) {
-        eventBus.post(
-                new StatusBarMessageEvent(i18n.get(message), Source.COLONY));
     }
 
     @Override

@@ -293,7 +293,7 @@ public final class ColonyAdvisorReport {
          */
         LOST_COLONIST,
         /** Food runs short and the lost resident is the last one. */
-        COLONY_LOST,
+        EMPTY_COLONY,
         /**
          * A completing warehouse or custom house changes storage in the same
          * update, before exports and limits are applied.
@@ -346,17 +346,21 @@ public final class ColonyAdvisorReport {
                 }
             }
             final int population = colony.getPopulation();
-            final boolean famine = foodAfterResidents < 0;
+            final boolean famine = population > 0 && foodAfterResidents < 0;
             return new ColonyStatus(colony, population,
-                    Colony.newColonistsFor(foodAfterResidents), famine,
-                    uncertaintyOf(famine, population, project),
+                    population == 0 ? 0
+                            : Colony.newColonistsFor(foodAfterResidents),
+                    famine, uncertaintyOf(famine, population, project),
                     List.copyOf(goods), project);
         }
 
         private static Uncertainty uncertaintyOf(final boolean famine,
                 final int population, final Project project) {
+            if (population == 0) {
+                return Uncertainty.EMPTY_COLONY;
+            }
             if (famine) {
-                return population == 1 ? Uncertainty.COLONY_LOST
+                return population == 1 ? Uncertainty.EMPTY_COLONY
                         : Uncertainty.LOST_COLONIST;
             }
             if (project.getState() == ProjectState.COMPLETES

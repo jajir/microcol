@@ -116,12 +116,17 @@ public final class ColonyWorkMenu {
 
     @Subscribe
     private void rejected(final ColonyWorkDropRejectedEvent event) {
-        showRejectedDrop();
+        showRejectedDrop(event.reason());
     }
 
     private void showRejectedDrop() {
-        message.setText(i18n.get(ColonyMsg.jobDropRejected),
-                i18n.get(ColonyMsg.jobChanged));
+        showRejectedDrop(ColonyMsg.jobChanged);
+    }
+
+    private void showRejectedDrop(final ColonyMsg reason) {
+        message.setText(i18n.get(reason == ColonyMsg.fieldInsufficientMovement
+                ? ColonyMsg.fieldDropRejected
+                : ColonyMsg.jobDropRejected), i18n.get(reason));
         message.showAndWait();
     }
 

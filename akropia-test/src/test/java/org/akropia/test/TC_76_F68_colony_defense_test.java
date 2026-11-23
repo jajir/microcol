@@ -285,7 +285,7 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
         final AttackPage attack = new AttackPage(getContext());
         attack.establishExistingWar();
         // A voluntary exit is refused, but the battle result is not voluntary.
-        colony.verifyVoluntaryExitRefused(ColonyDefensePage.RESIDENT);
+        colony.verifyResidentRetainsWork(ColonyDefensePage.RESIDENT);
         colony.chooseColonyOutcome(false);
         attack.chooseAttack(SOLDIER, QUEBEC);
         colony.verifyColonyReview("Free Colonist (armed by Paul Revere)",
@@ -295,7 +295,7 @@ public class TC_76_F68_colony_defense_test extends AbstractAkropiaTest {
                 "joins the garrison outside");
         colony.verifyMilitia(ColonyDefensePage.RESIDENT, true);
         // The two remaining residents stay protected by the fortification.
-        colony.verifyVoluntaryExitRefused(8);
+        colony.verifyResidentRetainsWork(8);
         // Continue keeps the garrison soldier and the capped liberty.
         GamePage.of(getContext()).exitToMenu();
         new FreePlayAuditPage(getContext()).continueGame();

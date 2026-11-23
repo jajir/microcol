@@ -545,7 +545,7 @@ public class GamePage extends AbstractScreen {
     }
 
     /** Marks the end of the interface routing of one human turn start. */
-    private static final class TurnStartRouting {
+    static final class TurnStartRouting {
         private final org.akropia.model.Model model;
         private final int previousRound;
         private final java.util.concurrent.CountDownLatch routed = new java.util.concurrent.CountDownLatch(
@@ -573,6 +573,12 @@ public class GamePage extends AbstractScreen {
             if (humanTurnThread == Thread.currentThread()) {
                 routed.countDown();
             }
+        }
+
+        @com.google.common.eventbus.Subscribe
+        public void onGameFinished(
+                final org.akropia.model.event.GameFinishedEvent event) {
+            routed.countDown();
         }
 
         void await() throws InterruptedException, TimeoutException {

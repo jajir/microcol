@@ -77,6 +77,7 @@ public class GameModelController {
     private final I18n i18n;
     private final DiagnosticLog diagnosticLog;
     private final Provider<TurnWaitingDialog> turnWaitingDialog;
+    private final Provider<org.akropia.gui.dialog.DialogDestroyColony> emptyColonyDialog;
     private final Queue<Runnable> afterTurn = new ConcurrentLinkedQueue<>();
     private volatile boolean processingTurn;
     private TurnWaitingDialog activeTurnWait;
@@ -87,7 +88,9 @@ public class GameModelController {
             final EventBus eventBus,
             final Provider<DialogMessage> passengerMessage, final I18n i18n,
             final DiagnosticLog diagnosticLog,
-            final Provider<TurnWaitingDialog> turnWaitingDialog) {
+            final Provider<TurnWaitingDialog> turnWaitingDialog,
+            final Provider<org.akropia.gui.dialog.DialogDestroyColony> emptyColonyDialog) {
+        this.emptyColonyDialog = Preconditions.checkNotNull(emptyColonyDialog);
         this.turnWaitingDialog = Preconditions.checkNotNull(turnWaitingDialog);
         this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
         this.selectedTileManager = Preconditions
@@ -766,6 +769,16 @@ public class GameModelController {
         }
         logger.debug("Next Turn event was triggered.");
         final Model model = getModel();
+        final var actor = model.getCurrentPlayer();
+        final var emptyColonies = model.getEmptyColoniesBeforeEndTurn();
+        if (!emptyColonies.isEmpty()
+                && !emptyColonyDialog.get().confirm(emptyColonies)) {
+            return;
+        }
+        if (!isHumanTurnReady() || getModel() != model
+                || model.getCurrentPlayer() != actor) {
+            return;
+        }
         final TurnWaitingDialog waiting = turnWaitingDialog.get();
         synchronized (afterTurn) {
             processingTurn = true;
@@ -775,7 +788,7 @@ public class GameModelController {
         final Thread worker = new Thread(() -> {
             Throwable failure = null;
             try {
-                model.endTurn();
+                model.endTurn(emptyColonies);
             } catch (Throwable rejected) {
                 failure = rejected;
                 logger.error("Turn processing failed", rejected);

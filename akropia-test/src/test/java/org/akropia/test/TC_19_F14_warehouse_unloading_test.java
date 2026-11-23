@@ -458,6 +458,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractAkropiaTest {
                             slot.getUnit().placeToLocation(COLONY_LOCATION);
                         }
                     }));
+            getModel().endTurn(getModel().getEmptyColoniesBeforeEndTurn());
         }).get(5, TimeUnit.SECONDS);
         colony.verifyColonyValid(false);
 

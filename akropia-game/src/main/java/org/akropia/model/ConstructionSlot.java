@@ -45,7 +45,7 @@ public class ConstructionSlot {
     public void clear(final boolean validate) {
         placeConstruction = null;
         if (validate) {
-            construction.verifyNumberOfUnitsOptionallyDestroyColony();
+            construction.populationChanged();
         }
     }
 

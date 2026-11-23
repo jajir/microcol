@@ -339,25 +339,16 @@ class LaSalleStockadeTest {
     }
 
     @Test
-    void grantedStockadeKeepsTheFortifiedPopulationRestriction() {
+    void grantedStockadeDoesNotRestrictResidentDeparture() {
         final Model model = member();
         final Colony colony = colony(model, 0);
         ColonyBattles.houseFieldWorkers(model, colony);
         retain(model, colony, 2);
         final Unit third = enterBuilding(model, colony);
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
-        assertFalse(third.canLeaveColony());
-        final String before = gson(model.save());
-        assertThrows(IllegalStateException.class,
-                () -> third.placeToMap(colony.getLocation()));
-        assertEquals(before, gson(model.save()));
-        // Only a fourth resident may leave; three stay protected.
-        final Unit fourth = enterField(model, colony);
-        assertTrue(fourth.canLeaveColony());
-        fourth.startTurn();
-        fourth.placeToMap(colony.getLocation());
-        assertEquals(3, colony.getUnitsInsideColony().size());
-        assertFalse(third.canLeaveColony());
+        third.placeToMap(colony.getLocation());
+        assertEquals(2, colony.getPopulation());
+        assertTrue(third.getWorkingColony().isEmpty());
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
     }
 
@@ -459,6 +450,7 @@ class LaSalleStockadeTest {
         final Colony delft = colony(model, 1);
         final Unit last = delft.getUnitsInsideColony().get(0);
         last.placeToMap(delft.getLocation());
+        model.destroyColony(delft);
         assertFalse(delft.isValid());
         final String before = gson(model.save());
         delft.grantLaSalleStockade();

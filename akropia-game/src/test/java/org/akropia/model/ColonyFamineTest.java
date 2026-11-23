@@ -225,7 +225,7 @@ class ColonyFamineTest {
     }
 
     @Test
-    void finalResidentLossRecordsDestroyedColonyWithoutStocks() {
+    void finalResidentLossKeepsEmptyColonyAndRecordsItsStocks() {
         final Model model = model(TerrainType.TUNDRA);
         final Colony colony = model.getColonyById(0).orElseThrow();
         retainTwoResidents(model, colony);
@@ -236,14 +236,15 @@ class ColonyFamineTest {
 
         colony.startTurn();
 
-        assertFalse(colony.isValid());
+        assertTrue(colony.isValid());
+        assertEquals(0, colony.getPopulation());
         final TurnEventFaminePlagueColony loss = model.getTurnEventStore()
                 .getForPlayer(colony.getOwner()).stream()
                 .filter(TurnEventFaminePlagueColony.class::isInstance)
                 .map(TurnEventFaminePlagueColony.class::cast).findFirst()
                 .orElseThrow();
         assertEquals(1, loss.getVictimId());
-        assertTrue(loss.getStocks().isEmpty());
+        assertFalse(loss.getStocks().isEmpty());
     }
 
     private void chooseVictim(final Colony colony, final Unit victim)

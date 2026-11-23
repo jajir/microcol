@@ -292,18 +292,22 @@ class RebellionVictoryTest {
     }
 
     @Test
-    void aDestroyedMemberLeavesTheSetSoTheSurvivorsWin() {
+    void anEmptyMemberStaysInTheSetWhenTheResidentBoundaryWins() {
         final Model model = load(
                 RoyalScenarioFixtures.declaredCrown().getModel());
         keepLivingGround(model, 2);
         final List<GameFinishedEvent> events = listen(model);
         assertEquals(Optional.empty(), endReason(model));
 
-        // Delft is rebel-held; its only resident steps out and it is destroyed.
+        // Delft remains rebel-held and empty; the resident victory rule still
+        // applies.
         // New Amsterdam and Haarlem remain and are rebel-held.
         model.getUnitById(DELFT_RESIDENT).placeToMap(DELFT_FIELD);
 
-        assertTrue(model.getColonyById(DELFT).isEmpty());
+        assertEquals(0,
+                model.getColonyById(DELFT).orElseThrow().getPopulation());
+        assertTrue(model.getPlayerByName(DUTCH).getRebellionColonyIds()
+                .contains(DELFT));
         assertEquals(Optional.of(VICTORY), endReason(model));
         assertEquals(1, events.size());
     }

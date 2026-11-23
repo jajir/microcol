@@ -332,7 +332,7 @@ public final class ColonyJobPage extends AbstractScreen {
         };
         final javafx.scene.Node source = getNodeFinder()
                 .lookup("#colonyUnit-" + workerId).query();
-        revealGameContent(source, building);
+        revealGameContent(source);
         final Point2D start = source.localToScreen(
                 source.getBoundsInLocal().getCenterX(),
                 source.getBoundsInLocal().getCenterY());
@@ -361,6 +361,7 @@ public final class ColonyJobPage extends AbstractScreen {
                 throw new IllegalStateException(
                         "The native indoor drag must start");
             }
+            revealGameContent(building);
             getRobot().moveTo(buildingBody
                     ? building.lookup(".building-top").localToScreen(25, 23)
                     : slotPoint(buildingId, 1));
@@ -409,9 +410,11 @@ public final class ColonyJobPage extends AbstractScreen {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
         revealGameContent(
-                getNodeFinder().lookup("#colonyUnit-" + workerId).query(),
-                getNodeFinder().lookup("#" + buildingId).query());
+                getNodeFinder().lookup("#colonyUnit-" + workerId).query());
         getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
+                .moveBy(12, 0);
+        revealGameContent(getNodeFinder().lookup("#" + buildingId).query());
+        getRobot()
                 .dropTo(building.lookup(".building-top").localToScreen(25, 23));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getModel()
                 .getUnitById(workerId).isAtPlaceConstructionSlot());
@@ -421,10 +424,11 @@ public final class ColonyJobPage extends AbstractScreen {
     public void dragCenterToIndoor(final int workerId, final String buildingId,
             final int slotIndex) throws Exception {
         revealGameContent(
-                getNodeFinder().lookup("#colonyUnit-" + workerId).query(),
-                getNodeFinder().lookup("#" + buildingId).query());
+                getNodeFinder().lookup("#colonyUnit-" + workerId).query());
         getRobot().drag("#colonyUnit-" + workerId, MouseButton.PRIMARY)
-                .dropTo(slotPoint(buildingId, slotIndex));
+                .moveBy(12, 0);
+        revealGameContent(getNodeFinder().lookup("#" + buildingId).query());
+        getRobot().dropTo(slotPoint(buildingId, slotIndex));
         WaitForAsyncUtils.waitFor(5, TimeUnit.SECONDS, () -> getModel()
                 .getUnitById(workerId).isAtPlaceConstructionSlot());
         WaitForAsyncUtils.waitForFxEvents();
@@ -520,10 +524,10 @@ public final class ColonyJobPage extends AbstractScreen {
         final Parent building = getNodeFinder().lookup("#" + buildingId)
                 .queryAs(Parent.class);
         screen.showSurroundingArea();
-        revealGameContent(building,
-                getNodeFinder().lookup("#colony-field-map").query());
+        revealGameContent(building);
         getRobot().drag(slotPoint(buildingId, slot), MouseButton.PRIMARY)
-                .dropTo(screen.fieldPoint(location));
+                .moveBy(12, 0);
+        getRobot().dropTo(screen.fieldPoint(location));
         WaitForAsyncUtils.waitForFxEvents();
         openFromField(colonyName, unitId);
         select(ColonyJobChoice.Kind.CURRENT_FIELD, goods);

@@ -227,6 +227,7 @@ class RebellionLossTest {
         final Model rebelHeld = load(
                 RoyalScenarioFixtures.declaredCrown().getModel());
         rebelHeld.getUnitById(DELFT_RESIDENT).placeToMap(DELFT_FIELD);
+        rebelHeld.destroyColony(rebelHeld.getColonyById(DELFT).orElseThrow());
         assertTrue(rebelHeld.getColonyById(DELFT).isEmpty());
         assertEquals(Set.of(NEW_AMSTERDAM, HAARLEM),
                 rebelHeld.getPlayerByName(DUTCH).getRebellionColonyIds());
@@ -239,6 +240,7 @@ class RebellionLossTest {
         assertEquals(Set.of(NEW_AMSTERDAM, DELFT, HAARLEM),
                 crownHeld.getPlayerByName(DUTCH).getRebellionColonyIds());
         crownHeld.getUnitById(DELFT_RESIDENT).placeToMap(DELFT_FIELD);
+        crownHeld.destroyColony(crownHeld.getColonyById(DELFT).orElseThrow());
         assertTrue(crownHeld.getColonyById(DELFT).isEmpty());
         assertEquals(Set.of(NEW_AMSTERDAM, HAARLEM),
                 crownHeld.getPlayerByName(DUTCH).getRebellionColonyIds());
@@ -503,14 +505,13 @@ class RebellionLossTest {
         resident.placeToMap(DELFT_FIELD);
 
         assertEquals(
-                List.of(GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN
-                        + ":" + DELFT_FIELD),
+                List.of(GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN + ":"
+                        + DELFT_FIELD),
                 seen,
                 "The loss is announced once, with the resident already placed");
         assertTrue(model.isGameFinished());
         assertEquals(
-                Optional.of(
-                        GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN),
+                Optional.of(GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN),
                 model.getGameOverResult()
                         .map(GameOverResult::getGameOverReason));
     }
@@ -538,13 +539,14 @@ class RebellionLossTest {
         final Model model = load(scene(new int[] { NEW_AMSTERDAM, HAARLEM },
                 new int[] { DELFT, HAARLEM }).getModel());
         model.getUnitById(DELFT_RESIDENT).placeToMap(DELFT_FIELD);
-        final String reason = GameOverEvaluator.REASON_REBELLION_ALL_COLONIES_CROWN;
+        final String reason = GameOverEvaluator.REASON_REBELLION_RESIDENTS_CROWN;
 
         final ModelPo saved = model.save();
         assertTrue(saved.getGameManager().isGameFinished());
         assertEquals(reason, saved.getGameManager().getGameOverReason());
         assertEquals(reason, rebelPo(saved).getRebellionLossReason());
-        assertEquals(ids(HAARLEM), rebelPo(saved).getRebellionColonyIds());
+        assertEquals(ids(DELFT, HAARLEM),
+                rebelPo(saved).getRebellionColonyIds());
 
         final Model restored = load(saved);
         final List<GameFinishedEvent> events = listen(restored);
@@ -553,7 +555,7 @@ class RebellionLossTest {
                 .map(GameOverResult::getGameOverReason));
         assertEquals(Optional.of(reason),
                 restored.getPlayerByName(DUTCH).getRebellionLossReason());
-        assertEquals(Set.of(HAARLEM),
+        assertEquals(Set.of(DELFT, HAARLEM),
                 restored.getPlayerByName(DUTCH).getRebellionColonyIds());
 
         // Continue cannot start a finished game, and a judgment adds nothing.

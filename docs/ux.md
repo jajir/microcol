@@ -1363,15 +1363,18 @@ nejde o pozorování skutečných hráčů.
 
 ### Odchod třetího obyvatele z opevnění (R-0082)
 
-**Změna pravidel schválená 21. listopadu 2026, dosud neimplementovaná:**
+**Změna pravidel schválená 21. listopadu, implementovaný zdroj z 23. listopadu 2026:**
 [Autoritativní pravidlo populace a prázdných měst](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21)
 ruší minimum tří obyvatel po dokončení opevnění. Rozestavěný projekt při
 nedostatku obyvatel čeká na začátku fronty; kladiva se dál hromadí, dokončení
 ani dostavění za peníze není dostupné. Po obnovení populace pokračuje.
 Přeřazení, odchod i rozpuštění posledního obyvatele zachová prázdné město
 během hráčova tahu. Až po stisknutí Next turn hráč potvrzuje zprávu, že
-stále prázdné město zanikne. Doplnění obyvatele během téhož tahu důvod
-zániku odstraní. Nejde o nové herní ověření; následující odstavec popisuje
+stále prázdné město zanikne. Dialog jmenuje prázdná města a ztrátu budov,
+zásob i stavebních front. Zrušit nebo Escape ponechá města i tah beze změny;
+nové stisknutí Next turn vždy znovu ověří aktuální stav. Doplnění obyvatele
+během téhož tahu důvod zániku odstraní. Uložení a načtení prázdné město
+zachová. Prázdné město zatím nic nevyrábí. Nejde o nové herní ověření; následující odstavec popisuje
 původní implementaci a její historickou přejímku.
 
 
@@ -1882,7 +1885,7 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 ## Výběr mapy a zrušení práce — zadání 2026-11-04
 
 1. [R-0414](requirements/done/R-0414.md): jednoduchý klik vybírá pole a vlastní jednotku, dvojklik otevírá vlastní město i přes jednotku. Město zůstává dostupné také přes nabídku měst a její klávesové ovládání. První klik dvojkliku nesmí zahájit přesun ani zrušit práci; plánovač tras zachovává svůj oddělený režim.
-2. Zaměstnaná jednotka je dostupná pro prohlížení; výběr, tažení nebo klávesa pohybu její práci neruší. Před ručním pohybem musí hráč v kontextové nabídce výslovně zrušit práci/rozkaz. Zrušení neobnovuje pohybové body. Pozemní pracovník zůstává na poli. Loď s rozkazem nejprve výslovně zruší původní rozkaz a teprve potom může dostat jiný cíl.
+2. Na hlavní mapě je zaměstnaná jednotka dostupná pro prohlížení; výběr, tažení nebo klávesa pohybu její práci neruší. Před ručním pohybem musí hráč v kontextové nabídce výslovně zrušit práci/rozkaz. Zrušení neobnovuje pohybové body. Pozemní pracovník zůstává na poli. Loď s rozkazem nejprve výslovně zruší původní rozkaz a teprve potom může dostat jiný cíl.
 3. Rybář při zrušení práce zaplatí existující jeden pohybový bod a vrátí se do svého města; bez dostupného návratu zůstane rybolov i poloha zachována. Jednoduchý klik rybáře vybírá, dvojklik otevírá jeho město. Jde o schválené chování; skutečné ověření vlastní funkční evidence.
 
 
@@ -1934,6 +1937,20 @@ Lokální ověření R-0409 dne 2026-11-04 zahrnulo EN/CS, B v nabídce i na map
 2. Ruční přepínač vývojářského režimu ukazuje pouze lokalizovaný název; aktuální klávesová vazba patří do editoru Klávesové zkratky. Změna nemění přepínání ani ukládání předvoleb.
 
 ## Odmítnuté přetažení pracovníka bez pohybu — 2026-11-10
+
+Doplnění schválené 21. listopadu 2026: v kolonii lze pracovníka přímo
+přetáhnout z pracovního pole na jiné pracoviště nebo do okolí města, pokud
+model dovolí cíl i cenu přesunu. Před tímto přetažením není nutné samostatně
+rušit práci; při platném dokončení se stará práce ukončí a provede se celý
+přesun, případně nová práce. Při nedostatku pohybových bodů se po puštění
+nad budovou, polem i částí Outside colony otevře modální vysvětlení s OK/Esc.
+Původní práce, poloha, pohyb i zásoby zůstanou zachované. U posledního
+obyvatele se nedostatek pohybu vysvětlí před jakoukoli otázkou opuštění města.
+Výběr a běžné pohybové příkazy na hlavní mapě stále vyžadují výslovné zrušení
+práce; přímé přeřazení je operací správy kolonie. Populační pravidla a odložený
+zánik města vlastní [společný kontrakt](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21).
+Ověření této úpravy vlastní [evidence přetažení](functional-tests.md#colony-worker-drop-2026-11-21).
+
 
 1. Schválené chování [R-0451](requirements/done/R-0451.md): hráč při tažení nad jinak dostupným polem předem čte ve stavové liště, že pracovník nemá dostatek pohybových bodů pro přesun. Samotný hover neotevírá dialog.
 2. Puštění otevře stejné vysvětlení v modálním okně s OK a zavřením přes Esc. Odmítnutí nezmění původní práci, umístění ani body. Opuštění cíle nebo ukončení tažení odstraní dočasnou pohybovou hlášku.
@@ -2144,3 +2161,10 @@ nejde o novou uživatelskou studii.
 2. Změna se ukládá okamžitě mezi nastavení aplikace a platí při příštím scrollování mapy v obou osách. Návrat z Nastavení změnu neruší; původní hodnotu lze nastavit stejným posuvníkem. Není potřeba rozehraná partie.
 3. Kolečko a touchpad sdílejí citlivost. Směr přijatých událostí a jejich setrvačný dojezd zůstávají zachované. Tažení mapy pravým tlačítkem a rychlost WASD jsou nezávislé.
 4. Jde o implementované chování; skutečné výsledky kontrol vlastní [funkční evidence](functional-tests.md#citlivost-scrollovani-2026-11-18). Nejde o měření konkrétního touchpadu ani hráčskou studii.
+
+## Přeřazení pracovníka a prázdné město — 23. listopadu 2026
+
+1. Pracovníka lze v kolonii přetáhnout z pole přímo do jiného zaměstnání nebo na náměstí. Přesun se zaplatí podle společných pravidel pohybu. Pokud body chybějí, po ukončení gesta se zobrazí modální vysvětlení; původní práce i stav hry zůstávají zachované. Dialog lze zavřít tlačítkem nebo Escape.
+2. Dokončené opevnění nebrání odchodu. Chybějící obyvatelé pozastavují rozestavěný projekt i placené dokončení; přehled uvádí požadovaný a současný počet. Původní projekt zůstává na čele fronty a zásoba práce se může dál zvyšovat.
+3. Odchod posledního obyvatele ponechá město otevřené pro návrat pracovníka. Až ukončení tahu vyvolá potvrzení se jmény prázdných měst a upozorněním na ztrátu budov, zásob a fronty. Zrušení dialogu zachová tah. Poradce odlišuje očekávanou ztrátu posledního obyvatele od potvrzeného zániku; hladomor neodstraňuje město ihned.
+4. Jde o implementaci a automatizovanou přejímku, nikoli nové pozorování hráčů. [Pravidla](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21) a [průběžná evidence](functional-tests.md#colony-worker-drop-2026-11-21) jsou oddělené.

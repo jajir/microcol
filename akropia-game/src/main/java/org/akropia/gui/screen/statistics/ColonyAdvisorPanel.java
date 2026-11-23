@@ -181,8 +181,8 @@ final class ColonyAdvisorPanel extends VBox {
         switch (uncertainty) {
         case LOST_COLONIST:
             return i18n.get(ColonyAdvisorText.uncertainLost);
-        case COLONY_LOST:
-            return i18n.get(ColonyAdvisorText.uncertainColonyLost);
+        case EMPTY_COLONY:
+            return i18n.get(ColonyAdvisorText.uncertainEmptyColony);
         case STORAGE_CHANGE:
             return i18n.get(ColonyAdvisorText.uncertainStorage);
         default:
@@ -200,7 +200,7 @@ final class ColonyAdvisorPanel extends VBox {
         final int id = colony.getColonyId();
         final Uncertainty uncertainty = colony.getUncertainty();
         final boolean lostColonist = uncertainty == Uncertainty.LOST_COLONIST
-                || uncertainty == Uncertainty.COLONY_LOST;
+                || uncertainty == Uncertainty.EMPTY_COLONY;
         final boolean storageChange = uncertainty == Uncertainty.STORAGE_CHANGE;
         final GridPane table = new GridPane();
         table.setId("colonyGoods-" + id);
@@ -290,8 +290,8 @@ final class ColonyAdvisorPanel extends VBox {
             return i18n.get(ColonyAdvisorText.projectUncertain, name);
         }
         if (project.getItem().isPresent()
-                && uncertainty == Uncertainty.COLONY_LOST) {
-            return i18n.get(ColonyAdvisorText.projectColonyLost, name);
+                && uncertainty == Uncertainty.EMPTY_COLONY) {
+            return i18n.get(ColonyAdvisorText.projectEmptyColony, name);
         }
         final ProjectState state = project.getState();
         switch (state) {

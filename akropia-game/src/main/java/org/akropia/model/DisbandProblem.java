@@ -27,11 +27,5 @@ public enum DisbandProblem {
     LOADED_CARRIER,
 
     /** The colony that would receive the equipment is no longer the owner's. */
-    RECEIVING_COLONY_INVALID,
-
-    /** The unit is the last resident; leaving would destroy the colony. */
-    LAST_COLONY_RESIDENT,
-
-    /** The colony's minimum resident rule keeps this unit in place. */
-    MINIMUM_RESIDENTS
+    RECEIVING_COLONY_INVALID
 }

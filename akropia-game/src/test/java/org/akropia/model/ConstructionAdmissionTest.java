@@ -104,6 +104,50 @@ class ConstructionAdmissionTest {
         assertEquals(before, snapshot());
     }
 
+    @ParameterizedTest(name = "population pause {0}")
+    @MethodSource("upgrades")
+    void populationPauseKeepsQueueAndStockAndRejectsPaidRush(
+            final ConstructionType type) {
+        prepare(type, "Dutch");
+        final int minimum = type.getRequiredColonyPopulation();
+        growTo(minimum);
+        if (type.getRequiredTools() > colony.getWarehouse()
+                .getStorageCapacity(GoodsType.TOOLS).getAmount()) {
+            colony.getConstructions()
+                    .removeIf(building -> ConstructionType.WAREHOUSES
+                            .contains(building.getType()));
+            colony.getConstructions().add(Construction.build(model, colony,
+                    ConstructionType.WAREHOUSE));
+        }
+        final ColonyBuildingItemProgressConstruction item = queue
+                .addAtEnd(type);
+        colony.getWarehouse().setGoods(
+                Goods.of(GoodsType.HAMMERS, item.getRequiredHammers()));
+        colony.getWarehouse()
+                .setGoods(Goods.of(GoodsType.TOOLS, item.getRequiredTools()));
+        final ConstructionRushQuote quote = queue.getRushQuote().orElseThrow();
+        final Unit departing = colony.getUnitsInsideColony().get(0);
+        departing.startTurn();
+        departing.placeToMap(colony.getLocation());
+        assertEquals(ColonyBuildingQueue.UnavailableReason.POPULATION,
+                queue.getCompletionUnavailableReason().orElseThrow());
+        assertTrue(queue.getRushQuote().isEmpty());
+        final String paused = snapshot();
+        assertThrows(IllegalStateException.class, () -> queue.rush(quote));
+        assertEquals(paused, snapshot());
+        queue.startTurn();
+        assertEquals(paused, snapshot());
+        assertEquals(item, queue.getBuildingQueue().get(0));
+        departing.placeToColonyStructureSlot(freeSlot());
+        queue.startTurn();
+        assertTrue(colony.wasConstructionBuilded(type));
+        assertTrue(queue.getBuildingQueue().isEmpty());
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+    }
+
     static Stream<ConstructionType> upgrades() {
         return projects().filter(type -> type.getUpgradeFrom().isPresent());
     }

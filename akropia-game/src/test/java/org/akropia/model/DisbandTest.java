@@ -366,7 +366,6 @@ class DisbandTest {
                 .filter(ConstructionSlot::isEmpty).findFirst().orElseThrow();
         helper.placeToColonyStructureSlot(slot);
         final int residents = colony.getUnitsInsideColony().size();
-        assertTrue(resident.canLeaveColony());
         resident.setTools(15);
         colony.getWarehouse().setGoods(Goods.of(GoodsType.TOOLS, 0));
         assertTrue(model.getDisbandProblem(resident).isEmpty());
@@ -385,7 +384,7 @@ class DisbandTest {
     }
 
     @Test
-    void lastColonyResidentIsRefusedBecauseLeavingWouldDestroyTheColony() {
+    void lastResidentCanBeDisbandedAndCityWaitsForTurnEnd() {
         final Model model = fixture();
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit last = model.getUnitById(0);
@@ -397,9 +396,11 @@ class DisbandTest {
             }
         }
         assertEquals(List.of(last), colony.getUnitsInsideColony());
-        assertEquals(DisbandProblem.LAST_COLONY_RESIDENT,
-                model.getDisbandProblem(last).orElseThrow());
-        assertTrue(model.getDisbandOffer(last).isEmpty());
+        final DisbandOffer offer = model.getDisbandOffer(last).orElseThrow();
+        model.disband(last, offer, false);
+        assertTrue(model.tryGetUnitById(last.getId()).isEmpty());
+        assertEquals(0, colony.getPopulation());
+        assertEquals(List.of(colony), model.getEmptyColoniesBeforeEndTurn());
         assertTrue(colony.isValid());
     }
 

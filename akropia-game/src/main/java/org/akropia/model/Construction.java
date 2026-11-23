@@ -53,7 +53,7 @@ public class Construction {
         return out;
     }
 
-    Colony getColony() {
+    public Colony getColony() {
         return colony;
     }
 
@@ -62,8 +62,8 @@ public class Construction {
                 String.format("Colony '%s' can't be upgraded", this)));
     }
 
-    void verifyNumberOfUnitsOptionallyDestroyColony() {
-        colony.verifyNumberOfUnitsOptionallyDestroyColony();
+    void populationChanged() {
+        colony.populationChanged();
     }
 
     private List<ConstructionSlotPo> getSaveConstructionSlots() {

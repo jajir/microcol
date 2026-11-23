@@ -197,7 +197,7 @@ class TurnPreparationBoundaryTest {
         });
         final ExecutorService threads = Executors.newFixedThreadPool(2);
         try {
-            final Future<?> transition = threads.submit(model::endTurn);
+            final Future<?> transition = threads.submit(() -> model.endTurn());
             assertTrue(entered.await(5, TimeUnit.SECONDS));
             final Future<ModelPo> pendingSave = threads.submit(() -> {
                 saving.countDown();

@@ -616,7 +616,9 @@ class ColonyLibertyTest {
         assertEquals(1, third.getPopulation());
         transfer(first.getUnitsInsideColony().get(0), second);
         transfer(third.getUnitsInsideColony().get(0), second);
-        assertFalse(model.getColonyById(1).isPresent());
+        assertTrue(model.getColonyById(1).isPresent());
+        assertEquals(0, third.getPopulation());
+        assertEquals(0, third.getLiberty());
         for (int i = 0; i < 2; i++) {
             final Unit leaver = first.getUnitsInsideColony().get(0);
             leaver.getPlace().destroy();

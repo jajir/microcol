@@ -73,6 +73,64 @@ class SharedColonyFieldAssignmentTest {
         assertTrue(target.canAccept(worker, GoodsType.GRAIN));
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(ints = { 0, 1 })
+    void insufficientMovementToTownPreservesWorkAndWholeState(
+            final int thirds) {
+        final Model model = fixture();
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final AbstractUnit worker = (AbstractUnit) model.getUnitById(0);
+        worker.setMovementThirds(thirds);
+        final ConstructionSlot target = colony
+                .getConstructionByType(ConstructionType.TOWN_HALL).getSlotAt(0);
+        final String before = snapshot(model);
+
+        assertTrue(worker.isColonyTransferWaitingForMovement(colony,
+                colony.getLocation()));
+        assertFalse(target.canAccept(worker));
+        assertThrows(IllegalStateException.class,
+                () -> worker.placeToColonyStructureSlot(target));
+        assertEquals(before, snapshot(model));
+        assertThrows(IllegalStateException.class,
+                () -> worker.placeToMap(colony.getLocation()));
+        assertEquals(before, snapshot(model));
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(booleans = { false, true })
+    void fieldWorkerTransfersDirectlyToTownAndPaysOnce(final boolean indoor) {
+        final Model model = fixture();
+        final Colony colony = model.getColonyById(0).orElseThrow();
+        final AbstractUnit worker = (AbstractUnit) model.getUnitById(0);
+        worker.startTurn();
+        final ColonyField source = colony
+                .getColonyFieldInDirection(Direction.west);
+        final int remaining = worker.getMovementThirds();
+        final int cost = worker.colonyTransferCost(colony,
+                colony.getLocation());
+        final int grain = colony.getWarehouse().getGoods(GoodsType.GRAIN)
+                .getAmount();
+        assertTrue(cost > 0);
+        assertFalse(worker.isColonyTransferWaitingForMovement(colony,
+                colony.getLocation()));
+
+        if (indoor) {
+            final ConstructionSlot target = colony
+                    .getConstructionByType(ConstructionType.TOWN_HALL)
+                    .getSlotAt(0);
+            worker.placeToColonyStructureSlot(target);
+            assertSame(worker, target.getUnit());
+        } else {
+            worker.placeToMap(colony.getLocation());
+            assertTrue(worker.getWorkingColony().isEmpty());
+            assertEquals(colony.getLocation(), worker.getLocation());
+        }
+        assertTrue(source.isEmpty());
+        assertEquals(remaining - cost, worker.getMovementThirds());
+        assertEquals(grain,
+                colony.getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
+    }
+
     private String snapshot(final Model model) {
         return new Gson().toJson(model.save());
     }

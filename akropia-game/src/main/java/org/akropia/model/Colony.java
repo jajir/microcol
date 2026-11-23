@@ -1081,6 +1081,9 @@ public class Colony {
      */
     public void startTurn() {
         model.releaseOutdoorWorkers(this, false);
+        if (getPopulation() == 0) {
+            return;
+        }
         // One snapshot for food, births, famine and post-famine output; owls
         // credited below affect the next update only.
         final PoliticalProduction political = getPoliticalProduction();
@@ -1097,8 +1100,9 @@ public class Colony {
         owner.checkCanCreditProducedOwls(possibleOwls);
         final Unit famineVictim = eatFoodAndOptionallyMakeNewColonist(
                 political);
-        // from now colony could be destroyed by famine.
-        if (isValid()) {
+        // An empty city awaits abandonment; it does not produce unattended
+        // goods.
+        if (isValid() && getPopulation() > 0) {
             final ColonyProductionStats colonyStats = getRawGoodsStats(
                     political);
             // Deposits are planned from this committed output, before education
@@ -1623,27 +1627,14 @@ public class Colony {
     }
 
     /**
-     * Verify number of units in colony and when it's 0 than destroy colony.
+     * Resident departures may leave a city empty until confirmed at turn end.
      */
-    void verifyNumberOfUnitsOptionallyDestroyColony() {
-        if (getUnitsInsideColony().isEmpty()) {
-            model.destroyColony(this);
-        } else {
-            // Completed resident exit; same-colony reassignment never gets
-            // here.
-            capLibertyToPopulation();
-        }
+    void populationChanged() {
+        capLibertyToPopulation();
     }
 
     public boolean isValid() {
         return model.isExists(this);
-    }
-
-    boolean canVoluntarilyLoseResident() {
-        return (!wasConstructionBuilded(ConstructionType.STOCKADE)
-                && !wasConstructionBuilded(ConstructionType.FORT)
-                && !wasConstructionBuilded(ConstructionType.FORTRESS))
-                || getUnitsInsideColony().size() > 3;
     }
 
     public List<ColonyJobChoice> getJobChoices(final Unit worker) {
@@ -1721,6 +1712,9 @@ public class Colony {
      */
     public ColonyProductionStats getGoodsStats() {
         final ColonyProductionStats preview = getRawGoodsStats();
+        if (getPopulation() == 0) {
+            return preview;
+        }
         final GoodsProductionStats food = preview
                 .getStatsByType(GoodsType.GRAIN);
         final int afterResidents = food.getInWarehouseAfter();
@@ -1805,6 +1799,9 @@ public class Colony {
                     warehouse.getGoods(goodsType).getAmount());
         });
 
+        if (getPopulation() == 0) {
+            return out;
+        }
         // get production from all fields
         colonyFields.forEach(field -> {
             if (field.getProduction(political).isPresent()) {

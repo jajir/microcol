@@ -27,8 +27,8 @@
   <entry key="colonyUnavailable">This colony is no longer one of yours. The report was refreshed.</entry>
   <entry key="unknownValue">?</entry>
   <entry key="uncertainLost">A random colonist is lost to the food shortage, so output, use, project and next stock depend on who is lost. They are not shown as exact.</entry>
-  <entry key="uncertainColonyLost">The last colonist is lost to the food shortage, so the colony itself is lost at the next update.</entry>
+  <entry key="uncertainEmptyColony">The colony is empty or will lose its last resident to famine. Abandonment requires confirmation when ending the turn; assign a resident to keep it.</entry>
   <entry key="uncertainStorage">The project completes at the next update and changes the warehouse or custom house, so the change and the next stock are not shown as exact.</entry>
   <entry key="projectUncertain">Project %s depends on which colonist is lost at the next update.</entry>
-  <entry key="projectColonyLost">Project %s is lost if the colony is lost at the next update.</entry>
+  <entry key="projectEmptyColony">Project %s stays paused in the empty colony until a resident returns or abandonment is confirmed.</entry>
 </properties>

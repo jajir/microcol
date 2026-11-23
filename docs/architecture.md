@@ -1339,3 +1339,11 @@ Lokální ověření popisuje [funkční evidence](functional-tests.md#fps-count
 
 1. `Model.getTradeRouteDestinationProblem` ověřuje vlastníka dopravce, přiřazení, aktuální trasu, dostupnost a dosažitelnost cíle prostřednictvím existujících pravidel přiřazení. `changeTradeRouteDestination` po validaci mění pouze přijaté zastávky, cíl a důvod čekání; zachovává polohu, náklad i záznam již zpracované návštěvy. `updateTradeRoute` při odebrání cíle vybere následující zbývající zastávku v cyklickém pořadí. UI z tohoto modelového kontraktu odvozuje dostupnost voleb.
 2. Odpovědnosti balíčků se nemění. Editor trasy poskytuje dropdown pro každého dopravce a standardní modální potvrzení smazání. Navigace v tahu a obsluha nákladu zůstávají v modelu. [Chování](gap-analysis.md#carrier-destination-and-route-deletion-agreed-2026-11-17), [lokální evidence](functional-tests.md#trade-route-destination-2026-11-17).
+
+
+## Populace, přetažení a zánik města — 23. listopadu 2026
+
+1. `ColonyBuildingQueue` ověřuje populační práh při zadání i dokončení stavby; stejnou překážku čte nabídka placeného dokončení. Kladiva zůstávají společnou zásobou a čekající první projekt se nepřeskakuje.
+2. `Colony.populationChanged` po odchodu obyvatele upraví politické body bez zničení města. `Model.getEmptyColoniesBeforeEndTurn` vybírá prázdná města aktuálního hráče; `endTurn` znovu ověří přesný potvrzený seznam před jejich odstraněním. AI potvrdí vlastní prázdná města automaticky. Save/load zachovává prázdné město bez nového schématu.
+3. `GameModelController` před výpočtem tahu zobrazí stávající `DialogDestroyColony` se seznamem prázdných měst. Zrušení nic nezmění; potvrzení předá seznam modelu. Jednotlivé přesuny již neotevírají okamžité potvrzení zániku.
+4. Přímé pracovní přesuny nadále validuje `AbstractUnit`; UI čte jeho dotaz na chybějící pohyb a odloží modální vysvětlení až za nativní konec tažení. Původní práce se při odmítnutí nemění. Vlastníci balíčků ani vazby model/UI se nemění. [Pravidla](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21), [ověření](functional-tests.md#colony-worker-drop-2026-11-21).

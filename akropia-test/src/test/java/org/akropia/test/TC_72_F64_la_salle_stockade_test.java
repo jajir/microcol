@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 /**
  * UC-108: La Salle gives a stockade to eligible colonies once, without cost,
- * while the existing fortified-population rule keeps three residents.
+ * and subsequent departures preserve the completed defense.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
@@ -68,12 +68,14 @@ public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
         defense.verifyStockadeBuilt(1);
         defense.verifyStockadeShown(true);
         defense.verifyStock(58, 19, 10000);
-        people.verifyWorker(4, ConstructionType.CARPENTERS_STAND, false);
-        // The existing fortified rule keeps all three residents inside.
-        colony.rememberWorld();
+        people.verifyWorker(4, ConstructionType.CARPENTERS_STAND);
+        // The completed defense stays even when a resident leaves.
         people.dragIndoorOutside("id_carpenter", 1);
-        colony.verifyWorldUnchanged();
-        colony.verifyThatStatusBarContains(BLOCKED);
+        defense.verifyPopulation(2);
+        people.verifyOutside(4);
+        defense.verifyStockadeBuilt(1);
+        // Return the worker before saving, without rebuilding the stockade.
+        work.assignCarpenter(4);
         defense.verifyPopulation(3);
         // Continue keeps the exact defense, residents and resources.
         game = colony.close();
@@ -85,7 +87,7 @@ public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
         defense.verifyStockadeShown(true);
         defense.verifyPopulation(3);
         defense.verifyStock(58, 19, 10000);
-        people.verifyWorker(4, ConstructionType.CARPENTERS_STAND, false);
+        people.verifyWorker(4, ConstructionType.CARPENTERS_STAND);
     }
 
     @Test
@@ -119,10 +121,11 @@ public class TC_72_F64_la_salle_stockade_test extends AbstractAkropiaTest {
         defense.verifyStock(58, 19, 10000);
         colony = game.openColonyAt(COLONY, COLONY_NAME);
         defense.verifyStockadeShown(true);
-        colony.rememberWorld();
         people.dragIndoorOutside("id_carpenter", 1);
-        colony.verifyWorldUnchanged();
-        colony.verifyThatStatusBarContains(BLOCKED);
+        people.verifyOutside(4);
+        defense.verifyPopulation(2);
+        defense.verifyStockadeBuilt(1);
+        work.assignCarpenter(4);
         defense.verifyPopulation(3);
         // A further turn and Continue never add a second stockade.
         game = colony.close();

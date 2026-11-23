@@ -569,10 +569,6 @@ public class ButtonsGamePanelController {
             return Buttons.disbandProblemLoadedCarrier;
         case RECEIVING_COLONY_INVALID:
             return Buttons.disbandProblemReceivingColony;
-        case LAST_COLONY_RESIDENT:
-            return Buttons.disbandProblemLastResident;
-        case MINIMUM_RESIDENTS:
-            return Buttons.disbandProblemMinimumResidents;
         default:
             return Buttons.disbandProblemUnavailable;
         }

@@ -400,6 +400,10 @@ class CustomHouseExportTest {
         assertSame(dutch, colony.getOwner());
         assertTrue(
                 colony.wasConstructionBuilded(ConstructionType.CUSTOM_HOUSE));
+        // Repopulate the captured port before its next productive update.
+        model.addUnitOutSideColony(colony).placeToColonyStructureSlot(
+                colony.getConstructionByType(ConstructionType.TOWN_HALL)
+                        .getSlotAt(0));
         colony.getWarehouse().stageProducedGoods(Goods.of(GoodsType.SILVER, 1));
         final int frenchGold = france.getGold();
         final int dutchGold = dutch.getGold();

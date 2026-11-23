@@ -27,8 +27,8 @@
 
 	<entry key="gameOver_caption">Konec hry.</entry>
 
-	<entry key="destroyColony_caption">Opravdu si přejete zrušit kolonii?</entry>
-	<entry key="destroyColony_question">Opravdu si přejete zrušit kolonii? Když kolonii opustíte s poslední jednotkou tak bude kolonie zrušena.</entry>
+	<entry key="destroyColony_caption">Zrušit prázdná města?</entry>
+	<entry key="destroyColony_question">Tato města nemají obyvatele a při ukončení tahu zaniknou: %s. Ztratíte jejich budovy, zásoby i stavební fronty. Zrušit vás vrátí do hry, kde můžete přidělit obyvatele.</entry>
 	
 	<entry key="colonyWasCaptured_caption">Kolonie byla obsazena</entry>
 	<entry key="colonyWasCaptured_text1">Dobyl jsi kolonii '</entry>
@@ -111,7 +111,7 @@
     <entry key="fight_workerName">Polní pracovník: %s</entry>
     <entry key="fight_workerCaptured">%s: polní pracovník kolonie %s byl zajat.</entry>
     <entry key="fight_revereExit">%s: vyzbrojený pracovník si ponechal zbraně a připojil se k posádce mimo kolonii.</entry>
-    <entry key="destroyColony_confirm">Opustit kolonii</entry>
+    <entry key="destroyColony_confirm">Zrušit města a ukončit tah</entry>
     <entry key="turnWait_title">Hrají ostatní hráči</entry>
     <entry key="turnWait_message">Ostatní hráči hrají, prosím čekejte.</entry>
 </properties>

@@ -30,6 +30,7 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
         work.verifyFishing(0, 0, true);
         final ColonyScreen colony = game.openColonyAt(Location.of(23, 16),
                 "New Amsterdam");
+        colony.showSurroundingArea();
         work.verifySelectedFieldWorker();
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0405-fisherman-selected.png");

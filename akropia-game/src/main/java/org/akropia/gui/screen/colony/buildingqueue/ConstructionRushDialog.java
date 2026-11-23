@@ -61,7 +61,11 @@ final class ConstructionRushDialog extends AbstractMessageWindow {
                 .getGold() >= quote.getPrice();
         confirm.setDisable(!affordable);
         detail.setText(quote == null
-                ? i18n.get(ConstructionText.rushUnavailable)
+                ? controller.getColony().getColonyBuildingQueue()
+                        .getCompletionUnavailableReason().isPresent()
+                                ? ConstructionText.status(i18n,
+                                        controller.getColony())
+                                : i18n.get(ConstructionText.rushUnavailable)
                 : i18n.get(ConstructionText.rushDetail,
                         ConstructionText.name(i18n, quote.getItem()),
                         quote.getHammersUsed(), quote.getToolsUsed(),

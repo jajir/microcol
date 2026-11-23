@@ -1074,16 +1074,31 @@ public class ColonyScreen extends AbstractScreen {
                 .findFirst().orElseThrow());
     }
 
-    public void moveFieldWorkerToBuilding(final int unitId,
-            final String buildingId) {
-        final Node building = getNodeFinder().lookup("#" + buildingId).query();
+    public void moveFieldWorkerOutside(final int unitId) {
         showSurroundingArea();
-        final Node canvas = getNodeFinder().lookup("#colony-field-map").query();
-        revealGameContent(canvas, building);
+        final Node outside = getNodeFinder().lookup("#colony-outside-area")
+                .query();
         getRobot()
                 .drag(fieldPoint(getModel().getUnitById(unitId).getLocation()),
                         MouseButton.PRIMARY)
-                .dropTo(building.lookup(".building-top").localToScreen(25, 23));
+                .moveBy(12, 0);
+        revealGameContent(outside);
+        getRobot().dropTo(outside).release(MouseButton.PRIMARY);
+        WaitForAsyncUtils.waitForFxEvents();
+    }
+
+    public void moveFieldWorkerToBuilding(final int unitId,
+            final String buildingId) {
+        showSurroundingArea();
+        final Node building = getNodeFinder().lookup("#" + buildingId).query();
+        getRobot()
+                .drag(fieldPoint(getModel().getUnitById(unitId).getLocation()),
+                        MouseButton.PRIMARY)
+                .moveBy(12, 0);
+        revealGameContent(building);
+        getRobot()
+                .dropTo(building.lookup(".building-top").localToScreen(25, 23))
+                .release(MouseButton.PRIMARY);
         WaitForAsyncUtils.waitForFxEvents();
     }
 

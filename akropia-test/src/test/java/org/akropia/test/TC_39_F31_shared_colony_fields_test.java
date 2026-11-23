@@ -308,4 +308,52 @@ public class TC_39_F31_shared_colony_fields_test extends AbstractAkropiaTest {
         colony.verifyWorldUnchanged();
     }
 
+    @Test
+    @Tag("local")
+    void TC_11_exhausted_worker_keeps_work_after_building_and_town_drop()
+            throws Exception {
+        // Spend the worker's movement through legal road reassignments.
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.dragFieldWorkerTo(0, Direction.north);
+        colony.dragFieldWorkerTo(0, Direction.west);
+        colony.dragFieldWorkerTo(0, Direction.north);
+        colony.verifyWorkerMovementThirds(0, 0);
+        colony.rememberWorld();
+
+        // A building drop explains missing movement and preserves the old job.
+        colony.moveFieldWorkerToBuilding(0, "id_town_hall");
+        colony.verifyRejectedWorkerDrop(
+                "The worker does not have enough movement points for this move.");
+        org.akropia.page.DialogMessagePage.of(getContext()).close();
+        colony.verifyWorldUnchanged();
+        colony.verifyFieldWorker(0, Location.of(24, 15), 4);
+
+        // The same explanation precedes any last-resident abandonment question.
+        colony.moveFieldWorkerOutside(0);
+        colony.verifyRejectedWorkerDrop(
+                "The worker does not have enough movement points for this move.");
+        org.akropia.page.DialogMessagePage.of(getContext()).closeWithEscape();
+        colony.verifyWorkerDropDialogVisible(false);
+        colony.verifyWorldUnchanged();
+        colony.verifyFieldWorker(0, Location.of(24, 15), 4);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_12_field_worker_moves_directly_into_building_without_cancelling_work()
+            throws Exception {
+        final ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(Location.of(24, 16), "New Amsterdam");
+        colony.verifyWorkerMovementThirds(0, 3);
+
+        // One drag changes the job and pays the road entry cost once.
+        colony.moveFieldWorkerToBuilding(0, "id_town_hall");
+        new org.akropia.page.ColonyJobPage(getContext()).verifyIndoorJob(0,
+                org.akropia.model.ConstructionType.TOWN_HALL, 0);
+        colony.verifyWorkerMovementThirds(0, 2);
+        colony.verifyWarehouseGoods(Goods.of(GoodsType.GRAIN, 100));
+        colony.verifyColonyPresent("New Amsterdam", true);
+    }
+
 }

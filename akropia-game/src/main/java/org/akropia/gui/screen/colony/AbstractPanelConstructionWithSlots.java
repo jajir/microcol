@@ -11,6 +11,7 @@ import org.akropia.gui.image.ImageProvider;
 import org.akropia.gui.util.ClipboardEval;
 import org.akropia.gui.util.ClipboardWritter;
 import org.akropia.i18n.I18n;
+import org.akropia.model.Colony;
 import org.akropia.model.ColonyProductionStats;
 import org.akropia.model.Construction;
 import org.akropia.model.ConstructionSlot;
@@ -24,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;
 
-import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -170,19 +170,14 @@ abstract class AbstractPanelConstructionWithSlots
                         event.setDropCompleted(true);
                     } catch (IllegalStateException
                             | IllegalArgumentException rejected) {
-                        // A modal dialog must wait for the native drag to end.
-                        final Node source = (Node) event.getGestureSource();
-                        source.addEventHandler(DragEvent.DRAG_DONE,
-                                new EventHandler<DragEvent>() {
-                                    @Override
-                                    public void handle(final DragEvent done) {
-                                        source.removeEventHandler(
-                                                DragEvent.DRAG_DONE, this);
-                                        javafx.application.Platform.runLater(
-                                                () -> getEventBus().post(
-                                                        new ColonyWorkDropRejectedEvent()));
-                                    }
-                                });
+                        final Colony colony = getConstruction().getColony();
+                        final ColonyMsg reason = unit
+                                .isColonyTransferWaitingForMovement(colony,
+                                        colony.getLocation())
+                                                ? ColonyMsg.fieldInsufficientMovement
+                                                : ColonyMsg.jobChanged;
+                        ColonyWorkDropRejectedEvent.afterDrag(event,
+                                getEventBus(), reason);
                     }
                 });
         event.consume();
@@ -208,10 +203,10 @@ abstract class AbstractPanelConstructionWithSlots
         dropTarget(canvasPoint(event.getSceneX(), event.getSceneY())).ifPresent(
                 slot -> ClipboardEval.make(model, event.getDragboard())
                         .tryReadUnit((unit, transferFrom) -> {
-                            if (slot.canAccept(unit)) {
-                                offeredDropSlot = slot;
-                                event.acceptTransferModes(TransferMode.MOVE);
-                            }
+                            // Accept the gesture so a refused release can
+                            // explain why.
+                            offeredDropSlot = slot;
+                            event.acceptTransferModes(TransferMode.MOVE);
                         }));
         event.consume();
     }
