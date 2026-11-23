@@ -10573,6 +10573,11 @@ public class Model {
                 whoDecalareIt);
     }
 
+    void fireColonyProjectCompleted(final Colony colony,
+            final ColonyBuildingItem item) {
+        listenerManager.fireColonyProjectCompleted(this, colony, item);
+    }
+
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,
             final Colony capturedColony) {
         listenerManager.fireColonyWasCaptured(model, capturingUnit,

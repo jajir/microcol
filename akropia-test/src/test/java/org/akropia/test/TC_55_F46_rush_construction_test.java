@@ -37,20 +37,33 @@ public class TC_55_F46_rush_construction_test extends AbstractAkropiaTest {
         building.captureDialog("closeButtonId",
                 "r0316-construction-before.png");
         building.assignCarpenter(4);
+        colony.moveFieldWorkerToBuilding(1, "id_blacksmith");
+        building.verifyDisplayedProduction("id_blacksmith", "+3");
         building.open();
         building.select("BLACKSMITHS_SHOP");
         building.confirm();
         building.select("WAREHOUSE");
         building.confirm();
         colony.rememberWorld();
+        building.rememberBuildingCards();
+        building.verifyDisplayedBuilding("id_blacksmith",
+                ConstructionType.BLACKSMITHS_HOUSE, "Blacksmith house", true);
         // Thirty missing hammers and five tools at ask three/tax ten cost 76.
         rush.open();
         rush.verifyQuote("Blacksmith shop", 34, 15, 30, 5, 76, 9924, true);
         rush.captureDialog("constructionRushDialog", "r83-rush-quote.png");
         rush.cancel();
         colony.verifyWorldUnchanged();
+        building.verifyBuildingCardsReplaced(List.of());
         rush.open();
         rush.confirm();
+        // The open colony reflects completion without closing or reopening it.
+        building.verifyDisplayedBuilding("id_blacksmith",
+                ConstructionType.BLACKSMITHS_SHOP, "Blacksmith shop", true);
+        building.verifyBuildingCardsReplaced(List.of("id_blacksmith"));
+        building.verifyDisplayedProduction("id_blacksmith", "+6");
+        rush.verifyDisplayedStocks(9924, 0, 0);
+        building.verifySharedHammerDisplay(0);
         building.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         building.verifyBuilding(ConstructionType.BLACKSMITHS_HOUSE, 0);
         building.verifyQueue(List.of("WAREHOUSE"), List.of(1), 0);
@@ -111,6 +124,7 @@ public class TC_55_F46_rush_construction_test extends AbstractAkropiaTest {
         building.open();
         building.select("BLACKSMITHS_SHOP");
         building.confirm();
+        building.rememberBuildingCards();
         rush.setGold(75);
         colony.rememberWorld();
         rush.open();
@@ -125,6 +139,7 @@ public class TC_55_F46_rush_construction_test extends AbstractAkropiaTest {
         colony.rememberWorld();
         rush.confirm();
         rush.verifyFeedback("The offer changed. Nothing was spent.", false);
+        building.verifyBuildingCardsReplaced(List.of());
         colony.verifyWorldUnchanged();
         rush.cancel();
         rush.open();
@@ -134,5 +149,33 @@ public class TC_55_F46_rush_construction_test extends AbstractAkropiaTest {
         building.verifyBuilding(ConstructionType.BLACKSMITHS_SHOP, 1);
         building.verifyQueue(List.of(), List.of(), 0);
         building.cancel();
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_paid_new_building_replaces_only_its_empty_card()
+            throws Exception {
+        // Open a colony with an empty dock site and buy its first dock.
+        ColonyScreen colony = WelcomePage.of(getContext()).loadGame()
+                .openColonyAt(COLONY, "New Amsterdam");
+        ConstructionPage building = new ConstructionPage(getContext());
+        ConstructionRushPage rush = new ConstructionRushPage(getContext());
+        building.open();
+        building.select("DOCK");
+        building.confirm();
+        building.verifyDisplayedBuilding("id_dock", ConstructionType.DOCK,
+                "Dock", false);
+        building.rememberBuildingCards();
+        rush.open();
+        rush.confirm();
+        // Completion updates the existing workspace and leaves other cards
+        // attached.
+        building.verifyDisplayedBuilding("id_dock", ConstructionType.DOCK,
+                "Dock", true);
+        building.verifyBuildingCardsReplaced(List.of("id_dock"));
+        building.verifyQueue(List.of(), List.of(), 0);
+        building.verifySharedHammerDisplay(0);
+        building.cancel();
+        colony.close();
     }
 }

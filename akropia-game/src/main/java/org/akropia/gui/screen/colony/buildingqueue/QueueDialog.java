@@ -248,7 +248,7 @@ public class QueueDialog extends AbstractMessageWindow {
         queue.refresh();
     }
 
-    private void refresh() {
+    public void refresh() {
         projects.getSelectionModel().clearSelection();
         controller.repaint();
         hammerPool.setText(i18n.get(ConstructionText.hammerPool,

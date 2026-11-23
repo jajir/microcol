@@ -6,6 +6,7 @@ import org.akropia.model.event.ActionWasStartedEvent;
 import org.akropia.model.event.BeforeDeclaringIndependenceEvent;
 import org.akropia.model.event.BeforeEndTurnEvent;
 import org.akropia.model.event.ColonyWasCapturedEvent;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
 import org.akropia.model.event.ColonyWasFoundEvent;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.GameStartedEvent;
@@ -155,6 +156,8 @@ public interface ModelListener {
     void onColonyWasFounded(ColonyWasFoundEvent event);
 
     void onColonyWasCaptured(ColonyWasCapturedEvent event);
+
+    void onColonyProjectCompleted(ColonyProjectCompletedEvent event);
 
     /**
      * Event is raised when game is stopped. This is last event send by model.

@@ -484,6 +484,7 @@ public class ColonyBuildingQueue {
         model.getEurope().applyTrade(nation, GoodsType.TOOLS,
                 -current.getMissingTools());
         model.getEurope().saveTradeAccount(nation, GoodsType.TOOLS, account);
+        model.fireColonyProjectCompleted(colony, head.getItem());
     }
 
     void startTurn() {
@@ -534,6 +535,7 @@ public class ColonyBuildingQueue {
                     .getProjectCompleted(colony.getOwner(), colony, item));
             buildingQueue.remove(0);
             revision++;
+            model.fireColonyProjectCompleted(colony, item.getItem());
         }
     }
 

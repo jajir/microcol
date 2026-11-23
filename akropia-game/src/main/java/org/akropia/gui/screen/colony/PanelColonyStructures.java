@@ -7,6 +7,11 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
 import org.akropia.model.Construction;
 import org.akropia.model.ConstructionType;
+import org.akropia.model.ColonyBuildingItemConstruction;
+import org.akropia.model.ColonyProductionStats;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
+import org.akropia.gui.util.Listener;
+import com.google.common.eventbus.Subscribe;
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -21,6 +26,7 @@ import javafx.scene.layout.VBox;
 
 /** Stable positions for all sixteen building families and their upgrades. */
 @Singleton
+@Listener
 final class PanelColonyStructures implements JavaFxComponent {
     private static final ConstructionType[] FAMILIES = {
             ConstructionType.TOWN_HALL, ConstructionType.CHAPEL,
@@ -37,6 +43,8 @@ final class PanelColonyStructures implements JavaFxComponent {
             "id_armory", "id_fort", "id_winery", "id_weaver", "id_oil_press",
             "id_pottery", "id_warehouse", "id_stables", "id_dock",
             "id_customs" };
+    private Colony colony;
+    private final PanelConstructionBasic[] panels = new PanelConstructionBasic[FAMILIES.length];
     private final GridPane mainPanel = new GridPane();
     private final ImageProvider images;
     private final GameModelController controller;
@@ -62,50 +70,80 @@ final class PanelColonyStructures implements JavaFxComponent {
     }
 
     void repaint(final Colony colony) {
+        this.colony = colony;
+        final ColonyProductionStats stats = colony.getGoodsStats();
         mainPanel.getChildren().clear();
         for (int i = 0; i < FAMILIES.length; i++) {
-            final ConstructionType family = FAMILIES[i];
-            final Construction construction = colony
-                    .getConstructions().stream().filter(item -> item.getType()
-                            .getUpgradeFromChain().contains(family))
-                    .findFirst().orElse(null);
-            final Region content;
-            if (construction == null) {
-                final ImageView image = buildingImage(
-                        images.getConstructionImage(family).orElseThrow());
-                image.setOpacity(0.3);
-                final Label name = new Label(
-                        i18n.get(ConstructionTypeName.getNameForType(family)));
-                name.getStyleClass().add("building-name");
-                name.setWrapText(true);
-                name.minHeightProperty()
-                        .bind(javafx.beans.binding.Bindings
-                                .createDoubleBinding(
-                                        () -> Math.max(22,
-                                                name.prefHeight(
-                                                        name.getWidth())),
-                                        name.widthProperty()));
-                name.setMaxWidth(Double.MAX_VALUE);
-                final Label state = new Label(i18n.get(ColonyMsg.notBuilt));
-                state.getStyleClass().add("building-state");
-                final HBox illustration = new HBox(image);
-                illustration.getStyleClass().add("building-top");
-                final VBox empty = new VBox(illustration, name, state);
-                empty.getStyleClass().addAll("constructionPane",
-                        "building-empty");
-                empty.setId(IDS[i]);
-                empty.setUserData(family);
-                content = empty;
-            } else {
-                final PanelConstructionBasic panel = new PanelConstructionBasic(
-                        images, events, i18n, construction,
-                        colony.getGoodsStats(), controller.getModel());
-                panel.setCssId(IDS[i]);
-                panel.paint();
-                content = panel.getContent();
-            }
-            mainPanel.add(content, i % 8, i / 8);
+            mainPanel.getChildren().add(createBuilding(i, stats));
         }
+    }
+
+    @Subscribe
+    private void onProjectCompleted(final ColonyProjectCompletedEvent event) {
+        if (event.getColony() != colony || !controller.isGameModelReady()
+                || event.getModel() != controller.getModel()
+                || !colony.isValid()) {
+            return;
+        }
+        final ColonyProductionStats stats = colony.getGoodsStats();
+        final ConstructionType completed = event
+                .getItem() instanceof ColonyBuildingItemConstruction
+                        ? ((ColonyBuildingItemConstruction) event.getItem())
+                                .getConstructionType()
+                        : null;
+        for (int i = 0; i < FAMILIES.length; i++) {
+            if (completed != null
+                    && completed.getUpgradeFromChain().contains(FAMILIES[i])) {
+                mainPanel.getChildren().set(i, createBuilding(i, stats));
+            } else if (panels[i] != null) {
+                panels[i].refreshProduction(stats);
+            }
+        }
+    }
+
+    private Region createBuilding(final int i,
+            final ColonyProductionStats stats) {
+        final ConstructionType family = FAMILIES[i];
+        final Construction construction = colony
+                .getConstructions().stream().filter(item -> item.getType()
+                        .getUpgradeFromChain().contains(family))
+                .findFirst().orElse(null);
+        final Region content;
+        panels[i] = null;
+        if (construction == null) {
+            final ImageView image = buildingImage(
+                    images.getConstructionImage(family).orElseThrow());
+            image.setOpacity(0.3);
+            final Label name = new Label(
+                    i18n.get(ConstructionTypeName.getNameForType(family)));
+            name.getStyleClass().add("building-name");
+            name.setWrapText(true);
+            name.minHeightProperty()
+                    .bind(javafx.beans.binding.Bindings.createDoubleBinding(
+                            () -> Math.max(22,
+                                    name.prefHeight(name.getWidth())),
+                            name.widthProperty()));
+            name.setMaxWidth(Double.MAX_VALUE);
+            final Label state = new Label(i18n.get(ColonyMsg.notBuilt));
+            state.getStyleClass().add("building-state");
+            final HBox illustration = new HBox(image);
+            illustration.getStyleClass().add("building-top");
+            final VBox empty = new VBox(illustration, name, state);
+            empty.getStyleClass().addAll("constructionPane", "building-empty");
+            empty.setId(IDS[i]);
+            empty.setUserData(family);
+            content = empty;
+        } else {
+            final PanelConstructionBasic panel = new PanelConstructionBasic(
+                    images, events, i18n, construction, stats,
+                    controller.getModel());
+            panel.setCssId(IDS[i]);
+            panel.paint();
+            panels[i] = panel;
+            content = panel.getContent();
+        }
+        GridPane.setConstraints(content, i % 8, i / 8);
+        return content;
     }
 
     @Override

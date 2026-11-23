@@ -36,6 +36,21 @@ Starší popisy rušených mechanismů níže jsou historické; aktuální kontr
 [pravidlech vztahů](gap-analysis.md#native-and-european-relations).
 Lokální přejímku dokládá [testová evidence](functional-tests.md#native-redesign-2026-11-20); plná regrese je samostatná.
 
+## Dokončení stavebního projektu — 23. listopadu 2026
+
+`ColonyBuildingQueue` po běžném i placeném dokončení vysílá modelovou
+`ColonyProjectCompletedEvent` s kolonií a dokončeným projektem. Událost následuje
+až po změně budovy či vytvoření jednotky, odečtení surovin a odebrání projektu
+z fronty; u nákupu také po zaplacení a aktualizaci evropského obchodu.
+Odmítnutá operace ani nedokončená stavba ji nevysílají.
+`ModelListenerImpl` doručuje událost vlastních kolonií na JavaFX vlákně,
+při zpracování tahu až po jeho dokončení. `PanelColonyStructures` vymění
+kartu dokončené rodiny budov a obnoví produkční údaje ostatních karet.
+`ColonyPanel` obnoví související zásoby, pole, jednotky, přehledy a otevřenou
+frontu. Pokladna nadále používá `GoldWasChangedEvent`. Model nezná GUI;
+odpovědnosti balíčků se nemění. Přejímku zaznamenává
+[funkční evidence](functional-tests.md#project-completion-events-2026-11-23).
+
 ## Kam patří nová změna
 
 | Otázka | Vlastník |

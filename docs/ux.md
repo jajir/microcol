@@ -1,3 +1,17 @@
+## Okamžitý výsledek dostavění — 23. listopadu 2026
+
+1. Hráč v otevřené kolonii zvolí nákup dokončení prvního projektu a potvrdí
+   jeho nabídku. Po úspěchu ihned vidí hotovou budovu nebo její nový stupeň,
+   aktuální produkci, zásoby, frontu a peníze bez zavření kolonie. Zachová se
+   otevřená část obrazovky a stávající stručné potvrzení nákupu.
+2. Dokončená budova nahradí příslušnou kartu; ostatní karty zůstanou připojené
+   a aktualizují své produkční údaje. Tentýž mechanismus oznámení používá
+   běžné dostavění; dokončení jednotky obnoví také její zobrazení.
+3. Zrušení ani odmítnutí změněné nebo nezaplatitelné nabídky neoznamují
+   dokončení a nevymění kartu budovy. Existující vysvětlení odmítnutí zůstává.
+4. Jde o implementované chování, nikoli výsledek hráčské studie.
+   Ověření UC-043/044/045 vede [funkční evidence](functional-tests.md#project-completion-events-2026-11-23).
+
 ## Úpravy z vizuálního přehledu — 21. listopadu 2026
 
 1. Schválený rozsah VD-01, VD-03–10 a VD-14–16 zachovává papírové plochy,

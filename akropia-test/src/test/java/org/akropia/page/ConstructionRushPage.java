@@ -72,6 +72,22 @@ public final class ConstructionRushPage extends AbstractScreen {
                 getButtonById("constructionRushConfirm").isDisabled());
     }
 
+    public void verifyDisplayedStocks(final int gold, final int hammers,
+            final int tools) {
+        org.testfx.util.WaitForAsyncUtils.waitForFxEvents();
+        assertEquals(String.format(java.util.Locale.ROOT, "%,d", gold)
+                .replace(',', '\u00a0'), getLabeledById("labelGold").getText());
+        for (final GoodsType type : java.util.List.of(GoodsType.HAMMERS,
+                GoodsType.TOOLS)) {
+            final javafx.scene.Node panel = getNodeFinder()
+                    .lookup("#colony-good-" + type.name()).query();
+            assertEquals(
+                    String.valueOf(type == GoodsType.HAMMERS ? hammers : tools),
+                    ((javafx.scene.control.Label) panel.lookup(".amount"))
+                            .getText());
+        }
+    }
+
     public void verifyStocks(int gold, int hammers, int tools) {
         assertEquals(gold, colony().getOwner().getGold());
         assertEquals(hammers, colony().getWarehouse()

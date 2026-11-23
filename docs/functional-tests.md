@@ -1,3 +1,53 @@
+<a id="project-completion-events-2026-11-23"></a>
+## Project completion events — 2026-11-23
+
+1. Scope: UC-043/044/045, shared model notification after normal or paid completion,
+   replacement of the affected building card, refresh of dependent production,
+   stocks, queue and units. Gold keeps its existing event. Cancelled and
+   rejected purchases do not announce completion.
+2. `ConstructionRushTest` checks event identity, fully settled model state at
+   delivery, normal completion, unit purchase and absence of events for
+   rejected or incomplete projects. TC55/01 checks displayed upgrade, stocks,
+   shared work and unchanged unrelated card instances; TC55/04 checks the
+   first dock; TC55/02 retains rejection coverage. TC54 covers ordinary work
+   and queue behavior; TC62/03 covers artillery completion.
+3. Final-source model/JUnit acceptance passed **4,929 tests, zero failures,
+   errors or skips**, in 156.200 s (separate lock wait 39.915 s). Completion
+   `20261123T074610Z-94d446c2743f`, PID 28622, reports
+   `target/verification/run-_x4bvfpg/`. All changed game/model-test files match that
+   runner's source snapshot based on `89e0ebb1`. Two earlier model runs also
+   passed, but preceded the final source review and are not the acceptance
+   evidence for the final implementation.
+4. First targeted run `20261123T074944Z-e139871f7357` (PID 29676,
+   `target/docker-ui/run-IUTMJg/`) completed 11 checks in 216.231 s: ten passed,
+   one failed, zero errors/skips. All four TC55 purchase cases passed. TC54/02
+   failed before any completion: it checked rendered instructions while the
+   construction section was still collapsed under the current colony UI.
+   TC54 now explicitly opens that section before checking its rendered
+   instructions and meters; all original assertions and cancellation actions
+   remain. Game and model-test sources are unchanged, so model acceptance is
+   retained. The failed evidence remains failed.
+5. Targeted retry `20261123T075428Z-cb40aefae346` (PID 30095,
+   `target/docker-ui/run-8nDgEm/`) passed **11 tests, zero failures/errors/skips**
+   in 230.952 s. Selection: full `TC_55_F46_rush_construction_test` (4), full
+   `TC_54_F45_shared_hammers_test` (3),
+   `TC_62_F53_artillery_test#TC_03_armory_gate_then_complete_one_gun` (1), and
+   `PageVerificationContractTest` (3). Source hashes match
+   `target/ux01-events/source.json`.
+6. Fixed smoke/support selection passed **23 tests, zero failures/errors/skips**
+   in **286.422 s**, within the 420-second acceptance budget. Completion
+   `20261123T075839Z-4df30b2de5ff`, PID 31022; all 13 fresh XML reports are in
+   `target/verification/run-1h98mpgr/`. The changed Java files match the final
+   smoke source snapshot. Model, targeted UI and smoke acceptance are complete.
+7. Review covered both completion paths, notification timing, JavaFX delivery,
+   colony filtering, targeted card replacement, dependent production refresh,
+   and preserved cancellation/rejection behavior. The shared Eclipse formatter
+   was applied to all changed Java files. Documentation acceptance passed 14
+   consistency checks, the name audit (zero unexplained occurrences), strict
+   MkDocs and scoped diff checks. Logs and source hashes are retained in
+   `target/ux01-events/`. The unrelated backlog edit is excluded.
+   No remote regression or publication verification was performed.
+
 ## Visual mitigations 2026-11-21
 
 1. Scope: approved VD-01, VD-03–10 and VD-14–16. UC-033/036/042/043/050/056/068/069/071/113/114/119

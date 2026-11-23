@@ -138,6 +138,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         });
         final ColonyScreen colony = game.openColonyAt(COLONY, "New Amsterdam");
         final ConstructionPage building = new ConstructionPage(getContext());
+        building.open();
         building.verifyEmptyProgress();
 
         // A second carpenter makes six hammers per turn; tools are not needed.
@@ -146,6 +147,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         building.select("LUMBER_MILL");
         building.confirm();
         building.cancel();
+        building.open();
         building.verifyResourceProgress("constructionWork", "36 / 52",
                 "+6/turn", "Turns: 3", 36.0 / 52, true);
         building.verifyResourceProgress("constructionTools", "Not required", "",
@@ -163,6 +165,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         building.select("BLACKSMITHS_SHOP");
         building.confirm();
         building.cancel();
+        building.open();
         building.verifyResourceProgress("constructionWork", "36 / 64",
                 "+6/turn", "Turns: 5", 36.0 / 64, true);
         building.verifyResourceProgress("constructionTools", "12 / 20",
@@ -178,6 +181,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         building.selectQueue(0);
         building.remove();
         building.cancel();
+        building.open();
         building.verifyEmptyProgress();
         colony.verifyWarehouseGoods(Goods.of(GoodsType.HAMMERS, 36));
         colony.verifyWarehouseGoods(Goods.of(GoodsType.TOOLS, 12));
@@ -203,6 +207,7 @@ public class TC_54_F45_shared_hammers_test extends AbstractAkropiaTest {
         building.select("WAREHOUSE");
         building.confirm();
         building.cancel();
+        building.open();
         building.verifyResourceProgress("constructionWork", "36 / 80",
                 "+0/turn", "44 missing", 0.45, true);
         building.verifyResourceProgress("constructionTools", "Not required", "",

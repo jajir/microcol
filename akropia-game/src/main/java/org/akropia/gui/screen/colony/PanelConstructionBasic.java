@@ -13,12 +13,13 @@ import com.google.common.eventbus.EventBus;
  * Panel with construction and slots for three workers.
  */
 class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
+    private final javafx.scene.layout.HBox illustration;
 
     PanelConstructionBasic(final ImageProvider imageProvider,
             final EventBus eventBus, final I18n i18n,
             final Construction construction,
             final ColonyProductionStats colonyStats, final Model model) {
-        super(eventBus, i18n, imageProvider, construction, colonyStats, model);
+        super(eventBus, i18n, imageProvider, construction, model);
         getMainPane().getStyleClass().add("constructionPane");
         final javafx.scene.control.Label name = new javafx.scene.control.Label(
                 i18n.get(ConstructionTypeName
@@ -31,17 +32,20 @@ class PanelConstructionBasic extends AbstractPanelConstructionWithSlots {
                 .bind(javafx.beans.binding.Bindings.createDoubleBinding(
                         () -> Math.max(22, name.prefHeight(name.getWidth())),
                         name.widthProperty()));
-        final javafx.scene.layout.HBox illustration = new javafx.scene.layout.HBox(
-                12,
+        illustration = new javafx.scene.layout.HBox(12,
                 PanelColonyStructures.buildingImage(imageProvider
                         .getConstructionImage(construction.getType())
                         .orElseThrow(() -> new AkropiaException(String.format(
                                 "Unable to find image for %s", construction)))),
-                createProduction());
+                createProduction(colonyStats));
         illustration.getStyleClass().add("building-top");
         getMainPane().getChildren().setAll(illustration, name, getCanvas());
         getMainPane().setAccessibleText(name.getText());
         getMainPane().setUserData(construction.getType());
+    }
+
+    void refreshProduction(final ColonyProductionStats colonyStats) {
+        illustration.getChildren().set(1, createProduction(colonyStats));
     }
 
     @Override

@@ -19,6 +19,7 @@ import javafx.scene.input.MouseButton;
 /** Player actions and separate observations for the construction picker. */
 public final class ConstructionPage extends AbstractScreen {
     private javafx.scene.Node picker;
+    private final java.util.Map<String, javafx.scene.Node> buildingCards = new java.util.LinkedHashMap<>();
 
     public ConstructionPage(final TestContext context) {
         super(context);
@@ -280,6 +281,56 @@ public final class ConstructionPage extends AbstractScreen {
         assertEquals(tools,
                 checked.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
         assertEquals(10000, model.getPlayerByName("Dutch").getGold());
+    }
+
+    public void rememberBuildingCards() {
+        getRobot().interact(() -> {
+            buildingCards.clear();
+            getNodeFinder().lookup(".colony-structures")
+                    .queryAs(javafx.scene.layout.GridPane.class).getChildren()
+                    .forEach(card -> buildingCards.put(card.getId(), card));
+        });
+    }
+
+    public void verifyBuildingCardsReplaced(final List<String> changedIds) {
+        getRobot().interact(() -> {
+            assertEquals(16, buildingCards.size());
+            buildingCards.forEach((id, previous) -> {
+                final javafx.scene.Node current = getNodeFinder()
+                        .lookup("#" + id).query();
+                if (changedIds.contains(id)) {
+                    assertNotSame(previous, current, id);
+                } else {
+                    assertSame(previous, current, id);
+                }
+            });
+        });
+    }
+
+    public void verifyDisplayedProduction(final String id,
+            final String expected) {
+        getRobot().interact(() -> {
+            final javafx.scene.Node card = getNodeFinder().lookup("#" + id)
+                    .query();
+            assertEquals(expected, ((javafx.scene.control.Label) card
+                    .lookup(".production .diffPositive")).getText());
+        });
+    }
+
+    public void verifyDisplayedBuilding(final String id,
+            final ConstructionType type, final String name,
+            final boolean built) {
+        getRobot().interact(() -> {
+            final javafx.scene.Node card = getNodeFinder().lookup("#" + id)
+                    .query();
+            assertEquals(type, card.getUserData());
+            assertEquals(name,
+                    ((javafx.scene.control.Label) card.lookup(".building-name"))
+                            .getText());
+            assertEquals(!built,
+                    card.getStyleClass().contains("building-empty"));
+            assertTrue(card.isVisible());
+        });
     }
 
     public void verifyBuilding(final ConstructionType type, final int count) {

@@ -1,3 +1,13 @@
+## UC-043/044/045: okamžitá obnova po dostavění — 23. listopadu 2026
+
+1. Nákup dokončení aktualizuje kartu budovy, související produkci, zásoby,
+   frontu a pokladnu v otevřené kolonii podle [UX kontraktu](ux.md#okamzity-vysledek-dostaveni-23-listopadu-2026).
+2. `TC_55_F46_rush_construction_test/TC_01` kontroluje skutečně zobrazené
+   vylepšení, zásoby a zachování ostatních karet; TC_04 vznik nové budovy.
+   TC_02 zachovává odmítnutí změněné nabídky bez výměny karet.
+   Běžné dostavění pokrývají `ConstructionRushTest` a TC54, dokončení jednotky
+   také TC62/03. Výsledky jsou v [evidenci](functional-tests.md#project-completion-events-2026-11-23).
+
 
 ## UC-114/119: neutrální potvrzení — 19. listopadu 2026
 

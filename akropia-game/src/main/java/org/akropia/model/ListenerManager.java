@@ -12,6 +12,7 @@ import org.akropia.model.event.ActionWasStartedEvent;
 import org.akropia.model.event.BeforeDeclaringIndependenceEvent;
 import org.akropia.model.event.BeforeEndTurnEvent;
 import org.akropia.model.event.ColonyWasCapturedEvent;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
 import org.akropia.model.event.ColonyWasFoundEvent;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.GameStartedEvent;
@@ -385,6 +386,13 @@ final class ListenerManager {
         logger.info("Colony was founded: {}.", event);
 
         listeners.forEach(listener -> listener.onColonyWasFounded(event));
+    }
+
+    void fireColonyProjectCompleted(final Model model, final Colony colony,
+            final ColonyBuildingItem item) {
+        final ColonyProjectCompletedEvent event = new ColonyProjectCompletedEvent(
+                model, colony, item);
+        listeners.forEach(listener -> listener.onColonyProjectCompleted(event));
     }
 
     void fireColonyWasCaptured(final Model model, final Unit capturingUnit,

@@ -6,6 +6,7 @@ import org.akropia.model.event.ActionWasStartedEvent;
 import org.akropia.model.event.BeforeDeclaringIndependenceEvent;
 import org.akropia.model.event.BeforeEndTurnEvent;
 import org.akropia.model.event.ColonyWasCapturedEvent;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
 import org.akropia.model.event.ColonyWasFoundEvent;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.GameStartedEvent;
@@ -122,6 +123,11 @@ public class ModelListenerAdapter implements ModelListener {
     @Override
     public void onColonyWasFounded(ColonyWasFoundEvent event) {
         // Do nothing.
+    }
+
+    @Override
+    public void onColonyProjectCompleted(
+            final ColonyProjectCompletedEvent event) {
     }
 
     @Override

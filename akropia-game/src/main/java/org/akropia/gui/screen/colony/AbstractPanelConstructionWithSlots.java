@@ -61,7 +61,6 @@ abstract class AbstractPanelConstructionWithSlots
             Point.of(SLOT_POSITION_X_START + 2 * SLOT_POSITION_WIDTH,
                     SLOT_POSITION_Y) };
 
-    private final ColonyProductionStats colonyStats;
     private final Map<Rectangle, ConstructionSlot> slots = new LinkedHashMap<>();
     private final Model model;
 
@@ -69,10 +68,8 @@ abstract class AbstractPanelConstructionWithSlots
 
     public AbstractPanelConstructionWithSlots(final EventBus eventBus,
             final I18n i18n, final ImageProvider imageProvider,
-            final Construction construction,
-            final ColonyProductionStats colonyStats, final Model model) {
+            final Construction construction, final Model model) {
         super(eventBus, i18n, imageProvider, construction, CANVAS_SIZE);
-        this.colonyStats = Preconditions.checkNotNull(colonyStats);
         this.model = Preconditions.checkNotNull(model);
         getMainPane().setOnDragOver(this::onDragOver);
         getMainPane().setOnDragDropped(this::onDragDropped);
@@ -111,7 +108,8 @@ abstract class AbstractPanelConstructionWithSlots
         });
     }
 
-    VBox createProduction() {
+    VBox createProduction(final ColonyProductionStats colonyStats) {
+        Preconditions.checkNotNull(colonyStats);
         final VBox output = new VBox(1);
         output.setMouseTransparent(true);
         output.getStyleClass().add("production");

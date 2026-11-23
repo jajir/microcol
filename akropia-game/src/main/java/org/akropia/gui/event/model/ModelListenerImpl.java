@@ -11,6 +11,8 @@ import org.akropia.model.event.ActionWasStartedEvent;
 import org.akropia.model.event.BeforeDeclaringIndependenceEvent;
 import org.akropia.model.event.BeforeEndTurnEvent;
 import org.akropia.model.event.ColonyWasCapturedEvent;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
+import javafx.application.Platform;
 import org.akropia.model.event.ColonyWasFoundEvent;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.GameStartedEvent;
@@ -163,6 +165,15 @@ final class ModelListenerImpl implements ModelListener {
     public void onGoldWasChanged(final GoldWasChangedEvent event) {
         if (event.getPlayer().isHuman()) {
             eventBus.post(event);
+        }
+    }
+
+    @Override
+    public void onColonyProjectCompleted(
+            final ColonyProjectCompletedEvent event) {
+        if (event.getColony().getOwner().isHuman()) {
+            gameModelController.afterTurnPresentation(
+                    () -> Platform.runLater(() -> eventBus.post(event)));
         }
     }
 

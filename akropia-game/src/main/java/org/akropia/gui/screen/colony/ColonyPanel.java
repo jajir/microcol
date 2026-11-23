@@ -10,6 +10,7 @@ import org.akropia.gui.util.Listener;
 import org.akropia.gui.util.UpdatableLanguage;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Colony;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
 import org.akropia.model.event.UnitMovedToColonyFieldEvent;
 import org.akropia.model.event.UnitMovedToConstructionEvent;
 
@@ -227,7 +228,18 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
         repaint();
     }
 
+    @Subscribe
+    private void onProjectCompleted(final ColonyProjectCompletedEvent event) {
+        if (event.getColony() == colony) {
+            repaint(false);
+        }
+    }
+
     void repaint() {
+        repaint(true);
+    }
+
+    private void repaint(final boolean repaintStructures) {
         if (colony != null) {
             if (!colony.isValid()) {
                 colony = null;
@@ -238,7 +250,9 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             colonyFields.setColony(colony);
             goods.repaint();
             panelDock.repaint();
-            colonyStructures.repaint(colony);
+            if (repaintStructures) {
+                colonyStructures.repaint(colony);
+            }
             construction.repaint(colony);
             panelOutsideColony.setColony(colony);
             panelOutsideColony.repaint();
@@ -250,8 +264,13 @@ public final class ColonyPanel implements JavaFxComponent, UpdatableLanguage {
             detail.getChildren().stream().filter(SchoolPanel.class::isInstance)
                     .map(SchoolPanel.class::cast).forEach(SchoolPanel::refresh);
             refreshOverview();
-            if (activeQueue != null)
-                activeQueue.refreshSelection();
+            if (activeQueue != null) {
+                if (repaintStructures) {
+                    activeQueue.refreshSelection();
+                } else {
+                    activeQueue.refresh();
+                }
+            }
         }
     }
 

@@ -3,6 +3,8 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
+import java.util.ArrayList;
+import org.akropia.model.event.ColonyProjectCompletedEvent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,6 +23,7 @@ class ConstructionRushTest {
     private Colony colony;
     private ColonyBuildingQueue queue;
     private Player owner;
+    private final List<ColonyProjectCompletedEvent> completions = new ArrayList<>();
 
     @BeforeEach
     void prepare() {
@@ -33,6 +36,60 @@ class ConstructionRushTest {
         owner = colony.getOwner();
         assertSame(owner, model.getCurrentPlayer());
         assertTrue(model.isGameRunning());
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onColonyProjectCompleted(
+                    final ColonyProjectCompletedEvent event) {
+                completions.add(event);
+            }
+        });
+    }
+
+    @Test
+    void normalCompletionNotifiesAfterRemovingHeadAndSpendingStocks() {
+        prepareRushNeedingFiveImportedTools();
+        final ColonyBuildingItemProgress<?> head = queue.getBuildingQueue()
+                .get(0);
+        colony.getWarehouse().setGoods(
+                Goods.of(GoodsType.HAMMERS, head.getRequiredHammers()));
+        colony.getWarehouse()
+                .setGoods(Goods.of(GoodsType.TOOLS, head.getRequiredTools()));
+        final List<String> observedStates = new ArrayList<>();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onColonyProjectCompleted(
+                    final ColonyProjectCompletedEvent event) {
+                observedStates.add(snapshot());
+            }
+        });
+        queue.startTurn();
+        assertEquals(List.of(snapshot()), observedStates);
+        assertEquals(1, completions.size());
+        assertSame(colony, completions.get(0).getColony());
+        assertSame(head.getItem(), completions.get(0).getItem());
+        assertTrue(queue.getBuildingQueue().isEmpty());
+        assertTrue(colony.isContainsConstructionByType(
+                ConstructionType.BLACKSMITHS_SHOP));
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
+        assertEquals(0,
+                colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
+        queue.startTurn();
+        assertEquals(1, completions.size());
+    }
+
+    @Test
+    void rejectedPurchasesAndIncompleteConstructionDoNotNotify() {
+        prepareRushNeedingFiveImportedTools();
+        owner.setGold(0);
+        final ConstructionRushQuote poor = queue.getRushQuote().orElseThrow();
+        assertThrows(NotEnoughtGoldException.class, () -> queue.rush(poor));
+        owner.setGold(1000);
+        final ConstructionRushQuote stale = queue.getRushQuote().orElseThrow();
+        colony.getWarehouse().addGoods(Goods.of(GoodsType.HAMMERS, 1));
+        assertThrows(IllegalStateException.class, () -> queue.rush(stale));
+        queue.startTurn();
+        assertTrue(completions.isEmpty());
     }
 
     private String snapshot() {
@@ -73,7 +130,20 @@ class ConstructionRushTest {
         assertEquals(76, quote.getPrice());
         assertEquals(24, quote.getGoldAfter());
         assertEquals(before, snapshot());
+        final List<String> observedStates = new ArrayList<>();
+        model.addListener(new ModelListenerAdapter() {
+            @Override
+            public void onColonyProjectCompleted(
+                    final ColonyProjectCompletedEvent event) {
+                observedStates.add(snapshot());
+            }
+        });
         queue.rush(quote);
+        assertEquals(List.of(snapshot()), observedStates);
+        assertEquals(1, completions.size());
+        assertSame(model, completions.get(0).getModel());
+        assertSame(colony, completions.get(0).getColony());
+        assertSame(head.getItem(), completions.get(0).getItem());
         assertEquals(24, owner.getGold());
         assertEquals(0,
                 colony.getWarehouse().getGoods(GoodsType.HAMMERS).getAmount());
@@ -185,6 +255,8 @@ class ConstructionRushTest {
         assertEquals(40, quote.getMissingHammers());
         assertEquals(0, quote.getMissingTools());
         queue.rush(quote);
+        assertEquals(1, completions.size());
+        assertSame(quote.getItem(), completions.get(0).getItem());
         assertEquals(units + 1, model.getAllUnits().size());
         assertEquals(10,
                 colony.getWarehouse().getGoods(GoodsType.TOOLS).getAmount());
