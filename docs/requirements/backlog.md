@@ -1,5 +1,23 @@
 # Current requirement backlog
 
+## Úvod do hry a postupná nápověda — 2026-11-24
+
+1. Uživatel požaduje realizovat první tři výsledky níže; jako první vybral
+   k přípravě **bod 2, R-0454**. Konkrétní návrhy a implementace zatím nejsou
+   schválené. Čísla požadavků neurčují pořadí práce.
+2. Bod 1: [R-0453 — stabilní rám úvodních obrazovek](R-0453.md), A01,
+   status `new`: orientace v menu a návazných stránkách, hierarchie akcí
+   a návaznost na společné herní lišty.
+3. Bod 2: [R-0454 — ukázky skutečného hraní v menu](R-0454.md), A01,
+   status `waiting for refinement`: průzkum, kolonie a obchod jako návrh
+   první sady; vybrat obsah a statickou či animovanou prezentaci.
+4. Bod 3: [R-0455 — postupně rostoucí nápověda](R-0455.md), A03,
+   status `new`: pomoc navazující na existující témata a herní kontext;
+   upřesnit postupné představování a zapamatování témat.
+5. Bod 4: [R-0456 — posouzení vedené výuky pomocí úkolů](R-0456.md), A03,
+   status `new`: zvážit úpravu existující první mise a vhodnost vedené výuky.
+   Její realizace není rozhodnutá a neblokuje první tři požadavky.
+
 ## Complete Settings contours — 2026-11-10
 
 1. [R-0447](done/R-0447.md), status `done`, A03: preserve complete header/footer contours around Settings and Keyboard shortcuts while scrolling and resizing. Locally accepted: 5,117 model/JUnit, 18 targeted UI/contract and 21 smoke/support checks, all passing; [evidence](../functional-tests.md#r-0447-settings-contours-2026-11-10).
