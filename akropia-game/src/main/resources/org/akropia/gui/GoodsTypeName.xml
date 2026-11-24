@@ -4,7 +4,7 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="grain">Grain</entry>
+	<entry key="grain">Food</entry>
 	<entry key="olives">Olives</entry>
 	<entry key="grapes">Grapes</entry>
 	<entry key="wool">Wool</entry>
@@ -25,7 +25,7 @@
 	<entry key="owls">Owls</entry>
 
 	<!-- Declension - 2 case - genitiv - plurar, it's -->
-	<entry key="grain_dc2_pl">Grain</entry>
+	<entry key="grain_dc2_pl">Food</entry>
 	<entry key="olives_dc2_pl">Olives</entry>
 	<entry key="grapes_dc2_pl">Grapes</entry>
 	<entry key="wool_dc2_pl">Wool</entry>
@@ -46,7 +46,7 @@
 	<entry key="owls_dc2_pl">Owls</entry>
 
 	<!-- Declension - 7 case - instrumental - plurar, it's -->
-	<entry key="grain_dc7_pl">Grain</entry>
+	<entry key="grain_dc7_pl">Food</entry>
 	<entry key="olives_dc7_pl">Olives</entry>
 	<entry key="grapes_dc7_pl">Grapes</entry>
 	<entry key="wool_dc7_pl">Wool</entry>

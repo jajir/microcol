@@ -1,3 +1,22 @@
+<a id="food-artwork-2026-11-24"></a>
+
+## Jídlo a rybolov — 24. listopadu 2026
+
+1. Schválená ryba 03 je šikmá, s plochou modrozelenou výplní. Výnos vody
+   a říčních polí používá rybu, zemědělský výnos obilí, společná zásoba košík
+   s obilím a rybou. Význam zásoby určuje [pravidlo jídla](gap-analysis.md#food-presentation-2026-11-24).
+2. Editovatelné zdroje v `akropia-game/src/graphics/production-goods/` jsou
+   `production-fish.svg`, `production-fish-small.svg`, `production-grain.svg`,
+   `production-grain-small.svg`, `good-food.svg` a `good-food-tiny.svg`.
+   Obsahují skutečné vektorové cesty, ploché výplně a černou linku `#000000`
+   přibližně 2 logické pixely. Menší varianty 24 a 15 px zjednodušují kresbu;
+   nejsou zmenšeným velkým rastrem. Velké ikony mají 45 px.
+3. Opakovatelný export a kontrola všech šesti PNG:
+   `python3 scripts/graphics/export-graphics.py food --install` a
+   `python3 scripts/graphics/export-graphics.py food --check`.
+   Skupina používá stávající renderer a manifest bez nové závislosti.
+   Skutečnou přejímku a snímky uvádí [funkční evidence](functional-tests.md#food-presentation-2026-11-24).
+
 ## Zjemnění ikony poznání — 19. listopadu 2026
 
 1. Uživatel při skutečném hraní odmítl první převod sovy jako příliš výrazný

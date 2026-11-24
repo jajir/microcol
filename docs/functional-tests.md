@@ -1,3 +1,86 @@
+<a id="food-presentation-2026-11-24"></a>
+
+## Food and fishing presentation — 24 November 2026
+
+1. UC-006 and UC-012 show Food/Jídlo with fish on water and rivers, grain on
+   ordinary land and a shared food-stock basket. Stock, cargo and trading
+   terminology shares the same translation; model IDs and economic rules
+   remain unchanged. See the [agreed behavior](gap-analysis.md#food-presentation-2026-11-24).
+2. `FoodTextTest` covers land, ocean, lake, both river sizes, unchanged food
+   output and English/Czech labels and help. `FoodArtworkTest` verifies stock,
+   source and size selection and non-food fallback. Existing goods artwork
+   and naming checks remain. TC202/01 and /04 verify actual fish icons,
+   Food/Jídlo labels, map/colony status feedback, shared stock and production
+   artwork; /01 retains fishing cancellation and food-consumption checks.
+   TC91 retains terrain disclosure, land icons, quantities and unchanged state.
+3. Updated text expectations also cover founding, town commons, markets,
+   trade routes, foreign-colony trade and the terrain/resource help tables.
+   No gameplay assertions or stable scenario IDs were removed.
+4. Acceptance is pending. First model attempt
+   `20261124T055123Z-433bfefddb02` failed during compilation after 13.878
+   supervised seconds (600-second limit), before tests started: an import
+   edit shortened `org.akropia.model.TerrainType`. The import was corrected;
+   this failed attempt remains failed. Second attempt
+   `20261124T055200Z-63ae4fb72527` failed after 31.852 supervised seconds
+   while compiling the new test: the I18n builder uses `setDefaultLocale`,
+   not `setLocale`. No tests started; the test setup was corrected.
+5. Third model attempt `20261124T055316Z-e6ad518990e6` ran 4,932 tests:
+   one failure, no errors or skips (152.066 supervised seconds). The existing
+   `ButtonPresentationContractTest` rejected a new hover tooltip. The tooltip
+   was removed; status-bar and accessible help remain. Final acceptance is
+   pending and earlier failed evidence is preserved.
+6. The already-queued fourth attempt `20261124T055436Z-2c56a16526ab`
+   still used the tooltip source and failed the same single contract check
+   (4,932 tests, one failure, no errors/skips; 156.073 supervised seconds,
+   plus 71.445 seconds waiting for the serialized test lock).
+7. Final model/JUnit run `20261124T055653Z-1113c691dd58`, supervisor PID
+   94776, passed **4,932 tests, zero failures, errors or skips**. Reports:
+   `target/verification/run-nzmqi2ez`; execution 154.968 supervised seconds
+   within 600 seconds, separately 90.984 seconds waiting for the lock.
+   All 40 changed implementation, artwork and test files matched the saved
+   source snapshot before targeted UI dispatch.
+8. Targeted Docker/Xvfb run `20261124T060121Z-c088b4eea902`, PID 95528,
+   has a 1,800-second limit. Selection: TC02, TC06, TC91, TC100/06+07,
+   TC109, TC117, TC148, TC186, TC202 and `PageVerificationContractTest`.
+   UI results and fixed smoke remain pending. Six SVG exports pass `--check`;
+   visual inspection covers 45px, simplified 24px and 15px artwork. Fourteen
+   documentation consistency tests, naming audit and strict MkDocs passed
+   before the final evidence update; final documentation checks remain due.
+9. Targeted run completed after 973.246 supervised seconds: **50 tests,
+   zero failures, four errors, zero skips**, reports `target/docker-ui/run-LhRor8`.
+   TC202/01 and /04 incorrectly expected a changeable product radio row for
+   the local fishing boat. This UI does not offer product selection there;
+   the new checks now verify the actual map fish, shared stock, status help
+   and selected fishing worker, preserving the original cancellation checks.
+   TC186/01 and /02 stopped at the existing empty-colony end-turn question
+   after conquest. Both journeys now explicitly assign the conqueror to the
+   captured town hall before ending the turn, verifying one resident and the
+   additional 50 weapons returned to its warehouse. Capture, gold, peace,
+   trade, ownership, stock and Continue assertions remain.
+   No game code changed after the passing model run. The other 46 passing UI
+   scenarios remain reusable; the affected scenarios and neighborhood will
+   be rerun before smoke.
+
+10. Repaired scenarios and their population neighborhood passed in
+   `20261124T062317Z-a3a3a8497e16`, PID 96136: **15 tests, zero failures,
+   errors or skips**, 321.530 supervised seconds within 1,200 seconds.
+   Reports: `target/docker-ui/run-cw9DPH`. Selection: all TC202, TC186,
+   TC53 and `PageVerificationContractTest` checks. The unchanged passing
+   scenarios from the preceding targeted run remain applicable. Reviewed
+   English fishing-map and Czech colony screenshots: contextual fish,
+   shared food basket and localized labels display correctly. All 29 changed
+   game files still match the passing model/JUnit source snapshot.
+11. Fixed smoke/support gate passed **23 checks across all 13 selected
+   classes, zero failures, errors or skips**, in 289.641 seconds within
+   the 420-second budget. Completion `20261124T063112Z-bc161b2a2060`,
+   PID 98897, took 292.812 supervised seconds including cleanup, with
+   no lock wait. Reports: `target/verification/run-8uwh416f`. All changed
+   executable files match its source snapshot. Final diff and vector/export
+   review completed; documentation consistency tests (14), naming audit
+   (zero unexplained occurrences) and strict MkDocs build pass.
+   This is local acceptance, not full-regression or distribution-publication
+   evidence. Earlier failed attempts remain failed.
+
 <a id="terrain-ownership-order-2026-11-23"></a>
 ## Terrain ownership order — 2026-11-23
 

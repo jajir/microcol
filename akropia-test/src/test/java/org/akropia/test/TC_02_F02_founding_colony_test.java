@@ -75,7 +75,7 @@ public class TC_02_F02_founding_colony_test extends AbstractAkropiaTest {
         // 3 with no worker, to the founder's field: net food is the earlier 2
         // plus the 4 from the commons.
         colonyScreen.showSurroundingArea();
-        colonyScreen.verifyTownCommons("Grain: 4, Grapes: 3");
+        colonyScreen.verifyTownCommons("Food: 4, Grapes: 3");
         colonyScreen.verifyThatProductionIs(GoodsType.GRAIN, 6);
 
         colonyScreen.verifyNumberOfUnitsAtPier(1);

@@ -137,6 +137,47 @@ public final class WorldWorkersPage extends AbstractScreen {
         assertTrue(unit.getMapJobChoices().isEmpty());
     }
 
+    public void verifyFishingYieldPresentation(final String expectedName,
+            final int expectedAmount, final String expectedHelp) {
+        final javafx.scene.layout.HBox row = getRobot()
+                .lookup("#terrainYield-GRAIN")
+                .queryAs(javafx.scene.layout.HBox.class);
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) row
+                .getChildren().get(0);
+        assertEquals(getContext()
+                .getClassFromGuice(org.akropia.gui.image.ImageProvider.class)
+                .getImage("production-fish.png"), icon.getImage());
+        assertEquals(expectedName,
+                ((javafx.scene.control.Label) row.getChildren().get(1))
+                        .getText());
+        assertEquals(Integer.toString(expectedAmount),
+                ((javafx.scene.control.Label) row.getChildren().get(3))
+                        .getText());
+        assertEquals(expectedHelp, row.getAccessibleHelp());
+    }
+
+    public void hoverFishingYield() {
+        getRobot().moveTo("#terrainYield-GRAIN");
+    }
+
+    public void verifyFoodStockPresentation(final String expectedName) {
+        final javafx.scene.layout.VBox stock = getRobot()
+                .lookup("#colony-good-GRAIN")
+                .queryAs(javafx.scene.layout.VBox.class);
+        final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) ((javafx.scene.layout.Pane) stock
+                .getChildren().get(0)).getChildren().get(0);
+        assertEquals(getContext()
+                .getClassFromGuice(org.akropia.gui.image.ImageProvider.class)
+                .getImage("good-food.png"), icon.getImage());
+        assertEquals(expectedName,
+                ((javafx.scene.control.Label) stock.getChildren().get(1))
+                        .getText());
+    }
+
+    public void hoverFoodStock() {
+        getRobot().moveTo("#colony-good-GRAIN");
+    }
+
     public void verifySelectedFieldWorker() {
         assertFalse(getRobot().lookup("#colony-field-worker")
                 .queryAs(javafx.scene.control.Label.class).getText().isBlank());

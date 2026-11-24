@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+    <entry key="stock">Food from farming and fishing. Feeds the colony.</entry>
+    <entry key="farming">Farming: provides %s food per turn.</entry>
+    <entry key="fishing">Fishing: provides %s food per turn.</entry>
+</properties>

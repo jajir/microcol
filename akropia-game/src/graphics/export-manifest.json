@@ -446,7 +446,90 @@
         }
       ]
     },
-    "goods": {
+    "food": {
+      "family": "Food stock, farming and fishing; 2026-11-24",
+      "outputs": [
+          {
+              "output": "production-fish.png",
+              "source": "production-goods/production-fish.svg",
+              "render": "size",
+              "size": [
+                  45,
+                  45
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "45 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          },
+          {
+              "output": "production-fish-small.png",
+              "source": "production-goods/production-fish-small.svg",
+              "render": "size",
+              "size": [
+                  24,
+                  24
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "24 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          },
+          {
+              "output": "production-grain.png",
+              "source": "production-goods/production-grain.svg",
+              "render": "size",
+              "size": [
+                  45,
+                  45
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "45 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          },
+          {
+              "output": "production-grain-small.png",
+              "source": "production-goods/production-grain-small.svg",
+              "render": "size",
+              "size": [
+                  24,
+                  24
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "24 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          },
+          {
+              "output": "good-food.png",
+              "source": "production-goods/good-food.svg",
+              "render": "size",
+              "size": [
+                  45,
+                  45
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "45 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          },
+          {
+              "output": "good-food-tiny.png",
+              "source": "production-goods/good-food-tiny.svg",
+              "render": "size",
+              "size": [
+                  15,
+                  15
+              ],
+              "transparent": true,
+              "consumer": "ImageProvider food presentation",
+              "display": "15 logical px",
+              "stroke": "black #000000, approximately 2 logical px"
+          }
+      ]
+  },
+  "goods": {
       "family": "19 goods icons, R-0384/R-0385",
       "outputs": [
         {

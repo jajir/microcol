@@ -325,7 +325,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Move cost: 1; defense: +0%", "Grain 4", "Fields: yes");
+                "Move cost: 1; defense: +0%", "Food 4", "Fields: yes");
         help.verifyReferenceProperties(
                 "colonizopediaTerrainForestProperties_GRASSLAND",
                 "Move cost: 2; defense: +50%", "Lumber 6");
@@ -354,8 +354,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
                 "Ore +2, Silver +2", "Ore 200, Silver 200");
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
-                "Allowed terrain: Ocean, Lake", "Grain +2",
-                "Does not deplete.");
+                "Allowed terrain: Ocean, Lake", "Food +2", "Does not deplete.");
         help.captureDialog("colonizopediaReference", "r0274-bonuses-en.png");
         help.scrollReferenceToEnd();
         help.verifyBodyScrolledToEnd();
@@ -388,7 +387,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
         help.verifySelectedTerrainArtwork();
         help.verifyReferenceProperties(
                 "colonizopediaTerrainProperties_GRASSLAND",
-                "Cena pohybu: 1; obrana: +0%", "Obilí 4", "Pole: ano");
+                "Cena pohybu: 1; obrana: +0%", "Jídlo 4", "Pole: ano");
         help.verifyReferenceProperties(
                 "colonizopediaTerrainForestProperties_GRASSLAND",
                 "Cena pohybu: 2; obrana: +50%", "Dříví 6");
@@ -404,7 +403,7 @@ public class TC_100_F91_colonizopedia_test extends AbstractAkropiaTest {
                 "Stříbro +2", "Počáteční zásoba bonusu: Stříbro 100");
         help.verifyReferenceProperties(
                 "colonizopediaResourceProperties_FISHERY",
-                "Povolený terén: Oceán, Jezero", "Obilí +2", "Nevyčerpává se.");
+                "Povolený terén: Oceán, Jezero", "Jídlo +2", "Nevyčerpává se.");
         help.captureDialog("colonizopediaReference", "r0274-bonuses-cs.png");
         help.closeWithEscape();
         help.verifyGameStateUnchanged(before);

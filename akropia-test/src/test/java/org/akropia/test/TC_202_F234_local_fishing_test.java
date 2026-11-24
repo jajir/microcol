@@ -28,8 +28,19 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final WorldWorkersPage work = new WorldWorkersPage(getContext());
         work.verifyFishing(0, 0, true);
+        // Water shows fish as the source of Food, without changing the job.
+        game.selectTile(Location.of(23, 16));
+        new ResourcePage(getContext()).openTerrainDetails();
+        work.verifyFishingYieldPresentation("Food", 3,
+                "Fishing: provides 3 food per turn.");
+        work.hoverFishingYield();
+        game.verifyThatStatusBarContains("Fishing: provides 3 food per turn.");
+        game.captureDialog("rightPanel", "food-fishing-map.png");
         final ColonyScreen colony = game.openColonyAt(Location.of(23, 16),
                 "New Amsterdam");
+        work.verifyFoodStockPresentation("Food");
+        work.hoverFoodStock();
+        colony.verifyThatStatusBarContains("Food from farming and fishing.");
         colony.showSurroundingArea();
         work.verifySelectedFieldWorker();
         new InGameLayoutPage(getContext())
@@ -83,6 +94,32 @@ public class TC_202_F234_local_fishing_test extends AbstractAkropiaTest {
         work.closeContext();
         work.verifyWorker(0, water, "w", 0, 0);
         work.verifyFood(0, 4);
+    }
+
+    @Test
+    @Tag("local")
+    void TC_04_czech_fishing_and_shared_food_stock() throws Exception {
+        // The same water yield and common stock use Czech food terminology.
+        final SettingPage settings = WelcomePage.of(getContext()).openSetting();
+        settings.setCzechLanguage();
+        final GamePage game = settings.goBack().loadGame();
+        final WorldWorkersPage work = new WorldWorkersPage(getContext());
+        game.selectTile(Location.of(23, 16));
+        new ResourcePage(getContext()).openTerrainDetails();
+        work.verifyFishingYieldPresentation("Jídlo", 3,
+                "Rybolov: jídlo za tah — 3.");
+        work.hoverFishingYield();
+        game.verifyThatStatusBarContains("Rybolov:");
+        final ColonyScreen colony = game.openColonyAt(Location.of(23, 16),
+                "New Amsterdam");
+        work.verifyFoodStockPresentation("Jídlo");
+        work.hoverFoodStock();
+        colony.verifyThatStatusBarContains("Jídlo ze zemědělství a rybolovu.");
+        colony.showSurroundingArea();
+        work.verifySelectedFieldWorker();
+        work.verifyFishing(0, 0, true);
+        new InGameLayoutPage(getContext())
+                .saveEvidence("food-fishing-czech-colony.png");
     }
 
 }

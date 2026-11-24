@@ -168,7 +168,7 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         // Sixteen goods columns in the colony order, named only for
         // assistive technology; hammers, torches and owls are not cargo.
         cargo.verifyGoodsColumns(TradeRouteStop.TRANSPORTABLE_GOODS,
-                List.of("Grain", "Olives", "Grapes", "Wool", "Clay", "Lumber",
+                List.of("Food", "Olives", "Grapes", "Wool", "Clay", "Lumber",
                         "Ore", "Silver", "Horse", "Olive oil", "Wine", "Cloth",
                         "Amphorae", "Goods", "Tools", "Weapons"));
         cargo.verifyGoodsRows("1. Home port", "2. Delft");
@@ -249,12 +249,12 @@ public class TC_117_F108_trade_route_cargo_test extends AbstractAkropiaTest {
         // The status bar explains a focused cell; three presses of Space
         // return the grain cell to ignoring.
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
-        cargo.verifyStatusBar("Delft, Obilí: nakládat. "
+        cargo.verifyStatusBar("Delft, Jídlo: nakládat. "
                 + "Změníte kliknutím nebo mezerníkem: ignorovat, nakládat, vykládat.");
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
         cargo.cycleCellWithKeyboard(DELFT_STOP, GoodsType.GRAIN);
         cargo.verifyCell(DELFT_STOP, GoodsType.GRAIN, "",
-                "Delft, Obilí: ignorovat");
+                "Delft, Jídlo: ignorovat");
         cargo.captureDialog("tradeRouteCargoDialog",
                 "trade-route-cargo-czech.png");
         cargo.addCarrier(GALLEON_ID);

@@ -353,6 +353,24 @@ The [accepted rules](#accepted-game-rules) now settle the audit's numeric moveme
 
 ### Colony workforce, food and storage
 
+<a id="food-presentation-2026-11-24"></a>
+
+**Food presentation — agreed 24 November 2026.** The player-facing shared
+resource is **Food** in English and **Jídlo** in Czech. Farming and fishing
+supply the same stock. Ocean, lake and river food production uses a fish
+icon; ordinary land food production uses grain. Both are labelled Food/Jídlo,
+and source help states the amount per turn. Colony stocks, trade and cargo
+use one basket-with-grain-and-fish icon and the shared name. Hovering colony
+food explains that it comes from farming and fishing.
+
+This is a presentation change: internal `GRAIN` identities, saved data,
+production, consumption, growth, horse breeding and trade rules stay unchanged.
+It adds no separate fish stock or restriction on horse feed. The approved
+fish is proposal 03; small icons have simplified vector geometry at the same
+approximately two-pixel pen width. See [artwork](graphics.md#food-artwork-2026-11-24)
+and [local acceptance](functional-tests.md#food-presentation-2026-11-24).
+
+
 The core colony economy exists: workers occupy fields/buildings, input goods feed manufacturing, warehouses store goods, food can create or kill colonists, and Europe trading changes the treasury. The largest gaps are missing town-commons production, incomplete profession/education and immigration systems, unenforced building prerequisites, and building effects represented only by definitions. All `Matches` below mean a narrow static source match; they do not claim a successful gameplay test.
 
 | ID | Manual (printed / PDF) | Expected rule | Current implementation and gap | Status | Acceptance / evidence |

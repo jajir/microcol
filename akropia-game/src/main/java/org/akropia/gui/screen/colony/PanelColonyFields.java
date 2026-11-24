@@ -526,8 +526,8 @@ public final class PanelColonyFields implements JavaFxComponent {
             final Goods production = colonyField.getProduction().get();
             final Unit unit = fieldWorker(colonyField).orElseThrow();
             paintService.paintUnitWithoutFlag(gc, point, unit);
-            gc.drawImage(imageProvider.getGoodsTypeImage(production.getType()),
-                    point.getX(), point.getY(), 25, 25);
+            gc.drawImage(imageProvider.getProductionImage(production.getType(),
+                    terrain, 25), point.getX(), point.getY(), 25, 25);
             gc.setTextAlign(TextAlignment.CENTER);
             gc.setTextBaseline(VPos.CENTER);
             gc.setFill(Color.BLACK);
@@ -654,11 +654,27 @@ public final class PanelColonyFields implements JavaFxComponent {
         final RadioButton row = org.akropia.gui.util.ProductionChoices.row(
                 output, choice, current, group, imageProvider, i18n,
                 "colony-field-");
-        row.setAccessibleHelp(i18n.get(ColonyMsg.outputHelp));
+        final String help = org.akropia.gui.FoodText.terrain(choice)
+                .filter(terrain -> goods.getType() == GoodsType.GRAIN)
+                .map(terrain -> i18n.get(
+                        org.akropia.gui.FoodText.source(terrain),
+                        goods.getAmount()) + " "
+                        + i18n.get(ColonyMsg.outputHelp))
+                .orElseGet(() -> i18n.get(ColonyMsg.outputHelp));
+        row.setAccessibleHelp(help);
+        row.setOnMouseEntered(event -> eventBus.post(new StatusBarMessageEvent(
+                row.getAccessibleHelp(), Source.COLONY)));
+        row.setOnMouseMoved(event -> {
+            eventBus.post(new StatusBarMessageEvent(row.getAccessibleHelp(),
+                    Source.COLONY));
+            event.consume();
+        });
         // Runs after the scroll pane's own jump to the focused row.
         row.focusedProperty().addListener((observable, wasFocused, focused) -> {
             if (focused) {
                 Platform.runLater(this::revealProduction);
+                eventBus.post(new StatusBarMessageEvent(row.getAccessibleHelp(),
+                        Source.COLONY));
             }
         });
         row.selectedProperty()

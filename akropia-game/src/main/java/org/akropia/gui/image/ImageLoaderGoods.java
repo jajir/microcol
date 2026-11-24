@@ -8,6 +8,8 @@ import javafx.scene.image.WritableImage;
  */
 public final class ImageLoaderGoods implements ImageLoader {
 
+    public static final String IMG_GOOD_FOOD = "good-food.png";
+
     public static final String IMG_GOOD_GRAIN = "good-grain.png";
 
     public static final String IMG_GOOD_OWLS = "good-owls.png";
@@ -48,6 +50,7 @@ public final class ImageLoaderGoods implements ImageLoader {
 
     @Override
     public void preload(final ImageCache imageCache) {
+        imageCache.getImage(IMG_GOOD_FOOD);
         imageCache.getImage(IMG_GOOD_OWLS);
         imageCache.getImage(IMG_GOOD_TORCHES);
         imageCache.getImage(IMG_GOOD_HAMMER);

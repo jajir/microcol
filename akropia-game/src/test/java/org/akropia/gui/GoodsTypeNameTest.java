@@ -32,13 +32,13 @@ class GoodsTypeNameTest {
             "WINE", "CLOTH", "AMPHORAE", "GOODS", "TOOLS", "WEAPONS", "HAMMERS",
             "TORCHES", "OWLS");
 
-    private static final List<String> ENGLISH = List.of("Grain", "Olives",
+    private static final List<String> ENGLISH = List.of("Food", "Olives",
             "Grapes", "Wool", "Clay", "Lumber", "Ore", "Silver", "Horse",
             "Olive oil", "Wine", "Cloth", "Amphorae", "Goods", "Tools",
             "Weapons", "Hammers", "Torches", "Owls");
 
     /** Unchanged goods keep their existing Czech names. */
-    private static final List<String> CZECH = List.of("Obilí", "Olivy",
+    private static final List<String> CZECH = List.of("Jídlo", "Olivy",
             "Hrozny", "Vlna", "Hlína", "Dříví", "Železná ruda", "Stříbro",
             "Koně", "Olivový olej", "Víno", "Látka", "Amfory", "Tretky",
             "Nářadí", "Zbraně", "Kladiva", "Pochodně", "Sovy");

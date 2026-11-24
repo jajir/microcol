@@ -148,8 +148,11 @@ public final class ResourcePage extends AbstractScreen {
                 getNodeFinder().lookup("#terrainDetails").query().isVisible());
         final javafx.scene.image.ImageView icon = (javafx.scene.image.ImageView) row
                 .getChildren().get(0);
-        assertEquals(getContext().getClassFromGuice(ImageProvider.class)
-                .getGoodsTypeImage(goods), icon.getImage());
+        final ImageProvider images = getContext()
+                .getClassFromGuice(ImageProvider.class);
+        assertEquals(goods == GoodsType.GRAIN
+                ? images.getImage("production-grain.png")
+                : images.getGoodsTypeImage(goods), icon.getImage());
         assertEquals(name,
                 ((javafx.scene.control.Label) row.getChildren().get(1))
                         .getText());

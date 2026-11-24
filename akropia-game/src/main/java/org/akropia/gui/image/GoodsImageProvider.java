@@ -24,7 +24,7 @@ public class GoodsImageProvider {
 
         goodsTypeImageMap = ImmutableMap.<GoodsType, Image>builder()
                 .put(GoodsType.GRAIN,
-                        imageCache.getImage(ImageLoaderGoods.IMG_GOOD_GRAIN))
+                        imageCache.getImage(ImageLoaderGoods.IMG_GOOD_FOOD))
                 .put(GoodsType.OWLS,
                         imageCache.getImage(ImageLoaderGoods.IMG_GOOD_OWLS))
                 .put(GoodsType.HAMMERS,

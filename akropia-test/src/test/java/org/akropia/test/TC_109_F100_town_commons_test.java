@@ -48,13 +48,13 @@ public class TC_109_F100_town_commons_test extends AbstractAkropiaTest {
     /** A goods panel narrower than this is squeezed out of its row. */
     private static final double MINIMUM_GOODS_WIDTH = 30;
 
-    private static final String EN_NEW_AMSTERDAM = "Grain: 6, Grapes: 3";
+    private static final String EN_NEW_AMSTERDAM = "Food: 6, Grapes: 3";
 
-    private static final String EN_DELFT = "Grain: 2, Ore: 4";
+    private static final String EN_DELFT = "Food: 2, Ore: 4";
 
-    private static final String EN_HAARLEM = "Grain: 3, Lumber: 6";
+    private static final String EN_HAARLEM = "Food: 3, Lumber: 6";
 
-    private static final String CS_NEW_AMSTERDAM = "Obilí: 6, Hrozny: 3";
+    private static final String CS_NEW_AMSTERDAM = "Jídlo: 6, Hrozny: 3";
 
     @Start
     private void start(final Stage stage) throws Exception {

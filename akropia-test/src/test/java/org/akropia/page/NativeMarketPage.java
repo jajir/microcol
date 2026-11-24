@@ -434,10 +434,10 @@ public final class NativeMarketPage extends AbstractScreen {
                 quantity, false);
         final String preview = getLabeledById(SALE_PREVIEW_ID).getText();
         assertTrue(preview.contains(
-                String.format("Prodáte %d kusů zboží Obilí za %d zlata.",
+                String.format("Prodáte %d kusů zboží Jídlo za %d zlata.",
                         quantity, sale.getGold())));
         assertTrue(preview.contains(String.format(
-                "Darujete %d kusů zboží Obilí. Žádné zlato se neplatí.",
+                "Darujete %d kusů zboží Jídlo. Žádné zlato se neplatí.",
                 quantity)));
     }
 
@@ -538,7 +538,7 @@ public final class NativeMarketPage extends AbstractScreen {
 
     private static String englishName(final GoodsType goods) {
         if (goods.equals(GoodsType.GRAIN)) {
-            return "Grain";
+            return "Food";
         }
         if (goods.equals(GoodsType.GRAPES)) {
             return "Grapes";

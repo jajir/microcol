@@ -1,5 +1,6 @@
 package org.akropia.gui.util;
 
+import org.akropia.gui.FoodText;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -33,8 +34,9 @@ public final class ProductionChoices {
         final GoodsType goodsType = choice.getGoodsType();
         final String name = i18n
                 .get(GoodsTypeName.getNameForGoodsType(goodsType));
-        final ImageView icon = new ImageView(
-                images.getGoodsTypeImage(goodsType));
+        final ImageView icon = new ImageView(FoodText.terrain(choice).map(
+                terrain -> images.getProductionImage(goodsType, terrain, 24))
+                .orElseGet(() -> images.getGoodsTypeImage(goodsType)));
         icon.setFitWidth(24);
         icon.setFitHeight(24);
         final Region space = new Region();
@@ -178,6 +180,13 @@ public final class ProductionChoices {
                                 ? ColonyMsg.jobOwlContribution
                                 : ColonyMsg.jobPotential,
                         goods.getAmount(), name)));
+        if (choice.getGoodsType() == GoodsType.GRAIN) {
+            FoodText.terrain(choice)
+                    .ifPresent(terrain -> choice.getPotential()
+                            .ifPresent(goods -> lines
+                                    .add(i18n.get(FoodText.source(terrain),
+                                            goods.getAmount()))));
+        }
         choice.getCurrentFieldYield().ifPresent(
                 goods -> lines.add(i18n.get(ColonyMsg.jobCurrentYield,
                         goods.getAmount() + " " + name)));

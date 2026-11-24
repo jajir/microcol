@@ -4,7 +4,7 @@
 <properties>
 	<comment>Define keys for Europe dialog</comment>
 
-	<entry key="grain">Obilí</entry>
+	<entry key="grain">Jídlo</entry>
 	<entry key="olives">Olivy</entry>
 	<entry key="grapes">Hrozny</entry>
 	<entry key="wool">Vlna</entry>
@@ -25,7 +25,7 @@
 	<entry key="owls">Sovy</entry>
 
 	<!-- Declension - 2 case - genitiv - plurar -->
-	<entry key="grain_dc2_pl">obilí</entry>
+	<entry key="grain_dc2_pl">jídla</entry>
 	<entry key="olives_dc2_pl">oliv</entry>
 	<entry key="grapes_dc2_pl">hroznů</entry>
 	<entry key="wool_dc2_pl">vlny</entry>
@@ -46,7 +46,7 @@
 	<entry key="owls_dc2_pl">sov</entry>
 
 	<!-- Declension - 7 case - instrumental - plurar -->
-	<entry key="grain_dc7_pl">obilím</entry>
+	<entry key="grain_dc7_pl">jídlem</entry>
 	<entry key="olives_dc7_pl">olivami</entry>
 	<entry key="grapes_dc7_pl">hrozny</entry>
 	<entry key="wool_dc7_pl">vlnou</entry>

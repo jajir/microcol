@@ -261,8 +261,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         // key held at the drop.
         europePort.quickBuyGoods(0, 0);
         europePort.verifyNoPurchaseChoice();
-        europePort
-                .verifyStatusMessage("Grain: bought 100 pieces for 400 gold.");
+        europePort.verifyStatusMessage("Food: bought 100 pieces for 400 gold.");
 
         // Verify that in first cargo slot is 100 grain.
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
@@ -282,7 +281,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.buyGoodsAndMoveItToCargoSlot(0, 0);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Grain: this cargo hold is full. Nothing was bought.");
+                "Food: this cargo hold is full. Nothing was bought.");
 
         // Verify that in first cargo slot is 100 grain.
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 100));
@@ -357,7 +356,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         screenMarketBuy.clickOnBuy();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 30));
         europePort.verifyGold(68);
-        europePort.verifyStatusMessage("Grain: bought 30 pieces for 132 gold.");
+        europePort.verifyStatusMessage("Food: bought 30 pieces for 132 gold.");
 
         // Close Europe port, save through the menu and continue the game.
         gamePage = europePort.close();
@@ -472,7 +471,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.verifyNoPurchaseChoice();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 63));
         europePort.verifyGold(94748);
-        europePort.verifyStatusMessage("Grain: bought 63 pieces for 252 gold.");
+        europePort.verifyStatusMessage("Food: bought 63 pieces for 252 gold.");
         gamePage = europePort.close();
     }
 
@@ -496,7 +495,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.buyGoodsAndMoveItToCargoSlot(0, 0);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Grain: this cargo hold holds other cargo or can't be used now. Nothing was bought.");
+                "Food: this cargo hold holds other cargo or can't be used now. Nothing was bought.");
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.WINE, 10));
         europePort.verifyGold(94880);
 
@@ -508,7 +507,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.quickBuyGoods(0, 1);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Grain: this cargo hold is full. Nothing was bought.");
+                "Food: this cargo hold is full. Nothing was bought.");
         europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94480);
 
@@ -517,7 +516,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.buyGoodsAndMoveItToCargoSlot(0, 2);
         europePort.verifyNoPurchaseChoice();
         europePort.verifyStatusMessage(
-                "Grain: you don't have enough gold for even one piece. Nothing was bought.");
+                "Food: you don't have enough gold for even one piece. Nothing was bought.");
         europePort.verifyCargoSlotEmpty(0, 2);
         europePort.verifyGold(3);
         gamePage = europePort.close();
@@ -601,7 +600,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.verifyNoPurchaseChoice();
         europePort.verifyGoodsInShip(0, Goods.of(GoodsType.GRAIN, 45));
         europePort.verifyGold(2);
-        europePort.verifyStatusMessage("Grain: bought 45 pieces for 198 gold.");
+        europePort.verifyStatusMessage("Food: bought 45 pieces for 198 gold.");
 
         // The key pressed only over the hold, before the drop, also buys the
         // maximum: here the full hold of 100 for 440 gold.
@@ -610,8 +609,7 @@ public class TC_06_F06_buy_and_sell_goods_test extends AbstractAkropiaTest {
         europePort.verifyNoPurchaseChoice();
         europePort.verifyGoodsInShip(1, Goods.of(GoodsType.GRAIN, 100));
         europePort.verifyGold(94560);
-        europePort
-                .verifyStatusMessage("Grain: bought 100 pieces for 440 gold.");
+        europePort.verifyStatusMessage("Food: bought 100 pieces for 440 gold.");
 
         // The key released before the drop opens the normal choice instead.
         ScreenMarketBuy screenMarketBuy = europePort

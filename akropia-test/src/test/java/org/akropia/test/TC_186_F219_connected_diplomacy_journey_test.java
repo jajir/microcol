@@ -373,6 +373,17 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
         journey.verifyFrenchGold(FRENCH_AFTER_FIRST_TRADE);
 
+        // Keep the captured city inhabited under the end-turn abandonment rule.
+        // The conqueror takes a town-hall job and stores his weapons locally.
+        final org.akropia.page.ColonyScreen captured = game
+                .openColonyAt(FORT_AT, "Fort Orleans");
+        new org.akropia.page.ColonyJobPage(getContext())
+                .dragCenterToIndoor(SOLDIER, "id_town_hall", 0);
+        journey.verifyColonyResidents(FORT_ORLEANS, 1);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS + 50);
+        captured.close();
+
         // Turn 4: the course ends, and the skill is granted once.
         game.nextTurnAndCloseDialogs();
         journey.verifyDutchGold(DUTCH_AFTER_FIRST_TRADE);
@@ -430,7 +441,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyFrenchGold(FRENCH_FINAL);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
-                FORT_WEAPONS);
+                FORT_WEAPONS + 50);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
@@ -504,6 +515,17 @@ public class TC_186_F219_connected_diplomacy_journey_test
                 Location.of(21, 21));
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);
 
+        // Keep the captured city inhabited under the end-turn abandonment rule.
+        // The conqueror takes a town-hall job and stores his weapons locally.
+        final org.akropia.page.ColonyScreen captured = game
+                .openColonyAt(FORT_AT, "Fort Orleans");
+        new org.akropia.page.ColonyJobPage(getContext())
+                .dragCenterToIndoor(SOLDIER, "id_town_hall", 0);
+        journey.verifyColonyResidents(FORT_ORLEANS, 1);
+        journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
+                FORT_WEAPONS + 50);
+        captured.close();
+
         // Turn 4: the skill is granted, peace is bought once and the trade
         // resumes.
         game.nextTurnAndCloseDialogs();
@@ -533,7 +555,7 @@ public class TC_186_F219_connected_diplomacy_journey_test
         journey.verifyFrenchGold(FRENCH_FINAL);
         journey.verifyColonyOwner(FORT_ORLEANS, DUTCH);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.WEAPONS,
-                FORT_WEAPONS);
+                FORT_WEAPONS + 50);
         journey.verifyColonyStock(FORT_ORLEANS, GoodsType.TOOLS, FORT_TOOLS);
         journey.verifyColonyListed(FRANCE, FORT_ORLEANS, false);
         journey.verifyRouteStopLost(FRANCE, ROUTE, FORT_ORLEANS, DUTCH);

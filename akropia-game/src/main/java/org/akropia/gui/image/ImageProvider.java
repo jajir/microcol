@@ -1,5 +1,7 @@
 package org.akropia.gui.image;
 
+import org.akropia.model.Terrain;
+import org.akropia.gui.FoodText;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.List;
@@ -233,6 +235,25 @@ public final class ImageProvider {
      */
     public Image getGoodsTypeImage(final GoodsType goodsType) {
         return goodsImageProvider.getGoodsTypeImage(goodsType);
+    }
+
+    public Image getGoodsTypeImage(final GoodsType goodsType, final int size) {
+        return goodsType == GoodsType.GRAIN && size <= 15
+                ? imageCache.getImage("good-food-tiny.png")
+                : getGoodsTypeImage(goodsType);
+    }
+
+    /** Select the source icon without changing the produced or stored goods. */
+    public Image getProductionImage(final GoodsType goodsType,
+            final Terrain terrain, final int size) {
+        if (goodsType != GoodsType.GRAIN) {
+            return getGoodsTypeImage(goodsType);
+        }
+        final String source = FoodText.source(terrain) == FoodText.fishing
+                ? "fish"
+                : "grain";
+        return imageCache.getImage(
+                "production-" + source + (size <= 25 ? "-small" : "") + ".png");
     }
 
     /**

@@ -1,5 +1,8 @@
 package org.akropia.gui.screen.game.components;
 
+import org.akropia.model.GoodsType;
+import org.akropia.gui.FoodText;
+import com.google.common.eventbus.EventBus;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -50,6 +53,8 @@ public final class RightPanelView implements JavaFxComponent {
 
     private final I18n i18n;
 
+    private final EventBus eventBus;
+
     private final TilePainter tilePainter;
     private final SelectedUnitManager selectedUnitManager;
 
@@ -79,7 +84,8 @@ public final class RightPanelView implements JavaFxComponent {
             final GameModelController gameModelController,
             final TilePainter tilePainter,
             final SelectedUnitManager selectedUnitManager,
-            final ImageProvider imageProvider) {
+            final ImageProvider imageProvider, final EventBus eventBus) {
+        this.eventBus = eventBus;
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.selectedUnitManager = selectedUnitManager;
         this.i18n = Preconditions.checkNotNull(i18n);
@@ -298,7 +304,8 @@ public final class RightPanelView implements JavaFxComponent {
         terrainYields.getChildren().add(title);
         for (final TerrainProduction production : terrain.getProduction()) {
             final ImageView icon = new ImageView(
-                    imageProvider.getGoodsTypeImage(production.getGoodsType()));
+                    imageProvider.getProductionImage(production.getGoodsType(),
+                            terrain, 45));
             icon.setFitWidth(45);
             icon.setFitHeight(45);
             final Label product = new Label(i18n.get(GoodsTypeName
@@ -315,6 +322,17 @@ public final class RightPanelView implements JavaFxComponent {
             row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
             row.setId("terrainYield-" + production.getGoodsType().name());
             row.getStyleClass().add("terrain-yield-row");
+            if (production.getGoodsType() == GoodsType.GRAIN) {
+                final String help = i18n.get(FoodText.source(terrain),
+                        production.getProduction());
+                row.setAccessibleHelp(help);
+                row.setOnMouseEntered(
+                        event -> eventBus.post(new StatusBarMessageEvent(help,
+                                StatusBarMessageEvent.Source.GAME)));
+                row.setOnMouseExited(
+                        event -> eventBus.post(new StatusBarMessageEvent(
+                                StatusBarMessageEvent.Source.GAME)));
+            }
             terrainYields.getChildren().add(row);
         }
         if (terrain.getProduction().isEmpty()) {

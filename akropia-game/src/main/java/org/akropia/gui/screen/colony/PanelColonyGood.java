@@ -1,5 +1,6 @@
 package org.akropia.gui.screen.colony;
 
+import org.akropia.gui.FoodText;
 import org.akropia.gui.GoodsTypeName;
 import org.akropia.gui.Loc;
 import org.akropia.gui.screen.game.components.StatusBarMessageEvent;
@@ -103,9 +104,11 @@ public final class PanelColonyGood implements JavaFxComponent {
     private void onMouseEntered(
             @SuppressWarnings("unused") final MouseEvent event) {
         eventBus.post(new StatusBarMessageEvent(
-                i18n.get(GoodsTypeName.getNameForGoodsType(goodsType))
-                        + i18n.get(goodsType.isCanBeBought() ? ColonyMsg.goods
-                                : ColonyMsg.localProduction),
+                goodsType == GoodsType.GRAIN ? i18n.get(FoodText.stock)
+                        : i18n.get(GoodsTypeName.getNameForGoodsType(goodsType))
+                                + i18n.get(goodsType.isCanBeBought()
+                                        ? ColonyMsg.goods
+                                        : ColonyMsg.localProduction),
                 Source.COLONY));
     }
 

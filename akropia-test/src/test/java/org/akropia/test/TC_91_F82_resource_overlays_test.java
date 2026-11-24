@@ -73,7 +73,7 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         resource.verifyTerrainDescription("+2 Olives");
         resource.verifyTerrainOwnershipOrder("Land owner:", "+2 Olives");
         resource.verifyTerrainYield(GoodsType.OLIVES, "Olives", 3);
-        resource.verifyTerrainYield(GoodsType.GRAIN, "Grain", 4);
+        resource.verifyTerrainYield(GoodsType.GRAIN, "Food", 4);
         resource.verifyTerrainYield(GoodsType.GRAPES, "Grapes", 3);
         resource.verifyTerrainPresentation("Base turn yield", "Step cost:");
         // Keep the expanded arrow and heading intact while inspecting another
@@ -224,7 +224,7 @@ public class TC_91_F82_resource_overlays_test extends AbstractAkropiaTest {
         resource.openTerrainDetails();
         resource.verifyTerrainExpanded(true);
         resource.verifyTerrainDescription("+2 Vlna");
-        resource.verifyTerrainYield(GoodsType.GRAIN, "Obilí", 4);
+        resource.verifyTerrainYield(GoodsType.GRAIN, "Jídlo", 4);
         resource.verifyTerrainYield(GoodsType.WOOL, "Vlna", 4);
         resource.verifyTerrainYield(GoodsType.GRAPES, "Hrozny", 1);
         resource.verifyTerrainYieldCount(3);

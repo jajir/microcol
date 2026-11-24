@@ -203,8 +203,8 @@ class UnitPanel {
             return new ImageView(
                     imageProvider.getUnitImage(cargoSlot.getUnit().get()));
         } else {
-            return new ImageView(imageProvider
-                    .getGoodsTypeImage(cargoSlot.getGoods().get()));
+            return new ImageView(imageProvider.getGoodsTypeImage(
+                    cargoSlot.getGoods().get().getType(), 15));
         }
     }
 
