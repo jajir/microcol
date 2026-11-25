@@ -96,6 +96,14 @@ public final class DemoScene {
         return model.getUnitById(actors.get(step.actor));
     }
 
+    /** Presentation starts at the carrier while a passenger is still aboard. */
+    public Location movementOrigin(Model model, Step step) {
+        Unit unit = actor(model, step);
+        return "disembark".equals(step.action)
+                ? unit.getPlaceCargoSlot().getOwnerUnit().getLocation()
+                : unit.getLocation();
+    }
+
     public Location destination(Step step) {
         return Location.of(step.to[0], step.to[1]);
     }

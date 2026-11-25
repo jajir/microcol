@@ -118,9 +118,10 @@ public final class DemoView extends StackPane {
                         : 1);
         Unit moving = null;
         Location from = null, to = null;
-        if ("move".equals(current.action)) {
+        if ("move".equals(current.action)
+                || "disembark".equals(current.action)) {
             moving = scene.actor(model, current);
-            from = moving.getLocation();
+            from = scene.movementOrigin(model, current);
             to = scene.destination(current);
         }
         painter.paint(canvas.getGraphicsContext2D(),

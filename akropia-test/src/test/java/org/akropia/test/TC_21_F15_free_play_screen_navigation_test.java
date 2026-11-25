@@ -30,6 +30,30 @@ public class TC_21_F15_free_play_screen_navigation_test
 
     @Test
     @Tag("local")
+    void TC_14_demo_shows_landing_and_the_separate_field_walk()
+            throws Exception {
+        // Restart the real preview clock so captures show each movement
+        // mid-step.
+        WelcomePage welcome = WelcomePage.of(getContext());
+        welcome.restartDemo();
+        welcome.observeDemo(11000);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-founder-landing.png");
+        // The pioneer lands at the colony before walking to the field.
+        welcome.observeDemo(4200);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-pioneer-landing.png");
+        welcome.observeDemo(2500);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-pioneer-walk.png");
+        // Finish the complete sequence and keep the normal menu usable.
+        welcome.observeDemo(16000);
+        welcome.verifyDemoVisible();
+        welcome.loadGame().verifyGameInFront();
+    }
+
+    @Test
+    @Tag("local")
     void TC_13_menu_demo_is_visible_and_menu_remains_usable() throws Exception {
         // Inspect the isolated map and pause its presentation.
         WelcomePage welcome = WelcomePage.of(getContext());

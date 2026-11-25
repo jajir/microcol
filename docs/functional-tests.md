@@ -19922,3 +19922,38 @@ s poslední modelovou a cílenou UI přejímkou. Java soubory byly zformátován
 projektním Eclipse profilem; dokumentační kontroly a strict MkDocs prošly.
 První scéna je lokálně přijata. Výrobní a obchodní scény nebyly implementovány;
 nová uživatelská studie, vzdálená CI, Pages ani distribuce nebyly ověřovány.
+
+## Animace vylodění v ukázce menu — 25. listopadu 2026
+
+UC-114/115/119, R-0454: schváleno plynulé vylodění obou cestujících
+a samostatná chůze pracovníka od kolonie na pole. `disembark` používá
+společné vykreslení pohybu, výchozím místem je poloha přepravce; do dokončení
+animace zůstává cestující v nákladu. Scénář obnovuje pohybové body běžnými
+tahy před zahájením orání. Pravidla a animace normální partie se nemění.
+Modelový `DemoSceneTest` kontroluje oba počátky vylodění, oddělenou cestu
+na pole a dokončení práce. `TC_21_F15_free_play_screen_navigation_test`
+doplňuje `TC_14_demo_shows_landing_and_the_separate_field_walk` se snímky
+jednotlivých pohybů; TC_191 prodlužuje pozorování na celý nový cyklus.
+Přejímka doplnění je dokončená; konkrétní výsledky následují.
+
+Modelová fáze doplnění: `run-7zjr8_0r`, 4 936 testů,
+0 selhání/chyb/vynechání, 148,868 s. Dozorovaný běh
+`20261125T082802Z-1e87677f4c6a` trval 153,810 s, čekání na zámek 0 s.
+Cílená Docker UI přejímka navazuje během `20261125T083053Z-a0bca6851cc8`
+s výběrem TC_21, TC_191/TC_20 a PageVerificationContractTest.
+
+Cílené Docker UI `20261125T083053Z-a0bca6851cc8` / `run-KKT4t0`
+prošlo 16 testů bez selhání/chyb/vynechání za 239,631 s včetně přípravy
+a úklidu (čekání 0 s). Výběr: celý TC_21, TC_191/TC_20 a
+PageVerificationContractTest. Vizuálně zkontrolovány snímky
+`demo-founder-landing.png`, `demo-pioneer-landing.png`,
+`demo-pioneer-walk.png` z `warehouse-qa`: jednotky jsou vykreslené
+při přechodu mezi místy, pracovník přistává u kolonie a pokračuje na pole.
+Smoke `run-c8jnukbj` / `20261125T083602Z-6dac1c393353` prošel
+23 testů bez selhání, chyb a vynechání. Pevný výběr `verify.sh --smoke`,
+fáze 282,736 s, celý dozorovaný běh 286,057 s z limitu 420 s,
+čekání na zámek 0 s. Přijímaný zdroj odpovídá zachovanému snímku tohoto
+běhu (základ `7a18cc376` plus doplnění animací). Formátování změněné Javy
+proběhlo sdíleným Eclipse profilem; 14 dokumentačních kontrol a strict MkDocs
+prošly. Grafika se neměnila. Nová distribuce, vzdálená CI ani Pages
+nebyly ověřovány.

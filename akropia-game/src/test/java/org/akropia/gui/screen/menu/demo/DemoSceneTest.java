@@ -6,6 +6,38 @@ import org.akropia.model.Location;
 
 class DemoSceneTest {
     @Test
+    void landingAndFieldWalkHaveSeparateOriginsWithoutEarlyMutation() {
+        var scene = DemoScene.load();
+        var model = scene.newModel();
+        int landings = 0;
+        boolean walked = false;
+        for (var step : scene.steps) {
+            if ("disembark".equals(step.action)) {
+                var passenger = scene.actor(model, step);
+                assertTrue(passenger.isAtCargoSlot());
+                assertEquals(model.getUnitById(3).getLocation(),
+                        scene.movementOrigin(model, step));
+                assertTrue(passenger.isAtCargoSlot());
+                assertEquals(Location.of(25, 15), scene.destination(step));
+                assertTrue(step.durationMs > 0);
+                landings++;
+            }
+            if ("move".equals(step.action) && "pioneer".equals(step.actor)) {
+                assertEquals(Location.of(25, 15),
+                        scene.movementOrigin(model, step));
+                assertEquals(Location.of(25, 16), scene.destination(step));
+                assertTrue(step.durationMs > 0);
+                walked = true;
+            }
+            scene.execute(model, step);
+        }
+        assertEquals(2, landings);
+        assertTrue(walked);
+        assertTrue(
+                model.getMap().getTerrainAt(Location.of(25, 16)).isHasField());
+    }
+
+    @Test
     void completeSceneAndRestartAreIsolated() {
         var scene = DemoScene.load();
         var model = scene.newModel();

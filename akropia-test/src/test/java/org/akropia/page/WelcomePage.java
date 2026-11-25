@@ -260,6 +260,14 @@ public class WelcomePage extends AbstractMenuScreen {
         });
     }
 
+    public void restartDemo() {
+        getRobot().interact(() -> {
+            org.akropia.gui.screen.menu.demo.DemoView demo = getRobot()
+                    .lookup("#menu-demo").query();
+            demo.start();
+        });
+    }
+
     public void observeDemo(final long milliseconds) {
         getRobot().sleep(milliseconds);
     }

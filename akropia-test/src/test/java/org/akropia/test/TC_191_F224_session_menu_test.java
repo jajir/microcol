@@ -44,7 +44,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         byte[] saved = audit.readAutosave();
         // A full preview cycle neither overwrites the save nor advances the
         // session.
-        welcome.observeDemo(32000);
+        welcome.observeDemo(35000);
         welcome.verifyDemoVisible();
         audit.verifyAutosaveUnchanged(saved);
         audit.continueGame();

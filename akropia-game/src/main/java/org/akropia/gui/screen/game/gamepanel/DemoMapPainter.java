@@ -65,7 +65,8 @@ public final class DemoMapPainter {
             paint.paintUnit(g, Point.of(
                     (int) (a.getX() + (b.getX() - a.getX()) * progress),
                     (int) (a.getY() + (b.getY() - a.getY()) * progress)),
-                    moving, Direction.valueOf(to.sub(from)));
+                    moving, from.equals(to) ? moving.getDefaultOrintation()
+                            : Direction.valueOf(to.sub(from)));
         }
         layers.paintFog(g, area, coordinates);
     }
