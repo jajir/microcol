@@ -1,0 +1,249 @@
+{
+  "initialState": "initial-state.json",
+  "actors": {
+    "ship": 3,
+    "founder": 0,
+    "pioneer": 1
+  },
+  "camera": [
+    26,
+    15
+  ],
+  "steps": [
+    {
+      "action": "wait",
+      "durationMs": 1500
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        30,
+        15
+      ],
+      "durationMs": 1200
+    },
+    {
+      "action": "wait",
+      "durationMs": 500
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        29,
+        15
+      ],
+      "durationMs": 1200
+    },
+    {
+      "action": "wait",
+      "durationMs": 500
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        28,
+        15
+      ],
+      "durationMs": 1200
+    },
+    {
+      "action": "wait",
+      "durationMs": 500
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        27,
+        15
+      ],
+      "durationMs": 1200
+    },
+    {
+      "action": "wait",
+      "durationMs": 500
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        26,
+        15
+      ],
+      "durationMs": 1200
+    },
+    {
+      "action": "wait",
+      "durationMs": 500
+    },
+    {
+      "action": "disembark",
+      "actor": "founder",
+      "to": [
+        25,
+        15
+      ]
+    },
+    {
+      "action": "wait",
+      "durationMs": 1200
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "found",
+      "actor": "founder",
+      "name": "Nový přístav"
+    },
+    {
+      "action": "wait",
+      "durationMs": 1800
+    },
+    {
+      "action": "disembark",
+      "actor": "pioneer",
+      "to": [
+        25,
+        16
+      ]
+    },
+    {
+      "action": "wait",
+      "durationMs": 1200
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "plow",
+      "actor": "pioneer"
+    },
+    {
+      "action": "wait",
+      "durationMs": 1500
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "wait",
+      "durationMs": 2000
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        27,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        28,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        29,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        30,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        31,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "endTurn"
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        32,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "move",
+      "actor": "ship",
+      "to": [
+        33,
+        15
+      ],
+      "durationMs": 700
+    },
+    {
+      "action": "wait",
+      "durationMs": 4000
+    }
+  ]
+}

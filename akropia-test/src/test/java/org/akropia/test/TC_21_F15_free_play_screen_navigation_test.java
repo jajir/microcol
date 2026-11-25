@@ -30,6 +30,30 @@ public class TC_21_F15_free_play_screen_navigation_test
 
     @Test
     @Tag("local")
+    void TC_13_menu_demo_is_visible_and_menu_remains_usable() throws Exception {
+        // Inspect the isolated map and pause its presentation.
+        WelcomePage welcome = WelcomePage.of(getContext());
+        welcome.observeDemo(1000);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-start.png");
+        // Let the whole authored sequence finish and loop without input.
+        welcome.observeDemo(18000);
+        welcome.captureDialog("menu-demo", "demo-colony.png");
+        welcome.observeDemo(16000);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-loop.png");
+        welcome.pauseDemo();
+        welcome.resizeWindow(1280, 850);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-wide.png");
+        // Settings and return preserve a usable main menu and map preview.
+        welcome = welcome.openSetting().goBack();
+        welcome.verifyDemoVisible();
+        welcome.loadGame().verifyGameInFront();
+    }
+
+    @Test
+    @Tag("local")
     void TC_01_europe_click_and_keyboard_return() throws Exception {
         // Load the game, open Europe with its button, and return with its
         // button.

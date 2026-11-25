@@ -28,7 +28,8 @@ public enum GameMenu implements MessageKeyResource {
     settingAutosave, settingTurnSummary, settingOpenEuropeOnArrival,
     settingDeveloperHeading, settingDeveloperMode, settingDeveloperDescription,
     settingVersion, campaignPanelButtonBack, campaignPanel_default_findNewWorld,
-    campaignPanel_default_buildArmy, campaignPanel_default_thrive;
+    campaignPanel_default_buildArmy, campaignPanel_default_thrive, demoCaption,
+    demoPause, demoUnavailable;
 
     public static GameMenu get(final CampaignName campaignName,
             final String missionName) {

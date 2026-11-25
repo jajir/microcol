@@ -3,14 +3,14 @@
 ## Úvod do hry a postupná nápověda — 2026-11-24
 
 1. Uživatel požaduje realizovat první tři výsledky níže; jako první vybral
-   k přípravě **bod 2, R-0454**. Konkrétní návrhy a implementace zatím nejsou
-   schválené. Čísla požadavků neurčují pořadí práce.
+   k přípravě **bod 2, R-0454**. První scéna byla schválena, implementována
+   a lokálně přijata 25. listopadu 2026. Další obsah čeká na upřesnění. Čísla požadavků neurčují pořadí práce.
 2. Bod 1: [R-0453 — stabilní rám úvodních obrazovek](R-0453.md), A01,
    status `new`: orientace v menu a návazných stránkách, hierarchie akcí
    a návaznost na společné herní lišty.
 3. Bod 2: [R-0454 — ukázky skutečného hraní v menu](R-0454.md), A01,
-   status `waiting for refinement`: průzkum, kolonie a obchod jako návrh
-   první sady; vybrat obsah a statickou či animovanou prezentaci.
+   status `waiting for refinement`: první animovaná scéna průzkumu, založení
+   kolonie a orání je hotová; zbývá upřesnit výrobní a obchodní scény.
 4. Bod 3: [R-0455 — postupně rostoucí nápověda](R-0455.md), A03,
    status `new`: pomoc navazující na existující témata a herní kontext;
    upřesnit postupné představování a zapamatování témat.

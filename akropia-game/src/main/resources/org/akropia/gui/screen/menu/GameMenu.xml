@@ -94,4 +94,7 @@
     <entry key="setupGoalDomination">Domination — take every other colonizing nation’s last colony.</entry>
     <entry key="setupGoalRule">Complete any selected objective to win. Opponents have the same objectives. The objective and score enter the Hall of Fame. No time limit.</entry>
     <entry key="setupSandbox">Sandbox without objective victory or a time limit. Losing your last colony after establishing your nation still eliminates you.</entry>
+    <entry key="demoCaption">Gameplay preview: discover a coast and found your first colony.</entry>
+    <entry key="demoPause">Pause preview</entry>
+<entry key="demoUnavailable">Gameplay preview unavailable.</entry>
 </properties>

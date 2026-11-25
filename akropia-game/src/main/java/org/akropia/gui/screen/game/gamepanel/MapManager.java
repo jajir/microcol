@@ -43,28 +43,38 @@ public final class MapManager {
 
     private TerrainBoundaryImages terrainBoundaryImages;
 
-    private final GameModelController gameModelController;
+    private final java.util.function.Supplier<Model> model;
+    private final java.util.function.Supplier<org.akropia.model.Player> player;
 
     @Inject
     MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
             final HiddenCoastMapGenerator hiddenCoastMapGenerator,
             final GameModelController gameModelController,
             final ImageProvider imageProvider) {
+        this(grassCoastMapGenerator, hiddenCoastMapGenerator,
+                gameModelController::getModel,
+                gameModelController::getHumanPlayer, imageProvider);
+    }
+
+    MapManager(final GrassCoastMapGenerator grassCoastMapGenerator,
+            final HiddenCoastMapGenerator hiddenCoastMapGenerator,
+            final java.util.function.Supplier<Model> model,
+            final java.util.function.Supplier<org.akropia.model.Player> player,
+            final ImageProvider imageProvider) {
         this.grassCoastMapGenerator = Preconditions
                 .checkNotNull(grassCoastMapGenerator);
         this.hiddenCoastMapGenerator = Preconditions
                 .checkNotNull(hiddenCoastMapGenerator);
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
-        this.gameModelController = Preconditions
-                .checkNotNull(gameModelController);
+        this.model = Preconditions.checkNotNull(model);
+        this.player = Preconditions.checkNotNull(player);
     }
 
     @Subscribe
     private void onTurnStarted(final TurnStartedEvent event) {
         if (event.getPlayer().isHuman()) {
             // Founder arrival can reveal terrain without any unit movement.
-            hiddenCoastMapGenerator
-                    .setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator.setMap(model.get().getMap());
         }
     }
 
@@ -72,8 +82,7 @@ public final class MapManager {
     private void onUnitMovedStepFinished(
             final UnitMovedStepFinishedEvent event) {
         if (event.getUnit().getOwner().isHuman()) {
-            hiddenCoastMapGenerator
-                    .setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator.setMap(model.get().getMap());
         }
     }
 
@@ -81,22 +90,23 @@ public final class MapManager {
     private void onShipArriveToColonies(
             final UnitArrivedToColoniesEvent event) {
         if (event.getShip().getOwner().isHuman()) {
-            hiddenCoastMapGenerator
-                    .setMap(gameModelController.getModel().getMap());
+            hiddenCoastMapGenerator.setMap(model.get().getMap());
         }
     }
 
     @SuppressWarnings("unused")
     @Subscribe
     private void onGameStarted(final GameStartedEvent event) {
-        terrainBoundaryImages = new TerrainBoundaryImages(
-                gameModelController.getModel().getMap(), imageProvider,
-                location -> gameModelController.getHumanPlayer()
-                        .isVisible(location));
-        grassCoastMapGenerator.setMap(gameModelController.getModel().getMap());
-        hiddenCoastMapGenerator.setMap(gameModelController.getModel().getMap());
+        refresh();
+    }
+
+    void refresh() {
+        terrainBoundaryImages = new TerrainBoundaryImages(model.get().getMap(),
+                imageProvider, location -> player.get().isVisible(location));
+        grassCoastMapGenerator.setMap(model.get().getMap());
+        hiddenCoastMapGenerator.setMap(model.get().getMap());
         imageRandomProvider = new ImageRandomProvider(imageProvider,
-                gameModelController.getModel().getMap());
+                model.get().getMap());
     }
 
     public Image getCoatsImageAt(final Location location) {
@@ -111,17 +121,15 @@ public final class MapManager {
 
     public boolean isTerrainDecorated(final Location location,
             final Terrain terrain, final long tick) {
-        final Model model = gameModelController.getModel();
+        final Model model = this.model.get();
         final boolean hasAttribute = terrain.isHasTrees()
                 || terrain.isHasField() || terrain.isHasRoad()
                 || terrain.getResourceOverlay() != ResourceOverlay.NONE
                 || model.getMap().getRiverSizeAt(location) != RiverSize.NONE
                 || model.getColonyAt(location).isPresent()
-                || model.getNativeSettlementKnownTo(
-                        gameModelController.getHumanPlayer(), location)
+                || model.getNativeSettlementKnownTo(player.get(), location)
                         .isPresent()
-                || (gameModelController.getHumanPlayer()
-                        .isCurrentlyVisible(location)
+                || (player.get().isCurrentlyVisible(location)
                         && model.getMap().hasLostCityRumorAt(location));
         return imageRandomProvider.isTerrainDecorated(terrain.getTerrainType(),
                 location, hasAttribute, tick);

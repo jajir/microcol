@@ -1,4 +1,7 @@
 /**
+ * Shared map layers also serve the non-interactive menu demo through
+ * DemoMapPainter, with explicitly supplied state and private map caches.
+ *
  * Map interaction, selection, movement preview and animation. Wait cycles the
  * model's eligible units; Skip uses its shared validated command. Selection
  * changes cancel unconfirmed movement previews without executing them. The

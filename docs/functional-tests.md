@@ -19850,3 +19850,75 @@ messages for diagnosis. No tests were removed or weakened for acceptance.
 24. Focused routing repair **passed 8 tests in 3 reports, 0 failures/errors/skips**, completion `20261123T071734Z-8cb77cecdab8`, PID 24456, reports `target/docker-ui/run-poKHNd`, **183.944 s** of 600 s. Both continued play and the final `NO_COLONIES` outcome are verified. Replacing TC53, TC09 and the source-contract reports in the preceding selection yields **86 distinct targeted tests / 16 successful reports**, zero failures/errors/skips; the other 78 scenarios and their runtime paths were unchanged. Report provenance is recorded locally in `target/ux02-accepted-ui-reports.json`; the earlier whole attempt remains failed. Fixed smoke is the remaining executable gate.
 25. Fixed smoke dispatch `20261123T072118Z-92ea83b75cfd`, supervisor PID **24778**, outer timeout **480 s**; the verifier retains the required total local smoke budget of **420 s**. No runtime game/model source differs from the passing model snapshot. Result inspection, final review and integration remain pending.
 26. Fixed smoke **passed 23 UI/support tests in 13 XML reports, 0 failures/errors/skips**, completion `20261123T072118Z-92ea83b75cfd`, PID **24778**, reports `target/verification/run-ux9gpaj7`. The verification phase took **279.865 s**, supervision/cleanup **282.819 s**, within the **420-second** local budget; no lock wait. Every tracked game/test and UI runner input matches the smoke snapshot exactly. Local acceptance is **4,927 model/JUnit tests, 86 distinct targeted UI/support tests and 23 fixed smoke/support tests**, with successful report provenance retained above. Shared Java formatting and review are complete. This accepts the source based on `332c61d45` plus this task; full regression, remote CI/Pages and a new game distribution were not requested or verified.
+
+## Ukázka první kolonie v menu — přejímka 25. listopadu 2026
+
+UC-114/115/119: `TC_21_F15_free_play_screen_navigation_test` doplňuje
+`TC_13_menu_demo_is_visible_and_menu_remains_usable`. `DemoSceneTest`
+provádí příkazy první scény, kontroluje vznik kolonie a pole, návrat
+do výchozího stavu a nezávislost druhé instance modelu. `TC_191_F224_session_menu_test.TC_20_demo_loop_preserves_the_resumed_game`
+kontroluje zachování uloženého souboru, kalendáře a peněz po cyklu ukázky.
+Následuje historie pokusů; závěrečná přejímka je uvedena na konci této sekce.
+
+První modelová přejímka `run-9_vwzrp2` spustila 4 934 testů: 1 selhání,
+0 chyb a 0 vynechání. Selhal kontrakt společné továrny tlačítek; oprava
+používá `ActionButtons` a explicitní ikony. Cílený opakovaný běh
+`DemoSceneTest,ButtonPresentationContractTest` prošel 6 testů bez selhání,
+chyb a vynechání. To nenahrazuje opakování celé modelové fáze.
+
+Opakovaná model/JUnit přejímka `run-eb7lvj6_` prošla **4 935 testů**,
+0 selhání, 0 chyb, 0 vynechání (394 reportů). Modelová fáze trvala
+154,043 s, celý dozorovaný běh 157,021 s; čekání na zámek 0 s.
+Doklad: `20261125T073016Z-acac9805a877`, základ revize `39c08f39`,
+pracovní změny této první scény. Cílené UI a smoke dosud nejsou přijaty.
+
+Cílený Docker UI běh `20261125T073321Z-462516c78702` / `run-qfOEpD`
+prošel 15 testů bez selhání, chyb či vynechání za 199,605 s včetně
+přípravy a úklidu. Výběr: celý `TC_21_F15_free_play_screen_navigation_test`,
+`TC_191_F224_session_menu_test#TC_20_demo_loop_preserves_the_resumed_game`
+a `PageVerificationContractTest`. Snímky v `warehouse-qa/demo-*.png`
+ale ukázaly přesah mapy za pravý okraj 900px okna. Tento běh tedy není
+vizuální přejímkou. Následná oprava zachovává šířku menu a odečítá jeho
+levý okraj při výpočtu prostoru; test doplňuje kontrolu mezí a široký snímek.
+
+Použité SVG jednotek, kolonií a symbolů terénu neobsahují rastrové image
+elementy. `export-graphics.py units terrain-fog colonies --check` ověřil
+4 exporty beze změny produkčních obrázků (`rsvg-convert 2.61.4`).
+
+Po opravě rozložení prošla modelová fáze `run-6uwmdolv`: 4 935 testů,
+0 selhání/chyb/vynechání, 153,343 s. Doklad
+`20261125T073816Z-ff812b0705b8`; celý dozorovaný běh 156,430 s, čekání 0 s.
+Opakované cílené UI běží pod `20261125T074111Z-264d526eebad`.
+
+Opakované UI `20261125T074111Z-264d526eebad` / `run-wz4FrG` skončilo
+15 testy, 0 selháními, 2 chybami, 0 vynecháními (164,029 s). Obě chyby
+byly aserce šířky tlačítka Načíst v nových scénářích; kontrola hranic mapy
+již prošla. Zjištěna kolize CSS `-fx-min-width: 0` na sloupci menu
+s nastavením `USE_PREF_SIZE`. CSS omezení odstraněno; běžná logika
+zobrazení popisků zůstala zachována. Nová modelová přejímka běží pod
+`20261125T074537Z-1245968912e8` (supervizor PID 46950).
+
+Modelová přejímka po odstranění CSS kolize: `run-71u65q3f`, 4 935 testů,
+0 selhání/chyb/vynechání, 151,897 s. Dozorovaný běh
+`20261125T074537Z-1245968912e8` trval 154,767 s bez čekání na zámek.
+Cílené UI pokračuje stejným výběrem pod `20261125T074822Z-0f8be914d6b6`.
+
+Cílená UI přejímka po opravě CSS: `20261125T074822Z-0f8be914d6b6` /
+`run-U0wv1w`, stejný výběr, **15 testů, 0 selhání/chyb/vynechání**,
+201,444 s včetně přípravy a úklidu, čekání 0 s. Vizuálně zkontrolovány
+`demo-start.png`, `demo-colony.png` a `demo-wide.png`: v 900px okně je
+mapa uvnitř plochy, celé označení Načíst je vidět, scéna ukazuje kolonii,
+pracovníka na upraveném poli a odplutí; 1280px okno zachovává čitelnost.
+Jde o technickou vizuální kontrolu, nikoli studii s novým hráčem.
+Smoke byl spuštěn jako `20261125T075222Z-97e53b356893` (PID 48342),
+s celkovým limitem vlastní přejímky 420 s.
+
+Závěrečná smoke přejímka `run-p0oxrjls`: **23 testů**, 0 selhání,
+0 chyb a 0 vynechání (13 reportů), výběr pevné `verify.sh --smoke`.
+Celý verifier trval 285,745 s, dozorovaný běh 285,863 s; limit 420 s
+splněn. Doklad `20261125T075222Z-97e53b356893`, čekání na zámek 0 s.
+Přijímaný zdroj: základ `39c08f39` plus změny první scény, shodné
+s poslední modelovou a cílenou UI přejímkou. Java soubory byly zformátovány
+projektním Eclipse profilem; dokumentační kontroly a strict MkDocs prošly.
+První scéna je lokálně přijata. Výrobní a obchodní scény nebyly implementovány;
+nová uživatelská studie, vzdálená CI, Pages ani distribuce nebyly ověřovány.

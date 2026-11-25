@@ -50,7 +50,8 @@ final class GamePaintService {
 
     private final ImageProvider imageProvider;
 
-    private final GameModelController gameModelController;
+    private final java.util.function.Supplier<Model> model;
+    private final java.util.function.Supplier<Player> player;
 
     private final GamePreferences gamePreferences;
 
@@ -60,8 +61,16 @@ final class GamePaintService {
     public GamePaintService(final GameModelController gameModelController,
             final ImageProvider imageProvider, final PaintService paintService,
             final GamePreferences gamePreferences) {
-        this.gameModelController = Preconditions
-                .checkNotNull(gameModelController);
+        this(gameModelController::getModel, gameModelController::getHumanPlayer,
+                imageProvider, paintService, gamePreferences);
+    }
+
+    GamePaintService(final java.util.function.Supplier<Model> model,
+            final java.util.function.Supplier<Player> player,
+            final ImageProvider imageProvider, final PaintService paintService,
+            final GamePreferences gamePreferences) {
+        this.model = model;
+        this.player = player;
         this.imageProvider = Preconditions.checkNotNull(imageProvider);
         this.paintService = Preconditions.checkNotNull(paintService);
         this.gamePreferences = Preconditions.checkNotNull(gamePreferences);
@@ -83,7 +92,7 @@ final class GamePaintService {
         graphics.setFill(PaintService.UNKNOWN_BACKGROUND);
         graphics.fillRect(0, 0, graphics.getCanvas().getWidth(),
                 graphics.getCanvas().getHeight());
-        final Player player = gameModelController.getHumanPlayer();
+        final Player player = this.player.get();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {
             for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
@@ -91,9 +100,9 @@ final class GamePaintService {
                 final Location location = Location.of(i, j);
                 final Point point = area.convertToCanvasPoint(location);
                 if (player.isVisible(location)) {
-                    paintService.paintTerrainBaseOnTile(
-                            graphics, point, location, gameModelController
-                                    .getModel().getMap().getTerrainAt(location),
+                    paintService.paintTerrainBaseOnTile(graphics, point,
+                            location,
+                            model.get().getMap().getTerrainAt(location),
                             gameTick);
                 } else {
                     paintService.paintHiddenTile(graphics, point);
@@ -107,8 +116,8 @@ final class GamePaintService {
             final Area area,
             final OneTurnMoveHighlighter oneTurnMoveHighlighter,
             final CanvasInMapCoordinates coord) {
-        final Player player = gameModelController.getHumanPlayer();
-        final WorldMap map = gameModelController.getModel().getMap();
+        final Player player = this.player.get();
+        final WorldMap map = model.get().getMap();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {
             for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
@@ -118,7 +127,9 @@ final class GamePaintService {
                     final Point point = area.convertToCanvasPoint(location);
                     paintService.paintTerrainOverlayOnTile(graphics, point,
                             map.getTerrainAt(location),
-                            oneTurnMoveHighlighter.isItHighlighted(location));
+                            oneTurnMoveHighlighter != null
+                                    && oneTurnMoveHighlighter
+                                            .isItHighlighted(location));
                     if (player.isCurrentlyVisible(location)
                             && map.hasLostCityRumorAt(location)) {
                         paintService.paintLostCityRumor(graphics, point);
@@ -131,10 +142,9 @@ final class GamePaintService {
     /** Draw the shared river layer over the visible map. */
     public void paintRivers(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord) {
-        paintService.paintRivers(graphics,
-                gameModelController.getModel().getMap(),
-                gameModelController.getHumanPlayer(), coord.getTopLeft(),
-                coord.getBottomRight(), area::convertToCanvasPoint);
+        paintService.paintRivers(graphics, model.get().getMap(),
+                this.player.get(), coord.getTopLeft(), coord.getBottomRight(),
+                area::convertToCanvasPoint);
     }
 
     /** Cover overlays which can cross from explored into unknown tiles. */
@@ -145,7 +155,7 @@ final class GamePaintService {
 
     public void paintFog(final GraphicsContext graphics, final Area area,
             final CanvasInMapCoordinates coord, final boolean planning) {
-        final Player player = gameModelController.getHumanPlayer();
+        final Player player = this.player.get();
         for (int i = coord.getTopLeft().getX(); i <= coord.getBottomRight()
                 .getX(); i++) {
             for (int j = coord.getTopLeft().getY(); j <= coord.getBottomRight()
@@ -184,7 +194,7 @@ final class GamePaintService {
             final Area area, final ExcludePainting excludePainting,
             final Optional<Unit> oSelectedUnit) {
         final Map<Location, List<Unit>> ships = model.getUnitsAt();
-        final Player player = gameModelController.getHumanPlayer();
+        final Player player = this.player.get();
 
         final Map<Location, List<Unit>> units = ships.entrySet().stream()
                 .filter(entry -> area.isLocationVisible(entry.getKey()))
@@ -250,7 +260,7 @@ final class GamePaintService {
 
     public void paintColonies(final GraphicsContext graphics, final Model model,
             final Area area) {
-        final Player player = gameModelController.getHumanPlayer();
+        final Player player = this.player.get();
         // Known colonies are live inside present sight and remembered
         // snapshots outside it; stale ones are drawn faded.
         for (final ColonySighting sighting : player.getKnownColonies()) {
@@ -290,7 +300,7 @@ final class GamePaintService {
         if (!gamePreferences.isGridShown()) {
             return;
         }
-        final Player player = gameModelController.getHumanPlayer();
+        final Player player = this.player.get();
         graphics.save();
         try {
             graphics.setStroke(Color.web("#746E60", 0.55));

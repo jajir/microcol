@@ -5,7 +5,7 @@ import com.google.inject.Inject;
 public final class GrassCoastMapGenerator extends AbstractCoastMapGenerator {
 
     @Inject
-    GrassCoastMapGenerator(final ImageProvider imageProvider) {
+    public GrassCoastMapGenerator(final ImageProvider imageProvider) {
         super(imageProvider);
     }
 

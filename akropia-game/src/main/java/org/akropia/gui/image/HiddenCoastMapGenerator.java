@@ -8,14 +8,18 @@ import com.google.inject.Inject;
 
 public final class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
 
-    private final GameModelController gameModelController;
+    private final java.util.function.Supplier<Player> player;
 
     @Inject
     HiddenCoastMapGenerator(final ImageProvider imageProvider,
             final GameModelController gameModelController) {
+        this(imageProvider, gameModelController::getHumanPlayer);
+    }
+
+    public HiddenCoastMapGenerator(final ImageProvider imageProvider,
+            final java.util.function.Supplier<Player> player) {
         super(imageProvider);
-        this.gameModelController = Preconditions
-                .checkNotNull(gameModelController);
+        this.player = Preconditions.checkNotNull(player);
     }
 
     @Override
@@ -39,6 +43,6 @@ public final class HiddenCoastMapGenerator extends AbstractCoastMapGenerator {
     }
 
     private Player getPlayer() {
-        return gameModelController.getHumanPlayer();
+        return player.get();
     }
 }

@@ -262,3 +262,7 @@ directory to `<results>/<module>/surefire-reports` before invoking Maven on a
 clean source snapshot. Completed XML and screenshots written there survive
 interruption. Ordinary Maven invocations keep their default report directories.
 Manual full regression defaults to tests only; nightly or explicitly selected publication retains the distribution gates.
+
+Ukázky hlavního menu z první dodávky R-0454 jsou součástí `akropia-game`:
+prostředky `demos/first-colony` obsahují autorský stav a JSON režii.
+Nepřidává se nový modul ani formát hráčského uložení.

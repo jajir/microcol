@@ -36,6 +36,23 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
+    void TC_20_demo_loop_preserves_the_resumed_game() throws Exception {
+        // Open a real session, then leave it behind the main menu preview.
+        GamePage game = WelcomePage.of(getContext()).loadGame();
+        WelcomePage welcome = game.exitToMenu();
+        FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
+        byte[] saved = audit.readAutosave();
+        // A full preview cycle neither overwrites the save nor advances the
+        // session.
+        welcome.observeDemo(32000);
+        welcome.verifyDemoVisible();
+        audit.verifyAutosaveUnchanged(saved);
+        audit.continueGame();
+        audit.verifyCalendarAndGold(18, 10000);
+    }
+
+    @Test
+    @Tag("local")
     void TC_18_enter_saves_the_typed_name_and_keeps_overwrite_protection()
             throws Exception {
         // The suggested name belongs to the player, not the internal nation.

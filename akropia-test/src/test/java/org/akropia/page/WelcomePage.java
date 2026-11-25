@@ -240,6 +240,34 @@ public class WelcomePage extends AbstractMenuScreen {
         return SettingPage.of(getContext());
     }
 
+    public void verifyDemoVisible() {
+        getRobot().interact(() -> {
+            javafx.scene.Parent demo = getRobot().lookup("#menu-demo").query();
+            assertTrue(demo.isVisible());
+            assertTrue(demo.isMouseTransparent());
+            assertTrue(demo.getChildrenUnmodifiable()
+                    .get(0) instanceof javafx.scene.canvas.Canvas);
+            assertTrue(demo.getBoundsInLocal().getWidth() >= 260);
+            Bounds bounds = demo.localToScene(demo.getBoundsInLocal());
+            assertTrue(bounds.getMinX() >= 0);
+            assertTrue(bounds.getMaxX() <= demo.getScene().getWidth());
+            assertTrue(bounds.getMaxY() <= demo.getScene().getHeight());
+            Button load = getRobot().lookup("#buttonLoad").queryButton();
+            assertTrue(load.getWidth() >= load.prefWidth(-1) - 1,
+                    "Load button width " + load.getWidth() + " / "
+                            + load.prefWidth(-1));
+            assertEquals(ContentDisplay.LEFT, load.getContentDisplay());
+        });
+    }
+
+    public void observeDemo(final long milliseconds) {
+        getRobot().sleep(milliseconds);
+    }
+
+    public void pauseDemo() {
+        getRobot().clickOn("#menu-demo-pause");
+    }
+
     public WelcomePage verifyMainScreen() {
         verifyMainTitle(realTitle -> {
             assertEquals("Akropia", realTitle);
