@@ -1379,7 +1379,7 @@ První scéna prošla místní přejímkou 25. listopadu 2026; viz
 
 Stejný balíček obsahuje `DemoPlayback` (časová osa a rekonstrukce modelu
 při posunu zpět) a `DemoStudio` (vývojářské ovládání). Menu i studio používají
-`DemoView`. Parametry `--demo-studio --demo-directory=/cesta/k/demos`
+`DemoView`. Parametry `--demo-studio=/cesta/k/demos`
 otevřou studio místo menu. Každý podadresář obsahuje `scene.json` a soubor
 uvedený v `initialState`: scénář JSON nebo uloženou hru `.akropia`.
 Čtení archivů používá existující validaci `GameModelPoDao`; vstupy se nepřepisují.

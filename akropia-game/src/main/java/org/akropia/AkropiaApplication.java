@@ -57,6 +57,23 @@ public final class AkropiaApplication extends Application {
         Platform.runLater(() -> initializeAkropia(primaryStage));
     }
 
+    static String demoDirectory(Parameters parameters) {
+        if (parameters == null)
+            return null;
+        String directory = parameters.getNamed().get("demo-studio");
+        if (directory == null
+                && parameters.getRaw().contains("--demo-studio")) {
+            directory = parameters.getNamed().get("demo-directory");
+            if (directory == null)
+                throw new IllegalArgumentException(
+                        "--demo-directory is required");
+        }
+        if (directory != null && directory.isBlank())
+            throw new IllegalArgumentException(
+                    "Demo directory must not be empty");
+        return directory;
+    }
+
     private void setDevelopmentMode() {
         final GamePreferences gamePreferences = injector
                 .getInstance(GamePreferences.class);
@@ -90,13 +107,8 @@ public final class AkropiaApplication extends Application {
             injector.getInstance(DiagnosticLog.class)
                     .record(DiagnosticEvent.STARTED, null);
 
-            if (getParameters() != null
-                    && getParameters().getRaw().contains("--demo-studio")) {
-                String directory = getParameters().getNamed()
-                        .get("demo-directory");
-                if (directory == null)
-                    throw new IllegalArgumentException(
-                            "--demo-directory is required");
+            String directory = demoDirectory(getParameters());
+            if (directory != null) {
                 new org.akropia.gui.screen.menu.demo.DemoStudio(
                         injector.getInstance(
                                 org.akropia.gui.screen.menu.demo.DemoView.class),

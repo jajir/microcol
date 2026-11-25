@@ -20007,3 +20007,26 @@ failures/errors/skips. Smoke took 295.916 supervised seconds (limit 420).
 Both snapshots match the changed scripts. No player behavior changed; targeted
 coverage is the launcher test. Documentation checks (14) and strict MkDocs passed.
 Native desktop launch and remote publication were not verified.
+
+### Demo Studio launch argument repair — 2026-11-25
+
+The initial wrapper passed two switches in `javafx.args`. JavaFX Maven plugin
+0.0.3 forwards that string as one application argument, so the studio selector
+was not recognized and normal menu startup occurred. The earlier mocked launcher
+tests and direct studio UI tests did not cover this boundary. Historical passing
+reports above remain valid for their selections, not proof of actual studio launch.
+
+The wrapper now passes `--demo-studio=src/main/resources/demos`; application
+selection accepts this named argument and preserves the previous two-argument
+form. `scripts/test_demo_studio_arguments.py` executes the real configured Maven
+plugin against a temporary console-only Java probe and checks the delivered
+argument. It passed, along with four launcher tests and two focused argument
+selection tests. Model `target/verification/run-lrkn622j` passed 4,940 tests,
+zero failures/errors/skips, in 151.426 supervised seconds. Targeted Docker UI
+`target/docker-ui/run-J41oIC` passed five tests (TC21/13, TC21/15 and the three
+page-contract tests), zero failures/errors/skips, in 99.75 supervised seconds.
+Smoke `target/verification/run-iokk4yvk` passed 23 tests, zero failures/errors/skips,
+in 294.334 supervised seconds (limit 420). Changed executable files match its
+source snapshot. Shared Java formatting, source review, 14 documentation checks
+and strict MkDocs completed. Native desktop launch and remote publication were
+not verified.

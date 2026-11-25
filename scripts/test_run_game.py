@@ -38,7 +38,7 @@ class LaunchTest(unittest.TestCase):
         result, _ = self.launch("Linux", script=SCRIPT.with_name("run-demo-studio.sh"))
         self.assertEqual(result[2], ["-pl", "akropia-game", "validate", "compile",
                          "javafx:run",
-                         "-Djavafx.args=--demo-studio --demo-directory=src/main/resources/demos",
+                         "-Djavafx.args=--demo-studio=src/main/resources/demos",
                          "-Dexample=two words"])
         self.assertEqual(result[3], str(SCRIPT.parent.parent))
         self.assertTrue((SCRIPT.parent.parent / "akropia-game/src/main/resources/demos/first-colony/scene.json").is_file())
