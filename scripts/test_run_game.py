@@ -11,7 +11,7 @@ SCRIPT = Path(__file__).resolve().parent / "run-game.sh"
 
 
 class LaunchTest(unittest.TestCase):
-    def launch(self, platform, java_home=None, brew=True):
+    def launch(self, platform, java_home=None, brew=True, script=SCRIPT):
         with tempfile.TemporaryDirectory(prefix="akropia launch ") as directory:
             root = Path(directory)
             scripts = {
@@ -30,9 +30,18 @@ class LaunchTest(unittest.TestCase):
             env.pop("JAVA_HOME", None)
             if java_home:
                 env["JAVA_HOME"] = java_home
-            result = subprocess.run(["/bin/bash", str(SCRIPT), "-Dexample=two words"],
-                                    env=env, text=True, capture_output=True, check=True)
+            result = subprocess.run(["/bin/bash", str(script), "-Dexample=two words"],
+                                    env=env, cwd=root, text=True, capture_output=True, check=True)
             return json.loads(result.stdout), env["TEST_JDK_PREFIX"]
+
+    def test_demo_studio_from_another_directory(self):
+        result, _ = self.launch("Linux", script=SCRIPT.with_name("run-demo-studio.sh"))
+        self.assertEqual(result[2], ["-pl", "akropia-game", "validate", "compile",
+                         "javafx:run",
+                         "-Djavafx.args=--demo-studio --demo-directory=src/main/resources/demos",
+                         "-Dexample=two words"])
+        self.assertEqual(result[3], str(SCRIPT.parent.parent))
+        self.assertTrue((SCRIPT.parent.parent / "akropia-game/src/main/resources/demos/first-colony/scene.json").is_file())
 
     def test_homebrew_selection_and_launch_arguments(self):
         result, prefix = self.launch("Darwin")

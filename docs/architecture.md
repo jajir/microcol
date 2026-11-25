@@ -1390,6 +1390,16 @@ nové délky; chyba ponechá poslední načtený náhled. Panel jednotek uvádí
 pro autorské mapování aktérů. Lokální přejímka je doložena ve [funkční evidenci](functional-tests.md#demo-studio-2026-11-25).
 
 
+Pro běžné spuštění z kořene repozitáře stačí:
+
+```bash
+bash scripts/run-demo-studio.sh
+```
+
+Skript používá existující `run-game.sh` pro volbu JDK a spuštění Maven;
+parametry studia i relativní cestu ke scénám doplňuje automaticky.
+Lze jej zavolat i absolutní cestou z jiného pracovního adresáře.
+
 Pro ladění přibalené scény použijte jako adresář
 `akropia-game/src/main/resources/demos` (absolutní cestu). Každý podadresář
 se objeví v seznamu pod svým názvem. Soubor `initialState` musí být přímo

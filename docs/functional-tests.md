@@ -19995,3 +19995,15 @@ nebyly ověřovány.
    14 documentation checks and strict MkDocs passed. These historical failed
    runs remain failed. No remote CI, website or distribution publication was
    verified; no new-player study was performed.
+
+### Demo Studio launch script — 2026-11-25
+
+The repository-relative wrapper `scripts/run-demo-studio.sh` reuses the JDK/Maven
+launcher and supplies the studio parameters. Four launcher tests passed, including
+execution from another working directory and argument forwarding; Bash syntax
+validation passed. Model `target/verification/run-dt8ee7v3` passed 4,938 tests,
+and smoke `target/verification/run-8g5jgml0` passed 23 tests, all with zero
+failures/errors/skips. Smoke took 295.916 supervised seconds (limit 420).
+Both snapshots match the changed scripts. No player behavior changed; targeted
+coverage is the launcher test. Documentation checks (14) and strict MkDocs passed.
+Native desktop launch and remote publication were not verified.
