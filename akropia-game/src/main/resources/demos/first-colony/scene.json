@@ -110,6 +110,19 @@
       "name": "Nový přístav"
     },
     {
+      "action": "animate",
+      "actor": "founder",
+      "from": [
+        25,
+        15
+      ],
+      "to": [
+        25,
+        14
+      ],
+      "durationMs": 1200
+    },
+    {
       "action": "wait",
       "durationMs": 1800
     },

@@ -20030,3 +20030,27 @@ in 294.334 supervised seconds (limit 420). Changed executable files match its
 source snapshot. Shared Java formatting, source review, 14 documentation checks
 and strict MkDocs completed. Native desktop launch and remote publication were
 not verified.
+
+### Demo Studio hover identity and founder walk — 2026-11-25
+
+R-0454 extension: studio hover identifies the rendered unit by script alias,
+ID, localized type and tile, including mid-animation. The menu remains mouse
+transparent. The first scene adds a 1,200 ms presentation-only `animate` step
+from the colony to the founder's assigned northern field; model founding and
+work assignment are unchanged. `DemoPlaybackTest` verifies the mid-step origin,
+model destination, fraction and reconstruction after seeking backwards.
+TC21/16 verifies hovered founder identity halfway through the walk, after
+seeking backwards and after reload; TC21's existing scenarios and TC191/20
+cover the studio controls, menu and isolation of the resumed game.
+
+Model `target/verification/run-rq2koqoj` passed 4,941 tests, zero failures,
+errors or skips, in 151.806 supervised seconds. Targeted Docker UI
+`target/docker-ui/run-2l0xdW` passed 18 tests with zero failures/errors/skips
+in 249.682 supervised seconds. The studio screenshot shows the founder
+mid-walk at 13.0 seconds with hover identity `founder · ID 0 · Free Colonist ·
+[25,14]`; control labels and the new status line are readable. TC21/16 also
+passed backward-seek and reload checks. Smoke `target/verification/run-76lw8bzu`
+passed 23 tests with zero failures/errors/skips in 288.358 supervised seconds
+(limit 420). All changed executable files and the scene match its frozen source
+snapshot. Shared Java formatting, final source review, 14 documentation checks
+and strict MkDocs passed. No remote CI or distribution publication was verified.

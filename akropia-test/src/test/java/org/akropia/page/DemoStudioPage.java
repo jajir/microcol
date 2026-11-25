@@ -71,6 +71,45 @@ public final class DemoStudioPage {
         Files.writeString(root.resolve("first/scene.json"), configuration);
     }
 
+    public void seekFounderWalk() {
+        context.getRobot().interact(() -> {
+            long time = 0;
+            for (var step : view.playback().scene().steps) {
+                if ("animate".equals(step.action))
+                    break;
+                time += step.durationMs;
+            }
+            ((Slider) stage.getScene().lookup("#demo-position"))
+                    .setValue(time + 600);
+        });
+    }
+
+    public void hoverFounder() {
+        javafx.geometry.Point2D[] point = new javafx.geometry.Point2D[1];
+        context.getRobot().interact(() -> {
+            for (int y = 0; y < view.getHeight(); y += 8) {
+                for (int x = 0; x < view.getWidth(); x += 8) {
+                    if (view.describeAt(x, y).contains("founder · ID 0")) {
+                        point[0] = view.localToScreen(x, y);
+                        return;
+                    }
+                }
+            }
+        });
+        context.getRobot().moveTo(java.util.Objects.requireNonNull(point[0],
+                "Founder not rendered"));
+        context.getRobot().sleep(150);
+    }
+
+    public void verifyFounderHover() {
+        context.getRobot().interact(() -> {
+            assertTrue(((Label) stage.getScene().lookup("#demo-hover"))
+                    .getText().contains("founder · ID 0"));
+            assertEquals("animate", view.playback().current().action);
+            assertEquals(0.5, view.playback().fraction(), 0.0001);
+        });
+    }
+
     public void captureEvidence() throws Exception {
         var image = org.testfx.util.WaitForAsyncUtils
                 .asyncFx(() -> stage.getScene().snapshot(null)).get();

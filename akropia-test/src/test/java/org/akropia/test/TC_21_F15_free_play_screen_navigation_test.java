@@ -30,6 +30,33 @@ public class TC_21_F15_free_play_screen_navigation_test
 
     @Test
     @Tag("local")
+    void TC_16_studio_identifies_the_founder_during_the_field_walk()
+            throws Exception {
+        // Inspect the founder halfway between the colony and the assigned
+        // field.
+        DemoStudioPage studio = new DemoStudioPage(getContext());
+        studio.open();
+        try {
+            studio.seekFounderWalk();
+            studio.hoverFounder();
+            studio.verifyFounderHover();
+            studio.captureEvidence();
+            // Reconstruct the scene and reload without losing the hovered
+            // identity.
+            studio.seek(0);
+            studio.seekFounderWalk();
+            studio.hoverFounder();
+            studio.verifyFounderHover();
+            studio.click("Reload");
+            studio.hoverFounder();
+            studio.verifyFounderHover();
+        } finally {
+            studio.close();
+        }
+    }
+
+    @Test
+    @Tag("local")
     void TC_15_demo_studio_seeks_reloads_and_selects_scenes() throws Exception {
         // Open the studio with two editable scenes.
         DemoStudioPage studio = new DemoStudioPage(getContext());

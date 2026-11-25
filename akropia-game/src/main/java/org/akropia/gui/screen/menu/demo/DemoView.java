@@ -76,6 +76,28 @@ public final class DemoView extends StackPane {
         getChildren().add(canvas);
     }
 
+    public String describeAt(double x, double y) {
+        if (model == null || playback == null)
+            return "";
+        var location = painter
+                .locationAt(org.akropia.gui.Point.of((int) x, (int) y));
+        if (location == null || !model.getMap().isValid(location))
+            return "";
+        var unit = painter.unitAt(x, y);
+        String tile = "[" + location.getX() + ", " + location.getY() + "]";
+        if (unit == null)
+            return tile;
+        String alias = playback.scene().actors.entrySet().stream()
+                .filter(e -> e.getValue() == unit.getId())
+                .map(java.util.Map.Entry::getKey)
+                .collect(java.util.stream.Collectors.joining(", "));
+        return (alias.isEmpty() ? "Unit" : alias) + " · ID " + unit.getId()
+                + " · "
+                + texts.get(
+                        org.akropia.gui.UnitTypes.getUnitName(unit.getType()))
+                + " · " + tile;
+    }
+
     public void start() {
         try {
             load(DemoScene.load(), 0);
@@ -161,7 +183,8 @@ public final class DemoView extends StackPane {
         Unit moving = null;
         Location from = null, to = null;
         if (current != null && ("move".equals(current.action)
-                || "disembark".equals(current.action))) {
+                || "disembark".equals(current.action)
+                || "animate".equals(current.action))) {
             moving = scene.actor(model, current);
             from = scene.movementOrigin(model, current);
             to = scene.destination(current);

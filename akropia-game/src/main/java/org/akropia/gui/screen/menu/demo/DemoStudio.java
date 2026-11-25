@@ -19,11 +19,15 @@ public final class DemoStudio {
     private final Label error = new Label();
     private final TextArea actors = new TextArea();
     private boolean updating;
+    private final Label hovered = new Label();
+    private javafx.geometry.Point2D pointer;
     private final AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
             if (view.playback() == null)
                 return;
+            hovered.setText(pointer == null ? ""
+                    : view.describeAt(pointer.getX(), pointer.getY()));
             updating = true;
             var playback = view.playback();
             if (!position.isValueChanging())
@@ -42,6 +46,14 @@ public final class DemoStudio {
     }
 
     public void show(Stage stage) {
+        hovered.setId("demo-hover");
+        view.setMouseTransparent(false);
+        view.setOnMouseMoved(
+                e -> pointer = new javafx.geometry.Point2D(e.getX(), e.getY()));
+        view.setOnMouseExited(e -> {
+            pointer = null;
+            hovered.setText("");
+        });
         scenes.setId("demo-scenes");
         position.setId("demo-position");
         position.setAccessibleText("Presentation time");
@@ -79,7 +91,7 @@ public final class DemoStudio {
         view.onError(e -> error.setText(e.getMessage()));
         VBox content = new VBox(10, scenes, new StackPane(view),
                 new HBox(8, play, stop, previous, next, reload), position,
-                new HBox(8, speed, loop, status), error, actors);
+                new HBox(8, speed, loop, status), hovered, error, actors);
         content.setStyle("-fx-padding: 16;");
         Scene scene = new Scene(content, 900, 620);
         scene.getStylesheets()

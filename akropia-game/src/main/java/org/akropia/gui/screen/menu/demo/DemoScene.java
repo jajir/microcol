@@ -21,6 +21,7 @@ public final class DemoScene {
         public String action;
         public String actor;
         public int[] to;
+        public int[] from;
         public String name;
         public int durationMs;
     }
@@ -69,14 +70,14 @@ public final class DemoScene {
             throw new IllegalArgumentException("Invalid demo definition");
         for (Step step : steps) {
             if (step == null || step.action == null
-                    || !Set.of("wait", "move", "disembark", "found", "plow",
-                            "endTurn").contains(step.action)
+                    || !Set.of("wait", "move", "disembark", "found", "animate",
+                            "plow", "endTurn").contains(step.action)
                     || step.durationMs < 0 || step.durationMs > 60000)
                 throw new IllegalArgumentException("Invalid demo step");
-            if (Set.of("move", "disembark", "found", "plow")
+            if (Set.of("move", "disembark", "found", "animate", "plow")
                     .contains(step.action) && !actors.containsKey(step.actor))
                 throw new IllegalArgumentException("Unknown actor");
-            if (Set.of("move", "disembark").contains(step.action)
+            if (Set.of("move", "disembark", "animate").contains(step.action)
                     && (step.to == null || step.to.length != 2))
                 throw new IllegalArgumentException("Missing destination");
         }
@@ -103,6 +104,10 @@ public final class DemoScene {
         if (!model.getMap().isValid(Location.of(camera[0], camera[1])))
             throw new IllegalArgumentException("Camera outside map");
         for (Step step : steps) {
+            if ("animate".equals(step.action) && (step.from == null
+                    || step.from.length != 2 || !model.getMap()
+                            .isValid(Location.of(step.from[0], step.from[1]))))
+                throw new IllegalArgumentException("Invalid animation origin");
             if (step.to != null && !model.getMap().isValid(destination(step)))
                 throw new IllegalArgumentException("Destination outside map");
         }
@@ -117,6 +122,12 @@ public final class DemoScene {
     /** Presentation starts at the carrier while a passenger is still aboard. */
     public Location movementOrigin(Model model, Step step) {
         Unit unit = actor(model, step);
+        if ("animate".equals(step.action)) {
+            if (!unit.getLocation().equals(destination(step)))
+                throw new IllegalArgumentException(
+                        "Animation destination differs from unit position");
+            return Location.of(step.from[0], step.from[1]);
+        }
         return "disembark".equals(step.action)
                 ? unit.getPlaceCargoSlot().getOwnerUnit().getLocation()
                 : unit.getLocation();
@@ -129,6 +140,9 @@ public final class DemoScene {
     public void execute(Model model, Step step) {
         switch (step.action) {
         case "wait":
+            break;
+        case "animate":
+            movementOrigin(model, step);
             break;
         case "move":
             model.moveUnit(actor(model, step),

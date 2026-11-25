@@ -1415,3 +1415,15 @@ Kroky s nulovou délkou se provedou v pořadí scénáře na příslušné časo
 hranici. Načtený počáteční stav se uchovává v paměti až do reloadu.
 Modelové operace při posunu vpřed běží bez čekání; posun zpět vytvoří
 nový izolovaný model. Náhodné bojové scény nejsou součástí této dodávky.
+
+Studio nyní zobrazuje pod ovládáním jednotku pod kurzorem: alias režie, ID,
+lokalizovaný typ a souřadnice políčka. Identifikace používá aktuální vykreslenou
+polohu včetně rozpracované animace; na prázdném políčku ukazuje souřadnice.
+Mimo mapu řádek vyprázdní. Hlavní menu zůstává neinteraktivní.
+`DemoMapPainter` poskytuje také převod bodu na pole a identitu vykreslené jednotky.
+
+Akce `animate` používá `actor`, `from`, `to` a `durationMs`. Pouze vizuálně
+přesune jednotku z `from` na její již platnou modelovou polohu `to`; jiný cíl
+odmítne. První scéna ji používá bezprostředně po `found`: zakladatel ID 0
+plynule přejde z [25,15] na přidělené pole [25,14] během 1 200 ms. Herní
+přiřazení práce zůstává součástí založení kolonie. Lokální přejímku dokládá [funkční evidence](functional-tests.md#demo-studio-hover-identity-and-founder-walk-2026-11-25).
