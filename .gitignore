@@ -18,4 +18,4 @@ akropia-test/src/test/scenarios/.akropia/autosave.akropia
 *.iml
 *.css.map
 __pycache__/
-hs_err_pid*.log
+*.log
