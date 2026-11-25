@@ -17,23 +17,34 @@ public final class DemoView extends StackPane {
     private final Canvas canvas = new Canvas();
     private final DemoMapPainter painter;
     private final I18n texts;
-    private DemoScene scene;
     private Model model;
-    private int step;
-    private long started;
+    private DemoPlayback playback;
     private long lastFrame;
     private boolean paused;
-    private long pausedAt;
+    private boolean looping = true;
+    private double speed = 1;
+    private java.util.function.Consumer<RuntimeException> errorHandler = error -> {
+    };
     private final AnimationTimer timer = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            if (paused)
+            if (paused) {
+                lastFrame = now;
                 return;
+            }
             if (now - lastFrame < 33000000)
                 return;
+            double delta = lastFrame == 0 ? 0 : (now - lastFrame) / 1000000d;
             lastFrame = now;
             try {
-                frame(now);
+                double target = playback.time() + delta * speed;
+                if (target >= playback.duration() && looping) {
+                    playback = new DemoPlayback(playback.scene());
+                    target = 0;
+                }
+                seek(target);
+                if (playback.time() >= playback.duration())
+                    paused = true;
             } catch (RuntimeException error) {
                 fail(error);
             }
@@ -52,32 +63,77 @@ public final class DemoView extends StackPane {
         setMinSize(260, 220);
         setPrefSize(600, 360);
         setMaxSize(600, 360);
+        canvas.widthProperty().addListener((o, a, b) -> {
+            if (playback != null && model != null)
+                paint();
+        });
+        canvas.heightProperty().addListener((o, a, b) -> {
+            if (playback != null && model != null)
+                paint();
+        });
         canvas.widthProperty().bind(widthProperty());
         canvas.heightProperty().bind(heightProperty());
         getChildren().add(canvas);
     }
 
     public void start() {
-        stop();
-        paused = false;
         try {
-            scene = DemoScene.load();
-            reset();
-            getChildren().setAll(canvas);
-            timer.start();
+            load(DemoScene.load(), 0);
+            setPaused(false);
         } catch (RuntimeException error) {
             fail(error);
         }
     }
 
-    public void setPaused(boolean paused) {
-        if (this.paused == paused)
-            return;
-        this.paused = paused;
-        if (paused)
-            pausedAt = System.nanoTime();
-        else if (started != 0)
-            started += System.nanoTime() - pausedAt;
+    public void load(DemoScene scene, double time) {
+        DemoPlayback candidate = new DemoPlayback(scene);
+        candidate.seek(time);
+        playback = candidate;
+        model = candidate.model();
+        paused = true;
+        lastFrame = 0;
+        painter.refresh();
+        getChildren().setAll(canvas);
+        paint();
+        timer.start();
+    }
+
+    public DemoPlayback playback() {
+        return playback;
+    }
+
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public void setPaused(boolean value) {
+        paused = value;
+        lastFrame = 0;
+    }
+
+    public void setLooping(boolean value) {
+        looping = value;
+    }
+
+    public void setSpeed(double value) {
+        if (!Double.isFinite(value) || value <= 0)
+            throw new IllegalArgumentException("Invalid speed");
+        speed = value;
+    }
+
+    public void onError(java.util.function.Consumer<RuntimeException> handler) {
+        errorHandler = handler;
+    }
+
+    public void seek(double time) {
+        int previousStep = playback.step();
+        playback.seek(time);
+        boolean changed = model != playback.model()
+                || previousStep != playback.step();
+        model = playback.model();
+        if (changed)
+            painter.refresh();
+        paint();
     }
 
     public void stop() {
@@ -85,55 +141,34 @@ public final class DemoView extends StackPane {
         model = null;
     }
 
-    private void reset() {
-        model = scene.newModel();
-        painter.refresh();
-        step = 0;
-        started = 0;
-    }
-
     private void fail(RuntimeException error) {
-        stop();
-        org.slf4j.LoggerFactory.getLogger(DemoView.class)
-                .warn("Demo failed at step {}", step, error);
+        paused = true;
+        org.slf4j.LoggerFactory.getLogger(DemoView.class).warn("Demo failed",
+                error);
+        errorHandler.accept(error);
         getChildren().setAll(new Label(texts
                 .get(org.akropia.gui.screen.menu.GameMenu.demoUnavailable)));
     }
 
-    private void frame(long now) {
+    private void paint() {
         if (getWidth() < 1 || getHeight() < 1)
             return;
-        if (started == 0)
-            started = now;
-        DemoScene.Step current = scene.steps.get(step);
-        double fraction = current.durationMs == 0 ? 1
-                : Math.min(1,
-                        (now - started) / (current.durationMs * 1000000d));
-        double elapsedMs = (now - started) / 1000000d;
-        canvas.setOpacity(step == 0 ? Math.min(1, elapsedMs / 500)
-                : step == scene.steps.size() - 1
-                        ? Math.min(1,
-                                Math.max(0,
-                                        (current.durationMs - elapsedMs) / 500))
-                        : 1);
+        DemoScene scene = playback.scene();
+        DemoScene.Step current = playback.current();
+        canvas.setOpacity(Math.max(0, Math.min(1,
+                Math.min(playback.time(), playback.duration() - playback.time())
+                        / 500)));
         Unit moving = null;
         Location from = null, to = null;
-        if ("move".equals(current.action)
-                || "disembark".equals(current.action)) {
+        if (current != null && ("move".equals(current.action)
+                || "disembark".equals(current.action))) {
             moving = scene.actor(model, current);
             from = scene.movementOrigin(model, current);
             to = scene.destination(current);
         }
         painter.paint(canvas.getGraphicsContext2D(),
-                Location.of(scene.camera[0], scene.camera[1]), now / 33000000,
-                moving, from, to, fraction);
-        if (fraction >= 1) {
-            scene.execute(model, current);
-            painter.refresh();
-            step++;
-            started = now;
-            if (step == scene.steps.size())
-                reset();
-        }
+                Location.of(scene.camera[0], scene.camera[1]),
+                (long) (playback.time() / 33), moving, from, to,
+                playback.fraction());
     }
 }

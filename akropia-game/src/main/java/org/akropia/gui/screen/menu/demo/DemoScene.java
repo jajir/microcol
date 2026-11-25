@@ -10,6 +10,8 @@ import org.akropia.model.campaign.po.GameModelPoDao;
 
 /** Authored commands; all gameplay changes still pass through the model. */
 public final class DemoScene {
+    private transient java.nio.file.Path directory;
+    private transient org.akropia.model.campaign.po.GameModelPo initialData;
     public String initialState;
     public Map<String, Integer> actors;
     public int[] camera;
@@ -25,17 +27,25 @@ public final class DemoScene {
 
     public static DemoScene load() {
         String directory = System.getProperty("akropia.demo.directory");
-        if (directory != null) {
-            try (Reader reader = java.nio.file.Files.newBufferedReader(
-                    java.nio.file.Path.of(directory, "scene.json"))) {
-                DemoScene scene = new Gson().fromJson(reader, DemoScene.class);
-                scene.validate();
-                return scene;
-            } catch (IOException error) {
-                throw new IllegalStateException("Cannot read demo directory",
-                        error);
-            }
+        if (directory != null)
+            return load(java.nio.file.Path.of(directory));
+        return loadBundled();
+    }
+
+    public static DemoScene load(java.nio.file.Path directory) {
+        try (Reader reader = java.nio.file.Files
+                .newBufferedReader(directory.resolve("scene.json"))) {
+            DemoScene scene = new Gson().fromJson(reader, DemoScene.class);
+            scene.directory = directory.toAbsolutePath().normalize();
+            scene.validate();
+            return scene;
+        } catch (IOException error) {
+            throw new IllegalStateException("Cannot read demo directory",
+                    error);
         }
+    }
+
+    private static DemoScene loadBundled() {
         try (InputStream stream = DemoScene.class
                 .getResourceAsStream("/demos/first-colony/scene.json")) {
             DemoScene scene = new Gson().fromJson(
@@ -50,9 +60,12 @@ public final class DemoScene {
     }
 
     public void validate() {
-        if (!"initial-state.json".equals(initialState) || camera == null
-                || camera.length != 2 || actors == null || steps == null
-                || steps.isEmpty() || steps.size() > 500)
+        if ((initialState == null || initialState.isBlank()
+                || initialState.contains("/") || initialState.contains("\\")
+                || !(initialState.endsWith(".json")
+                        || initialState.endsWith(".akropia")))
+                || camera == null || camera.length != 2 || actors == null
+                || steps == null || steps.isEmpty() || steps.size() > 500)
             throw new IllegalArgumentException("Invalid demo definition");
         for (Step step : steps) {
             if (step == null || step.action == null
@@ -71,11 +84,16 @@ public final class DemoScene {
 
     public Model newModel() {
         GameModelPoDao dao = new GameModelPoDao();
-        String directory = System.getProperty("akropia.demo.directory");
-        var data = directory == null
-                ? dao.loadFromClassPath("/demos/first-colony/" + initialState)
-                : dao.loadScenarioFromFile(new File(directory, initialState));
-        Model model = Model.make(data.getModel(),
+        if (initialData == null)
+            initialData = directory == null
+                    ? dao.loadFromClassPath(
+                            "/demos/first-colony/" + initialState)
+                    : initialState.endsWith(".akropia")
+                            ? dao.loadPlayerGame(
+                                    directory.resolve(initialState).toFile())
+                            : dao.loadScenarioFromFile(
+                                    directory.resolve(initialState).toFile());
+        Model model = Model.make(initialData.getModel(),
                 List.of(GameOverEvaluator.GAMEOVER_CONDITION_CALENDAR));
         for (Integer id : actors.values()) {
             if (id == null)

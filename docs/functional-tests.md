@@ -19957,3 +19957,41 @@ běhu (základ `7a18cc376` plus doplnění animací). Formátování změněné 
 proběhlo sdíleným Eclipse profilem; 14 dokumentačních kontrol a strict MkDocs
 prošly. Grafika se neměnila. Nová distribuce, vzdálená CI ani Pages
 nebyly ověřovány.
+
+
+## Demo Studio — 2026-11-25
+
+1. R-0454 authoring extension: shared preview timeline, backward/forward seeking,
+   external JSON/player-save initial state, scene selection and reload.
+   `TC_21_F15_free_play_screen_navigation_test.TC_15_demo_studio_seeks_reloads_and_selects_scenes`
+   covers reconstruction, invalid/repaired reload, archive selection and Stop.
+   Existing TC21 demo/menu paths and TC191/20 cover the menu and resumed-game isolation.
+2. Model verification `target/verification/run-q0kq3bbd` passed 4,938 tests,
+   zero failures/errors/skips (150.982-second model phase; 154.05-second supervisor).
+   This precedes the final duration-label correction and is not its acceptance.
+3. Preserved failed Docker evidence:
+   `target/docker-ui/run-RzxtFi` (59.495 seconds): application startup accessed
+   absent JavaFX parameters in the test harness; guarded the optional parameters.
+   `target/docker-ui/run-Epwgig` (242.694 seconds): 17 tests, one error;
+   initial scene selection did not initialize playback; switched to the selected-value listener.
+   `target/docker-ui/run-BsqKP5` (226.502 seconds): 17 tests, five errors;
+   duration-label formatting passed a Long to a floating-point format; corrected
+   the conversion to seconds. Timer exceptions propagated into later tests.
+4. Current model verification `target/verification/run-b09g1vom` passed
+   4,938 tests with zero failures/errors/skips (152.84-second phase,
+   155.971-second supervisor). Targeted UI `target/docker-ui/run-a0frjD`
+   passed all 17 selected tests with zero failures/errors/skips in 244.991
+   supervised seconds. The studio screenshot was written outside the archived
+   directory; its test output path was corrected. TC21/15 plus the page
+   contract then passed all four tests with zero failures/errors/skips in
+   `target/docker-ui/run-MCOOG8` (60.015 supervised seconds).
+   Visual review of `akropia-test/warehouse-qa/demo-studio.png` confirmed
+   visible scene selection, preview, transport buttons, timeline, speed/loop,
+   step/time status and scrollable actor identities. Runtime source is unchanged.
+5. Smoke `target/verification/run-5v_4xpgf` passed 23 tests with zero
+   failures/errors/skips: 295.753-second phase, 299.11-second supervisor,
+   within the 420-second budget. Every changed Java file matches its frozen
+   source snapshot. Final source review and shared Java formatting completed;
+   14 documentation checks and strict MkDocs passed. These historical failed
+   runs remain failed. No remote CI, website or distribution publication was
+   verified; no new-player study was performed.

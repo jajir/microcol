@@ -1373,3 +1373,35 @@ vrstvy s vlastními instancemi mapových cache. Kreslicí služby přijímají
 zdroj modelu a pozorovatele; běžná mapa zachovává dosavadní controller.
 První scéna prošla místní přejímkou 25. listopadu 2026; viz
 [funkční evidence](functional-tests.md).
+
+
+### Ladicí okno scén — 25. listopadu 2026
+
+Stejný balíček obsahuje `DemoPlayback` (časová osa a rekonstrukce modelu
+při posunu zpět) a `DemoStudio` (vývojářské ovládání). Menu i studio používají
+`DemoView`. Parametry `--demo-studio --demo-directory=/cesta/k/demos`
+otevřou studio místo menu. Každý podadresář obsahuje `scene.json` a soubor
+uvedený v `initialState`: scénář JSON nebo uloženou hru `.akropia`.
+Čtení archivů používá existující validaci `GameModelPoDao`; vstupy se nepřepisují.
+
+Studio nabízí výběr scény, přehrávání/pauzu, stop, posuvník, sousední kroky,
+rychlost, smyčku a reload. Reload obnoví oba vstupy a zachová čas v mezích
+nové délky; chyba ponechá poslední načtený náhled. Panel jednotek uvádí ID
+pro autorské mapování aktérů. Lokální přejímka je doložena ve [funkční evidenci](functional-tests.md#demo-studio-2026-11-25).
+
+
+Pro ladění přibalené scény použijte jako adresář
+`akropia-game/src/main/resources/demos` (absolutní cestu). Každý podadresář
+se objeví v seznamu pod svým názvem. Soubor `initialState` musí být přímo
+vedle `scene.json`; nelze odkazovat mimo adresář scény. Názvy aktérů v
+`actors` se mapují na číselná ID jednotek vypsaná v dolním panelu.
+
+Postup: připravit výchozí stav v editoru, uložit jej vedle režie, upravit
+`initialState`, `actors`, `camera` a `steps`, načíst scénu a ladit
+`durationMs` s tlačítkem Reload. Přepínač rychlosti mění pouze tempo
+náhledu; neukládá změny do JSON. Přehrát/pauza pokračuje od aktuálního času,
+Stop vrací na začátek. Přesun posuvníku a reload pozastaví přehrávání.
+Kroky s nulovou délkou se provedou v pořadí scénáře na příslušné časové
+hranici. Načtený počáteční stav se uchovává v paměti až do reloadu.
+Modelové operace při posunu vpřed běží bez čekání; posun zpět vytvoří
+nový izolovaný model. Náhodné bojové scény nejsou součástí této dodávky.

@@ -90,6 +90,19 @@ public final class AkropiaApplication extends Application {
             injector.getInstance(DiagnosticLog.class)
                     .record(DiagnosticEvent.STARTED, null);
 
+            if (getParameters() != null
+                    && getParameters().getRaw().contains("--demo-studio")) {
+                String directory = getParameters().getNamed()
+                        .get("demo-directory");
+                if (directory == null)
+                    throw new IllegalArgumentException(
+                            "--demo-directory is required");
+                new org.akropia.gui.screen.menu.demo.DemoStudio(
+                        injector.getInstance(
+                                org.akropia.gui.screen.menu.demo.DemoView.class),
+                        java.nio.file.Path.of(directory)).show(primaryStage);
+                return;
+            }
             final MainStageBuilder mainStageBuilder = injector
                     .getInstance(MainStageBuilder.class);
             mainStageBuilder.buildPrimaryStage(primaryStage);

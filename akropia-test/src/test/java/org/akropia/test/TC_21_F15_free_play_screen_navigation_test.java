@@ -30,6 +30,42 @@ public class TC_21_F15_free_play_screen_navigation_test
 
     @Test
     @Tag("local")
+    void TC_15_demo_studio_seeks_reloads_and_selects_scenes() throws Exception {
+        // Open the studio with two editable scenes.
+        DemoStudioPage studio = new DemoStudioPage(getContext());
+        studio.open();
+        try {
+            studio.verifyAvailableScenes(2);
+            studio.verifyReloadError(false);
+            // Move beyond colony founding, then reconstruct the initial state.
+            studio.seek(25000);
+            studio.verifyPosition(25000, 1);
+            studio.captureEvidence();
+            studio.seek(2100);
+            studio.verifyPosition(2100, 0);
+            // Invalid edits preserve the last valid preview; repaired edits
+            // reload.
+            studio.corruptConfiguration();
+            studio.click("Reload");
+            studio.verifyReloadError(true);
+            studio.verifyPosition(2100, 0);
+            studio.restoreConfiguration();
+            studio.click("Reload");
+            studio.verifyReloadError(false);
+            studio.verifyPosition(2100, 0);
+            // Switching scenes and stopping reset presentation time.
+            studio.selectSecond();
+            studio.verifyPosition(0, 0);
+            studio.seek(1000);
+            studio.click("Stop");
+            studio.verifyPosition(0, 0);
+        } finally {
+            studio.close();
+        }
+    }
+
+    @Test
+    @Tag("local")
     void TC_14_demo_shows_landing_and_the_separate_field_walk()
             throws Exception {
         // Restart the real preview clock so captures show each movement

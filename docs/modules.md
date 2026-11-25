@@ -266,3 +266,7 @@ Manual full regression defaults to tests only; nightly or explicitly selected pu
 Ukázky hlavního menu z první dodávky R-0454 jsou součástí `akropia-game`:
 prostředky `demos/first-colony` obsahují autorský stav a JSON režii.
 Nepřidává se nový modul ani formát hráčského uložení.
+
+Ladicí okno Demo Studio je rovněž součástí `akropia-game`, spouštěnou
+parametry stejné JavaFX aplikace; nevzniká další distribuční artefakt.
+Ovládání a vstupy popisuje [architektura přehrávače](architecture.md#ladici-okno-scen-25-listopadu-2026).
