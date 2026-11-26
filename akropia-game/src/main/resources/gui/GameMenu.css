@@ -46,6 +46,17 @@
     -fx-alignment: center-left;
 }
 
+#menu-demo-frame {
+    -fx-background-color: #FFF9EC;
+    -fx-background-radius: 3;
+    -fx-background-insets: 2;
+    -fx-border-image-source: url("../images/trade-route-name-frame.png");
+    -fx-border-image-slice: 12;
+    -fx-border-image-width: 6;
+    -fx-border-image-repeat: stretch;
+    -fx-padding: 6;
+}
+
 .welcome-screen .titled-content {
     -fx-translate-y: 20;
 }

@@ -7,12 +7,16 @@
    Pokračovat nadále závisí na existující pozici.
 2. Obsah je vystředěný v šířce nejvýše 1440 logických pixelů včetně bočních
    okrajů 16 px. Vlevo je menu, bezprostředně za ním neinteraktivní ukázka.
-   Nadpis je zarovnaný k levé hraně menu a horní hrana ukázky k horní
+   Nadpis je zarovnaný k levé hraně menu a horní hrana rámečku ukázky k horní
    hraně tlačítka Pokračovat; toto doplnění uživatel schválil téhož dne.
    Ve vývojářském režimu šířka menu zahrnuje i celé tlačítko editoru vedle
    Nastavení, aby ho náhled nepřekrýval.
    Slunce a odraz sledují pravý okraj tohoto prostoru; při zúžení okna je
    odraz překrytý ukázkou. Ukázka běží automaticky, bez tlačítka pozastavení.
+   Ukázku a její popisek obklopuje společný světlý podklad v barvě nebe
+   a tlačítek, s tenkým černým kresleným rámečkem a vnitřním odstupem
+   12 px. Moře v náhledu tak nenavazuje přímo na pozadí menu. Rámeček
+   se přizpůsobuje dostupné šířce; ukázka zůstává neinteraktivní.
 3. Kampaň, mise a jejich restart jsou odstraněny. Konec běžné partie vrací
    hráče do hlavního menu. Síň slávy zůstává ve statistikách a výsledku,
    vstup z hlavního menu mizí. Zrušení načítání a přípravy zachovává

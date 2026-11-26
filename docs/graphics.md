@@ -1,5 +1,17 @@
 ## Umístění slunce v menu — 26. listopadu 2026
 
+Náhled a jeho popisek mají společný podklad `#FFF9EC` a kreslený obrys
+podle uživatelem vybrané varianty 2. Používá se existující skutečně
+vektorový zdroj
+[trade-route-name-frame.svg](../akropia-game/src/graphics/trade-route-name-frame.svg)
+a jeho PNG export: černá linka `#000000`, 2 logické px, devítidílné
+škálování se zachováním šířky tahu. Obsah má odstup 12 px od okraje
+rámečku. Výplň je jednobarevná, bez textur, stínů a přechodů.
+Opakovatelný export ověřuje
+`python3 scripts/graphics/export-graphics.py trade-route-name --check`;
+nový obrázek ani export nevzniká. Výsledky patří do
+[funkční evidence](functional-tests.md#menu-preview-frame-2026-11-26).
+
 Menu používá nezměněný vektorový zdroj
 [sunset2.svg](../akropia-game/src/graphics/sunset2.svg) a jeho stávající PNG.
 Pravý obrys slunce (x = 620 v exportu) se zarovnává 16 px od pravého okraje

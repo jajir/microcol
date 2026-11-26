@@ -1,3 +1,46 @@
+<a id="menu-preview-frame-2026-11-26"></a>
+## Rámeček ukázky hlavního menu — 26. listopadu 2026
+
+1. UC-114/119: ukázka a popisek používají společný světlý podklad
+   `#FFF9EC`, černý kreslený obrys a vnitřní odstup 12 px.
+   `WelcomePage.verifyDemoVisible` kontroluje podklad, rámeček, odstupy,
+   popisek uvnitř, zarovnání k Pokračovat a oddělení od editoru map.
+   Stávající `TC_21_F15_free_play_screen_navigation_test.TC_13` ověřuje
+   přehrání a opakování ukázky, okna 1600 × 900 a 1000 × 800, oba režimy
+   editoru a následné načtení hry; `TC_14` zachovává kontrolu celé scény.
+2. Java soubory byly zformátovány společným Eclipse profilem.
+   `python3 scripts/graphics/export-graphics.py trade-route-name --check`
+   ověřil jeden shodný export ze skutečného SVG, bez rastrů ve zdroji.
+3. Model/JUnit na základu `0986cb6a` se změnou rámečku: **4 936 testů**
+   v 396 čerstvých XML reportech, **0 failures/errors/skips**. Běh
+   `target/verification/run-bhuakaxk` skončil za 153,863 s; supervisor
+   `20261126T121300Z-42cf70be9554` za 155,633 s z limitu 600 s.
+   Kontrola potvrdila shodu testovaných Java/CSS zdrojů s pracovním stromem.
+4. Cílený Docker/Xvfb běh `target/docker-ui/run-5ctKDb`: **6 kontrol**,
+   **0 failures/errors/skips**. Výběr:
+   `PageVerificationContractTest`,
+   `TC_21_F15_free_play_screen_navigation_test#TC_13*+TC_14*` a
+   `TC_191_F224_session_menu_test#TC_20*`. Poslední scénář ověřil, že
+   přehrání ukázky nemění uloženou pozici ani stav obnovené hry.
+   Supervisor `20261126T121637Z-6ea18483a858` skončil za 183,741 s
+   z limitu 600 s, bez čekání na zámek.
+5. Vizuální kontrola snímků
+   [1600 × 900](assets/menu-preview-frame-2026-11-26/wide.png) a
+   [1000 × 800](assets/menu-preview-frame-2026-11-26/narrow.png)
+   potvrdila souvislé světlé oddělení náhledu, černý obrys, popisek uvnitř
+   a celé menu včetně editoru map bez překrytí. Jde o automatické
+   Docker/Xvfb snímky a kontrolu vzhledu, nikoli hráčskou studii.
+6. Pevný smoke/support výběr `bash scripts/ui-tests/verify.sh --smoke`
+   prošel v `target/verification/run-xigx2ak1`: **23 kontrol** v 13 čerstvých
+   XML reportech, **0 failures/errors/skips**, celá verifikace 291,955 s
+   z rozpočtu 420 s. Supervisor `20261126T122027Z-9f153b2effd2` včetně
+   závěrečného úklidu skončil za 292,105 s, bez čekání na zámek.
+   Porovnání 2 652 zdrojových, konfiguračních a runtime souborů potvrdilo
+   shodu pracovního stromu s modelovým i smoke snapshotem.
+7. Dokumentační přejímka: 14 kontrol, audit názvu bez nevysvětlených
+   výskytů a strict MkDocs build. Změna prošla lokální přejímkou;
+   plná regrese, vzdálené CI, Pages a nová distribuce nebyly ověřovány.
+
 <a id="regression-repair-45742079233"></a>
 
 ## Regression repair for run 45742079233 — 26 November 2026

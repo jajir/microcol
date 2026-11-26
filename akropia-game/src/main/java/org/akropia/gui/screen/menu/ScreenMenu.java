@@ -39,7 +39,10 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
         menuHolderPanel.getContent().getStyleClass().add("welcome-screen");
         javafx.scene.layout.VBox presentation = new javafx.scene.layout.VBox(8,
                 demo, caption);
+        presentation.setId("menu-demo-frame");
         presentation.setMinWidth(0);
+        presentation.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        caption.setId("menu-demo-caption");
         caption.setWrapText(true);
         if (System.getProperty("akropia.demo.directory") != null) {
             javafx.scene.control.Button reload = org.akropia.gui.util.ActionButtons
