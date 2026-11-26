@@ -52,7 +52,8 @@ public class WelcomePage extends AbstractMenuScreen {
                     getContext().getPrimaryStage().getScene());
             final int cx = (int) frame.getWidth() / 2;
             final int cy = (int) frame.getHeight() / 2;
-            final int[] rows = { cy - 300, cy, cy + 300 };
+            // Sample the sea below the right-hand buttons.
+            final int[] rows = { cy - 300, cy + 200, cy + 300 };
             final int[] colors = { 0xFFF9EC, 0x649B97, 0xC5C18A };
             for (int i = 0; i < rows.length; i++) {
                 for (int x : new int[] { cx + 300, cx + 389, cx + 393,
@@ -94,6 +95,10 @@ public class WelcomePage extends AbstractMenuScreen {
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
             assertEquals(ids.size(), menuEntries(column).size());
+            final Node preview = getNodeFinder().lookup("#menu-demo-frame")
+                    .query();
+            final double menuLeft = preview
+                    .localToScene(preview.getBoundsInLocal()).getMaxX() + 24;
             Bounds previous = null;
             for (int i = 0; i < ids.size(); i++) {
                 // The developer-only Map editor (R-0435) stands outside the
@@ -121,10 +126,8 @@ public class WelcomePage extends AbstractMenuScreen {
                         button.getContentDisplay());
                 final Bounds bounds = button
                         .localToScene(button.getBoundsInLocal());
-                assertEquals(
-                        Math.max(0, (button.getScene().getWidth() - 1440) / 2)
-                                + 16,
-                        bounds.getMinX(), 0.01);
+                assertEquals(menuLeft, bounds.getMinX(), 0.01);
+                assertTrue(bounds.getMaxX() <= button.getScene().getWidth());
                 assertTrue(bounds.getMinY() >= 0);
                 assertTrue(bounds.getMaxY() <= button.getScene().getHeight());
                 if (previous != null) {
@@ -281,7 +284,9 @@ public class WelcomePage extends AbstractMenuScreen {
             Bounds titleBounds = title.localToScene(title.getBoundsInLocal());
             double left = Math.max(0, (demo.getScene().getWidth() - 1440) / 2)
                     + 16;
-            assertEquals(left, firstBounds.getMinX(), 0.5);
+            assertEquals(left, frameBounds.getMinX(), 0.5);
+            assertEquals(frameBounds.getMaxX() + 24, firstBounds.getMinX(),
+                    0.5);
             assertEquals(left, titleBounds.getMinX(), 0.5);
             assertEquals(javafx.geometry.Pos.CENTER_LEFT, title.getAlignment());
             assertEquals(firstBounds.getMinY(), frameBounds.getMinY(), 0.5,
@@ -290,10 +295,10 @@ public class WelcomePage extends AbstractMenuScreen {
             if (editor.isVisible()) {
                 Bounds editorBounds = editor
                         .localToScene(editor.getBoundsInLocal());
-                assertTrue(
-                        editorBounds.getMaxX() + 24 <= frameBounds.getMinX()
-                                + 0.5,
-                        "The preview leaves room for the complete Map editor button");
+                assertTrue(editorBounds.getMinX() >= firstBounds.getMinX(),
+                        "Map editor stays in the right-hand menu");
+                assertTrue(editorBounds.getMaxX() <= Math.min(left + 1408,
+                        demo.getScene().getWidth()));
             }
             assertTrue(frameBounds.getMaxX() <= left + 1408);
             assertTrue(frameBounds.getMinX() >= 0);

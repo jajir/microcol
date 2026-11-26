@@ -1,3 +1,12 @@
+## Náhled vlevo, tlačítka vpravo — 26. listopadu 2026
+
+Schválené pořadí je náhled a poté menu. Levá hrana rámečku navazuje
+na nadpis Akropia, tlačítka začínají 24 px napravo od něj a mají stejnou
+horní hranu. Rozměry, světlý podklad a černý kreslený obrys zůstávají
+zachované; grafické zdroje ani exporty se nemění.
+[Funkční evidence](functional-tests.md#menu-preview-first-2026-11-26)
+vede kontrolu skutečného rozložení ve dvou velikostech okna.
+
 ## Umístění slunce v menu — 26. listopadu 2026
 
 Náhled a jeho popisek mají společný podklad `#FFF9EC` a kreslený obrys

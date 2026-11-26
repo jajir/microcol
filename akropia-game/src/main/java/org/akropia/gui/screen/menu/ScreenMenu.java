@@ -52,7 +52,7 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
             presentation.getChildren().add(reload);
         }
         javafx.scene.layout.HBox content = new javafx.scene.layout.HBox(24,
-                buttonsPanelView.getContent(), presentation);
+                presentation, buttonsPanelView.getContent());
         javafx.scene.layout.HBox.setHgrow(presentation,
                 javafx.scene.layout.Priority.ALWAYS);
         buttonsPanelView.getContent().setMinWidth(Region.USE_PREF_SIZE);

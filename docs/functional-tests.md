@@ -1,3 +1,47 @@
+<a id="menu-preview-first-2026-11-26"></a>
+## Náhled před tlačítky hlavního menu — 26. listopadu 2026
+
+1. UC-114/119: v hlavním menu je vlevo náhled, vpravo tlačítka.
+   `WelcomePage.verifyDemoVisible` kontroluje levé zarovnání náhledu
+   a nadpisu, odstup menu 24 px, společnou horní hranu a celý editor map
+   v okně. Zachovává kontroly rámečku, popisku a automatického přehrávání.
+   `verifyOpeningControls` ověřuje všechna tlačítka napravo od náhledu,
+   jejich popisky, rozměry, klávesnici a dostupnost. Kontrola palety
+   vzorkuje moře pod tlačítky, aby nečetla jejich výplň místo pozadí.
+2. Výběr k ověření: `PageVerificationContractTest`,
+   `TC_21_F15_free_play_screen_navigation_test#TC_13*+TC_14*`,
+   `TC_191_F224_session_menu_test#TC_20*` a
+   `TC_83_F74_wooden_buttons_test#TC_01*`. Pokrývá okna 1600 × 900
+   a 1000 × 800, oba režimy editoru, přehrání a smyčku, zachování partie,
+   čitelnost anglických i českých tlačítek a klávesové ovládání.
+3. Model/JUnit na základu `d48baa15` se změnou pořadí: **4 936 testů**
+   ve 396 čerstvých XML reportech, **0 failures/errors/skips**. Verifikace
+   `target/verification/run-wbsl3955` trvala 153,625 s; supervisor
+   `20261126T132022Z-790ec1b33e5d` 155,182 s z limitu 600 s, bez čekání
+   na zámek. Shoda 2 652 zdrojových, konfiguračních a runtime souborů
+   s pracovním stromem je ověřená.
+4. Cílený Docker/Xvfb výběr z bodu 2 prošel v
+   `target/docker-ui/run-bj8ZQJ`: **7 kontrol**, **0 failures/errors/skips**.
+   Supervisor `20261126T132329Z-db9324b5e862` skončil za 196,559 s
+   z limitu 600 s, bez čekání na zámek.
+5. Vizuální kontrola snímků
+   [1600 × 900](assets/menu-preview-first-2026-11-26/wide.png) a
+   [1000 × 800](assets/menu-preview-first-2026-11-26/narrow.png) potvrdila
+   náhled vlevo pod nadpisem, tlačítka napravo, společnou horní hranu
+   a celé menu včetně editoru bez překrytí. Rámeček i popisek zůstaly
+   zachované. Jde o automatické Docker/Xvfb snímky, nikoli hráčskou studii.
+6. Pevný smoke/support výběr `bash scripts/ui-tests/verify.sh --smoke`
+   prošel v `target/verification/run-2xscrabs`: **23 kontrol** ve 13 čerstvých
+   XML reportech, **0 failures/errors/skips**. Celá verifikace trvala
+   283,089 s z rozpočtu 420 s; supervisor
+   `20261126T132731Z-1815bc7ba01c` včetně úklidu 283,218 s, bez čekání
+   na zámek. Porovnání 2 652 zdrojových, konfiguračních a runtime souborů
+   potvrdilo shodu pracovního stromu s modelovým i smoke snapshotem.
+7. Dokumentační přejímka: 14 kontrol, audit názvu bez nevysvětlených
+   výskytů a strict MkDocs build. Změna prošla lokální přejímkou;
+   plná regrese, vzdálené CI, Pages a nová distribuce nebyly ověřovány.
+   Předchozí výsledky níže patří starému pořadí.
+
 <a id="menu-preview-frame-2026-11-26"></a>
 ## Rámeček ukázky hlavního menu — 26. listopadu 2026
 
