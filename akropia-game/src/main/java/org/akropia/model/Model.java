@@ -10111,8 +10111,7 @@ public class Model {
         try {
             if (listenerManager.fireBeforeEndTurn(this)) {
                 checkEmptyColonyConfirmation(confirmed);
-                confirmed.forEach(this::destroyColony);
-                gameManager.endTurn();
+                gameManager.endTurn(confirmed);
             }
         } finally {
             endingTurn = false;

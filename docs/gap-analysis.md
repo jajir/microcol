@@ -1463,8 +1463,10 @@ Authored resource-overlay placement decision (2026-10-19): all land resource kin
    production/consumption from survivors; clamp resulting food at zero without
    a second death. The deceased contributes nothing to the committed update.
    Preview warns that the victim/result is variable; the final report identifies
-   actual loss/stocks. Zero does not kill. Last-resident famine destroys the
-   colony/buildings/warehouse and leaves outside troops on the tile. Move
+   actual loss/stocks. Zero does not kill. Last-resident famine leaves an empty
+   colony under the [deferred abandonment rule](#population-during-construction-and-empty-colonies-2026-11-21).
+   Confirmed abandonment destroys its buildings/warehouse and leaves outside
+   troops on the tile. Move
    seaworthy docked ships with their cargo to a legal adjacent water tile,
    ordered by coordinates; friendly ships may share it, enemy occupancy excludes
    it. If no legal water neighbor exists, destroy those ships/cargo with an

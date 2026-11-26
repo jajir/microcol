@@ -1,3 +1,74 @@
+<a id="regression-repair-45742079233"></a>
+
+## Regression repair for run 45742079233 — 26 November 2026
+
+1. [The failed GitHub run](https://github.com/jajir/microcol/actions/runs/45742079233)
+   tested `88be89b442720c20beeab18b5f8dc5686ea8dd84`: all **4,941 model tests**
+   passed; **875 UI/support checks** finished with **3 failures and 4 errors**,
+   no skips. Its reports remain failed. Repair starts from `5d4413fb3`, which
+   already contains the later menu correction and campaign removal.
+2. The complete failure inventory covers UC-012, UC-031/032/035, UC-044/096
+   and UC-114/119, with five shared subjects:
+   TC195/01, /02 and /05 retain exact production and accessibility checks while
+   expecting the added English/Czech food-source explanation;
+   TC57/03 expects the specific missing-discovery reason and still checks the
+   disabled purchase and absent model quote; TC87/04 checks the current Czech
+   movement cost and ownership text without moving the unit; TC10 follows the
+   [deferred abandonment rule](gap-analysis.md#population-during-construction-and-empty-colonies-2026-11-21)
+   after famine, checks cancellation, then confirms destruction and retains the
+   colony-loss report, outside-unit and evacuated-ship assertions. TC83/01 is
+   rechecked against the already repaired menu.
+3. The expanded TC10 exposed a runtime defect: `NextTurnEvent` disabled the
+   toolbar before empty-colony confirmation, so canceling left Next turn and
+   the turn report disabled. `ButtonsGamePanelController` now disables commands
+   on the human player's model `TurnFinishedEvent`, on the JavaFX thread.
+   Cancellation keeps the world and controls unchanged and permits another
+   request immediately. TC10 explicitly checks both
+   enabled buttons before repeating the action.
+   Its next assertion exposed a second defect: abandonment added the destruction
+   report before `GameManager` cleared the previous turn's messages. `Model`
+   still validates the exact empty-city list before mutation; `GameManager`
+   now performs that confirmed destruction after clearing old reports and before
+   advancing to the next player. `FortifiedPopulationTest` checks that rejected
+   confirmation preserves the world, old reports clear, and exactly one new
+   destruction report survives the boundary and save/load.
+4. Targeted Docker/Xvfb selection: all TC09, TC10, TC53, TC55, TC57, TC87, TC90,
+   TC195 and TC199, TC83/01, and `PageVerificationContractTest`. This covers the failed
+   methods and neighboring famine, rush, movement, river and colony-layout paths.
+   The saved inventory and source hashes are in
+   `target/regression-repair-45742079233/`. Model, targeted and fixed smoke
+   results are listed below; no full local regression was run.
+5. Earlier evidence remains failed or limited to its tested source: the first
+   targeted run `docker-ui/run-6ePN8g` completed 30 checks with one TC10 error
+   (539.047 s); isolated `run-HmlVGS` repeated that error (67.074 s). The focus
+   hypothesis was rejected by `run-4mCIJ1`: 9 checks, one identical TC10 error
+   (208.837 s). Its temporary focus adjustment and diagnostics were removed.
+   The initial model pass was 4,936 tests in 396 reports, zero failures/errors/
+   skips (`verification/run-h3zdnd9z`, completion `20261126T081912Z-28bfc7fa0d21`,
+   PID 32077, 156.795 s); the runtime correction requires fresh acceptance.
+   The toolbar correction passed another 4,936 model checks
+   (`verification/run-1hmxsck3`, completion `20261126T084052Z-25028b785e3f`,
+   PID 37355, 154.933 s). Its `docker-ui/run-Y6AZhu` then completed 42 checks
+   with one TC10 failure for the lost destruction report (696.689 s); the
+   cancellation/repeat assertions passed. Report-order changes require another
+   complete model and targeted acceptance on the updated source.
+6. Final source acceptance uses Docker Linux amd64 with Xvfb/Openbox. The
+   final model manifest and `target/regression-repair-45742079233/source-hashes.json`
+   match the checked executable source. Targeted XML methods match all **42**
+   selected checks, including every failure in the original GitHub inventory.
+
+| Phase | Actual result | Evidence and supervised elapsed time |
+| --- | --- | --- |
+| All model/JUnit | **4,936 tests**, 396 reports; zero failures/errors/skips | `verification/run-agackoqg`; completion `20261126T085739Z-4676f93a6414`, PID 40786; **154.997 s** |
+| Famine, cancellation, repeated confirmation and destruction report | **1 scenario**; zero failures/errors/skips | `docker-ui/run-3QDc4m`; completion `20261126T090041Z-0a9e4330ec8d`, PID 41329; **77.770 s** |
+| Remaining targeted scenarios and page contract | **41 checks**, 10 reports; zero failures/errors/skips | `docker-ui/run-WLqFwl`; completion `20261126T090222Z-016504115ab4`, PID 41680; **668.522 s** |
+| Fixed smoke/support | **23 checks**, 13 reports; zero failures/errors/skips | `verification/run-ygdzxof2`; completion `20261126T091354Z-9bf9e398f0a7`, PID 44928; **296.265 s**, within 420 s |
+
+7. All 11 changed Java files were formatted with the shared Eclipse profile.
+   Temporary diagnostics were removed; model validation, scenario IDs, exact
+   outcome checks and the original failed reports remain intact. Local acceptance
+   does not establish full-regression success or publication of a game build.
+
 <a id="main-menu-cleanup-2026-11-26"></a>
 
 ## Main menu and campaign removal — 26 November 2026

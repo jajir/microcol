@@ -46,10 +46,10 @@ public final class FounderConstructionPage extends AbstractScreen {
                 .contains(founder));
     }
 
-    public void verifyRushUnavailable() {
+    public void verifyRushUnavailable(final String expectedReason) {
         assertTrue(getButtonById("constructionRushConfirm").isDisabled());
-        assertTrue(getLabeledById("constructionRushDetail").getText()
-                .contains("Completion cannot be bought now."));
+        assertEquals(expectedReason,
+                getLabeledById("constructionRushDetail").getText());
         assertTrue(getModel().getColonyById(0).orElseThrow()
                 .getColonyBuildingQueue().getRushQuote().isEmpty());
     }

@@ -3,7 +3,6 @@ package org.akropia.gui.screen.game.components;
 import java.util.List;
 import java.util.Optional;
 
-import org.akropia.gui.buttonpanel.NextTurnEvent;
 import org.akropia.gui.buttonpanel.Buttons;
 import org.akropia.i18n.I18n;
 import com.google.common.eventbus.EventBus;
@@ -42,6 +41,7 @@ import org.akropia.model.event.GameStartedEvent;
 import org.akropia.model.event.IndependenceWasDeclaredEvent;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.event.TurnStartedEvent;
+import org.akropia.model.event.TurnFinishedEvent;
 import org.akropia.model.event.ImmigrationChoiceRequiredEvent;
 import org.akropia.model.event.ScoreBoundaryRequiredEvent;
 import org.akropia.model.event.TaxDemandRequiredEvent;
@@ -148,11 +148,11 @@ public class ButtonsGamePanelController {
         });
     }
 
-    @SuppressWarnings("unused")
     @Subscribe
-    private void onNextTurn(final NextTurnEvent event) {
-        LOGGER.debug("Next turn was triggered");
-        view.disableTurnCommands();
+    private void onTurnFinished(final TurnFinishedEvent event) {
+        if (event.getPlayer().isHuman()) {
+            Platform.runLater(view::disableTurnCommands);
+        }
     }
 
     @Subscribe

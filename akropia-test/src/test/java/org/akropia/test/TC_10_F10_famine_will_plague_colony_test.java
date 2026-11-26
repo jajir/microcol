@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
 import org.akropia.page.ColonyScreen;
+import org.akropia.page.FortifiedPopulationPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.ScreenTurnReport;
 import org.akropia.page.WelcomePage;
@@ -56,13 +57,32 @@ public class TC_10_F10_famine_will_plague_colony_test
         colonyAfterWarning.verifyFamineForecast();
         colonyAfterWarning.close();
 
-        // The next turn starves that final resident and removes the port.
+        // The next turn starves the final resident but retains the empty port.
         final Optional<ScreenTurnReport> lossReport = gamePage.nextTurn();
         gamePage.verifyTurnReportPresent(lossReport);
         lossReport.get().verifyFamineLossCount(1);
         lossReport.get().verifyThatAtLeastOneEventMessageContains(
-                "Colony Delft was destroyed.");
+                "Famine in colony Delft killed one Free Colonist.");
         lossReport.get().close();
+        colonyAfterWarning.verifyColonyPresent("Delft", true);
+
+        // Canceling abandonment preserves the port; confirmation removes it.
+        final FortifiedPopulationPage population = new FortifiedPopulationPage(
+                getContext());
+        colonyAfterWarning.rememberWorld();
+        population.requestAbandonment();
+        population.verifyEmptyColonyQuestion("Delft");
+        population.cancelEmptyColony();
+        population.verifyTurnCommandsEnabled();
+        colonyAfterWarning.verifyWorldUnchanged();
+        colonyAfterWarning.verifyColonyPresent("Delft", true);
+        population.requestAbandonment();
+        population.verifyEmptyColonyQuestion("Delft");
+        population.confirmEmptyColony();
+        final ScreenTurnReport abandonmentReport = gamePage.openTurnReport();
+        abandonmentReport.verifyThatAtLeastOneEventMessageContains(
+                "Colony Delft was destroyed.");
+        abandonmentReport.close();
 
         gamePage.verifyThatThereIsNoColonyAt(Location.of(22, 12));
         gamePage.verifyNumberOfUnitsAt(Location.of(22, 12), 3);

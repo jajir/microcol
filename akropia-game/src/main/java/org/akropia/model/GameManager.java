@@ -413,7 +413,7 @@ final class GameManager {
     }
 
     /** Finish one actor and advance through nations, then their Crowns. */
-    void endTurn() {
+    void endTurn(final List<Colony> confirmedEmptyColonies) {
         checkGameRunning();
         checkCurrentPlayer(currentPlayer);
         final List<Player> players = turnOrder();
@@ -423,6 +423,7 @@ final class GameManager {
         preparing = true;
         model.fireTurnFinished(currentPlayer);
         model.getTurnEventStore().clearTurnEventsForPlayer(currentPlayer);
+        confirmedEmptyColonies.forEach(model::destroyColony);
         // An unanswered mercenary offer expires with its turn on every route
         // that ends it, so a later update can open a new one (R-0169).
         currentPlayer.clearMercenaryOffer();

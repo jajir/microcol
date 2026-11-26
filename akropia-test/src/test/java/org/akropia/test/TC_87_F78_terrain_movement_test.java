@@ -167,8 +167,7 @@ public class TC_87_F78_terrain_movement_test extends AbstractAkropiaTest {
                 "Nedostatek zbývajícího pohybu");
         terrain.verifyUnitAt(colonistById(unitId), BEYOND, 0);
         game.selectTile(Location.of(26, 12));
-        panel.verifyStepDescription("Základní cena terénu:",
-                "Základní cena terénu:");
+        panel.verifyStepDescription("Cena pohybu: 1", "Půda bez vlastníka");
         terrain.verifyUnitAt(colonistById(unitId), BEYOND, 0);
     }
 

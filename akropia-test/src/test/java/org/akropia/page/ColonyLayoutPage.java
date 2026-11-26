@@ -971,7 +971,8 @@ public final class ColonyLayoutPage extends AbstractScreen {
     }
 
     public void verifyProductionChoices(final int colonyId,
-            final GoodsType bestHere, final GoodsType betterElsewhere) {
+            final GoodsType bestHere, final GoodsType betterElsewhere,
+            final String expectedFoodHelp) {
         getRobot().interact(() -> {
             final Colony colony = getModel().getColonyById(colonyId)
                     .orElseThrow();
@@ -1057,7 +1058,10 @@ public final class ColonyLayoutPage extends AbstractScreen {
                                 + texts.get(ColonyMsg.yieldSummary,
                                         goods.getAmount()),
                         option.getAccessibleText());
-                assertEquals(texts.get(ColonyMsg.outputHelp),
+                assertEquals(
+                        (goods.getType() == GoodsType.GRAIN
+                                ? expectedFoodHelp + " "
+                                : "") + texts.get(ColonyMsg.outputHelp),
                         option.getAccessibleHelp());
                 assertTrue(option.lookupAll(".label").stream().anyMatch(
                         node -> name.equals(((Label) node).getText())));

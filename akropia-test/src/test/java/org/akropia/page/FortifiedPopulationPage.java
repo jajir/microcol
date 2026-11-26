@@ -108,6 +108,11 @@ public final class FortifiedPopulationPage extends AbstractScreen {
         WaitForAsyncUtils.waitForFxEvents();
     }
 
+    public void verifyTurnCommandsEnabled() {
+        assertFalse(getButtonById("nextTurn").isDisabled());
+        assertFalse(getButtonById("turnReport").isDisabled());
+    }
+
     public void confirmEmptyColony() throws Exception {
         final GamePage.TurnStartRouting routing = new GamePage.TurnStartRouting(
                 getModel(), getModel().getCalendar().getNumberOfPlayedTurns());

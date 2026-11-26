@@ -61,7 +61,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
                 javafx.scene.paint.Color.web("#c99638"));
         layout.verifyOutput(GoodsType.LUMBER, 2);
         layout.revealProductionChoices();
-        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.LUMBER);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.LUMBER,
+                "Farming: provides 2 food per turn.");
         layout.verifyPreviewMatchesMap(0, 1);
         layout.hoverProductionChoices();
         layout.verifyTileFacts(0);
@@ -78,7 +79,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
         layout.revealProductionChoices();
-        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN,
+                "Farming: provides 2 food per turn.");
         layout.verifyLayout("New Amsterdam", 7);
         layout.verifyCompactBuildings(46, 22, 32, 12);
         layout.selectTile(2, 0);
@@ -97,7 +99,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         new InGameLayoutPage(getContext())
                 .saveEvidence("r0362-production-small.png");
         layout.revealProductionChoices();
-        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN,
+                "Farming: provides 2 food per turn.");
         layout.verifyPreviewMatchesMap(0, 1);
         layout.hoverProductionChoices();
         layout.verifyTileFacts(0);
@@ -145,7 +148,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         layout.selectTile(0, 1);
         layout.verifyTileClickKeepsScroll();
         layout.revealProductionChoices();
-        layout.verifyProductionChoices(1, GoodsType.LUMBER, GoodsType.GRAIN);
+        layout.verifyProductionChoices(1, GoodsType.LUMBER, GoodsType.GRAIN,
+                "Zemědělství: jídlo za tah — 3.");
         layout.verifyPreviewMatchesMap(0, 1);
         layout.hoverProductionChoices();
         new InGameLayoutPage(getContext())
@@ -263,7 +267,8 @@ public class TC_195_F227_colony_layout_test extends AbstractAkropiaTest {
         jobs.verifyFieldJob(0, Location.of(23, 16),
                 org.akropia.model.Goods.of(GoodsType.GRAIN, 2));
         layout.revealProductionChoices();
-        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN);
+        layout.verifyProductionChoices(0, GoodsType.WOOL, GoodsType.GRAIN,
+                "Farming: provides 2 food per turn.");
 
         // A source job changed after rendering invalidates the captured offer.
         layout.changeSourceCropWithoutRefresh(GoodsType.LUMBER);

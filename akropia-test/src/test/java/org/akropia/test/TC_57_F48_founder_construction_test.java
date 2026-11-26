@@ -147,7 +147,7 @@ public class TC_57_F48_founder_construction_test extends AbstractAkropiaTest {
         construction.open();
         ConstructionRushPage rush = new ConstructionRushPage(getContext());
         rush.open();
-        founder.verifyRushUnavailable();
+        founder.verifyRushUnavailable("Requires discovery: Large workshops.");
         rush.cancel();
         construction.cancel();
         colony.verifyWorldUnchanged();

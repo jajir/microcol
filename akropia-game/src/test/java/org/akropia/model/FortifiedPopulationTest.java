@@ -10,6 +10,8 @@ import org.akropia.model.game.GameModel;
 import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
+import org.akropia.model.turnevent.TurnEventColonyWasDestroyed;
+import org.akropia.model.turnevent.TurnEventProvider;
 
 import com.google.gson.Gson;
 
@@ -125,6 +127,8 @@ class FortifiedPopulationTest {
         final Model model = model(null);
         final Colony colony = model.getColonyById(0).orElseThrow();
         empty(colony);
+        model.addTurnEvent(TurnEventProvider
+                .getFamineWillPlagueColony(colony.getOwner(), colony));
         final String before = snapshot(model);
         assertThrows(IllegalStateException.class, model::endTurn);
         assertEquals(before, snapshot(model));
@@ -135,6 +139,17 @@ class FortifiedPopulationTest {
         assertFalse(colony.isValid());
         assertTrue(model.getColonyById(0).isEmpty());
         assertTrue(model.tryGetUnitById(0).isPresent());
+        final var events = model.getTurnEventStore()
+                .getForPlayer(colony.getOwner());
+        assertEquals(1, events.size());
+        assertTrue(events.get(0) instanceof TurnEventColonyWasDestroyed);
+        final Model restored = Model.make(model.save(),
+                GameModel.gameOverEvaluators());
+        final var restoredEvents = restored.getTurnEventStore().getForPlayer(
+                restored.getPlayerByName(colony.getOwner().getName()));
+        assertEquals(1, restoredEvents.size());
+        assertTrue(
+                restoredEvents.get(0) instanceof TurnEventColonyWasDestroyed);
     }
 
     @Test
