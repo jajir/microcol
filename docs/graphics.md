@@ -5,8 +5,11 @@ Menu používá nezměněný vektorový zdroj
 Pravý obrys slunce (x = 620 v exportu) se zarovnává 16 px od pravého okraje
 vystředěného prostoru šířky nejvýše 1440 logických pixelů. Odraz zůstává
 ve vrstvě pozadí pod ukázkou; okrajové čáry se opakují přes celou šířku.
-Nevzniká nová ilustrace ani změna exportu. Zobrazení této úpravy za běhu
-nebylo ověřeno; viz [evidence](functional-tests.md#main-menu-cleanup-2026-11-26).
+Nevzniká nová ilustrace ani změna exportu. Navazující Docker/Xvfb kontrola
+26. listopadu 2026 ověřila snímky v rozměrech 1600 × 900 a 1000 × 800:
+slunce je vpravo, nadpis u levé hrany menu a ukázka u horní hrany Pokračovat.
+Editor map zůstává celý viditelný vedle Nastavení; viz
+[evidence](functional-tests.md#main-menu-cleanup-2026-11-26).
 
 <a id="food-artwork-2026-11-24"></a>
 

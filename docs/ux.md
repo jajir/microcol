@@ -7,6 +7,10 @@
    Pokračovat nadále závisí na existující pozici.
 2. Obsah je vystředěný v šířce nejvýše 1440 logických pixelů včetně bočních
    okrajů 16 px. Vlevo je menu, bezprostředně za ním neinteraktivní ukázka.
+   Nadpis je zarovnaný k levé hraně menu a horní hrana ukázky k horní
+   hraně tlačítka Pokračovat; toto doplnění uživatel schválil téhož dne.
+   Ve vývojářském režimu šířka menu zahrnuje i celé tlačítko editoru vedle
+   Nastavení, aby ho náhled nepřekrýval.
    Slunce a odraz sledují pravý okraj tohoto prostoru; při zúžení okna je
    odraz překrytý ukázkou. Ukázka běží automaticky, bez tlačítka pozastavení.
 3. Kampaň, mise a jejich restart jsou odstraněny. Konec běžné partie vrací
@@ -15,9 +19,9 @@
    dosavadní návraty; pravidla rozehrané hry se nemění.
 4. Toto je dílčí úprava stávající kompozice. Společná hlavička a stavový
    řádek z [R-0453](requirements/R-0453.md) čekají na samostatný návrh.
-   Změna nepředstavuje pozorování hráčů ani ověřenou použitelnost;
-   [evidence](functional-tests.md#main-menu-cleanup-2026-11-26) odděluje
-   kompilaci od výslovně vynechaných testů.
+   [Evidence](functional-tests.md#main-menu-cleanup-2026-11-26) odděluje
+   první push bez testů od následného automatického ověření a kontroly
+   snímků. Nejde o studii použitelnosti s hráči.
 
 ## Okamžitý výsledek dostavění — 23. listopadu 2026
 

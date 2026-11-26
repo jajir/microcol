@@ -2,34 +2,71 @@
 
 ## Main menu and campaign removal — 26 November 2026
 
-1. UC-114/115/119: the main menu keeps Continue, Open Game, New Game,
-   Settings, developer Map editor and Quit. Campaign, Hall of Fame entry
-   and preview pause are removed. Content is centered within 1440 logical
-   pixels; the right-aligned sun reflection remains behind the preview.
-   [UX](ux.md#main-menu-simplification-2026-11-26) owns the agreed behavior.
-2. Campaign and mission implementation, progress persistence and shipped
-   tutorial maps are removed. Ordinary game creation, authored scenarios,
-   save validation, objectives, scoring and result dialogs remain.
-   Endgame navigation now returns to the main menu. Test fixtures keep
-   their worlds without campaign/mission metadata.
-3. Updated scenario sources include `TC_21_F15_free_play_screen_navigation_test`,
-   `TC_191_F224_session_menu_test` and the endgame neighborhood in TC_157,
-   TC_158, TC_163, TC_164, TC_179 and TC_187. Shared page objects and model
-   tests use the new game package; restart-mission coverage now checks
-   absence of that action. These source updates are not passing test evidence.
-4. The user explicitly requested “pushni to bez testu”. Model/JUnit,
-   targeted Docker UI and smoke were not run. No native visual inspection,
-   remote CI or distribution verification was performed. Java sources were
-   formatted using the shared Eclipse profile. Maven `-pl akropia-test -am
-   -DskipTests test-compile` compiles production and test sources only;
-   compilation and documentation validation are reported separately from
-   runtime acceptance. This delivery does not establish a new fully tested
-   revision or a published game build.
-5. Final local checks for this change: Maven production and test-source
-   compilation **BUILD SUCCESS**, no test execution; shared Eclipse formatting
-   applied; documentation name audit **0 unexplained occurrences** and strict
-   MkDocs build **passed**. The pre-existing edit to
-   `docs/requirements/backlog.md` is excluded from this delivery.
+1. UC-114/115/119: the menu keeps Continue, Open Game, New Game, Settings,
+   developer Map editor and Quit. Campaign, Hall of Fame entry and preview pause
+   are removed. Content is centered within 1440 logical pixels. The title shares
+   the menu's left edge; the preview starts level with Continue. The menu reserves
+   the whole Settings/editor row, and the right-aligned sun reflection stays
+   behind the preview. [UX](ux.md#main-menu-simplification-2026-11-26) owns behavior.
+2. Campaign and mission implementation, progress persistence and shipped tutorial
+   maps are removed. Ordinary creation, authored scenarios, validated saves,
+   objectives, scoring and result dialogs remain. The game-result listener must
+   retain its `@Listener` registration; completed games return to the main menu.
+3. The initial delivery `710c708a9d149cdaced308cd45a2ff800a823250` was pushed
+   without tests at the user's explicit request; compilation, Java formatting,
+   name audit and strict MkDocs passed. The user subsequently requested the
+   missing acceptance and the title/preview alignment. The following checks cover
+   that revision plus this follow-up's executable changes, with matching source
+   hashes. Environment: Docker Linux amd64, Xvfb/Openbox, Eclipse Adoptium
+   JDK **25.0.2**. Reports are under the repository's `target/` directory.
+
+| Phase | Actual result | Evidence and supervised elapsed time |
+| --- | --- | --- |
+| All model/JUnit | **4,936 tests**, 396 reports; 0 failures/errors/skips | `verification/run-jzhe9mb_`; completion `20261126T071819Z-acab64fd4e35`, PID 24363; **153.882 s** |
+| Menu and representative repaired journeys | **14 checks**, 9 reports; 0 failures/errors/skips | `docker-ui/run-Ety5Sy`; completion `20261126T072119Z-5ad6df776b8a`, PID 24929; **344.226 s** |
+| Remaining affected journeys | **45 scenarios**, 8 reports; 0 failures/errors/skips | `docker-ui/run-A88kQJ`; completion `20261126T072732Z-63abfc8b52bc`, PID 26251; **1912.212 s** |
+| Fixed smoke/support | **23 checks**, 13 reports; 0 failures/errors/skips | `verification/run-d31r8gl0`; completion `20261126T075955Z-5192303391b6`, PID 28213; **286.804 s**, within 420 s |
+
+4. The two targeted runs cover **59 distinct checks**: TC21/13, all TC24,
+   TC43/06, TC83/01, all TC157/158/163/164/179/187/191, TC210/01 and all three
+   `PageVerificationContractTest` checks. Four repaired journeys were selected
+   first (TC157/03, TC158/01, TC164/01, TC191/05); the remaining selection excludes
+   them. XML method names match the requested selections and cover every earlier
+   failure. The selection and local audit are in
+   `target/menu-cleanup-acceptance-20261126/selection.json` and `evidence.json`.
+5. Screenshot review at 1600 × 900 and 1000 × 800 confirms title/menu alignment,
+   preview/Continue alignment, right-hand sun and the complete developer editor
+   button. Captures are `akropia-test/warehouse-qa/demo-wide.png` and
+   `demo-narrow.png` inside the menu run. TC21/13 also toggles developer mode off
+   and on. This is automated layout and screenshot evidence, not a player study.
+6. Failed and superseded evidence remains unchanged:
+   - Model `run-myx81n42`, completion `20261126T063233Z-36c58e8f537a`:
+     **4,936 tests, 2 failures, 0 errors/skips**, 155.106 s. Old button labels and
+     the changed line number in the deliberately malformed fixture were corrected.
+   - Model retries `run-2v2imxyb` (`20261126T063658Z-d8af0b72e18a`, 157.538 s)
+     and the run from `20261126T064533Z-8f2aea594f0d` (155.010 s) each passed
+     4,936 checks before later executable repairs; they are not the final gate.
+   - Menu `run-FPaTeG`, completion `20261126T064003Z-f08eaeb84181`: 9 checks
+     passed in 192.340 s, but screenshot review found the preview covering part
+     of Map editor. Width reservation and a separation assertion fixed this.
+     The already started journey run `20261126T064346Z-4ffff74f4d98` was stopped
+     intentionally after 51.928 s (exit 130, cleanup complete); it is not a pass.
+   - Menu `run-pxMUll`, completion `20261126T064832Z-8501dcd02ee2`: 10 checks
+     passed in 208.090 s before the later listener repair.
+   - Journeys `run-6kJSEj`, completion `20261126T065216Z-59d27a2b8cb0`:
+     **49 tests, 3 failures, 19 errors, 0 skips**, 1458.668 s. Missing
+     `GameEventListener` registration prevented declaration and result dialogs.
+     Three save-browser checks still expected the removed game-type line; they
+     now require its absence while retaining player/date/treasury/support,
+     preview, file-safety and restore checks. Current passing reports cover all
+     22 previously failing scenarios.
+7. Shared Eclipse formatting was applied to the nine changed Java files.
+   All required local game phases passed on matching executable sources.
+   Documentation closure passed **14 consistency tests**, the name audit
+   (**0 unexplained occurrences**) and strict MkDocs. The unrelated backlog edit
+   and city-UI design outputs remain outside this change. No native macOS UI run,
+   full regression, remote CI or distribution verification was requested; this
+   local acceptance does not establish a published game build.
 
 <a id="food-presentation-2026-11-24"></a>
 

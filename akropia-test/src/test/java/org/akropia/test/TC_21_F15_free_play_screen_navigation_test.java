@@ -129,11 +129,21 @@ public class TC_21_F15_free_play_screen_navigation_test
         welcome.observeDemo(16000);
         welcome.verifyDemoVisible();
         welcome.captureDialog("menu-demo", "demo-loop.png");
-        welcome.resizeWindow(1280, 850);
+        // A wide window caps the content; a narrow window preserves alignment.
+        welcome.resizeWindow(1600, 900);
         welcome.verifyDemoVisible();
         welcome.captureDialog("menu-demo", "demo-wide.png");
-        // Settings and return preserve a usable main menu and map preview.
-        welcome = welcome.openSetting().goBack();
+        welcome.resizeWindow(1000, 800);
+        welcome.verifyDemoVisible();
+        welcome.captureDialog("menu-demo", "demo-narrow.png");
+        // Toggling the editor preserves a usable menu and a separate preview.
+        SettingPage settings = welcome.openSetting();
+        new DeveloperModePage(getContext()).setModeInSettings(false);
+        welcome = settings.goBack();
+        welcome.verifyDemoVisible();
+        settings = welcome.openSetting();
+        new DeveloperModePage(getContext()).setModeInSettings(true);
+        welcome = settings.goBack();
         welcome.verifyDemoVisible();
         welcome.loadGame().verifyGameInFront();
     }

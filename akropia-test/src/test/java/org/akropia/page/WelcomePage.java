@@ -251,6 +251,27 @@ public class WelcomePage extends AbstractMenuScreen {
                     .get(0) instanceof javafx.scene.canvas.Canvas);
             assertTrue(demo.getBoundsInLocal().getWidth() >= 260);
             Bounds bounds = demo.localToScene(demo.getBoundsInLocal());
+            Button first = getRobot().lookup("#buttonContinue").queryButton();
+            Bounds firstBounds = first.localToScene(first.getBoundsInLocal());
+            Label title = getRobot().lookup(".welcome-screen .main-title")
+                    .queryAs(Label.class);
+            Bounds titleBounds = title.localToScene(title.getBoundsInLocal());
+            double left = Math.max(0, (demo.getScene().getWidth() - 1440) / 2)
+                    + 16;
+            assertEquals(left, firstBounds.getMinX(), 0.5);
+            assertEquals(left, titleBounds.getMinX(), 0.5);
+            assertEquals(javafx.geometry.Pos.CENTER_LEFT, title.getAlignment());
+            assertEquals(firstBounds.getMinY(), bounds.getMinY(), 0.5,
+                    "Preview starts at the top of Continue");
+            Button editor = getRobot().lookup("#buttonMapEditor").queryButton();
+            if (editor.isVisible()) {
+                Bounds editorBounds = editor
+                        .localToScene(editor.getBoundsInLocal());
+                assertTrue(
+                        editorBounds.getMaxX() + 24 <= bounds.getMinX() + 0.5,
+                        "The preview leaves room for the complete Map editor button");
+            }
+            assertTrue(bounds.getMaxX() <= left + 1408);
             assertTrue(bounds.getMinX() >= 0);
             assertTrue(bounds.getMaxX() <= demo.getScene().getWidth());
             assertTrue(bounds.getMaxY() <= demo.getScene().getHeight());

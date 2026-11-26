@@ -63,9 +63,9 @@ class GameMenuTextTest {
 
     @Test
     void loadButtonLeavesItsShortcutToTheShortcutController() {
-        assertEquals("Load saved game",
+        assertEquals("Open Game",
                 i18n(Locale.ROOT).get(GameMenu.buttonLoadSave));
-        assertEquals("Nahrát hru",
+        assertEquals("Otevřít hru",
                 i18n(new Locale("cs", "CZ")).get(GameMenu.buttonLoadSave));
     }
 

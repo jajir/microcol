@@ -331,23 +331,19 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
-    private com.google.gson.JsonElement initialMission;
-    private String initialPlaythrough;
-
     public void verifyRestartAvailable(final boolean expected) {
         assertEquals(expected,
                 !getNodeFinder().lookup("#menuRestart").queryAll().isEmpty());
     }
 
     /** The detail beside the list describes the selected save. */
-    public void verifySelectedDetails(final String player, final String year,
-            final String gameType) {
+    public void verifySelectedDetails(final String player, final String year) {
         WaitForAsyncUtils.waitForFxEvents();
         final String summary = getLabeledById("savedGameSummary").getText();
         assertNotNull(list().getSelectionModel().getSelectedItem());
         assertTrue(summary.contains(player), summary);
         assertTrue(summary.contains(year), summary);
-        assertTrue(summary.contains(gameType), summary);
+        assertFalse(summary.contains("Game type:"), summary);
         assertFalse(summary.contains("null"), summary);
         assertFalse(summary.contains("Type:"), summary);
         assertFalse(summary.contains("Discoverer"), summary);

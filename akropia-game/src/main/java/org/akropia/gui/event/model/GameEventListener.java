@@ -8,6 +8,7 @@ import org.akropia.gui.dialog.DialogMessage;
 import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
 import org.akropia.gui.screen.statistics.HallOfFameDialog;
+import org.akropia.gui.util.Listener;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.HallOfFameEntry;
@@ -23,6 +24,7 @@ import com.google.inject.Inject;
 import javafx.application.Platform;
 
 /** Presents game outcomes, then returns to the main menu. */
+@Listener
 public final class GameEventListener {
 
     private final I18n i18n;

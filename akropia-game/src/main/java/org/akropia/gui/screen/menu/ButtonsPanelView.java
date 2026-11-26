@@ -66,7 +66,16 @@ public final class ButtonsPanelView
     private final Button buttonMapEditor = ActionButtons
             .button(ButtonIcon.LAND);
 
-    private final VBox buttonsBox = new VBox();
+    private final VBox buttonsBox = new VBox() {
+        @Override
+        protected double computePrefWidth(final double height) {
+            final double column = super.computePrefWidth(height);
+            return buttonMapEditor.isVisible()
+                    ? Math.max(column, buttonSetting.prefWidth(-1)
+                            + MAP_EDITOR_GAP + buttonMapEditor.prefWidth(-1))
+                    : column;
+        }
+    };
 
     private final KeyboardShortcuts shortcuts;
 
@@ -98,9 +107,11 @@ public final class ButtonsPanelView
         buttonMapEditor.setMaxWidth(Region.USE_PREF_SIZE);
         buttonMapEditor.accessibleTextProperty()
                 .bind(buttonMapEditor.textProperty());
-        // The column lays out only its seven entries; the developer-only
+        // The column lays out only its five entries; the developer-only
         // entry follows Settings in focus order and stands right of it.
         buttonMapEditor.setManaged(false);
+        buttonMapEditor.visibleProperty()
+                .addListener(observable -> buttonsBox.requestLayout());
         buttonSetting.boundsInParentProperty()
                 .addListener(observable -> placeMapEditor());
         buttonMapEditor.textProperty()
@@ -146,6 +157,7 @@ public final class ButtonsPanelView
         buttonMapEditor.autosize();
         buttonMapEditor.relocate(setting.getMaxX() + MAP_EDITOR_GAP,
                 buttonSetting.getLayoutY());
+        buttonsBox.requestLayout();
     }
 
     private void updateLabel(final Button button) {

@@ -61,11 +61,11 @@ public class GameModelPoDaoTest {
                 });
 
         assertEquals(
-                "com.google.gson.stream.MalformedJsonException: Expected name at line 190 column 9 path $.model.units[9].action",
+                "com.google.gson.stream.MalformedJsonException: Expected name at line 185 column 9 path $.model.units[9].action",
                 exception.getMessage());
     }
 
-    /** A valid manual player save of the thrive mission. */
+    /** A valid manual player save of the developed-world fixture. */
     private Path validSave(final String name) throws Exception {
         final Path file = directory.resolve(name + ".akropia");
         SaveArchives.playerSave(file, dao.loadFromClassPath(MAP));

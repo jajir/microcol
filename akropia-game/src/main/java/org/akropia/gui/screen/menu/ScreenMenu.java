@@ -55,7 +55,7 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
         buttonsPanelView.getContent().setMinWidth(Region.USE_PREF_SIZE);
         content.setMinWidth(0);
         content.maxWidthProperty().bind(content.prefWidthProperty());
-        content.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        content.setAlignment(javafx.geometry.Pos.TOP_LEFT);
         content.prefWidthProperty().bind(javafx.beans.binding.Bindings.min(1408,
                 menuHolderPanel.getContent().widthProperty().subtract(32)));
         menuHolderPanel.setMenuPanel(() -> content);

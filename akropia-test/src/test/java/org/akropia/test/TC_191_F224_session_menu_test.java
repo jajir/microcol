@@ -275,8 +275,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.verifyGameUnchanged();
         saves.openLoad();
         saves.select("Přístav – před bitvou");
-        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
-                "Game type: Free play");
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer");
         saves.captureDialog("savedGamesList", "r0298-saved-games-filled.png");
         saves.action("loadSelected");
         saves.action("saveCancel");
@@ -585,15 +584,15 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Harbour before the storm");
         saves.verifyLoadLayout("Harbour before the storm");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
-                "Game type: Free play");
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0383-load-detail-en.png");
         saves.verifyGameUnchanged();
 
-        // The filename-only list needs no filter; details retain type and time.
+        // The filename-only list needs no filter; details retain the treasury
+        // and save time.
         saves.verifyFilenameList();
-        saves.verifySummaryLines("Game type: Free play", "Saved:");
+        saves.verifySummaryLines("Gold:", "Saved:");
         hosted.click("savedGamesCancel");
 
         // An unsupported save names the reason and cannot be confirmed.
@@ -969,9 +968,8 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         saves.select("Metadata title");
         saves.verifyLoadLayout("Metadata title");
         saves.verifyPreview(true);
-        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer",
-                "Game type: Free play");
-        saves.verifySummaryLines("Game type: Free play", "Saved:");
+        saves.verifySelectedDetails("Corinth", "1 · 5/3 Summer");
+        saves.verifySummaryLines("Gold:", "Saved:");
         saves.verifyLoadEnabled(true);
         saves.captureDialog("savedGamesList", "r0436-load-filenames.png");
         saves.verifyGameUnchanged();
