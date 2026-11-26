@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.unit.UnitActionNoAction;
 import org.akropia.model.unit.UnitCreateRequest;
@@ -113,8 +113,7 @@ class UnitSightTest {
                 player.setCongress(congress);
             }
         }
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         final Player france = model.getPlayerByName("France");
         final Player dutch = model.getPlayerByName("Dutch");
         final Location frontier = Location.of(19, 12);
@@ -131,7 +130,7 @@ class UnitSightTest {
         assertFalse(france.isVisible(interiorOnly));
         assertEquals(dutchBefore, dutch.save().getVisible().getVisibilitySet());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(france.save().getVisible().getVisibilitySet(),
                 restored.getPlayerByName("France").save().getVisible()
                         .getVisibilitySet());
@@ -191,7 +190,7 @@ class UnitSightTest {
     void mountedScoutRevealsImmediatelyAndKnowledgeSurvivesRoleLossAndSave() {
         final Model model = Model.make(new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.akropia").getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         final UnitFreeColonist scout = (UnitFreeColonist) model.getUnitById(0);
         final Player dutch = scout.getOwner();
@@ -210,7 +209,7 @@ class UnitSightTest {
         assertEquals(1, scout.getSightRadius());
         assertTrue(dutch.isVisible(frontier));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.getPlayerByName("Dutch").isVisible(frontier));
         assertEquals(1, restored.getUnitById(0).getSightRadius());
     }
@@ -257,15 +256,14 @@ class UnitSightTest {
     void disarmingDragoonIntoToolsOrColonyWorkNeverRevealsTransientScoutSight() {
         for (boolean colonyWork : List.of(false, true)) {
             final var saved = new GameModelPoDao()
-                    .loadFromClassPath(
-                            "/maps/default-campaign-mission-2-thrive.akropia")
+                    .loadFromClassPath("/maps/fixture-developed-world.akropia")
                     .getModel();
             saved.getGameManager().getPlayers().stream()
                     .filter(player -> "Dutch".equals(player.getName()))
                     .findFirst().orElseThrow().getVisible()
                     .setVisible(new String[0]);
             final Model model = Model.make(saved,
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             model.startGame();
             final UnitFreeColonist dragoon = (UnitFreeColonist) model
                     .getUnitById(13);

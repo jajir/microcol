@@ -19,11 +19,10 @@ import com.google.gson.JsonObject;
 
 /**
  * The persistent Hall of Fame as the player meets it (R-0197): the ranking
- * opened from the main menu and from the statistics of a game, the window that
- * a scored game shows when it ends or spring 1800 freezes the score, the
- * current result with its breakdown whether or not it is ranked, and the saved
- * file the ranking is read from. The page reads what the screen shows and what
- * the file holds.
+ * opened from the statistics of a game, the window that a scored game shows
+ * when it ends or spring 1800 freezes the score, the current result with its
+ * breakdown whether or not it is ranked, and the saved file the ranking is read
+ * from. The page reads what the screen shows and what the file holds.
  */
 public final class HallOfFamePage extends AbstractScreen {
 
@@ -57,10 +56,6 @@ public final class HallOfFamePage extends AbstractScreen {
     // --- player gestures ---------------------------------------------------
 
     /** Open the ranking from the main menu and wait for its window. */
-    public void openFromMenu() throws Exception {
-        clickOnButtonWithId("buttonHallOfFame");
-        awaitResultDialog();
-    }
 
     /** Wait until the Hall of Fame window is on screen. */
     public void awaitResultDialog() throws Exception {

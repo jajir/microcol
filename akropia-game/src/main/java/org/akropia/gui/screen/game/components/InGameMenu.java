@@ -64,11 +64,7 @@ public final class InGameMenu {
                 ShortcutAction.QUICK_SAVE).setDisable(!game.isHumanTurnReady());
         item(SavedGameText.quickLoad, "menuQuickLoad", saves::quickLoad,
                 ShortcutAction.QUICK_LOAD).setDisable(!game.isHumanTurnReady());
-        if (game.isGameModelReady()
-                && game.getGameModel().isCampaignMission()) {
-            item(SavedGameText.restart, "menuRestart", saves::restartMission,
-                    ShortcutAction.RESTART_MISSION);
-        }
+
         menu.getItems().add(new SeparatorMenuItem());
         item(SavedGameText.settings, "menuSettings",
                 () -> events.post(new ShowScreenEvent(Screen.SETTING)),
@@ -86,16 +82,11 @@ public final class InGameMenu {
      * Run a session menu command from its shortcut, with the same action and
      * availability as its menu item.
      *
-     * @param action {@link ShortcutAction#EXIT_TO_MAIN_MENU} or
-     *               {@link ShortcutAction#RESTART_MISSION}
+     * @param action {@link ShortcutAction#EXIT_TO_MAIN_MENU}
      */
     public void run(final ShortcutAction action) {
         if (action == ShortcutAction.EXIT_TO_MAIN_MENU) {
             events.post(new ExitGameEvent());
-        } else if (action == ShortcutAction.RESTART_MISSION
-                && game.isGameModelReady()
-                && game.getGameModel().isCampaignMission()) {
-            saves.restartMission();
         }
     }
 

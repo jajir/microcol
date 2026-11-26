@@ -153,8 +153,7 @@ public class TC_107_F98_jettison_test extends AbstractAkropiaTest {
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
         final File savedFile = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("jettison-map.akropia");
         when(files.loadFile(any(File.class))).thenReturn(savedFile);
         game.saveGame(savedFile);
@@ -227,8 +226,7 @@ public class TC_107_F98_jettison_test extends AbstractAkropiaTest {
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);
         final File savedFile = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("jettison-atlantic.akropia");
         when(files.loadFile(any(File.class))).thenReturn(savedFile);
         game = europe.close();

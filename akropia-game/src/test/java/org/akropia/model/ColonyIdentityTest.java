@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.turnevent.TurnEventColonyWasDestroyed;
 import org.akropia.model.turnevent.TurnEventProvider;
@@ -19,13 +19,13 @@ class ColonyIdentityTest {
     Path directory;
 
     private GameModelPo fixture() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final ModelPo data) {
-        return Model.make(data, org.akropia.model.campaign.MissionImpl
-                .getPredefinedGameOverEvaluators());
+        return Model.make(data,
+                org.akropia.model.game.GameModel.gameOverEvaluators());
     }
 
     @Test

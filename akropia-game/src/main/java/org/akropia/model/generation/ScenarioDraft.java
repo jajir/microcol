@@ -11,7 +11,6 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
-import org.akropia.model.Calendar;
 import org.akropia.model.Difficulty;
 import org.akropia.model.Direction;
 import org.akropia.model.Europe;
@@ -27,10 +26,10 @@ import org.akropia.model.RoyalRoster;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
 import org.akropia.model.WorldMap;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.ReferenceExpedition;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.ReferenceExpedition;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.ScenarioProblem.Reason;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
@@ -77,10 +76,6 @@ public final class ScenarioDraft {
             .filter(type -> type != UnitType.BRAVE
                     && type != UnitType.TREASURE_TRAIN)
             .collect(ImmutableList.toImmutableList());
-
-    private static final String CAMPAIGN = "freePlay";
-
-    private static final String MISSION = "freePlay";
 
     private static final int STARTING_GOLD = 1000;
 
@@ -169,8 +164,6 @@ public final class ScenarioDraft {
         model.getGameManager().getPlayers().add(crown);
         model.getGameManager().setCurrentPlayer(owner);
         final GameModelPo out = new GameModelPo();
-        out.setCampaignName(CAMPAIGN);
-        out.setMissionName(MISSION);
         out.setModel(model);
         return new ScenarioDraft(out);
     }
@@ -201,9 +194,7 @@ public final class ScenarioDraft {
     }
 
     private static void checkStructure(final GameModelPo source) {
-        if (source.getCampaignName() == null || source.getMissionName() == null
-                || source.getModel() == null
-                || source.getModel().getMap() == null
+        if (source.getModel() == null || source.getModel().getMap() == null
                 || source.getModel().getGameManager() == null
                 || source.getModel().getGameManager().getPlayers() == null
                 || source.getModel().getUnits() == null
@@ -920,7 +911,7 @@ public final class ScenarioDraft {
         if (out.isEmpty()) {
             try {
                 Model.make(assemble().getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators());
+                        GameModel.gameOverEvaluators());
             } catch (RuntimeException rejected) {
                 out.add(new ScenarioProblem(Reason.GAME_REJECTED, null,
                         rejected.getMessage()));

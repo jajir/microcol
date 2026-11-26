@@ -1,3 +1,19 @@
+## Správa běžné partie bez kampaní — 26. listopadu 2026
+
+1. `model.game` vlastní `GameModel`, vytvoření a obnovu partie přes
+   `GameModelDao` a převod výsledků na zprávy přes `GameEvents`.
+   `model.game.po` vlastní obálku uložení, archiv, metadata a obnovu.
+   Balíčky `model.campaign`, jeho úložiště postupu a `gui.screen.campaign`
+   byly odstraněny, stejně jako registry misí a jejich dílčí cíle.
+2. Herní pravidla nadále vlastní společný model. `GameEvents` posílá
+   `EventGameFinished` a `EventShowMessages`; GUI `GameEventListener`
+   zobrazuje výsledek, zaznamenává skóre a vrací hlavní menu.
+   `GameVictoryCue` rozhoduje o zvuku vítězství. Nová závislost modelu
+   na GUI nevzniká. Panel cílů ukazuje běžné cíle nezávislosti.
+3. Výukové mapy nejsou distribuované prostředky. Tři staré světy jsou
+   ponechány pouze jako testovací fixture; obecné autorské scénáře,
+   demo a editor map zůstávají podporované.
+
 # Odpovědnosti Java balíčků
 
 Tento přehled určuje, kam v Akropia patří nová změna a které části mají
@@ -58,8 +74,8 @@ odpovědnosti balíčků se nemění. Přejímku zaznamenává
 | Co hra dovoluje, kolik akce stojí a jak změní svět? | `model` a jeho příslušné podbalíčky. |
 | Kterou povolenou akci zvolí počítačový hráč? | `ai`. |
 | Jak člověk akci najde, vyvolá, zruší a uvidí výsledek? | `gui` a příslušná obrazovka. |
-| Co musí zůstat zachované po uložení a načtení? | Herní objekty spolu s `model.store`; obálka hry v `model.campaign.po`. |
-| Jaký cíl nebo scénář platí v konkrétní misi? | `model.campaign`. |
+| Co musí zůstat zachované po uložení a načtení? | Herní objekty spolu s `model.store`; obálka hry v `model.game.po`. |
+| Jak vznikne partie a její výsledek? | `model.game`; společná pravidla zůstávají v modelu. |
 | Jak se text přeloží a jak se vybere obrázek? | `i18n`, respektive `gui.image`; význam herního výsledku zůstává v modelu. |
 | Jak ověříme pravidlo a skutečnou cestu hráče? | Modelové testy a `akropia-test` podle [funkčního kontraktu](functional-tests.md). |
 
@@ -229,7 +245,7 @@ vyvolá výjimku bez zápisu. Živé ukončení zmrazí jediný `GameResult` se 
 
 ### Kruhové automatické ukládání (R-0432)
 
-`model.campaign.po.SavedGames` vlastní společný adresář, validaci ručních
+`model.game.po.SavedGames` vlastní společný adresář, validaci ručních
 názvů a výběr z deseti automatických slotů. `SaveMetadataPo` uchovává pořadí
 úspěšného automatického zápisu ve stejném archivu. `GameModelDao` zapisuje
 snímek atomicky přes `GameModelPoDao`; nenásledují kopie posledního tahu ani
@@ -251,7 +267,7 @@ ověřené případy od úplné přejímky.
 
 ### Referenční výpravy (R-0066)
 
-`model.campaign.ReferenceExpedition` sestavuje nový model ze samotného terénu,
+`model.game.ReferenceExpedition` sestavuje nový model ze samotného terénu,
 obtížnosti a identity `EuropeanNation`. Nepřebírá jednotky, kolonie ani průzkum
 zdrojového scénáře. Před sestavením ověří čtyři odlišné východní námořní starty
 s vodní cestou k pobřeží. Vlastnictví, vybavení, náklad a mírové vztahy používají
@@ -459,9 +475,8 @@ V následujících tabulkách jsou názvy relativní k `org.akropia` v
 | [model.event](../akropia-game/src/main/java/org/akropia//model/event) | Události změn a přechodů modelu, včetně zrušitelných událostí před akcí; odběratelé používají `ModelListener`. | Popis herního děje bez UI ovládacích prvků. Nejde o uloženou historii zpráv pro hráče. |
 | [model.turnevent](../akropia-game/src/main/java/org/akropia//model/turnevent) | Zprávy aktuálního přehledu tahu o příjezdu lodí, hladu, ztrátě kolonie a dalších výsledcích: `TurnEvent`, `TurnEventStore`. | Záznamy se ukládají s hrou, protože je nelze spolehlivě obnovit z aktuálního světa. Při ukončení tahu se zprávy hráče čistí; nejde o trvalý archiv. Zobrazení vlastní `gui.screen.turnreport`. `TurnEventCriticality` určuje kritické záznamy (hlad, ztráta či zánik kolonie), které se ukážou i při vypnutém rutinním přehledu (R-0204). |
 | [model.store](../akropia-game/src/main/java/org/akropia//model/store) | Datové objekty uloženého světa a Gson převody: `ModelPo`, `UnitPo`, `CargoPo`, adaptéry akcí a typů. | Ukládaná reprezentace; výpočty herních pravidel zůstávají v modelových objektech. Tento balíček sám nezajišťuje celý souborový save/load. |
-| [model.campaign](../akropia-game/src/main/java/org/akropia//model/campaign) | Kampaně, mise, cíle a jejich posluchače; `GameModel` spojuje misi a `Model`, `GameModelDao` sestavuje a obnovuje hru. Obsahuje i volnou hru `FreePlay`; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry a jen u nové volné hry nechá `Model.rememberStartingArrivalRoutes` zapamatovat příjezdovou námořní cestu výprav (R-0424); volbu `NORTH_AMERICA` sestaví `model.generation.NorthAmericaWorld`. | Specifické podmínky mise; obecná ekonomika, boj a pohyb patří do společného modelu. |
-| [model.campaign.po](../akropia-game/src/main/java/org/akropia//model/campaign/po) | Obálka celé uložené hry: svět, jméno kampaně/mise, data cílů a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; hráčská pozice je od R-0382 ZIP s `metadata.json` (`SaveMetadataPo` s odvozeným `SaveSummaryPo`), `game.json` z téhož datového modelu a volitelným `preview.png`, autorské scénáře zůstávají prostým JSONem se samostatným čtením/zápisem; `GameModelPoDao` vynucuje limity, strukturu archivu a povinná metadata shodná s hrou (`loadPlayerGame`/`savePlayerGame`); `PersistingTool` vlastní adresář a názvy save souborů i příponu; `SavedGames` čte přehled jen z metadat, náhled vybrané pozice a vytváří cesty ručních/rychlých pozic, obálka nese volitelnou identitu rozehrané hry a název uložení; `HallOfFameDao` ukládá trvalý žebříček R-0197 do vlastního souboru vedle nich. `RecoverySlot` označuje historické body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. `SavedGames` vybírá deset společných kruhových slotů podle pořadí úspěšného zápisu v metadatech (R-0432); `GameModelPoDao.gameplayState` dává produkční JSON herního stavu a `SaveBaseline` drží stav posledního úspěšného uložení či načtení s jeho souborem (R-0387). Výzvu k uložení a zpětnou vazbu vlastní `gui.dialog.PersistingService`. Nespouštět zde herní akce ani dialogy. |
-| [model.campaign.store](../akropia-game/src/main/java/org/akropia//model/campaign/store) | Uložení postupu kampaně, například dokončených misí, přes `CampaignsDao`. | Odlišovat postup kampaně od rozehrané pozice a od uživatelských nastavení. |
+| [model.game](../akropia-game/src/main/java/org/akropia/model/game) | `GameModel` drží model a identitu partie, `GameModelDao` sestavuje a obnovuje hru, `GameEvents` převádí výsledek na zprávy; `FreePlayMap` vybírá přibalený svět a `GameModelDao.createFreePlay` jej připraví před nahrazením rozehrané hry a jen u nové volné hry nechá `Model.rememberStartingArrivalRoutes` zapamatovat příjezdovou námořní cestu výprav (R-0424); volbu `NORTH_AMERICA` sestaví `model.generation.NorthAmericaWorld`. | Obecná ekonomika, boj a pohyb patří do společného modelu. |
+| [model.game.po](../akropia-game/src/main/java/org/akropia/model/game/po) | Obálka celé uložené hry: svět, identita partie a souborové čtení/zápis přes `GameModelPoDao`. | Formát a převod dat; hráčská pozice je od R-0382 ZIP s `metadata.json` (`SaveMetadataPo` s odvozeným `SaveSummaryPo`), `game.json` z téhož datového modelu a volitelným `preview.png`, autorské scénáře zůstávají prostým JSONem se samostatným čtením/zápisem; `GameModelPoDao` vynucuje limity, strukturu archivu a povinná metadata shodná s hrou (`loadPlayerGame`/`savePlayerGame`); `PersistingTool` vlastní adresář a názvy save souborů i příponu; `SavedGames` čte přehled jen z metadat, náhled vybrané pozice a vytváří cesty ručních/rychlých pozic, obálka nese volitelnou identitu rozehrané hry a název uložení; `HallOfFameDao` ukládá trvalý žebříček R-0197 do vlastního souboru vedle nich. `RecoverySlot` označuje historické body obnovy, `RecoveryCheckpointPolicy` vybírá bezpečné hranice a `GameModelPoDao` nahrazuje soubor atomicky. `SavedGames` vybírá deset společných kruhových slotů podle pořadí úspěšného zápisu v metadatech (R-0432); `GameModelPoDao.gameplayState` dává produkční JSON herního stavu a `SaveBaseline` drží stav posledního úspěšného uložení či načtení s jeho souborem (R-0387). Výzvu k uložení a zpětnou vazbu vlastní `gui.dialog.PersistingService`. Nespouštět zde herní akce ani dialogy. |
 | [ai](../akropia-game/src/main/java/org/akropia//ai) | Rozhodování evropských a královských soupeřů: `SimpleAiPlayer`, `KingRobotPlayer`, chování jednotek a volba cílů přes `ContinentTargets` nad topologií z modelu. | Volit akce nad společnými pravidly; neobcházet modelové operace a nepřidávat nové závislosti na GUI. Současné vazby na animace jsou výjimkou níže. |
 | [i18n](../akropia-game/src/main/java/org/akropia//i18n) | Překladové klíče, XML resource bundles, jejich načítání, cache a kontrola úplnosti. | Překlad významu; neurčuje herní pravidla, rozložení obrazovek ani okamžik otevření dialogu. |
 | [diagnostics](../akropia-game/src/main/java/org/akropia//diagnostics) | Lokální omezený záznam obnovitelných chyb: pevné události, verze a platforma, bez zpráv výjimek a hráčského textu. Popis vlastní [diagnostika](diagnostics.md). Dialogy uložení, odchodu, načtení a nedokončeného tahu uvádějí složku záznamu. | Jen zápis záznamu; nesmí přerušit hru, uložení ani načtení. Model na něj nezávisí; volají ho GUI a spouštěcí kód. |
@@ -484,7 +499,7 @@ UI pouze připraví návrh a zobrazí výsledek či chybu. `model.store` uklád�
 ID a další volné ID, `PlaceBuilderPo` podle ID obnovuje vazby pracovníků.
 Zprávy tahu nesou ID i historický text jména. Samotná shoda čísel z různých
 her neznamená totožnost objektů; objektové equality se tímto řezem nemění.
-Přetrvávající souborové čtení/zápis zůstává v `model.campaign.po`.
+Přetrvávající souborové čtení/zápis zůstává v `model.game.po`.
 
 U [sdílených pracovních polí](gap-analysis.md#shared-colony-working-squares)
 `ColonyField` poskytuje dotaz na přípustnost a ověření očekávaného pracovníka;
@@ -510,7 +525,7 @@ mají povinné identifikátory. Podrobnosti a limity vlastní výše uvedený ko
 | [gui.dialog](../akropia-game/src/main/java/org/akropia//gui/dialog) | Dialogy a potvrzení; dnes také `ApplicationController` a `PersistingService`, které koordinují spuštění, načtení a uložení hry. | Dialog získá rozhodnutí hráče; výpočet výsledku a formát uložené hry řeší jejich vlastníci. |
 | [gui.dock](../akropia-game/src/main/java/org/akropia//gui/dock) | Sdílený přístav, nákladní sloty a drag & drop; konkrétní chování dodává kolonie nebo Evropa. | Kapacita, vlastnictví a přenos musí být platné i při jiném vstupu než přetažení myší. |
 | [gui.event](../akropia-game/src/main/java/org/akropia//gui/event) | Záměry UI a posluchače: založení kolonie, orání, jazyk, výběr a zobrazení. | Předat herní akci modelu; modelové události patří do `model.event`. |
-| [gui.event.model](../akropia-game/src/main/java/org/akropia//gui/event/model) | Most mezi hrou a UI: `GameModelController`, `GameController`, `ModelListenerImpl`, zapojení robotů a reakce na mise včetně rozhodnutí o zvuku vítězství (`MissionVictoryCue`). | Integrační balíček uvnitř GUI, nikoli druhý model. Nepřidávat sem strategie soupeřů a výpočty pravidel. |
+| [gui.event.model](../akropia-game/src/main/java/org/akropia//gui/event/model) | Most mezi hrou a UI: `GameModelController`, `GameController`, `ModelListenerImpl`, zapojení robotů a reakce na výsledek partie včetně rozhodnutí o zvuku vítězství (`GameVictoryCue`). | Integrační balíček uvnitř GUI, nikoli druhý model. Nepřidávat sem strategie soupeřů a výpočty pravidel. |
 | [gui.image](../akropia-game/src/main/java/org/akropia//gui/image) | Načítání, skládání a cache obrazů, pobřeží a kosmetických variant. | `WorldMapRandoms` vybírá obrazové varianty; negeneruje herní svět ani bojovou náhodu. |
 | [gui.preferences](../akropia-game/src/main/java/org/akropia//gui/preferences) | Uživatelské nastavení a jeho JSON persistence: jazyk, hlasitost hudby a efektů, okno, animace, zobrazení a odchylky klávesových zkratek po platformách. `SettingService.load` při nedostupném úložišti vrací poslední známé nastavení (nebo výchozí hodnoty), znovu zkouší čtení a nic nepřepisuje ani nepřesouvá; `save`/`update` selhání hlásí. | Rozehraná partie a její pravidla patří do modelové persistence. Nastavení nesmí při ztrátě umístění uložených her přerušit probíhající hru. |
 | [gui.shortcut](../akropia-game/src/main/java/org/akropia//gui/shortcut) | Nastavitelné klávesové zkratky: akce a kontexty, tři platformní profily, hráčovy odchylky a jediná účinná konfigurace `ShortcutController` za rozhraním `KeyboardShortcuts`; viz [klávesové zkratky](keyboard-shortcuts.md). | Jen rozhoduje, která akce odpovídá klávese, a skládá popisky. Dostupnost akce, fokus a dialogy hlídá její obsluha; pravidla zůstávají v modelu. |
@@ -532,8 +547,7 @@ verzi pravidla. [UX](ux.md) a [grafika](graphics.md) popisují společné požad
 | [gui.screen.colony.buildingqueue](../akropia-game/src/main/java/org/akropia//gui/screen/colony/buildingqueue) | Lokalizovaný výběr a explicitní potvrzení projektu, pořadí a odebrání z fronty. Výběr drží původní kolonii/model a kontroluje změnu zobrazeného stavu; pravidla dostupnosti, ceny a zpracování fronty zůstávají v modelu. |
 | [gui.screen.europe](../akropia-game/src/main/java/org/akropia//gui/screen/europe) | Evropský přístav, nákup a nábor jednotek, zboží a přehled plavby; nabídky vybavení na molu zobrazují ceny a důvody odmítnutí z modelu. |
 | [gui.screen.market](../akropia-game/src/main/java/org/akropia//gui/screen/market) | Modální nákup a prodej nad domovským přístavem a prezentace modelových cen; společný rám vlastní `gui.util.AbstractMessageWindow`. |
-| [gui.screen.campaign](../akropia-game/src/main/java/org/akropia//gui/screen/campaign) | Výběr kampaně a mise. |
-| [gui.screen.goals](../akropia-game/src/main/java/org/akropia//gui/screen/goals) | Zobrazení cílů mise a jejich postupu. |
+| [gui.screen.goals](../akropia-game/src/main/java/org/akropia//gui/screen/goals) | Zobrazení běžných herních cílů a jejich postupu. |
 | [gui.screen.statistics](../akropia-game/src/main/java/org/akropia//gui/screen/statistics) | Zobrazení herních statistik, grafů, základních evropských vztahů, síně slávy (R-0197; zápis výsledku jde přes `HallOfFameDao`) a přehledu práce (R-0198; počty a místa čte `model.LaborReport`, odkaz otevírá existující obrazovky přes `LaborNavigator`) a přehledu náboženství (R-0199; výstup a postup čte `model.ReligionReport`, zobrazení nemění pochodně ani přistěhovalce) a přehledu kolonií (R-0200; populaci, zásoby, očekávaný výstup, příští stav a projekt čte `model.ColonyAdvisorReport`, otevření kolonie přes `ColonyAdvisorNavigator` ověřuje model a vlastnictví; projekt a nástroje používají stejné pravidlo jako oznámení R-0086); přehled lodí (R-0202; loďstvo, plavby, opravy a náklad čte `model.FleetReport`, cizí lodě jen počet obsazených prostorů, otevření přes `FleetNavigator` ověřuje živý přehled); potvrzení vyhlášení války se kontroluje proti původní hře a hráčům před modelovou operací. |
 | [gui.screen.congress](../akropia-game/src/main/java/org/akropia//gui/screen/congress) | `ScreenCongress` v hlavním okně přes `InGamePage` (R-0332); zobrazení neměnné nabídky poznání, národních sov, ceny a získaných bonusů. `KnowledgeReference` přidává statické historické předlohy a odkazy do nápovědy. Národní podporu, členy, cíl a skutečnou REF vlastního národa čte `model.CongressReport` (R-0203) jedním dotazem bez mezipaměti. Výslovný nákup používá hlídanou operaci `Player.acquireKnowledge`; UI nelosuje ani neuděluje odměny. |
 | [gui.screen.turnreport](../akropia-game/src/main/java/org/akropia//gui/screen/turnreport) | Prezentace uložených zpráv `model.turnevent`. Rutinní přehled řídí předvolba v `gui.preferences` (R-0204); kritické zprávy otevřou přehled i při jejím vypnutí. Akce Otevřít kolonii (chybějící nástroje, dokončený projekt, zahozené zboží, narození) a Otevřít Evropu ověřují aktuální hru a nic nespotřebují. `EuropeOpeningRequest` drží automatické otevření Evropy až za přehledem a zruší se při jeho opuštění (R-0204). |
@@ -594,16 +608,16 @@ na jiné herní balíčky byly v R-0011 odstraněny; ostatní uvedené přesahy 
    1.5.1 v rozsahu `test`. Běží jako běžný JUnit Jupiter test při `mvn test`,
    včetně povinného CI před publikací distribucí. Není součástí hry.
 2. Produkční `org.akropia.model..` nesmí záviset na žádné třídě
-   `org.akropia..` mimo vlastní podstrom. Zahrnuté jsou i podbalíčky kampaní,
+   `org.akropia..` mimo vlastní podstrom. Zahrnuté jsou i podbalíčky správy partie,
    persistence a událostí. Testy se neimportují a prázdný výběr selže.
    Přímé vazby na `javafx..` jsou také zakázané. Java a ostatní externí
    knihovny zůstávají povolené; jde o kontrolu závislostí
    v bytecode, nikoli řetězců pro reflexi nebo nepoužitých importů.
 3. Výjimka `AkropiaException` je v `model`, souborová pomůcka `PersistingTool`
-   v `model.campaign.po`. Topologie `Continent`, `Continents` a `ContinentTool`
+   v `model.game.po`. Topologie `Continent`, `Continents` a `ContinentTool`
    je společná; skórování a pořadí cílů v `ai.ContinentTargets` zachovává
    dosavadní rozhodování královské armády.
-4. Události mise přenášejí pouze `Missions`. Překladové prostředky zachovávají
+4. Události hry přenášejí pouze `GameMessages`. Překladové prostředky zachovávají
    původní české a anglické zprávy; `I18n` překládá enumy bez požadavku,
    aby model implementoval rozhraní překladové služby.
 5. Ověření a dodání vlastní [R-0011](requirements/done/R-0011.md). Ručně lze

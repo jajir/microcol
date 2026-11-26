@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.*;
 
 class SharedColonyFieldPersistenceTest {
@@ -19,13 +19,11 @@ class SharedColonyFieldPersistenceTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     private GameModelPo fixture() {
-        return dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private ColonyFieldPo field(GameModelPo data, int colony,

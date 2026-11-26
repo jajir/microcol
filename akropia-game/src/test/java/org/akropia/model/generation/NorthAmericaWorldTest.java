@@ -27,10 +27,10 @@ import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
 import org.akropia.model.store.PlayerPo;
@@ -464,7 +464,7 @@ class NorthAmericaWorldTest {
     }
 
     private static Model make(final ModelPo saved) {
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     private static TerrainType at(final Map<Location, TerrainType> types,

@@ -23,9 +23,9 @@ import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.RivalColonyPage;
@@ -119,7 +119,7 @@ public class TC_120_F111_rival_trade_test extends AbstractAkropiaTest {
                 .filter(player -> player.getName().equals("France")).findFirst()
                 .orElseThrow().getVisible().setVisibility(known, 50, 30);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             model.startGame();
             final Player france = model.getPlayerByName("France");

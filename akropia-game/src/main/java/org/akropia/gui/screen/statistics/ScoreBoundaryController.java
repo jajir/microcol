@@ -4,7 +4,7 @@ import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.util.Listener;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 import org.akropia.model.Model;
 import org.akropia.model.event.ScoreBoundaryRequiredEvent;
 

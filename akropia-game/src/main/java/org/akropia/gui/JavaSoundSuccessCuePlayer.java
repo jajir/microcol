@@ -23,7 +23,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 /**
- * Plays the mission success cue through Java Sound on its own daemon thread,
+ * Plays the game success cue through Java Sound on its own daemon thread,
  * beside the music line. The cue follows the effects volume (R-0227) by scaling
  * its samples; a change while it plays applies from the next written block.
  * Zero is silence and the <code>soundEnabled=false</code> property always
@@ -36,9 +36,9 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
 
     /**
      * Class path name of the cue; exported by
-     * <code>src/audio/mission-success-01.py</code>.
+     * <code>src/audio/game-success-01.py</code>.
      */
-    static final String RESOURCE = "sounds/mission-success-01.wav";
+    static final String RESOURCE = "sounds/game-success-01.wav";
 
     private final static int BUFFER_SIZE = 4096;
 
@@ -78,7 +78,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
             out.open(format);
             return out;
         }, task -> {
-            final Thread thread = new Thread(task, "mission-success-cue");
+            final Thread thread = new Thread(task, "game-success-cue");
             thread.setDaemon(true);
             thread.start();
         });
@@ -114,8 +114,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
             });
         } catch (RuntimeException e) {
             playing.set(false);
-            logger.warn("Mission success cue was not started: {}",
-                    e.getMessage());
+            logger.warn("Game success cue was not started: {}", e.getMessage());
         }
     }
 
@@ -149,8 +148,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
             }
         } catch (IOException | UnsupportedAudioFileException
                 | LineUnavailableException | RuntimeException e) {
-            logger.warn("Mission success cue was not played: {}",
-                    e.getMessage());
+            logger.warn("Game success cue was not played: {}", e.getMessage());
         }
     }
 
@@ -201,7 +199,7 @@ public final class JavaSoundSuccessCuePlayer implements SuccessCuePlayer {
                 out.stop();
                 out.flush();
             } catch (RuntimeException e) {
-                logger.warn("Mission success cue was not stopped: {}",
+                logger.warn("Game success cue was not stopped: {}",
                         e.getMessage());
             }
         }

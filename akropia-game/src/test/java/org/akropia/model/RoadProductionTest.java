@@ -8,9 +8,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 
 /**
@@ -123,8 +123,8 @@ class RoadProductionTest {
     }
 
     private static GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private static UnitPo worker(final GameModelPo data) {
@@ -158,7 +158,7 @@ class RoadProductionTest {
         data.getModel().getMap()
                 .setRoads(road ? Set.of(westSquare) : Collections.emptySet());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ColonyField field = model.getColonyById(0).orElseThrow()
                 .getColonyFieldInDirection(Direction.west);
         return field.getProduction().orElseThrow().getAmount();

@@ -10,8 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.CongressPo;
@@ -185,8 +185,7 @@ class ForeignColonyTradeTest {
                 .save();
         RealFounderJoin.readyFor(RealFounderJoin.congressOf(saved, "Dutch"),
                 Founder.JAN_DE_WITT);
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         model.startGame();
         final Unit wagon = model.getUnitById(WAGON_ID);
         load(wagon, GoodsType.GRAIN, 3);
@@ -641,7 +640,7 @@ class ForeignColonyTradeTest {
         final int franceGold = model.getPlayerByName("France").getGold();
 
         final Model reloaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(0,
                 carried(reloaded.getUnitById(WAGON_ID), GoodsType.GRAIN));
         assertEquals(dutchGold, reloaded.getPlayerByName("Dutch").getGold());
@@ -744,7 +743,7 @@ class ForeignColonyTradeTest {
             final EuropeanRelationState relation, final boolean rebellion,
             final UnitType shipType, final boolean trainAboard) {
         final Model terrain = Model.make(data(false, relation, false),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ModelPo data = data(deWitt, relation, rebellion);
         data.getUnits()
                 .add(unit(WAGON_ID, UnitType.WAGON, landBeside(terrain)));
@@ -757,8 +756,7 @@ class ForeignColonyTradeTest {
             ship.getCargo().getSlots()
                     .forEach(hold -> hold.setUnitId(TRAIN_ID));
         }
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {

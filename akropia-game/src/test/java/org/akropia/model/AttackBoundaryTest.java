@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitActionType;
@@ -66,7 +66,7 @@ class AttackBoundaryTest {
         final java.util.Set<Location> fields = data.getMap().getFieldSet();
         fields.remove(ORIGIN);
         data.getMap().setFields(fields);
-        model = Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         while (!model.getCurrentPlayer().getName().equals("Dutch")) {
             model.endTurn();

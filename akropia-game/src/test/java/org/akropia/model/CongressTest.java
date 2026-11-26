@@ -12,9 +12,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -45,8 +45,8 @@ class CongressTest {
     }
 
     private GameModelPo fixture(final int owls, final Founder selected) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getWhosKingThisPlayerIs() == null) {
@@ -60,7 +60,7 @@ class CongressTest {
 
     private Model model(final int owls, final Founder selected) {
         return Model.make(fixture(owls, selected).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
     }
 
     private int oneUpdateOwlProduction() {
@@ -136,7 +136,7 @@ class CongressTest {
                 () -> owner.acquireKnowledge(offer));
         assertEquals(after, new Gson().toJson(world.save()));
         final Model restored = Model.make(world.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(owner.getCongressMembers(),
                 restored.getCurrentPlayer().getCongressMembers());
         assertEquals(25, restored.getCurrentPlayer().getCongressOwls());
@@ -281,7 +281,7 @@ class CongressTest {
                         .count());
         final JsonObject completed = savedWithUnitsOrderedById(model);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertEquals(completed, savedWithUnitsOrderedById(restored));
     }
@@ -348,7 +348,7 @@ class CongressTest {
         RebellionFixtures.declare(data.getModel(), dutch);
         isolateSavedVoyageOrigin(data);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player owner = model.getPlayerStore().getPlayerByName("Dutch");
         assertFalse(owner.getColonies().isEmpty());
         owner.startTurn();
@@ -362,7 +362,7 @@ class CongressTest {
                         .count());
         final String saved = new Gson().toJson(model.save());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertEquals(saved, new Gson().toJson(restored.save()));
         assertTrue(restored.getPlayerStore().getPlayerByName("Dutch")
@@ -400,7 +400,7 @@ class CongressTest {
                 .findFirst().orElseThrow().getCargo().getSlots().get(0)
                 .setUnitId(null);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player france = model.getPlayerStore().getPlayerByName("France");
         assertTrue(france.getFounderOffers().isEmpty());
         model.buildColony(france, model.getUnitById(4), "Quebec");
@@ -412,7 +412,7 @@ class CongressTest {
                 france.getFounderOffers().stream().map(FounderOffer::getFounder)
                         .collect(java.util.stream.Collectors.toList()));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(offers, restored.getPlayerStore().getPlayerByName("France")
                 .getFounderOffers().stream().map(FounderOffer::getFounder)
                 .collect(java.util.stream.Collectors.toList()));
@@ -428,7 +428,7 @@ class CongressTest {
         final Map<Location, TerrainType> original = isolateSavedVoyageOrigin(
                 data);
         final Model blocked = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player owner = blocked.getCurrentPlayer();
         owner.startTurn();
         assertTrue(owner.isJonesDeliveryPending());
@@ -436,7 +436,7 @@ class CongressTest {
         final ModelPo repairedPo = blocked.save();
         repairedPo.getMap().setTerrainType(original);
         final Model repaired = Model.make(repairedPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player repairedOwner = repaired.getCurrentPlayer();
         repairedOwner.startTurn();
         assertFalse(repairedOwner.isJonesDeliveryPending());

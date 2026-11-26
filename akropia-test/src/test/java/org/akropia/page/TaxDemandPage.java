@@ -187,7 +187,7 @@ public final class TaxDemandPage extends AbstractScreen {
     public void prepareRevolutionFrom(final File snapshot, final String name)
             throws Exception {
         final JsonObject saved = new Gson()
-                .fromJson(new org.akropia.model.campaign.po.GameModelPoDao()
+                .fromJson(new org.akropia.model.game.po.GameModelPoDao()
                         .loadGameJson(snapshot), JsonObject.class);
         RebellionJson.declare(saved.getAsJsonObject("model"),
                 saved.getAsJsonObject("model").getAsJsonObject("gameManager")
@@ -210,8 +210,7 @@ public final class TaxDemandPage extends AbstractScreen {
     /** Save the current game through the normal save action. */
     public File saveSnapshot(final String name) throws Exception {
         final File file = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target(name);
         GamePage.of(getContext()).saveGame(file);
         return file;

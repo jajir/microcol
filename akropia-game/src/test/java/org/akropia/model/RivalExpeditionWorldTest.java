@@ -6,10 +6,10 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.UnitWithCargo;
 
 class RivalExpeditionWorldTest {
@@ -57,7 +57,7 @@ class RivalExpeditionWorldTest {
         final GameModelPo data = dao
                 .loadFromClassPath(FreePlayMap.RIVAL_EXPEDITION.getResource());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         verifyExpeditions(model);
     }
@@ -67,14 +67,14 @@ class RivalExpeditionWorldTest {
         final GameModelPo data = dao
                 .loadFromClassPath(FreePlayMap.RIVAL_EXPEDITION.getResource());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         data.setModel(model.save());
         final Path file = directory.resolve("expedition.akropia");
         dao.saveToFile(file.toString(), data);
         final Model restored = Model.make(
                 dao.loadFromFile(file.toFile()).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         verifyExpeditions(restored);
     }

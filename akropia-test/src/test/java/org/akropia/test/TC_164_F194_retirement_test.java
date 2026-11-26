@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HallOfFamePage;
@@ -24,11 +24,11 @@ import javafx.stage.Stage;
  * The retirement of R-0194 as the player meets it. In scored free play before
  * spring 1800 the real menu Exit leaves the game and records nothing, and a
  * cancelled Retire changes nothing; a confirmed Retire freezes one score, shows
- * its notice, breakdown and ranking, and returns to the campaign screen. After
- * an unscored continuation a confirmed Retire keeps the earlier frozen result
- * and ranks it once. In a declared rebellion that is still open, cancelling
- * keeps the rebellion running, and a confirmed Retire records the score without
- * an independence bonus.
+ * its notice, breakdown and ranking, and returns to the main menu. After an
+ * unscored continuation a confirmed Retire keeps the earlier frozen result and
+ * ranks it once. In a declared rebellion that is still open, cancelling keeps
+ * the rebellion running, and a confirmed Retire records the score without an
+ * independence bonus.
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_164_F194_retirement_test extends AbstractAkropiaTest {
@@ -90,7 +90,7 @@ public class TC_164_F194_retirement_test extends AbstractAkropiaTest {
 
         // Retire again and confirm: the previewed score is frozen once and
         // ranked as the only entry. The end notice is acknowledged, then the
-        // finished result with its breakdown is shown, and the campaign screen
+        // finished result with its breakdown is shown, and the main menu
         // follows.
         retire.openRetire();
         retire.verifyPreviewUnchanged();
@@ -107,7 +107,7 @@ public class TC_164_F194_retirement_test extends AbstractAkropiaTest {
         result.verifyCurrentResultShown();
         result.verifyStoredEntries(1);
         result.closeResultDialog();
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
     }
 
     @Test
@@ -151,7 +151,7 @@ public class TC_164_F194_retirement_test extends AbstractAkropiaTest {
         result.verifyCurrentResultShown();
         result.verifyStoredEntries(1);
         result.closeResultDialog();
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
     }
 
     @Test
@@ -201,6 +201,6 @@ public class TC_164_F194_retirement_test extends AbstractAkropiaTest {
         result.verifyCurrentResultShown();
         result.verifyStoredEntries(1);
         result.closeResultDialog();
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
     }
 }

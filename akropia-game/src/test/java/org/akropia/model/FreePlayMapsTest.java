@@ -7,9 +7,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 class FreePlayMapsTest {
     @TempDir
@@ -67,8 +67,7 @@ class FreePlayMapsTest {
                 FreePlayMap.TWO_ISLANDS)) {
             final GameModelPo data = dao.loadFromClassPath(map.getResource());
             final Model model = Model.make(data.getModel(),
-                    org.akropia.model.campaign.MissionImpl
-                            .getPredefinedGameOverEvaluators());
+                    org.akropia.model.game.GameModel.gameOverEvaluators());
             model.startGame();
             verifyWorld(model, map == FreePlayMap.ORIGINAL ? 17 : 13);
             data.setModel(model.save());
@@ -76,8 +75,7 @@ class FreePlayMapsTest {
             dao.saveToFile(save.toString(), data);
             final Model restored = Model.make(
                     dao.loadFromFile(save.toFile()).getModel(),
-                    org.akropia.model.campaign.MissionImpl
-                            .getPredefinedGameOverEvaluators());
+                    org.akropia.model.game.GameModel.gameOverEvaluators());
             restored.startGame();
             verifyWorld(restored, map == FreePlayMap.ORIGINAL ? 17 : 13);
         }
@@ -129,8 +127,7 @@ class FreePlayMapsTest {
         final Model model = Model.make(
                 dao.loadFromClassPath(FreePlayMap.TWO_ISLANDS.getResource())
                         .getModel(),
-                org.akropia.model.campaign.MissionImpl
-                        .getPredefinedGameOverEvaluators());
+                org.akropia.model.game.GameModel.gameOverEvaluators());
         final List<Continent> continents = new ContinentTool()
                 .findContinents(model).getContinents();
         assertEquals(2, continents.stream()

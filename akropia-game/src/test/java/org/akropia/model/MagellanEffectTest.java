@@ -10,9 +10,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.PlayerPo;
@@ -26,8 +26,8 @@ class MagellanEffectTest {
             UnitType.FRIGATE, UnitType.WAR_GALLEY };
 
     private GameModelPo fixture(final boolean member) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> "Dutch".equals(player.getName()))
                 .findFirst().orElseThrow();
@@ -43,8 +43,7 @@ class MagellanEffectTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void nextDutchTurn(final Model model) {
@@ -74,7 +73,7 @@ class MagellanEffectTest {
         final Ship first = created.get(0);
         first.setActionPoints(1);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertEquals(1, restored.getUnitById(first.getId()).getActionPoints());
         assertEquals(first.getSpeed(),
@@ -108,7 +107,7 @@ class MagellanEffectTest {
         assertEquals(ordinaryVoyage,
                 ((PlaceHighSea) ship.getPlace()).getOriginalTurns());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         final Ship saved = (Ship) restored.getUnitById(3);
         assertEquals(ordinaryVoyage,
@@ -167,7 +166,7 @@ class MagellanEffectTest {
         assertEquals(Math.max(1, (ordinary + 1) / 2),
                 voyage.getOriginalTurns());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         final PlaceHighSea saved = (PlaceHighSea) restored.getUnitById(3)
                 .getPlace();
@@ -197,7 +196,7 @@ class MagellanEffectTest {
         assertEquals(3, ((PlaceHighSea) model.getUnitById(3).getPlace())
                 .getOriginalTurns());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         final PlaceHighSea saved = (PlaceHighSea) restored.getUnitById(3)
                 .getPlace();

@@ -11,9 +11,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.NullSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 
 /**
@@ -35,8 +35,8 @@ class TownCommonsTest {
     }
 
     private static GameModelPo mission() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private static ColonyPo colonyPo(final GameModelPo data) {
@@ -71,8 +71,7 @@ class TownCommonsTest {
     }
 
     private static Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Terrain baseline rows: open and forested, with the saved food. */
@@ -251,8 +250,7 @@ class TownCommonsTest {
                 .orElseThrow();
         assertEquals("GRAPES", saved.getTownCommonsGoods());
         final Colony restored = Model
-                .make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+                .make(model.save(), GameModel.gameOverEvaluators())
                 .getColonyById(0).orElseThrow();
         assertEquals(colony.getTownCommonsProduction(),
                 restored.getTownCommonsProduction());

@@ -51,8 +51,7 @@ public class TC_19_F14_warehouse_unloading_test extends AbstractAkropiaTest {
     void TC_01_confirm_one_unit_and_reload() throws Exception {
         // Choose an isolated save file and load the defined game.
         final File savedFile = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("warehouse.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);

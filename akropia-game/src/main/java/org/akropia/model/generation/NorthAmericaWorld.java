@@ -22,7 +22,7 @@ import org.akropia.model.NativeNation;
 import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
-import org.akropia.model.campaign.ReferenceExpedition;
+import org.akropia.model.game.ReferenceExpedition;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.RiverSegmentPo;
 import org.akropia.model.store.WorldMapPo;

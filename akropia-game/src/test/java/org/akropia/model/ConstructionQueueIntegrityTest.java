@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.QueueItemType;
 
 import com.google.gson.Gson;
@@ -22,10 +22,9 @@ class ConstructionQueueIntegrityTest {
 
     @BeforeEach
     void prepare() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         // The real fixture has one resident and the initial warehouse.
         queue = colony.getColonyBuildingQueue();
@@ -84,7 +83,7 @@ class ConstructionQueueIntegrityTest {
                 queue.save().stream().map(item -> item.getType())
                         .collect(Collectors.toList()));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final List<ColonyBuildingItemProgress<?>> items = restored
                 .getColonyByName("Delft").orElseThrow().getColonyBuildingQueue()
                 .getBuildingQueue();

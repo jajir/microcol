@@ -10,9 +10,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ConstructionPo;
@@ -27,8 +27,8 @@ import org.akropia.model.store.UnitPo;
 class PoliticalProductionIntegrationTest {
 
     private GameModelPo data(final long liberty) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies().forEach(colony -> {
             colony.setLiberty(0L);
             colony.setLastColonialAffiliation(colony.getOwnerName());
@@ -44,8 +44,7 @@ class PoliticalProductionIntegrationTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Move a saved resident from its field into a building slot. */

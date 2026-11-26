@@ -14,9 +14,9 @@ import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.gson.Gson;
 
@@ -50,8 +50,7 @@ class FirstColonyPlannerTest {
                 .orElseThrow().getVisible().setVisibility(known, 50, 30);
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 5)
                 .findFirst().orElseThrow().getPlaceMap().setLocation(START);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Optional<Location> next(final Model model) {
@@ -70,7 +69,7 @@ class FirstColonyPlannerTest {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String before = new Gson().toJson(model.save());
         final Unit ship = model.getUnitById(5);
         final Location step = next(model).orElseThrow();
@@ -111,7 +110,7 @@ class FirstColonyPlannerTest {
         final Model model = world(land, true);
         assertEquals(Optional.of(WEST), next(model));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(Optional.of(WEST), next(restored));
     }
 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+	<comment>Define messages for games.</comment>
+
+	<entry key="independenceWasDeclared_caption">You declared an independent polis. Prepare for the army of the mother city.</entry>
+	<entry key="gameOver_allColoniesAreLost">You lost all colonies.</entry>
+	<entry key="gameOver_timeIsUp">The time allowed for this game has expired.</entry>
+	<entry key="gameOver_rebellionNoColonies">Your rebellion has failed: no rebel colony survives.</entry>
+	<entry key="gameOver_rebellionAllColoniesCrown">Your rebellion has failed: every surviving rebel colony is back under the mother city.</entry>
+	<entry key="gameOver_rebellionCoastalCrown">Your rebellion has failed: no free coastal colony remains.</entry>
+	<entry key="gameOver_rebellionResidentsCrown">Your rebellion has failed: the mother city controls at least 90 percent of the residents of your surviving colonies.</entry>
+	<entry key="gameOver_rebellionVictory">Your rebellion has succeeded: every surviving rebel colony is yours and the mother city has at most two ground units left.</entry>
+	<entry key="gameOver_rebellionUnresolved">Your rebellion is still unresolved in spring 1850, so it is lost.</entry>
+	<entry key="gameOver_freePlayEnded">Spring 1850 has come and free play is over. Your frozen score stands as your result.</entry>
+	<entry key="gameOver_retired">You retired and the game is over. The score shown is your final result.</entry>
+<entry key="gameOver_objectiveVictory">Victory! You completed a game objective. Your result and score are recorded in the Hall of Fame.</entry>
+<entry key="gameOver_opponentVictory">Defeat. An opponent completed a game objective before you.</entry>
+</properties>

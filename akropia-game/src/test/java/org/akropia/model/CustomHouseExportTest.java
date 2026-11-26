@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.turnevent.TurnEventCustomHouseExport;
 
@@ -18,16 +18,15 @@ import com.google.gson.Gson;
 /** Saved custom-house selections and same-turn export accounting. */
 class CustomHouseExportTest {
     private GameModelPo data() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies()
                 .forEach(colony -> colony.setExportGoods(List.of()));
         return data;
     }
 
     private Model model() {
-        return Model.make(data().getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data().getModel(), GameModel.gameOverEvaluators());
     }
 
     private Colony equipped(final Model model) {
@@ -62,21 +61,18 @@ class CustomHouseExportTest {
                 () -> TurnEventCustomHouseExport.tryLoad(invalidEvent));
         final GameModelPo absent = data();
         absent.getModel().getColonies().get(0).setExportGoods(null);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(absent.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(absent.getModel(), GameModel.gameOverEvaluators()));
         final GameModelPo duplicate = data();
         duplicate.getModel().getColonies().get(0)
                 .setExportGoods(List.of(GoodsType.GRAIN, GoodsType.GRAIN));
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(duplicate.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(duplicate.getModel(), GameModel.gameOverEvaluators()));
         final GameModelPo untradable = data();
         untradable.getModel().getColonies().get(0)
                 .setExportGoods(List.of(GoodsType.HAMMERS));
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(untradable.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(untradable.getModel(), GameModel.gameOverEvaluators()));
 
         final Model model = model();
         final Colony colony = equipped(model);
@@ -97,7 +93,7 @@ class CustomHouseExportTest {
         assertEquals(Set.of(GoodsType.GRAIN), colony.getExportGoods());
         assertEquals(List.of(GoodsType.GRAIN), colony.save().getExportGoods());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(Set.of(GoodsType.GRAIN), restored.getColonyByName("Delft")
                 .orElseThrow().getExportGoods());
     }
@@ -141,7 +137,7 @@ class CustomHouseExportTest {
         assertEquals(income, exports.get(0).getIncome());
         final String saved = new Gson().toJson(model.save());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(saved, new Gson().toJson(restored.save()));
     }
 
@@ -185,7 +181,7 @@ class CustomHouseExportTest {
         // Continue keeps the market and does not export or press again.
         final String saved = new Gson().toJson(model.save());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(saved, new Gson().toJson(restored.save()));
         assertEquals(4, grain(restored, EuropeanNation.DUTCH).getPressure());
     }
@@ -198,7 +194,7 @@ class CustomHouseExportTest {
                         .filter(player -> player.getName().equals("Dutch"))
                         .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = equipped(model);
         colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
         setGrainAfterConsumption(colony, 101);
@@ -230,7 +226,7 @@ class CustomHouseExportTest {
                         .filter(player -> player.getName().equals("Dutch"))
                         .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = equipped(model);
         colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
         setGrainAfterConsumption(colony, 101);
@@ -386,7 +382,7 @@ class CustomHouseExportTest {
         quebec.setExportGoods(List.of(GoodsType.SILVER));
         quebec.getColonyWarehouse().put("SILVER", 100);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         final Colony colony = model.getColonyByName("Quebec").orElseThrow();
@@ -459,7 +455,7 @@ class CustomHouseExportTest {
                         .filter(player -> player.getName().equals("Dutch"))
                         .findFirst().orElseThrow());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = equipped(model);
         colony.configureExportGoods(Set.of(), Set.of(GoodsType.GRAIN));
         setGrainAfterConsumption(colony, 101);

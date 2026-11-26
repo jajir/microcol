@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 
 /**

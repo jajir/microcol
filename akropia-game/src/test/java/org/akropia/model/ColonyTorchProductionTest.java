@@ -3,16 +3,15 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 
 class ColonyTorchProductionTest {
 
     private Model model() {
         return Model.make(new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
+                .getModel(), GameModel.gameOverEvaluators());
     }
 
     private Construction chapel(final Colony colony) {
@@ -40,7 +39,7 @@ class ColonyTorchProductionTest {
                 colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony resumed = restored.getColonyById(0).orElseThrow();
         assertEquals(1,
                 resumed.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
@@ -135,7 +134,7 @@ class ColonyTorchProductionTest {
                 second.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
 
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         resumed.startGame();
         assertEquals(1, resumed.getColonyById(0).orElseThrow().getWarehouse()
                 .getGoods(GoodsType.TORCHES).getAmount());

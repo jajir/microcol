@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ConstructionPo;
@@ -46,8 +46,8 @@ class LaSalleStockadeTest {
     }
 
     private GameModelPo data(final CongressPo dutch) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getName().equals("Dutch")) {
@@ -66,8 +66,7 @@ class LaSalleStockadeTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Model member() {
@@ -407,7 +406,7 @@ class LaSalleStockadeTest {
         assertDefenseOnly(colony(model, 0), null);
         final String saved = gson(model.save());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(saved, gson(restored.save()));
         restored.startGame();
         assertEquals(saved, gson(restored.save()));
@@ -431,7 +430,7 @@ class LaSalleStockadeTest {
         assertDefenseOnly(colony, ConstructionType.STOCKADE);
         final String saved = gson(model.save());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony again = colony(restored, 0);
         assertDefenseOnly(again, ConstructionType.STOCKADE);
         assertEquals(saved, gson(restored.save()));

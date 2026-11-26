@@ -11,7 +11,6 @@ import org.akropia.gui.dialog.ApplicationController;
 import org.akropia.gui.image.ModuleImages;
 import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.gui.util.ApplicationInfo;
-import org.akropia.model.campaign.CampaignModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +101,7 @@ public final class AkropiaApplication extends Application {
             injector = Guice.createInjector(com.google.inject.Stage.PRODUCTION,
                     new AkropiaModule(), new ModuleImages(),
                     new ExternalModule(primaryStage, getHostServices()),
-                    new CampaignModule(), overridenModule);
+                    overridenModule);
             setDevelopmentMode();
             injector.getInstance(DiagnosticLog.class)
                     .record(DiagnosticEvent.STARTED, null);

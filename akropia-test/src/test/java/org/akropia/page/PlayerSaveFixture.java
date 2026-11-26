@@ -12,18 +12,13 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.akropia.model.Model;
-import org.akropia.model.campaign.CampaignModule;
-import org.akropia.model.campaign.GameModel;
-import org.akropia.model.campaign.GameModelDao;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.campaign.po.SaveMetadataPo;
-import org.akropia.model.campaign.po.SaveSummaryPo;
-import org.akropia.model.campaign.po.SavedGames;
-import org.akropia.model.campaign.store.CampaignsDao;
-import org.akropia.model.campaign.store.CampaignsPo;
-import org.mockito.Mockito;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.GameModelDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
+import org.akropia.model.game.po.SaveMetadataPo;
+import org.akropia.model.game.po.SaveSummaryPo;
+import org.akropia.model.game.po.SavedGames;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
@@ -140,14 +135,14 @@ public final class PlayerSaveFixture {
             final GameModelPo data, final String valid) {
         final GameModelPoDao dao = new GameModelPoDao();
         final Model model = Model.make(dao.loadFromClassPath(valid).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         if (data.getPlaythroughId() == null) {
             data.setPlaythroughId(UUID.randomUUID().toString());
         }
-        dao.savePlayerGame(target.getAbsolutePath(), data, SaveMetadataPo
-                .of("Invalid game data", SavedGames.Kind.MANUAL, Instant.now(),
-                        data.getPlaythroughId(), SaveSummaryPo.describe(model,
-                                data.getCampaignName(), data.getMissionName())),
+        dao.savePlayerGame(target.getAbsolutePath(), data,
+                SaveMetadataPo.of("Invalid game data", SavedGames.Kind.MANUAL,
+                        Instant.now(), data.getPlaythroughId(),
+                        SaveSummaryPo.describe(model)),
                 null);
     }
 
@@ -162,13 +157,7 @@ public final class PlayerSaveFixture {
 
     private static synchronized GameModelDao games() {
         if (games == null) {
-            final CampaignsDao campaigns = Mockito.mock(CampaignsDao.class);
-            Mockito.when(campaigns.load()).thenReturn(new CampaignsPo());
-            games = Guice
-                    .createInjector(new CampaignModule(),
-                            binder -> binder.bind(CampaignsDao.class)
-                                    .toInstance(campaigns))
-                    .getInstance(GameModelDao.class);
+            games = Guice.createInjector().getInstance(GameModelDao.class);
         }
         return games;
     }

@@ -67,11 +67,8 @@
     <entry key="saveFailed">Shortcuts could not be saved; your changes are still here and the previous shortcuts stay active. Check that the settings folder can be written.</entry>
     <entry key="actionOpenSettings">Settings</entry>
     <entry key="actionQuitGame">Quit Akropia</entry>
-    <entry key="actionNewFreeGame">New free game</entry>
-    <entry key="actionPlayCampaign">Play campaign</entry>
-    <entry key="actionHallOfFame">Hall of fame</entry>
+    <entry key="actionNewFreeGame">New Game</entry>
     <entry key="actionExitToMainMenu">Main menu</entry>
-    <entry key="actionRestartMission">Restart mission</entry>
     <entry key="actionDeclareIndependence">Declare independence</entry>
     <entry key="actionRetire">Retire</entry>
     <entry key="actionDisband">Disband unit</entry>

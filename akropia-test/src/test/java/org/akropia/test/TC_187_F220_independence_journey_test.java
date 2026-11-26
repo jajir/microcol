@@ -18,7 +18,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.GoodsType;
 import org.akropia.model.RoyalRoster.Family;
 import org.akropia.model.RoyalRoster.State;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.CongressPage;
 import org.akropia.page.CustomHousePage;
 import org.akropia.page.DialogMessagePage;
@@ -143,8 +143,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         final RebellionVictoryPage victory = new RebellionVictoryPage(
                 getContext());
         final HallOfFamePage hall = new HallOfFamePage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
         GamePage game = WelcomePage.of(getContext()).loadGame();
 
         // Start of the ledger: the purse, 49 percent liberty, the people, the
@@ -179,7 +178,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         independence.verifyConfirmationClosed();
         final DialogMessagePage message = DialogMessagePage.of(getContext());
         message.verifyReady();
-        // Free play emits one declaration message (the campaign emits two).
+        // Free play emits one declaration message (the mainMenu emits two).
         message.close();
         game = GamePage.of(getContext());
         independence.verifyDeclared(true);
@@ -286,14 +285,11 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         hall.verifyStoredEntries(1);
         hall.closeResultDialog();
         journey.closeCaptureNoticeIfShown();
-        campaign.verifyCampaignScreen();
+        mainMenu.verifyMainMenu();
 
-        // Reopening the ranking from the menu shows the same single entry.
-        campaign.back();
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
+        // Returning to the menu preserves the same single saved entry.
+
         hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
 
         // Continue opens the last saved open position of the war: no second
         // victory is shown and the ranking keeps its single entry.
@@ -321,8 +317,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         final RebellionVictoryPage victory = new RebellionVictoryPage(
                 getContext());
         final HallOfFamePage hall = new HallOfFamePage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
         GamePage game = WelcomePage.of(getContext()).loadGame();
 
         // The same player commands as the first test, in one session.
@@ -337,7 +332,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         independence.verifyConfirmationClosed();
         final DialogMessagePage message = DialogMessagePage.of(getContext());
         message.verifyReady();
-        // Free play emits one declaration message (the campaign emits two).
+        // Free play emits one declaration message (the mainMenu emits two).
         message.close();
         game = GamePage.of(getContext());
         independence.verifyDeclared(true);
@@ -400,12 +395,9 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         hall.verifyStoredEntries(1);
         hall.closeResultDialog();
         journey.closeCaptureNoticeIfShown();
-        campaign.verifyCampaignScreen();
-        campaign.back();
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
+        mainMenu.verifyMainMenu();
+
         hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
         // Replay that exact checkpoint, with Continue after the aid arrives.
         game = WelcomePage.of(getContext()).loadGame();
         final IndependenceJourneyPage replay = new IndependenceJourneyPage(
@@ -427,7 +419,7 @@ public class TC_187_F220_independence_journey_test extends AbstractAkropiaTest {
         hall.awaitResultDialog();
         hall.closeResultDialog();
         replay.closeCaptureNoticeIfShown();
-        campaign.verifyCampaignScreen();
-        campaign.back();
+        mainMenu.verifyMainMenu();
+
     }
 }

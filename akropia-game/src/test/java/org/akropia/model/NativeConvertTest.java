@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -58,8 +58,7 @@ class NativeConvertTest {
     }
 
     private static Model reload(final Model model) {
-        return Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(model.save(), GameModel.gameOverEvaluators());
     }
 
     private static long randomState(final Model model) {
@@ -213,14 +212,14 @@ class NativeConvertTest {
         final ModelPo noNation = convertScene(0).save();
         noNation.getUnits().stream().filter(unit -> unit.getId() == CONVERT_ID)
                 .findFirst().orElseThrow().setNativeConvertNation(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(noNation,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(noNation, GameModel.gameOverEvaluators()));
 
         final ModelPo fullCount = convertScene(0).save();
         fullCount.getUnits().stream().filter(unit -> unit.getId() == CONVERT_ID)
                 .findFirst().orElseThrow().setNativeConvertUnassignedUpdates(8);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(fullCount,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(fullCount, GameModel.gameOverEvaluators()));
 
         final ModelPo strayFields = missionScene().save();
         strayFields.getUnits().stream()
@@ -228,7 +227,6 @@ class NativeConvertTest {
                 .orElseThrow()
                 .setNativeConvertNation(NativeNation.AZTEC.name());
         assertThrows(IllegalArgumentException.class,
-                () -> Model.make(strayFields,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                () -> Model.make(strayFields, GameModel.gameOverEvaluators()));
     }
 }

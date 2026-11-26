@@ -23,8 +23,7 @@ public class WelcomePage extends AbstractMenuScreen {
 
     /** Main-menu buttons from top to bottom. */
     private static final List<String> MENU_IDS = List.of("buttonContinue",
-            "buttonLoad", "buttonCampaign", "buttonStartFreeGame",
-            "buttonHallOfFame", "buttonSetting", "buttonExit");
+            "buttonLoad", "buttonStartFreeGame", "buttonSetting", "buttonExit");
 
     public static WelcomePage of(final TestContext context) {
         return new WelcomePage(context);
@@ -85,15 +84,13 @@ public class WelcomePage extends AbstractMenuScreen {
             // elsewhere.
             final String load = isMacPlatform() ? " (⌘O)" : " (Ctrl+O)";
             final List<String> labels = czech
-                    ? List.of("Pokračovat", "Nahrát hru" + load,
-                            "Spustit kampaň", "Nová neomezená hra", "Síň slávy",
+                    ? List.of("Pokračovat", "Otevřít hru" + load, "Nová hra",
                             "Nastavení", "Ukončit hru")
-                    : List.of("Continue", "Load saved game" + load,
-                            "Play campaign", "New free play game",
-                            "Hall of Fame", "Setting", "Quit Akropia");
+                    : List.of("Continue", "Open Game" + load, "New Game",
+                            "Setting", "Quit Akropia");
             // Each button keeps its artwork; column 1 is the retired
             // Recovery points entry (R-0376).
-            final List<Integer> columns = List.of(0, 2, 3, 4, 5, 6, 7);
+            final List<Integer> columns = List.of(0, 2, 4, 6, 7);
             final VBox column = getNodeFinder().lookup(".game-menu-inner")
                     .queryAs(VBox.class);
             assertEquals(ids.size(), menuEntries(column).size());
@@ -124,7 +121,10 @@ public class WelcomePage extends AbstractMenuScreen {
                         button.getContentDisplay());
                 final Bounds bounds = button
                         .localToScene(button.getBoundsInLocal());
-                assertEquals(80, bounds.getMinX(), 0.01);
+                assertEquals(
+                        Math.max(0, (button.getScene().getWidth() - 1440) / 2)
+                                + 16,
+                        bounds.getMinX(), 0.01);
                 assertTrue(bounds.getMinY() >= 0);
                 assertTrue(bounds.getMaxY() <= button.getScene().getHeight());
                 if (previous != null) {
@@ -221,10 +221,6 @@ public class WelcomePage extends AbstractMenuScreen {
         return owner != null && id.equals(owner.getId());
     }
 
-    public void verifyHallOfFameOpen() {
-        assertTrue(isCssIdShown("hallOfFameDialog"));
-    }
-
     public void verifyContinueAvailable(final boolean expected) {
         assertEquals(expected, !getButtonById("buttonContinue").isDisabled());
     }
@@ -244,6 +240,12 @@ public class WelcomePage extends AbstractMenuScreen {
         getRobot().interact(() -> {
             javafx.scene.Parent demo = getRobot().lookup("#menu-demo").query();
             assertTrue(demo.isVisible());
+            assertTrue(
+                    getRobot().lookup("#menu-demo-pause").queryAll().isEmpty());
+            assertTrue(
+                    getRobot().lookup("#buttonCampaign").queryAll().isEmpty());
+            assertTrue(getRobot().lookup("#buttonHallOfFame").queryAll()
+                    .isEmpty());
             assertTrue(demo.isMouseTransparent());
             assertTrue(demo.getChildrenUnmodifiable()
                     .get(0) instanceof javafx.scene.canvas.Canvas);
@@ -270,10 +272,6 @@ public class WelcomePage extends AbstractMenuScreen {
 
     public void observeDemo(final long milliseconds) {
         getRobot().sleep(milliseconds);
-    }
-
-    public void pauseDemo() {
-        getRobot().clickOn("#menu-demo-pause");
     }
 
     public WelcomePage verifyMainScreen() {

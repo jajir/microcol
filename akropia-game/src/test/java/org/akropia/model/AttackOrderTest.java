@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -24,7 +24,7 @@ class AttackOrderTest {
     void prepareAdjacentArmedOpponentsAtPeace() {
         model = Model.make(new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.akropia").getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         while (!model.getCurrentPlayer().getName().equals("Dutch")) {
             model.endTurn();
@@ -121,7 +121,7 @@ class AttackOrderTest {
     @Test
     void targetFromAnotherGameWithTheSameIdCannotReplaceTheChosenDefender() {
         final Model other = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String before = snapshot();
         assertThrows(IllegalArgumentException.class,
                 () -> new AttackOrder(attacker,
@@ -135,8 +135,7 @@ class AttackOrderTest {
             final boolean attackerWins) {
         final ModelPo controlled = model.save();
         controlled.setCombatRandomState(attackerWins ? 3L : 0L);
-        model = Model.make(controlled,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(controlled, GameModel.gameOverEvaluators());
         attacker = (UnitFreeColonist) model.getUnitById(0);
         defender = (UnitFreeColonist) model.getUnitById(6);
         final AttackOrder order = proposal();
@@ -161,7 +160,7 @@ class AttackOrderTest {
         assertEquals(after, snapshot());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit continued = restored.getUnitById(survivor.getId());
         assertEquals(0, continued.getActionPoints());
         assertFalse(((UnitFreeColonist) restored.getUnitById(lost.getId()))

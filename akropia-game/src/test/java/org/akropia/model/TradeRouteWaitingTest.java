@@ -10,9 +10,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitWithCargo;
 
@@ -48,8 +48,7 @@ class TradeRouteWaitingTest {
 
         World(final GameModelPo data) {
             this.data = data;
-            model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
             delft = model.getColonyById(DELFT).orElseThrow();
             dutch = delft.getOwner();
             ship = (UnitWithCargo) model.getAllUnits().stream()
@@ -616,16 +615,16 @@ class TradeRouteWaitingTest {
         final World w = waitingAtDelft();
         final int played = w.model.getCalendar().getNumberOfPlayedTurns();
         w.data.setModel(w.model.save());
-        final org.akropia.model.campaign.po.GameModelPo saved = w.data;
+        final org.akropia.model.game.po.GameModelPo saved = w.data;
         for (final Integer bad : new Integer[] { null, -1, played + 1 }) {
-            final org.akropia.model.campaign.po.GameModelPo copy = new GameModelPoDao()
+            final org.akropia.model.game.po.GameModelPo copy = new GameModelPoDao()
                     .loadFromFile(write(saved, "bad.json").toFile());
             ship(copy).setTradeRouteVisitTurn(bad);
             assertThrows(IllegalArgumentException.class, () -> new World(copy),
                     "turn " + bad);
         }
         // The current turn is accepted.
-        final org.akropia.model.campaign.po.GameModelPo good = new GameModelPoDao()
+        final org.akropia.model.game.po.GameModelPo good = new GameModelPoDao()
                 .loadFromFile(write(saved, "good.json").toFile());
         assertEquals(played, ship(good).getTradeRouteVisitTurn());
         new World(good);
@@ -643,7 +642,7 @@ class TradeRouteWaitingTest {
         assertEquals(Files.readString(first), Files.readString(second));
     }
 
-    private Path write(final org.akropia.model.campaign.po.GameModelPo data,
+    private Path write(final org.akropia.model.game.po.GameModelPo data,
             final String name) {
         final Path file = directory.resolve(name);
         new GameModelPoDao().saveToFile(file.toString(), data);
@@ -651,7 +650,7 @@ class TradeRouteWaitingTest {
     }
 
     private static UnitPo ship(
-            final org.akropia.model.campaign.po.GameModelPo data) {
+            final org.akropia.model.game.po.GameModelPo data) {
         return data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == SHIP_ID).findFirst()
                 .orElseThrow();

@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ConstructionPo;
@@ -452,7 +452,7 @@ final class NativeRelationsScene {
     }
 
     Model toModel() {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     /** @return the only native settlement of a scene model */

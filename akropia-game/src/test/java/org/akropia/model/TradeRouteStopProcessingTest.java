@@ -11,9 +11,9 @@ import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.unit.UnitWithCargo;
 
@@ -65,7 +65,7 @@ class TradeRouteStopProcessingTest {
         World(final GameModelPo data) {
             this.data = data;
             this.model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             this.delft = model.getColonyById(DELFT).orElseThrow();
             this.dutch = delft.getOwner();
             this.ship = (UnitWithCargo) dutch.getUnits().stream()

@@ -10,8 +10,8 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitActionFortifyPo;
 import org.akropia.model.store.UnitPo;
@@ -43,8 +43,7 @@ class CombatStrengthTest {
     }
 
     private Model model(ModelPo data) {
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int index = 0; index < 8 && !model.getCurrentPlayer().getName()
                 .equals("Dutch"); index++) {
@@ -210,8 +209,7 @@ class CombatStrengthTest {
         final UnitActionFortifyPo action = new UnitActionFortifyPo();
         action.setFortified(false);
         defenderPo.setAction(action);
-        final Model pending = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model pending = Model.make(data, GameModel.gameOverEvaluators());
         final UnitFreeColonist attacker = (UnitFreeColonist) pending
                 .getUnitById(0);
         attacker.placeToLocation(ATTACKER);
@@ -224,7 +222,7 @@ class CombatStrengthTest {
                 .findFirst().orElseThrow().getAction();
         effectiveAction.setFortified(true);
         final Model effective = Model.make(effectiveData,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(50,
                 quote(effective).getDefender().getFortificationBonus());
         assertEquals(3, quote(effective).getDefender().getTotal());
@@ -240,8 +238,8 @@ class CombatStrengthTest {
     void requiredRandomStateAndZeroDefenseBoundary() {
         final ModelPo missing = scenario(TerrainType.GRASSLAND, false);
         missing.setCombatRandomState(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(missing,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(missing, GameModel.gameOverEvaluators()));
         final CombatStrengths zeroDefense = new CombatStrengths(
                 new CombatStrength(2, 50, 0, 0, 0),
                 new CombatStrength(0, 0, 0, 0, 0), "zero");

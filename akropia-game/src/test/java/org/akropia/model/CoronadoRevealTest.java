@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -57,7 +57,7 @@ class CoronadoRevealTest {
 
     private static Model load(final int owls) {
         return Model.make(dutchCoronadoSave(owls),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
     }
 
     /**
@@ -88,7 +88,7 @@ class CoronadoRevealTest {
         place.setOrientation(Direction.west);
         founder.setPlaceMap(place);
         founder.setAvailableMoves(1);
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Set<Location> explored(final Player player) {
@@ -227,7 +227,7 @@ class CoronadoRevealTest {
                 .toJson(dutch.save().getColonySightings());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player restoredDutch = restored.getPlayerByName("Dutch");
         assertEquals(exploredAfterArrival, explored(restoredDutch));
         assertEquals(sightingsAfterArrival,
@@ -301,7 +301,7 @@ class CoronadoRevealTest {
 
         // Save and Continue keep the arrival result and hide the later colony.
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player restoredDutch = restored.getPlayerByName("Dutch");
         assertTrue(restored.getColonyAt(site).isPresent());
         assertEquals(exploredAfterArrival, explored(restoredDutch));

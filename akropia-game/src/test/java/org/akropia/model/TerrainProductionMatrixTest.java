@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 /**
  * Baseline terrain output of the aid card for every legal bare and forested
@@ -26,7 +26,7 @@ import org.akropia.model.campaign.po.GameModelPoDao;
  */
 class TerrainProductionMatrixTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private final GameModelPoDao dao = new GameModelPoDao();
 

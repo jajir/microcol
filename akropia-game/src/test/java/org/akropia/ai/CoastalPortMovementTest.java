@@ -10,9 +10,9 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.akropia.model.*;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.UnitPo;
@@ -32,8 +32,7 @@ class CoastalPortMovementTest {
     private Model model;
 
     private void prepare(final Location water) {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies().forEach(colony -> {
             final ConstructionPo dock = new ConstructionPo();
             dock.setType(ConstructionType.DOCK);
@@ -90,8 +89,7 @@ class CoastalPortMovementTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Ship ship() {
@@ -111,8 +109,7 @@ class CoastalPortMovementTest {
         final Path file = directory.resolve("port.akropia");
         dao.saveToFile(file.toString(), data);
         data = dao.loadFromFile(file.toFile());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
     }
 
@@ -155,8 +152,7 @@ class CoastalPortMovementTest {
                 terrain.put(Location.of(x, y), TerrainType.GRASSLAND);
         }
         data.getModel().getMap().setTerrainType(terrain);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         final Unit unit = model.getUnitById(0);
         unit.placeToLocation(Location.of(30, 15));
         ((AbstractUnit) unit).setActionPoints(1);
@@ -270,8 +266,7 @@ class CoastalPortMovementTest {
 
         data.setModel(model.save());
         data.getModel().getUnits().add(enemy);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
 
         String beforePayload = payload();
         verifyRejectedStep(ship(), PORT);
@@ -375,8 +370,7 @@ class CoastalPortMovementTest {
 
         data.setModel(model.save());
         data.getModel().getUnits().add(enemy);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
 
         assertFalse(model.isOwnedCoastalPort(model.getCurrentPlayer(), INLAND));
         assertFalse(ship().isPossibleToMoveAt(INLAND));

@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.event.UnitMovedStepFinishedEvent;
 import org.akropia.model.event.UnitMovedStepStartedEvent;
@@ -43,7 +43,7 @@ class CurrentSightTest {
     void startFreePlay() {
         model = Model.make(new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.akropia").getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         ColonyBattles.houseFieldWorkers(model,
                 model.getColonyAt(MONTREAL).orElseThrow());
@@ -172,7 +172,7 @@ class CurrentSightTest {
         assertEquals(before, gson.toJson(dutch.save().getColonySightings()));
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player restoredDutch = restored.getPlayerByName("Dutch");
         final ColonySighting loaded = restoredDutch.getKnownColonyAt(MONTREAL)
                 .orElseThrow();
@@ -271,7 +271,7 @@ class CurrentSightTest {
         }
         assertFalse(france.isVisible(NEAR_MONTREAL));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.getPlayerByName("France")
                 .isVisible(Location.of(16, 20)));
 
@@ -329,7 +329,7 @@ class CurrentSightTest {
         assertEquals(previousPopulation + 1, sighting.getPopulation());
         assertEquals(3, sighting.getFortificationLevel());
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(gson.toJson(saved), gson.toJson(restored.save()));
     }
 
@@ -358,7 +358,7 @@ class CurrentSightTest {
         assertEquals(first.getPopulation() - 1, colony.getPopulation());
         assertEquals(3, colony.getFortificationLevel());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ColonySighting remembered = restored.getPlayerByName("Dutch")
                 .getKnownColonyAt(MONTREAL).orElseThrow();
         assertEquals(first.getPopulation(), remembered.getPopulation());
@@ -411,12 +411,12 @@ class CurrentSightTest {
         broken.setObservedTurn(
                 model.getCalendar().getNumberOfPlayedTurns() + 100);
         savedDutch.getColonySightings().add(broken);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
 
         broken.setObservedTurn(0);
         broken.setOwnerName(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 }

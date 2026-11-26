@@ -13,9 +13,9 @@ import org.akropia.model.Calendar;
 import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.ResultScore;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.page.TestContext;
 
@@ -142,7 +142,7 @@ final class ScoreBoundaryFixture {
     private static JsonObject frozenOf(final File valid) {
         final Model model = Model.make(
                 new GameModelPoDao().loadFromFile(valid).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = model.getPlayerByName(DUTCH);
         final BaseScore base = dutch.getBaseScore();
         final ResultScore result = dutch.getResultScore();

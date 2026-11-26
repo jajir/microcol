@@ -16,8 +16,6 @@ import javafx.scene.layout.Region;
 @Singleton
 public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
 
-    private final javafx.scene.control.ToggleButton pause = org.akropia.gui.util.ActionButtons
-            .toggle(org.akropia.gui.image.ButtonIcon.WAIT);
     private final javafx.scene.control.Label caption = new javafx.scene.control.Label();
     private final org.akropia.gui.screen.menu.demo.DemoView demo;
 
@@ -39,10 +37,8 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
         menuHolderPanel.getContent().getStylesheets()
                 .add(STYLE_SHEET_GAME_MENU);
         menuHolderPanel.getContent().getStyleClass().add("welcome-screen");
-        pause.setId("menu-demo-pause");
-        pause.setOnAction(event -> demo.setPaused(pause.isSelected()));
         javafx.scene.layout.VBox presentation = new javafx.scene.layout.VBox(8,
-                demo, caption, pause);
+                demo, caption);
         presentation.setMinWidth(0);
         caption.setWrapText(true);
         if (System.getProperty("akropia.demo.directory") != null) {
@@ -58,8 +54,10 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
                 javafx.scene.layout.Priority.ALWAYS);
         buttonsPanelView.getContent().setMinWidth(Region.USE_PREF_SIZE);
         content.setMinWidth(0);
-        content.prefWidthProperty().bind(javafx.beans.binding.Bindings.min(960,
-                menuHolderPanel.getContent().widthProperty().subtract(112)));
+        content.maxWidthProperty().bind(content.prefWidthProperty());
+        content.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+        content.prefWidthProperty().bind(javafx.beans.binding.Bindings.min(1408,
+                menuHolderPanel.getContent().widthProperty().subtract(32)));
         menuHolderPanel.setMenuPanel(() -> content);
     }
 
@@ -72,14 +70,12 @@ public final class ScreenMenu extends AbstractScreenMenu implements GameScreen {
     public void updateLanguage(final I18n i18n) {
         menuHolderPanel.setTitle(i18n.get(GameMenu.mainMenu));
         caption.setText(i18n.get(GameMenu.demoCaption));
-        pause.setText(i18n.get(GameMenu.demoPause));
         buttonsPanelView.updateLanguage(i18n);
     }
 
     @Override
     public void beforeShow() {
         buttonsPanelPresenter.refresh();
-        pause.setSelected(false);
         demo.start();
         menuHolderPanel.beforeShow();
     }

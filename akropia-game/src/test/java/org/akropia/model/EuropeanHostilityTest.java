@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.EuropeanRelationPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.store.ModelPo;
@@ -47,8 +47,7 @@ class EuropeanHostilityTest {
             pair.setState(EuropeanRelationState.PEACE);
             saved.getModel().getEuropeanRelations().add(pair);
         }
-        model = Model.make(saved.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
         while (!model.getCurrentPlayer().getName().equals("Dutch")) {
             model.endTurn();
@@ -89,7 +88,7 @@ class EuropeanHostilityTest {
         assertThrows(IllegalArgumentException.class,
                 () -> model.areHostile(null, player("France")));
         final Model foreign = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertThrows(IllegalArgumentException.class,
                 () -> model.areHostile(player("Dutch"),
                         foreign.getPlayerByName("France")));
@@ -300,7 +299,7 @@ class EuropeanHostilityTest {
         terrain.put(WEST_WATER, TerrainType.OCEAN);
         terrain.put(EAST_WATER, TerrainType.OCEAN);
         data.getMap().setTerrainType(terrain);
-        model = Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data, GameModel.gameOverEvaluators());
         attacker = model.getUnitById(0);
         colony = model.getColonyById(0).orElseThrow();
         declareWar();

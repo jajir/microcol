@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
 
@@ -22,10 +22,10 @@ class ExpertPurchaseTest {
     @TempDir
     Path directory;
     private final GameModelPoDao dao = new GameModelPoDao();
-    private GameModelPo data = dao.loadFromClassPath(
-            "/maps/default-campaign-mission-2-thrive.akropia");
+    private GameModelPo data = dao
+            .loadFromClassPath("/maps/fixture-developed-world.akropia");
     private Model model = Model.make(data.getModel(),
-            MissionImpl.getPredefinedGameOverEvaluators());
+            GameModel.gameOverEvaluators());
 
     private Player buyer() {
         return model.getPlayerStore().getPlayerByName("Dutch");
@@ -46,8 +46,7 @@ class ExpertPurchaseTest {
         Path file = directory.resolve("expert.akropia");
         dao.saveToFile(file.toString(), data);
         data = dao.loadFromFile(file.toFile());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
     }
 
@@ -121,8 +120,7 @@ class ExpertPurchaseTest {
                 data.getModel().getGameManager().getPlayers().stream()
                         .filter(p -> p.getName().equals("Dutch")).findFirst()
                         .orElseThrow());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         buyer().setGold(2200);
         String before = snapshot();
         assertThrows(IllegalStateException.class,
@@ -133,8 +131,7 @@ class ExpertPurchaseTest {
     @Test
     void unstartedGameCannotCreateOrChargeForAnExpert() {
         data.getModel().getGameManager().setGameStarted(false);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         buyer().setGold(2200);
         String before = new Gson().toJson(buyer().save());
         int count = buyer().getAllUnits().size();
@@ -182,8 +179,7 @@ class ExpertPurchaseTest {
                 .filter(unit -> unit.getId() == id).findFirst().orElseThrow();
         saved.setMounted(true);
         saved.setHoldingWeapons(true);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         reload();
         UnitFreeColonist expert = (UnitFreeColonist) model.getUnitById(id);
         assertSame(UnitType.MASTER_BLACKSMITH, expert.getType());
@@ -235,8 +231,7 @@ class ExpertPurchaseTest {
                 arrivalColony.getColonyWarehouse());
         warehouse.put("TOOLS", 0);
         arrivalColony.setColonyWarehouse(warehouse);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         expert = (UnitFreeColonist) model.getUnitById(expertId);
         expert.disembarkToLocation(colonyAt);
         assertTrue(expert.isAtPlaceLocation());

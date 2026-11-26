@@ -11,9 +11,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.turnevent.TurnEventFaminePlagueColony;
 
 /**
@@ -23,8 +23,8 @@ import org.akropia.model.turnevent.TurnEventFaminePlagueColony;
 class ColonyPoliticalFamineTest {
 
     private Model model(final long liberty) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         terrain.put(Location.of(24, 14), TerrainType.TUNDRA);
@@ -39,8 +39,7 @@ class ColonyPoliticalFamineTest {
         data.getModel().getColonies().stream()
                 .filter(colony -> colony.getId() == 0).findFirst().orElseThrow()
                 .setLiberty(liberty);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void retain(final Model model, final Colony colony,

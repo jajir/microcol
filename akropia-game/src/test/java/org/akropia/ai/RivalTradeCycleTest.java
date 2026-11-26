@@ -33,9 +33,9 @@ import org.akropia.model.RivalTradeObjective.Stage;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
@@ -157,8 +157,7 @@ class RivalTradeCycleTest {
             }
             data.getModel().setUnits(units);
         }
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** An extra empty-or-tooled French galleon at sea. */
@@ -214,8 +213,7 @@ class RivalTradeCycleTest {
         final List<ColonyPo> colonies = new ArrayList<>(saved.getColonies());
         Collections.reverse(colonies);
         saved.setColonies(colonies);
-        model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved, GameModel.gameOverEvaluators());
         ai = new SimpleAiPlayer(model, france(),
                 new AnimationManager(new EventBus()));
     }
@@ -240,8 +238,7 @@ class RivalTradeCycleTest {
     /** Continue: the saved game is loaded into a new model and robot. */
     private void continueGame() {
         ai.stop();
-        model = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(model.save(), GameModel.gameOverEvaluators());
         ai = new SimpleAiPlayer(model, france(),
                 new AnimationManager(new EventBus()));
     }
@@ -1006,21 +1003,18 @@ class RivalTradeCycleTest {
             final ModelPo saved = model.save();
             savedFrance(saved).setRivalParkedCarrierIds(parked);
             assertThrows(RuntimeException.class,
-                    () -> Model.make(saved,
-                            MissionImpl.getPredefinedGameOverEvaluators()),
+                    () -> Model.make(saved, GameModel.gameOverEvaluators()),
                     "Malformed parked carriers " + parked);
         }
         final ModelPo saved = model.save();
         savedFrance(saved).setRivalLastServedColonyId(-1);
         assertThrows(RuntimeException.class,
-                () -> Model.make(saved,
-                        MissionImpl.getPredefinedGameOverEvaluators()),
+                () -> Model.make(saved, GameModel.gameOverEvaluators()),
                 "Negative served colony");
         final ModelPo missing = model.save();
         savedFrance(missing).setRivalParkedCarrierIds(null);
         assertThrows(RuntimeException.class,
-                () -> Model.make(missing,
-                        MissionImpl.getPredefinedGameOverEvaluators()),
+                () -> Model.make(missing, GameModel.gameOverEvaluators()),
                 "A missing parked-carrier list");
     }
 

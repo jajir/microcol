@@ -22,9 +22,9 @@ import org.akropia.model.Model;
 import org.akropia.model.MovementPoints;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -232,8 +232,7 @@ public class TC_146_F137_rival_naval_military_test extends AbstractAkropiaTest {
     private static double carrierQuote(final Model model) {
         final ModelPo copySave = model.save();
         copySave.getGameManager().setCurrentPlayer("France");
-        final Model copy = Model.make(copySave,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model copy = Model.make(copySave, GameModel.gameOverEvaluators());
         try {
             return copy.getUnitById(WARSHIP_ID)
                     .previewAttack(APPROACH, CARRIER_START)
@@ -266,7 +265,7 @@ public class TC_146_F137_rival_naval_military_test extends AbstractAkropiaTest {
                     CARRIER_START);
         }
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             model.startGame();
             for (int guard = 0; guard < 4 && model.getCurrentPlayer() != model

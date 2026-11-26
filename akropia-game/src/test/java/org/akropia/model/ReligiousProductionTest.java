@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ColonyBuildingQueueItemPo;
 import org.akropia.model.store.ConstructionPo;
@@ -23,13 +23,12 @@ import org.akropia.model.store.UnitPo;
 class ReligiousProductionTest {
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private int torches(final Colony colony) {
@@ -121,7 +120,7 @@ class ReligiousProductionTest {
         assertEquals(expected,
                 colony.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony resumed = restored.getColonyById(0).orElseThrow();
         assertEquals(expected,
                 resumed.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
@@ -172,7 +171,7 @@ class ReligiousProductionTest {
         assertEquals(3,
                 second.getWarehouse().getGoods(GoodsType.TORCHES).getAmount());
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(3, resumed.getColonyById(0).orElseThrow().getWarehouse()
                 .getGoods(GoodsType.TORCHES).getAmount());
         assertEquals(3, resumed.getColonyById(1).orElseThrow().getWarehouse()
@@ -193,7 +192,7 @@ class ReligiousProductionTest {
         assertEquals(3, torches(colony));
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(3, torches(restored.getColonyById(0).orElseThrow()));
     }
 
@@ -258,7 +257,7 @@ class ReligiousProductionTest {
         assertEquals(3, torches(own.getColonyByName("Quebec").orElseThrow()));
         assertEquals(3, torches(own.getColonyByName("Montreal").orElseThrow()));
         final Model resumed = Model.make(own.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(3,
                 torches(resumed.getColonyByName("Quebec").orElseThrow()));
     }

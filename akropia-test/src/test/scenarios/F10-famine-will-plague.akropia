@@ -1,10 +1,4 @@
 {
-  "campaignName": "default",
-  "missionName": "thrive",
-  "goalData": {
-      "conquerRaf": "false",
-      "declareIndependence": "false"
-  },
   "model": {
     "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",

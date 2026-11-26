@@ -15,9 +15,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.BeforeDeclaringIndependenceEvent;
 import org.akropia.model.event.IndependenceWasDeclaredEvent;
 import org.akropia.model.event.UnitMovedToColonyFieldEvent;
@@ -40,7 +40,7 @@ import com.google.gson.Gson;
  */
 class IndependenceDeclarationTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     /** Colony 0 and colony 1 of the scenario. */
     private static final Location PORT = Location.of(25, 14);
@@ -95,8 +95,7 @@ class IndependenceDeclarationTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private ColonyPo savedColony(final GameModelPo data, final int id) {
@@ -430,7 +429,7 @@ class IndependenceDeclarationTest {
         assertEquals(expectedMustered(3), mustered);
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Events events = new Events(restored);
         assertEquals(snapshot(model), snapshot(restored));
         assertTrue(restored.getPlayerByName("Dutch").isDeclaredIndependence());
@@ -546,7 +545,7 @@ class IndependenceDeclarationTest {
         assertEquals(Optional.of(year), dutch.getDeclarationYear());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player restoredDutch = restored.getPlayerByName("Dutch");
         assertEquals(Optional.of(year), restoredDutch.getDeclarationYear());
         assertEquals(dutch.getResultScore().getTotal(),
@@ -560,8 +559,8 @@ class IndependenceDeclarationTest {
         final ModelPo saved = model.save();
         savedDutch(saved)
                 .setDeclarationYear(model.getCalendar().getCurrentYear() + 1);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -570,8 +569,8 @@ class IndependenceDeclarationTest {
         model.getPlayerByName("Dutch").declareIndependence();
         final ModelPo saved = model.save();
         savedDutch(saved).setDeclarationYear(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -580,12 +579,12 @@ class IndependenceDeclarationTest {
         model.getPlayerByName("Dutch").declareIndependence();
         final ModelPo saved = model.save();
         savedDutch(saved).setDeclarationTurn(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
         savedDutch(saved).setDeclarationTurn(
                 model.getCalendar().getNumberOfPlayedTurns() + 1);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -601,8 +600,7 @@ class IndependenceDeclarationTest {
         intervention.setEarned(true);
         intervention.setDelivered(false);
         savedDutch(saved).setIntervention(intervention);
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final Player dutch = model.getPlayerByName("Dutch");
         assertTrue(dutch.getIntervention().orElseThrow().isEarned());
         assertFalse(dutch.getIntervention().orElseThrow().isDelivered());
@@ -667,7 +665,7 @@ class IndependenceDeclarationTest {
             // The unit as a save stores it now, and the whole saved game as
             // the loader sees it now.
             final Model loaded = Model.make(model.save(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             observed.add((continental.isAtPlaceColonyField()
                     || continental.isAtPlaceConstructionSlot()) + ":"
                     + continental.save().getMilitaryRole() + ":"

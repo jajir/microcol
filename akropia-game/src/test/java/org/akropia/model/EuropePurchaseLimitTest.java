@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.PlayerPo;
@@ -35,8 +35,8 @@ class EuropePurchaseLimitTest {
     private static final GoodsType GRAIN = GoodsType.GRAIN;
 
     private GameModelPo data(final Consumer<PlayerPo> dutchSetup) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies()
                 .forEach(colony -> colony.setExportGoods(List.of()));
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
@@ -66,7 +66,7 @@ class EuropePurchaseLimitTest {
 
     private Model model(final Consumer<PlayerPo> dutchSetup) {
         final Model model = Model.make(data(dutchSetup).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.getPlayerByName("Dutch").setGold(100000);
         return model;
     }
@@ -197,7 +197,7 @@ class EuropePurchaseLimitTest {
                 .findFirst().orElseThrow();
         RebellionFixtures.declare(data.getModel(), dutchPo);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         assertBlocked(slot(model, 0).getEuropePurchaseLimit(GRAIN),
                 EuropePurchaseLimit.Blocker.TRADE_UNAVAILABLE);

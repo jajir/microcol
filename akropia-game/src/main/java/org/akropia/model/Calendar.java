@@ -28,7 +28,7 @@ public final class Calendar {
 
     /**
      * Explicit free-play score policy (R-0193), saved with the calendar. It is
-     * not derived from the end year: a mission may end in any year, and only a
+     * not derived from the end year: a scenario may end in any year, and only a
      * calendar saved as scored runs the frozen-result rules.
      */
     private final boolean scoredPlay;
@@ -87,7 +87,7 @@ public final class Calendar {
     public static Calendar make(final CalendarPo cal) {
         Preconditions.checkArgument(
                 cal.getTurnLimit() != null && cal.getTurnLimit() > 0,
-                "A positive mission turn limit is required.");
+                "A positive scenario turn limit is required.");
         final Calendar result = new Calendar(cal.getStartYear(),
                 cal.getEndYear(), cal.getNumberOfPlayedTurns(),
                 cal.isScoredPlay());

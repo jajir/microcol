@@ -7,9 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 
 import com.google.gson.Gson;
@@ -28,7 +28,7 @@ class RetirementTest {
      * Map whose human Dutch nation owns colonies from turn 0; the tests give it
      * the calendar they need.
      */
-    private static final String COLONIAL_HUMAN = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String COLONIAL_HUMAN = "/maps/fixture-developed-world.akropia";
 
     private static final String DUTCH = "Dutch";
 
@@ -47,7 +47,7 @@ class RetirementTest {
     }
 
     private static Model make(final ModelPo saved) {
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     private static Model load(final String map, final int turns) {

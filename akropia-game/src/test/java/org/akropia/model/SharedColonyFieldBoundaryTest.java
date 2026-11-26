@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Collections;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.*;
 import org.akropia.model.unit.UnitFreeColonist;
 import com.google.gson.Gson;
 
 class SharedColonyFieldBoundaryTest {
     private GameModelPo fixture() {
-        GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         ColonyPo colony = data.getModel().getColonies().get(0);
         colony.getColonyFields().forEach(f -> {
             f.setWorkerId(null);
@@ -51,8 +51,7 @@ class SharedColonyFieldBoundaryTest {
     }
 
     private Model load(GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private String snapshot(Model model) {

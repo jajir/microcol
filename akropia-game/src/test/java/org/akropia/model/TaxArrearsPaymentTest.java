@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.store.TaxPo;
@@ -41,8 +41,8 @@ class TaxArrearsPaymentTest {
      */
     private GameModelPo data(final int gold, final Map<GoodsType, Integer> owed,
             final int updatesToDemand) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().setDifficulty(Difficulty.CONQUISTADOR);
         final PlayerPo dutch = player(data.getModel(), "Dutch");
         dutch.setGold(gold);
@@ -58,7 +58,7 @@ class TaxArrearsPaymentTest {
     }
 
     private Model load(final ModelPo saved) {
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     /** The loaded game with the Dutch turn running and no demand waiting. */

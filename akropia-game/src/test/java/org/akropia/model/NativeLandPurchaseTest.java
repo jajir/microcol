@@ -9,7 +9,7 @@ import static org.akropia.model.NativeRelationsScene.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
 
@@ -37,11 +37,10 @@ class NativeLandPurchaseTest {
     void paidRiverRightsSurviveSaveAndLoad() {
         final ModelPo data = dutchOnTile().toModel().save();
         data.getMap().setRivers(java.util.Map.of(TILE, RiverSize.SMALL));
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.buyNativeLand(quote(model, DUTCH, TILE));
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(NativeLandStatus.PAID,
                 quote(loaded, DUTCH, TILE).getStatus());
         assertEquals(TILE,
@@ -186,8 +185,7 @@ class NativeLandPurchaseTest {
         // The settlement moves away; the original national claim stays
         // recorded.
         saved.getNativeSettlements().get(0).setLocation(at(-3, 0));
-        final Model loaded = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model loaded = Model.make(saved, GameModel.gameOverEvaluators());
         assertEquals(NativeLandStatus.PAID,
                 quote(loaded, DUTCH, TILE).getStatus());
         assertEquals(java.util.Optional.of(loaded.getPlayerByName(DUTCH)),
@@ -221,8 +219,7 @@ class NativeLandPurchaseTest {
         saved.getNativeSettlements().add(camp);
         saved.setNativeLocalAlarm(
                 NativeRelations.freshLocalAlarm(saved.getNativeSettlements()));
-        final Model loaded = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model loaded = Model.make(saved, GameModel.gameOverEvaluators());
         final NativeLandQuote after = quote(loaded, DUTCH, TILE);
         // One purchase satisfies the obligation: no hidden second claim.
         assertEquals(NativeLandStatus.PAID, after.getStatus());
@@ -239,7 +236,7 @@ class NativeLandPurchaseTest {
         final Model model = dutchOnTile().toModel();
         model.buyNativeLand(quote(model, DUTCH, TILE));
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(300, loaded.getPlayerByName(DUTCH).getGold());
         assertEquals(2200, settlement(loaded).getTreasury());
         assertEquals(NativeLandStatus.PAID,

@@ -12,7 +12,7 @@ import org.akropia.model.BaseScore;
 import org.akropia.model.GameResult;
 import org.akropia.model.Model;
 import org.akropia.model.ResultScore;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;

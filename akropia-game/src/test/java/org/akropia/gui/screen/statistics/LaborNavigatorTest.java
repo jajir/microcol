@@ -14,8 +14,8 @@ import org.akropia.model.LaborMember;
 import org.akropia.model.LaborReport;
 import org.akropia.model.Model;
 import org.akropia.model.Player;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.common.eventbus.EventBus;
 
@@ -26,7 +26,7 @@ import com.google.common.eventbus.EventBus;
  */
 class LaborNavigatorTest {
 
-    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String THRIVE = "/maps/fixture-developed-world.akropia";
 
     private static final String DUTCH = "Dutch";
 
@@ -40,7 +40,7 @@ class LaborNavigatorTest {
     private static Model thrive() {
         return Model.make(
                 new GameModelPoDao().loadFromClassPath(THRIVE).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
     }
 
     private static LaborMember firstPerson(final Model model) {

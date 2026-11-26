@@ -8,7 +8,6 @@ import org.akropia.gui.dialog.PersistingService;
 import org.akropia.gui.dialog.SavedGamesDialog;
 import org.akropia.gui.event.ChangeLanguageEvent;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.gui.screen.campaign.ScreenCampaign;
 import org.akropia.gui.screen.colony.ScreenColony;
 import org.akropia.gui.screen.editor.ScreenEditor;
 import org.akropia.gui.screen.europe.ScreenEurope;
@@ -76,7 +75,6 @@ public final class MainPanelPresenter {
     private final ScreenEurope screenEurope;
     private final ScreenGame screenGame;
     private final ScreenMenu screenMenu;
-    private final ScreenCampaign screenCampaign;
     private final ScreenFreePlay screenFreePlay;
     private final ScreenSetting screenSetting;
     private final ScreenLoad screenLoad;
@@ -94,7 +92,7 @@ public final class MainPanelPresenter {
     @Inject
     public MainPanelPresenter(final MainPanelView view, final I18n i18n,
             final ScreenGame screenGame, final ScreenMenu screenMenu,
-            final ScreenCampaign screenCampaign,
+
             final ScreenEurope screenEurope, final ScreenSetting screenSetting,
             final ScreenLoad screenLoad, final SavedGamesDialog screenSave,
             final ScreenFreePlay screenFreePlay,
@@ -122,7 +120,7 @@ public final class MainPanelPresenter {
         this.i18n = Preconditions.checkNotNull(i18n);
         this.screenGame = Preconditions.checkNotNull(screenGame);
         this.screenMenu = Preconditions.checkNotNull(screenMenu);
-        this.screenCampaign = Preconditions.checkNotNull(screenCampaign);
+
         this.screenFreePlay = Preconditions.checkNotNull(screenFreePlay);
         this.screenSetting = Preconditions.checkNotNull(screenSetting);
         this.screenLoad = Preconditions.checkNotNull(screenLoad);
@@ -146,11 +144,6 @@ public final class MainPanelPresenter {
                 }, event -> {
                     if (Screen.EUROPE == event.getScreen()) {
                         return screenEurope;
-                    }
-                    return null;
-                }, event -> {
-                    if (Screen.CAMPAIGN == event.getScreen()) {
-                        return screenCampaign;
                     }
                     return null;
                 }, event -> {
@@ -381,7 +374,7 @@ public final class MainPanelPresenter {
             return isMenuScreen(origins.get(screen));
         }
         return screen == null || screen == screenMenu
-                || screen == screenCampaign || screen == screenFreePlay;
+                || screen == screenFreePlay;
     }
 
     private void show(final GameScreen screen) {

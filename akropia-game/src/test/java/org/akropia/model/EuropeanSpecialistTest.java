@@ -10,9 +10,9 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.Ship;
 import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitMasterBlacksmith;
@@ -32,13 +32,12 @@ class EuropeanSpecialistTest {
     }
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @ParameterizedTest

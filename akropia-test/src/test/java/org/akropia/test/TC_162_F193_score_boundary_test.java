@@ -3,17 +3,13 @@ package org.akropia.test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.page.CampaignScreenPage;
 import org.akropia.page.FreePlayAuditPage;
-import org.akropia.page.HallOfFamePage;
 import org.akropia.page.GamePage;
 import org.akropia.page.ScoreBoundaryPage;
-import org.akropia.page.ScreenTurnReport;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;

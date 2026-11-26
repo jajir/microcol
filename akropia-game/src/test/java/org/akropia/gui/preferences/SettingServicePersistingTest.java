@@ -10,7 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.PersistingTool;
 
 /**
  * This test initialize {@link SettingDao} to really read and write to json

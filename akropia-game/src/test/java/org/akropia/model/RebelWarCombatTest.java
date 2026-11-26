@@ -14,9 +14,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -199,7 +199,7 @@ class RebelWarCombatTest {
         data.getModel().getGameManager()
                 .setCurrentPlayer(attacker.getOwnerId());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit actor = model.getUnitById(ATTACKER);
         actor.getOwner().revealMapForUnit(actor);
         return model;
@@ -425,7 +425,7 @@ class RebelWarCombatTest {
                         MilitaryRole.ROYAL));
         colonist(model, ATTACKER).markInterventionDelivered();
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(colonist(restored, ATTACKER).isInterventionDelivered());
         assertFalse(colonist(restored, DEFENDER).isInterventionDelivered());
         assertEquals(new Gson().toJson(model.save()),
@@ -573,7 +573,7 @@ class RebelWarCombatTest {
                 soldier(ATTACKER, REBEL, ORIGIN, false, MilitaryRole.COLONIAL),
                 120L);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(60.0,
                 quote(restored, QUEBEC).getAttacker().getCauseSupportBonus(),
                 EPSILON);
@@ -749,7 +749,7 @@ class RebelWarCombatTest {
 
         // The captured world is coherent: Save and Continue reproduce it.
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(new Gson().toJson(model.save()),
                 new Gson().toJson(restored.save()));
 
@@ -768,8 +768,7 @@ class RebelWarCombatTest {
         flatten(data.getModel(), ORIGIN);
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer(REBEL);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Armed Continental on Quebec's tile, delivered by the intervention. */
@@ -796,7 +795,7 @@ class RebelWarCombatTest {
         assertFalse(unit.isInterventionDelivered());
         // The saved unit carries neither the role nor the origin.
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(MilitaryRole.COLONIAL,
                 colonist(restored, unit.getId()).getMilitaryRole());
         assertFalse(colonist(restored, unit.getId()).isInterventionDelivered());
@@ -835,8 +834,8 @@ class RebelWarCombatTest {
         unit.setInterventionDelivered(true);
         final ModelPo data = savedWorld(true, unit);
         final String before = new Gson().toJson(data);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(data, GameModel.gameOverEvaluators()));
         assertEquals(before, new Gson().toJson(data));
     }
 
@@ -845,15 +844,14 @@ class RebelWarCombatTest {
         final UnitPo royal = soldier(ATTACKER, OWN_CROWN, ORIGIN, false,
                 MilitaryRole.ROYAL);
         royal.setInterventionDelivered(true);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(savedWorld(true, royal),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(savedWorld(true, royal), GameModel.gameOverEvaluators()));
         final UnitPo continental = soldier(ATTACKER, REBEL, ORIGIN, false,
                 MilitaryRole.CONTINENTAL);
         continental.setInterventionDelivered(true);
         assertThrows(IllegalArgumentException.class,
                 () -> Model.make(savedWorld(false, continental),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                        GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -865,8 +863,8 @@ class RebelWarCombatTest {
         wagon.setInterventionDelivered(true);
         final ModelPo data = savedWorld(true, wagon);
         final String before = new Gson().toJson(data);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(data, GameModel.gameOverEvaluators()));
         assertEquals(before, new Gson().toJson(data));
     }
 
@@ -876,7 +874,7 @@ class RebelWarCombatTest {
                 MilitaryRole.CONTINENTAL);
         continental.setInterventionDelivered(true);
         final Model restored = Model.make(savedWorld(true, continental),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(colonist(restored, ATTACKER).isInterventionDelivered());
     }
 }

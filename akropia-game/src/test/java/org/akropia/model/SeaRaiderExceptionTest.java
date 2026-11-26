@@ -3,8 +3,8 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
@@ -49,8 +49,7 @@ class SeaRaiderExceptionTest {
         }
         target.setCargo(cargo);
         data.getUnits().add(target);
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -82,7 +81,7 @@ class SeaRaiderExceptionTest {
         assertEquals(EuropeanRelationState.PEACE,
                 model.getEuropeanRelation(dutch, french));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(EuropeanRelationState.PEACE,
                 restored.getEuropeanRelation(restored.getUnitById(3).getOwner(),
                         restored.getUnitById(100).getOwner()));

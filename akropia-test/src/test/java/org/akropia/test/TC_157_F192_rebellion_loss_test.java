@@ -11,7 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.gui.SuccessCuePlayer;
 import org.akropia.mock.RecordingSuccessCuePlayer;
 import org.akropia.model.GameOverEvaluator;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.RebellionLossPage;
@@ -31,9 +31,9 @@ import javafx.stage.Stage;
  * here the Crown already holds Haarlem, as if it had taken it earlier. The
  * player only ends turns: in its own turn the Crown storms Delft, and the
  * rebellion is over, with its explicit reason, in the same turn. The game then
- * leaves for the campaign screen, saves no end position, and a saved open
- * position still continues without repeating the end. A loss never requests the
- * success cue (R-0228).
+ * leaves for the main menu, saves no end position, and a saved open position
+ * still continues without repeating the end. A loss never requests the success
+ * cue (R-0228).
  */
 @ExtendWith(ApplicationExtension.class)
 public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
@@ -103,14 +103,13 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
         loss.verifyColonyOwner(DELFT, CROWN);
         loss.verifyRebellionMembers(MEMBERS);
 
-        // Acknowledging the message leaves the game for the campaign screen.
+        // Acknowledging the message leaves the game for the main menu.
         loss.closeLossDialog();
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
-        campaign.verifyCampaignScreen();
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
+        mainMenu.verifyMainMenu();
 
         // The ending does not replace the last loaded position or checkpoint.
-        campaign.back();
+
         new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(true);
         new FreePlayAuditPage(getContext()).continueGame();
         loss.verifyRebellionHolds();
@@ -127,8 +126,7 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
                 "rebellion-loss-f192-saved.akropia", HAARLEM);
         final GamePage gamePage = WelcomePage.of(getContext()).loadGame();
         final RebellionLossPage loss = new RebellionLossPage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
 
         // Save: leaving to the menu stores the open position, and Continue
         // opens it again.
@@ -143,8 +141,7 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
         loss.verifyLossDialog(REASON_TEXT);
         loss.verifyGameOverReason(REASON_CODE);
         loss.closeLossDialog();
-        campaign.verifyCampaignScreen();
-        campaign.back();
+        mainMenu.verifyMainMenu();
 
         // The end itself was not saved. Continue opens the saved open position:
         // the rebellion holds, Delft is rebel-held, and no end is shown again.
@@ -165,8 +162,7 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
         WelcomePage.of(getContext()).loadGame();
         final RebellionLossPage loss = new RebellionLossPage(getContext());
         final SuccessCuePage cue = new SuccessCuePage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
         loss.verifyRebellionHolds();
 
         // The player ends turns until the Crown storms Delft; the loss is
@@ -176,10 +172,10 @@ public class TC_157_F192_rebellion_loss_test extends AbstractAkropiaTest {
         loss.verifyGameOverReason(REASON_CODE);
         cue.verifySuccessCueRequests(0);
 
-        // Acknowledging the message leaves for the campaign screen, still
+        // Acknowledging the message leaves for the main menu, still
         // without a cue.
         loss.closeLossDialog();
-        campaign.verifyCampaignScreen();
+        mainMenu.verifyMainMenu();
         cue.verifySuccessCueRequests(0);
     }
 }

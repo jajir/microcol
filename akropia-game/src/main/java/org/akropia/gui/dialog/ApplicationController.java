@@ -7,7 +7,7 @@ import org.akropia.gui.screen.Screen;
 import org.akropia.gui.screen.ShowScreenEvent;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
-import org.akropia.model.campaign.FreePlayMap;
+import org.akropia.model.game.FreePlayMap;
 import org.akropia.model.generation.GeneratedWorldSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

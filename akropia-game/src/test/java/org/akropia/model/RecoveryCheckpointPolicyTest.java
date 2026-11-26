@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.po.RecoveryCheckpointPolicy;
-import org.akropia.model.campaign.po.RecoverySlot;
+import org.akropia.model.game.po.RecoveryCheckpointPolicy;
+import org.akropia.model.game.po.RecoverySlot;
 
 class RecoveryCheckpointPolicyTest {
 

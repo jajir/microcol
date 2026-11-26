@@ -19,7 +19,7 @@ import org.akropia.model.Player;
 import org.akropia.model.PlayerKing;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.event.TurnStartedEvent;
 import org.akropia.model.generation.ScenarioDraft;
 import org.akropia.model.store.ModelPo;
@@ -56,7 +56,7 @@ class AuthoredScenarioTurnTest {
         final ModelPo authored = draft.playableScenario().getModel();
 
         final Model model = Model.make(authored,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final List<AbstractRobotPlayer> robots = new ArrayList<>();
         final BlockingQueue<Player> humanTurns = new LinkedBlockingQueue<>();
         try {

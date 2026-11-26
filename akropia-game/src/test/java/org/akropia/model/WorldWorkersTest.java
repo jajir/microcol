@@ -4,17 +4,17 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Collections;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ConstructionPo;
 import com.google.gson.Gson;
 
 class WorldWorkersTest {
     private Model fixture(final boolean fishing) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         final ColonyPo colony = data.getModel().getColonies().get(0);
@@ -34,8 +34,7 @@ class WorldWorkersTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test
@@ -49,7 +48,7 @@ class WorldWorkersTest {
                 .filter(unit -> unit == worker).count());
         ((AbstractUnit) worker).setActionPoints(0);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(at, restored.getUnitById(0).getLocation());
         assertEquals("w", restored.getUnitById(0).getTaskSign());
         assertEquals(0, restored.getUnitById(0).getMovementThirds());
@@ -166,8 +165,7 @@ class WorldWorkersTest {
         assertFalse(worker.isFishing());
         assertEquals(0, worker.getMovementThirds());
         final Unit loaded = Model
-                .make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+                .make(model.save(), GameModel.gameOverEvaluators())
                 .getUnitById(0);
         assertFalse(loaded.isFishing());
         assertEquals(home, loaded.getLocation());
@@ -245,8 +243,7 @@ class WorldWorkersTest {
         }
         ship.setCargo(cargo);
         saved.getUnits().add(ship);
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         model.getPlayerByName("France")
                 .revealMapForUnit(model.getUnitById(900));
         return model;
@@ -268,7 +265,7 @@ class WorldWorkersTest {
         assertTrue(fisherman.getWorkingColony().isEmpty());
         assertEquals(0, fisherman.getMovementThirds());
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(loaded.getUnitById(0).isAtCargoSlot());
     }
 
@@ -289,7 +286,7 @@ class WorldWorkersTest {
                         org.akropia.model.turnevent.TurnEventFishermanLost.class::isInstance)
                         .count());
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(1, loaded
                 .getTurnEventsLocalizedMessages(
                         loaded.getPlayerByName(owner.getName()))
@@ -349,8 +346,7 @@ class WorldWorkersTest {
         saved.getMap().setTrees(Collections.emptySet());
         saved.getMap().setFields(Collections.emptySet());
         saved.getMap().setRoads(Collections.emptySet());
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final Colony colony = model.getUnitById(0).getFishingColony()
                 .orElseThrow();
         final Player owner = colony.getOwner();
@@ -362,7 +358,7 @@ class WorldWorkersTest {
                         org.akropia.model.turnevent.TurnEventFishermanLost.class::isInstance)
                         .count());
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(loaded.tryGetUnitById(0).isEmpty());
     }
 
@@ -383,10 +379,8 @@ class WorldWorkersTest {
                 .removeIf(title -> saved.getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        final Model first = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
-        final Model second = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model first = Model.make(saved, GameModel.gameOverEvaluators());
+        final Model second = Model.make(saved, GameModel.gameOverEvaluators());
         first.releaseOutdoorWorkers(first.getColonyById(0).orElseThrow(), true);
         second.releaseOutdoorWorkers(second.getColonyById(0).orElseThrow(),
                 true);
@@ -423,7 +417,7 @@ class WorldWorkersTest {
         }
         guard.setCargo(cargo);
         saved.getUnits().add(guard);
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     @Test
@@ -469,11 +463,8 @@ class WorldWorkersTest {
                 colony.getWarehouse().getGoods(GoodsType.HORSE).getAmount());
         assertEquals(3, worker.getMovementThirds());
         assertEquals(target.getLocation(), worker.getLocation());
-        assertEquals(new Gson().toJson(model.save()),
-                new Gson().toJson(Model
-                        .make(model.save(),
-                                MissionImpl.getPredefinedGameOverEvaluators())
-                        .save()));
+        assertEquals(new Gson().toJson(model.save()), new Gson().toJson(Model
+                .make(model.save(), GameModel.gameOverEvaluators()).save()));
     }
 
     @Test
@@ -508,8 +499,7 @@ class WorldWorkersTest {
                 .filter(slot -> Integer.valueOf(4).equals(slot.getWorkerId())
                         || Integer.valueOf(5).equals(slot.getWorkerId()))
                 .forEach(slot -> slot.setWorkerId(null));
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final Unit fisherman = model.getUnitById(0);
         final String before = new Gson().toJson(model.save());
         fisherman.cancelColonyWork();

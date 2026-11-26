@@ -10,9 +10,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.EducationCoursePo;
 import org.akropia.model.turnevent.TurnEventEducationCompleted;
@@ -42,8 +42,8 @@ class EducationTest {
 
     private GameModelPo scenario(final UnitType teacherType,
             final ConstructionType school) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getUnits().forEach(unit -> {
             if (unit.getType() == UnitType.COLONIST
                     || unit.getType() == UnitType.INDENTURED_SERVANT
@@ -71,8 +71,7 @@ class EducationTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @ParameterizedTest
@@ -199,7 +198,7 @@ class EducationTest {
         assertEquals(2,
                 colony.getEducationCourses().get(0).getCompletedUpdates());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony resumed = restored.getColonyById(0).orElseThrow();
         final Unit sameStudent = restored.getUnitById(0);
         assertEquals(UnitType.COLONIST, sameStudent.getType());
@@ -265,7 +264,7 @@ class EducationTest {
                             .getWorkUpdates());
         }
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit resumed = restored.getUnitById(0);
         final Colony resumedColony = restored.getColonyById(0).orElseThrow();
         assertEquals(19, ((org.akropia.model.unit.UnitFreeColonist) resumed)
@@ -416,9 +415,7 @@ class EducationTest {
                 UnitType.MASTER_CARPENTER);
         student.placeToLocation(colony.getLocation());
         assertTrue(colony.getEducationCourses().isEmpty());
-        assertTrue(Model
-                .make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+        assertTrue(Model.make(model.save(), GameModel.gameOverEvaluators())
                 .getColonyById(0).orElseThrow().getEducationCourses()
                 .isEmpty());
     }
@@ -544,9 +541,7 @@ class EducationTest {
         colony.startTurn();
         assertEquals(UnitType.EXPERT_FARMER, student.getType());
         assertTrue(colony.getEducationCourses().isEmpty());
-        assertTrue(Model
-                .make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+        assertTrue(Model.make(model.save(), GameModel.gameOverEvaluators())
                 .getColonyById(0).orElseThrow().getEducationCourses()
                 .isEmpty());
     }

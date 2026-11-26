@@ -22,9 +22,9 @@ import org.akropia.model.Player;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
 import org.mockito.Mockito;
@@ -107,7 +107,7 @@ public class TC_34_F26_rival_first_colony_test extends AbstractAkropiaTest {
 
         // France founds with the ordinary model operation, then yields.
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             model.startGame();
             final Player france = model.getPlayerByName("France");

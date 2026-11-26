@@ -14,9 +14,9 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.common.eventbus.EventBus;
 
@@ -38,8 +38,7 @@ class SelectedUnitManagerTest {
                 .loadFromClassPath("/maps/original-world.akropia");
         data.getModel().getGameManager().setGameStarted(false);
         data.getModel().getGameManager().setCurrentPlayer(null);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
         when(game.getModel()).thenReturn(model);
         when(game.isGameModelReady()).thenReturn(true);

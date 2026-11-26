@@ -16,16 +16,12 @@ import org.akropia.gui.dialog.PersistingService;
 import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Model;
-import org.akropia.model.campaign.po.PersistingTool;
-import org.akropia.model.campaign.po.SavedGames;
-import org.akropia.model.campaign.CampaignManager;
-import org.akropia.model.campaign.CampaignModule;
-import org.akropia.model.campaign.GameModelDao;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.campaign.po.SaveArchives;
-import org.akropia.model.campaign.store.CampaignsDao;
-import org.akropia.model.campaign.store.CampaignsPo;
+import org.akropia.model.game.po.PersistingTool;
+import org.akropia.model.game.po.SavedGames;
+import org.akropia.model.game.GameModelDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
+import org.akropia.model.game.po.SaveArchives;
 import org.akropia.model.store.PlaceMapPo;
 
 import com.google.common.eventbus.EventBus;
@@ -44,31 +40,25 @@ class GameLoadRejectionTest {
 
     @BeforeEach
     void prepare() throws Exception {
-        final CampaignsDao campaigns = mock(CampaignsDao.class);
-        when(campaigns.load()).thenReturn(new CampaignsPo());
-        final Injector injector = Guice.createInjector(new CampaignModule(),
-                binder -> binder.bind(CampaignsDao.class)
-                        .toInstance(campaigns));
+        final Injector injector = Guice.createInjector();
         diagnostics = new DiagnosticLog(directory.resolve("logs"),
                 "test-build");
         controller = new GameController(current,
-                injector.getInstance(GameModelDao.class),
-                injector.getInstance(CampaignManager.class), new EventBus(),
+                injector.getInstance(GameModelDao.class), new EventBus(),
                 diagnostics);
-        data = files.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = files.loadFromClassPath("/maps/fixture-developed-world.akropia");
         source = directory.resolve("game.akropia").toFile();
         save(THRIVE);
     }
 
-    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String THRIVE = "/maps/fixture-developed-world.akropia";
 
     private static final String FREE_PLAY = "/maps/free-play.akropia";
 
     /**
      * Write the current data as a player save. Its metadata describe the valid
-     * authored state with the identity and campaign keys of the data, so only
-     * the game data can be wrong.
+     * authored state with the identity of the data, so only the game data can
+     * be wrong.
      */
     private void save(final String map) throws Exception {
         files.savePlayerGame(source.getAbsolutePath(), data, SaveArchives
@@ -161,8 +151,7 @@ class GameLoadRejectionTest {
         save(THRIVE);
         assertRejectedSource();
 
-        data = files.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = files.loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getUnits().get(0).setOwnerId("unknown participant");
         save(THRIVE);
         assertRejectedSource();
@@ -242,22 +231,6 @@ class GameLoadRejectionTest {
         verify(current, never()).setAndStartModel(any());
     }
 
-    @Test
-    void unknownCampaignAndMissionDoNotReplaceTheGame() throws Exception {
-        data.setCampaignName("unknown campaign");
-        save(THRIVE);
-        assertRejectedSource();
-
-        data = files.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        data.setMissionName("unknown mission");
-        save(THRIVE);
-        assertRejectedSource();
-
-        verify(current, times(2)).showInvalidSavedGame();
-        verify(current, never()).setAndStartModel(any());
-    }
-
     private void assertRejectedSource() throws Exception {
         final byte[] before = Files.readAllBytes(source.toPath());
         assertFalse(controller.loadModelFromFile(source));
@@ -312,7 +285,7 @@ class GameLoadRejectionTest {
             throws Exception {
         assertTrue(controller.loadModelFromFile(source));
         final var loaded = org.mockito.ArgumentCaptor
-                .forClass(org.akropia.model.campaign.GameModel.class);
+                .forClass(org.akropia.model.game.GameModel.class);
         verify(current).setAndStartModel(loaded.capture());
         when(current.getGameModel()).thenReturn(loaded.getValue());
         controller.writeNamedGame(source, "\u2003Přístav / první\u00a0");
@@ -335,7 +308,7 @@ class GameLoadRejectionTest {
     void savesStoreKindSummaryAndPreviewOfTheSameState() throws Exception {
         assertTrue(controller.loadModelFromFile(source));
         final var loaded = org.mockito.ArgumentCaptor
-                .forClass(org.akropia.model.campaign.GameModel.class);
+                .forClass(org.akropia.model.game.GameModel.class);
         verify(current).setAndStartModel(loaded.capture());
         when(current.getGameModel()).thenReturn(loaded.getValue());
         final Model model = loaded.getValue().getModel();
@@ -353,10 +326,6 @@ class GameLoadRejectionTest {
                 metadata.getSummary().getYear());
         // The summary and the game data describe the same snapshot.
         final var game = files.loadPlayerGame(quick);
-        assertEquals(game.getCampaignName(),
-                metadata.getSummary().getCampaignName());
-        assertEquals(game.getMissionName(),
-                metadata.getSummary().getMissionName());
         assertEquals(game.getModel().getCalendar().getNumberOfPlayedTurns(),
                 model.getCalendar().getNumberOfPlayedTurns());
         assertTrue(files.loadPreview(quick).isPresent(),

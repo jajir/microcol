@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 
 /**
@@ -20,7 +20,7 @@ import org.akropia.model.store.ColonyPo;
  */
 class PoliticalProductionTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     /** Tory count at which each difficulty starts the -1 penalty. */
     private static final Map<Difficulty, Integer> THRESHOLD = Map.of(
@@ -143,7 +143,7 @@ class PoliticalProductionTest {
                 .getAmount();
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(MAP);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit ordinary = model.getUnitById(0);
         final PoliticalProduction full = of(2000, 10, Difficulty.CONQUISTADOR);
         // An ordinary colonist makes base + 2 and needs the matching input.
@@ -193,8 +193,7 @@ class PoliticalProductionTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Output a worked field must give: base, worker modifier, then change. */

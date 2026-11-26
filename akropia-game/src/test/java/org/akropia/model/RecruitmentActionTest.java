@@ -12,9 +12,9 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.RecruitmentCandidatePo;
 import org.akropia.model.store.RecruitmentPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -29,8 +29,8 @@ class RecruitmentActionTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     private GameModelPo scenario() {
-        final GameModelPo data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> player.getWhosKingThisPlayerIs() == null)
                 .forEach(player -> player.setRecruitment(pool()));
@@ -59,8 +59,7 @@ class RecruitmentActionTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private String snapshot(final Model model) {

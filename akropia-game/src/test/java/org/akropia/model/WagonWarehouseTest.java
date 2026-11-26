@@ -13,9 +13,9 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -43,8 +43,7 @@ class WagonWarehouseTest {
     }
 
     private void prepare(final ConstructionType type, final int capacity) {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
         final ColonyPo savedColony = data.getModel().getColonies().stream()
                 .filter(value -> value.getName().equals("Delft")).findFirst()
                 .orElseThrow();
@@ -67,8 +66,7 @@ class WagonWarehouseTest {
         savedWagon.getCargo().getSlots().add(ore);
         savedWagon.getCargo().getSlots().add(new CargoSlotPo());
         data.getModel().getUnits().add(savedWagon);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         wagon = (UnitWithCargo) model.getUnitById(WAGON_ID);
         source = wagon.getCargo().getSlotByIndex(0);
@@ -152,7 +150,7 @@ class WagonWarehouseTest {
         assertTrue(source.isEmpty());
         data.setModel(model.save());
         final Model resumed = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(220, resumed.getColonyByName("Delft").orElseThrow()
                 .getWarehouse().getGoods(GoodsType.GRAIN).getAmount());
         assertTrue(((UnitWithCargo) resumed.getUnitById(WAGON_ID)).getCargo()
@@ -205,8 +203,7 @@ class WagonWarehouseTest {
         final Path file = directory.resolve("wagon.akropia");
         dao.saveToFile(file.toString(), data);
         data = dao.loadFromFile(file.toFile());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
         final UnitWithCargo loaded = (UnitWithCargo) model
                 .getUnitById(WAGON_ID);

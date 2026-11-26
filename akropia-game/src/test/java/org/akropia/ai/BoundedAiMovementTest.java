@@ -12,9 +12,9 @@ import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
 
@@ -45,8 +45,7 @@ class BoundedAiMovementTest {
         place.setOrientation(Direction.west);
         guard.setPlaceMap(place);
         guard.setAvailableMoves(moves);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void move(final Model model) {

@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
@@ -124,8 +124,7 @@ class CoastalBatteryTest {
     private static Model build(final ModelPo data, final long state,
             final boolean war) throws ReflectiveOperationException {
         data.getUnits().add(dutchFrigate());
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -281,7 +280,7 @@ class CoastalBatteryTest {
                 stateFor(false));
         ship(model).moveOneStep(APPROACH);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Ship saved = ship(restored);
         final long state = savedState(restored);
         restored.resolveCoastalBatteries(saved, PORT_PATROL);
@@ -315,7 +314,7 @@ class CoastalBatteryTest {
                 stateFor(false));
         ship(model).moveOneStep(APPROACH);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Ship saved = ship(restored);
         final int quebecId = restored.getColonyAt(PORT).orElseThrow().getId();
         final long state = savedState(restored);
@@ -558,8 +557,7 @@ class CoastalBatteryTest {
         ship(model).moveOneStep(APPROACH);
         final CoastalBatteryShotPo shot = model.save().getCoastalBatteryShots()
                 .get(0);
-        assertNotNull(Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertNotNull(Model.make(model.save(), GameModel.gameOverEvaluators()));
 
         assertRejected(model,
                 shotPo(shot.getColonyId(), shot.getShipId(), "Nobody"));
@@ -584,7 +582,7 @@ class CoastalBatteryTest {
             final CoastalBatteryShotPo... shots) {
         final ModelPo bad = model.save();
         bad.setCoastalBatteryShots(List.of(shots));
-        assertThrows(IllegalArgumentException.class, () -> Model.make(bad,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(bad, GameModel.gameOverEvaluators()));
     }
 }

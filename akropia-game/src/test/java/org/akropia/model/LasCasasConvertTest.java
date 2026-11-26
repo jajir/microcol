@@ -8,9 +8,9 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -32,7 +32,7 @@ import com.google.gson.Gson;
  */
 class LasCasasConvertTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private static final String DUTCH_NAME = "Dutch";
 
@@ -113,8 +113,7 @@ class LasCasasConvertTest {
             }
         }
         edit.accept(data.getModel());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** The passenger is saved as a convert of the Aztecs, unassigned so far. */
@@ -375,7 +374,7 @@ class LasCasasConvertTest {
         final String saved = gson(model.save());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         assertEquals(saved, gson(restored.save()));
         assertEquals(LAS_CASAS, dutch(restored).getCongressMembers());

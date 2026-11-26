@@ -27,9 +27,9 @@ import org.akropia.model.Player;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ColonySightingPo;
@@ -250,8 +250,7 @@ class RivalLandMilitaryCycleTest {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
         data.getModel().setCombatRandomState(winningState(0.5));
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Places the French colonist and the armed Dutch human. */
@@ -422,7 +421,7 @@ class RivalLandMilitaryCycleTest {
         model.declareHostilities(france(), dutch());
         startFrenchTurn();
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit restoredRival = restored.getUnitById(RIVAL_ID);
         final Model live = model;
         model = restored;

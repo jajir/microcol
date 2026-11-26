@@ -13,9 +13,9 @@ import java.util.Set;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -119,7 +119,7 @@ class IndependenceCapturedColonyTest {
             final int expectedPercent, final boolean eligible,
             final int expectedMustered) {
         final Model model = Model.make(data(bolivarNation, liberty).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = model.getPlayerByName("Dutch");
         final Player france = model.getPlayerByName("France");
         final Colony quebec = model.getColonyById(0).orElseThrow();

@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.Ship;
 
 import com.google.gson.Gson;
@@ -18,9 +18,8 @@ public class UnitColonistInCargoTest {
     @BeforeEach
     public void setup() {
         model = Model.make(new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
+                .getModel(), GameModel.gameOverEvaluators());
         passenger = model.getUnitById(16);
         carrier = (Ship) model.getUnitById(3);
     }

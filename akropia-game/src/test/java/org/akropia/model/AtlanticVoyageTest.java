@@ -3,15 +3,15 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.Path;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceEuropePortPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -27,8 +27,7 @@ class AtlanticVoyageTest {
     private Model model;
 
     private void prepare(boolean west, boolean inEurope) {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
         Map<Location, TerrainType> terrain = data.getModel().getMap()
                 .getTerrainMap();
         for (int y = 1; y <= 30; y++) {
@@ -55,8 +54,7 @@ class AtlanticVoyageTest {
         ore.setAmount(7);
         data.getModel().getUnits().stream().filter(u -> u.getId() == 16)
                 .findFirst().orElseThrow().setTools(80);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Ship ship() {
@@ -75,8 +73,7 @@ class AtlanticVoyageTest {
         Path save = directory.resolve("voyage.akropia");
         dao.saveToFile(save.toString(), data);
         data = dao.loadFromFile(save.toFile());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
     }
 
@@ -252,32 +249,26 @@ class AtlanticVoyageTest {
         UnitPo saved = data.getModel().getUnits().stream()
                 .filter(u -> u.getId() == 3).findFirst().orElseThrow();
         saved.setDepartureDirection(null);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
         saved.setDepartureLocation(null);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
         saved.setDepartureLocation(Location.of(49, 15));
         saved.setDepartureDirection(Direction.west);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
         saved.setDepartureDirection(Direction.east);
         saved.setDepartureLocation(Location.of(48, 15));
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
         saved.setDepartureLocation(Location.of(51, 15));
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
         saved.setDepartureLocation(Location.of(49, 15));
         saved.getPlaceHighSeas().setRemainigTurns(-1);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -309,17 +300,14 @@ class AtlanticVoyageTest {
     }
 
     private void assertInvalidVoyage() {
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
     }
 
     @Test
     void savedMidVoyageRetainsWeatherOriginalAndRemainingUntilArrival() {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         final PlaceHighSea departure = (PlaceHighSea) ship().getPlace();
         assertEquals(1, departure.getWeather());
         assertEquals(3, departure.getOriginalTurns());
@@ -345,8 +333,7 @@ class AtlanticVoyageTest {
                 .getTerrainMap();
         terrain.entrySet().removeIf(e -> e.getValue() == TerrainType.HIGH_SEA);
         data.getModel().getMap().setTerrainType(terrain);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         Place before = ship().getPlace();
         assertThrows(IllegalStateException.class,
                 () -> ship().placeToHighSeas(false));
@@ -403,8 +390,7 @@ class AtlanticVoyageTest {
         terrain.entrySet()
                 .removeIf(entry -> entry.getValue() == TerrainType.HIGH_SEA);
         data.getModel().getMap().setTerrainType(terrain);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         final int before = model.getAllUnits().size();
         assertThrows(IllegalStateException.class, () -> model
                 .createCargoShipForKing(model.getPlayerByName("Dutch's King")));

@@ -16,7 +16,7 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
 import org.akropia.model.Player;
-import org.akropia.model.campaign.FreePlayMap;
+import org.akropia.model.game.FreePlayMap;
 import org.akropia.model.generation.GeneratedLandLayout;
 import org.akropia.model.generation.GeneratedMapSize;
 import org.akropia.model.generation.GeneratedWorld;

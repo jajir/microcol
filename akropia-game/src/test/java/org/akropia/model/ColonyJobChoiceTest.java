@@ -10,9 +10,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.akropia.model.ColonyJobChoice.Kind;
 import org.akropia.model.ColonyJobChoice.UnavailableReason;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.PlaceColonyFieldPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -22,8 +22,8 @@ import com.google.gson.Gson;
 
 class ColonyJobChoiceTest {
     private GameModelPo data() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final ColonyPo colony = data.getModel().getColonies().get(0);
         colony.getColonyFields().forEach(f -> {
             final boolean source = f.getDirection()
@@ -92,8 +92,7 @@ class ColonyJobChoiceTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Model model() {

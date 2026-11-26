@@ -6,9 +6,9 @@ import java.util.Collections;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyFieldPo;
 import org.akropia.model.store.ColonyPo;
 
@@ -20,8 +20,8 @@ class SharedColonyFieldAssignmentTest {
     }
 
     private Model fixture(final boolean foreignNeighbor) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final ColonyPo neighbor = data.getModel().getColonies().get(1);
         neighbor.setLocation(Location.of(27, 14));
         if (foreignNeighbor) {
@@ -45,8 +45,7 @@ class SharedColonyFieldAssignmentTest {
         }
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setTrees(Collections.emptySet());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @org.junit.jupiter.params.ParameterizedTest

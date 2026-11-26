@@ -1,13 +1,4 @@
 {
-  "campaignName": "default",
-  "missionName": "findNewWorld",
-  "goalData": {
-    "findNewWorld": "true",
-    "produceWine": "false",
-    "sellWine": "false",
-    "wineWasSold": "0",
-    "foundColony": "true"
-  },
   "model": {
     "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",

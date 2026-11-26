@@ -16,9 +16,9 @@ import org.akropia.mock.CursorServiceNoOpp;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -116,7 +116,7 @@ public class TC_145_F136_rival_land_military_test extends AbstractAkropiaTest {
             data.getModel().getMap().setTrees(Set.of());
         }
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             model.startGame();
             for (int guard = 0; guard < 4 && model.getCurrentPlayer() != model

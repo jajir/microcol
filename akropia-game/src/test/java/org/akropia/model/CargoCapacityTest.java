@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitActionNoActionPo;
@@ -43,12 +43,10 @@ class CargoCapacityTest {
 
     @BeforeEach
     void prepare() {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getUnits().add(wagon(SOURCE_WAGON_ID));
         data.getModel().getUnits().add(wagon(TARGET_WAGON_ID));
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
         colony = model.getColonyByName("Delft").orElseThrow();
         player = model.getPlayerByName("Dutch");
@@ -231,8 +229,7 @@ class CargoCapacityTest {
         dao.saveToFile(file.toString(), data);
 
         final GameModelPo loaded = dao.loadFromFile(file.toFile());
-        model = Model.make(loaded.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(loaded.getModel(), GameModel.gameOverEvaluators());
 
         assertEquals(Goods.of(GoodsType.ORE, 100), cargoOf(TARGET_WAGON_ID)
                 .getSlotByIndex(0).getGoods().orElseThrow());
@@ -247,9 +244,8 @@ class CargoCapacityTest {
                 .orElseThrow().getCargo().getSlots().get(0).setAmount(101);
 
         final IllegalArgumentException rejected = assertThrows(
-                IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                IllegalArgumentException.class, () -> Model
+                        .make(data.getModel(), GameModel.gameOverEvaluators()));
 
         assertTrue(rejected.getMessage().contains("more than 100 goods"),
                 rejected.getMessage());

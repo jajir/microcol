@@ -3,15 +3,15 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.List;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.junit.jupiter.api.Test;
 
 class TradeRouteDestinationTest {
     private final Model model = Model.make(new GameModelPoDao()
             .loadFromFile(new File(
                     "../akropia-test/src/test/scenarios/F110-trade-route-edit.akropia"))
-            .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+            .getModel(), GameModel.gameOverEvaluators());
     private final Player owner = model.getColonyById(0).orElseThrow()
             .getOwner();
     private final TradeRoute route = model.getTradeRoutes(owner).stream()

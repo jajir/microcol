@@ -14,9 +14,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.store.RecruitmentPo;
@@ -26,8 +26,8 @@ import org.akropia.model.store.ModelPo;
 class BrewsterImmigrationTest {
 
     private GameModelPo fixture(final int torches) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
                 .stream().filter(player -> "Dutch".equals(player.getName()))
                 .findFirst().orElseThrow();
@@ -45,8 +45,7 @@ class BrewsterImmigrationTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void nextDutchTurn(final Model model) {
@@ -84,7 +83,7 @@ class BrewsterImmigrationTest {
         assertEquals(100, first.get(0).getThreshold());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player owner = restored.getPlayerByName("Dutch");
         restored.startGame();
         assertTrue(restored.isAwaitingImmigrationChoice());
@@ -100,7 +99,7 @@ class BrewsterImmigrationTest {
         assertFalse(owner.canChooseEarnedImmigrant(chosen));
 
         final Model between = Model.make(restored.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player resumed = between.getPlayerByName("Dutch");
         between.startGame();
         assertTrue(between.isAwaitingImmigrationChoice());
@@ -114,7 +113,7 @@ class BrewsterImmigrationTest {
         assertEquals(pierBefore + 2, peopleAtPier(resumed));
         assertTrue(resumed.getCongressOwls() > owlsBefore);
         final Model after = Model.make(between.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player finalOwner = after.getPlayerByName("Dutch");
         final int finalTorches = finalOwner.getImmigrationTorches();
         final int finalPier = peopleAtPier(finalOwner);
@@ -139,7 +138,7 @@ class BrewsterImmigrationTest {
         assertEquals(owlsBefore, dutch.getCongressOwls());
         assertEquals(peopleBefore, peopleAtPier(dutch));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player owner = restored.getPlayerByName("Dutch");
         restored.startGame();
         assertTrue(restored.isAwaitingImmigrationChoice());
@@ -247,7 +246,7 @@ class BrewsterImmigrationTest {
             choice.get(5, TimeUnit.SECONDS);
             final ModelPo saved = snapshot.get(5, TimeUnit.SECONDS);
             final Model restored = Model.make(saved,
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             final int earned = restored.getPlayerByName("Dutch").save()
                     .getRecruitment().getEarnedImmigrants();
             assertTrue(earned == 0 || earned == 1);

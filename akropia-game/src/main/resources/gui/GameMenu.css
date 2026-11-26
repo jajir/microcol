@@ -50,8 +50,8 @@
 }
 
 .welcome-screen .centered-page-row {
-    -fx-alignment: center-left;
-    -fx-padding: 0 0 0 80;
+    -fx-alignment: center;
+    -fx-padding: 0 16;
 }
 .welcome-screen .main-title, .welcome-screen .titled-content {
     -fx-translate-x: 0;

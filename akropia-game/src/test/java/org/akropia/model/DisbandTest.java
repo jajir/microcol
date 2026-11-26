@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitWithCargo;
@@ -28,7 +28,7 @@ class DisbandTest {
     /** Open sea two squares east of New Amsterdam, next to its colony. */
     private static final Location SEA = Location.of(26, 14);
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private final GameModelPoDao dao = new GameModelPoDao();
 
@@ -432,8 +432,7 @@ class DisbandTest {
         dutch.getCongress().setMembers(List.of(Founder.WILLIAM_BREWSTER));
         dutch.getCongress().setSelected(null);
         dutch.getRecruitment().setTorches(230);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test

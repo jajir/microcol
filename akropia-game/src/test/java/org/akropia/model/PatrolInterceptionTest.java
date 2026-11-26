@@ -10,8 +10,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
@@ -57,7 +57,7 @@ class PatrolInterceptionTest {
     private static final class Ground {
         private final Model terrain = Model.make(
                 new GameModelPoDao().loadFromClassPath(MAP).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         private final Location start = terrain.getUnitById(MOVER_ID)
                 .getLocation();
         /** Open water whose other neighbors hold no unit to intercept. */
@@ -140,8 +140,7 @@ class PatrolInterceptionTest {
                     .findFirst().orElseThrow().setState(relation);
         }
         patrols.forEach(data.getUnits()::add);
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -222,8 +221,7 @@ class PatrolInterceptionTest {
         data.getUnits().add(frenchFrigate(from));
         data.getUnits().add(patrol(FIRST_PATROL_ID, UnitType.SEA_RAIDER,
                 "Dutch", patrolAt));
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("France"); i++) {
@@ -507,7 +505,7 @@ class PatrolInterceptionTest {
                 stateFor(ShipPatrolRules.Outcome.STOPPED));
         ((Ship) model.getUnitById(MOVER_ID)).moveOneStep(ground.step);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(0, restored.getUnitById(MOVER_ID).getMovementThirds());
         assertEquals(model.save().getCombatRandomState(),
                 restored.save().getCombatRandomState());
@@ -576,7 +574,7 @@ class PatrolInterceptionTest {
     @Test
     void harbourFixtureMakesQuebecAnOwnedPortWithOpenSeaBesideIt() {
         final Model model = Model.make(harbourData(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player france = model.getColonyAt(PORT).orElseThrow().getOwner();
         assertEquals("France", france.getName());
         assertTrue(model.isOwnedCoastalPort(france, PORT));
@@ -647,7 +645,7 @@ class PatrolInterceptionTest {
         assertEquals(state + GAMMA, savedState(model));
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Ship again = (Ship) restored.getUnitById(MOVER_FRENCH_ID);
         assertEquals(PORT, again.getLocation());
         assertEquals(0, again.getMovementThirds());

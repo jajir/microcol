@@ -243,7 +243,6 @@ public class ScreenGamePresenter {
             event.consume();
             return true;
         case EXIT_TO_MAIN_MENU:
-        case RESTART_MISSION:
             // The session menu's own command and confirmation.
             gameMenu.run(action);
             event.consume();

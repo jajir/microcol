@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.PersistingTool;
 
 /**
  * Separate music and effects volumes (R-0227) in the application setting file,

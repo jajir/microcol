@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
@@ -42,8 +42,8 @@ class ClearSpecialtyTest {
     }
 
     private GameModelPo scenario(final ConstructionType school) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getUnits().stream()
                 .filter(unit -> unit.getWorkUpdates() != null)
                 .forEach(unit -> unit.setWorkUpdates(0));
@@ -69,7 +69,7 @@ class ClearSpecialtyTest {
 
     private Model start(final GameModelPo data) {
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         return model;
     }
@@ -118,8 +118,7 @@ class ClearSpecialtyTest {
         assertEquals(0, unit.getWorkUpdates());
         assertTrue(unit.getWorkSkill().isEmpty());
         final UnitFreeColonist restored = (UnitFreeColonist) Model
-                .make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+                .make(model.save(), GameModel.gameOverEvaluators())
                 .getUnitById(0);
         assertEquals(UnitType.COLONIST, restored.getType());
         assertFalse(restored.isVeteran());
@@ -167,7 +166,7 @@ class ClearSpecialtyTest {
         dao.saveToFile(file.toString(), data);
         final Model reloaded = Model.make(
                 dao.loadFromFile(file.toFile()).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist same = (UnitFreeColonist) reloaded
                 .getUnitById(0);
         assertEquals(UnitType.COLONIST, same.getType());
@@ -265,7 +264,7 @@ class ClearSpecialtyTest {
         setType(data, 0, UnitType.EXPERT_FARMER, false);
         final Model first = start(data);
         final Model second = Model.make(first.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         second.startGame();
         final Unit foreign = second.getUnitById(0);
         assertRejected(first, colony(first), foreign,
@@ -364,7 +363,7 @@ class ClearSpecialtyTest {
         dao.saveToFile(file.toString(), data);
         final Model loaded = Model.make(
                 dao.loadFromFile(file.toFile()).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         loaded.startGame();
         final Unit grower = loaded.getUnitById(0);
         assertEquals(UnitType.MASTER_OLIVE_GROWER, grower.getType());

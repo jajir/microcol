@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
@@ -21,7 +21,7 @@ class AttackRoleTest {
         saved.getModel().getUnits().stream().filter(unit -> unit.getId() == 0)
                 .findFirst().orElseThrow().setType(type);
         final Model model = Model.make(saved.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         while (!model.getCurrentPlayer().getName().equals("Dutch")) {
             model.endTurn();

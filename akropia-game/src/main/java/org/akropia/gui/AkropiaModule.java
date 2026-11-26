@@ -18,13 +18,10 @@ import org.akropia.gui.event.QuitGameListener;
 import org.akropia.gui.event.ShowGridListenerPreferences;
 import org.akropia.gui.event.model.ArtifitialPlayersManager;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.gui.event.model.MissionEventListener;
+import org.akropia.gui.event.model.GameEventListener;
 import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.gui.screen.MainPanelPresenter;
 import org.akropia.gui.screen.MainPanelView;
-import org.akropia.gui.screen.campaign.CampaignPresenter;
-import org.akropia.gui.screen.campaign.CampaignView;
-import org.akropia.gui.screen.campaign.ScreenCampaignPresenter;
 import org.akropia.gui.screen.colonizopedia.ScreenColonizopedia;
 import org.akropia.gui.screen.congress.ScreenCongress;
 import org.akropia.gui.screen.nativesettlements.NativeSettlementsDialog;
@@ -106,7 +103,7 @@ import org.akropia.gui.util.TurnStartedListener;
 import org.akropia.gui.util.UnitUtil;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.PersistingTool;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -162,7 +159,7 @@ public final class AkropiaModule extends AbstractModule {
         bind(DialogDestroyColony.class).in(Singleton.class);
         bind(ChooseGoodsDialog.class).in(Singleton.class);
         bind(DialogMessage.class).in(Singleton.class);
-        bind(MissionEventListener.class).asEagerSingleton();
+        bind(GameEventListener.class).asEagerSingleton();
         bind(SettingButtonsPresenter.class).asEagerSingleton();
 
         /**
@@ -197,11 +194,6 @@ public final class AkropiaModule extends AbstractModule {
         bind(ButtonsPanelView.class).in(Singleton.class);
         bind(ButtonsPanelPresenter.class).asEagerSingleton();
 
-        bind(CampaignView.class).in(Singleton.class);
-        bind(CampaignPresenter.Display.class).to(CampaignView.class)
-                .in(Singleton.class);
-        bind(CampaignPresenter.class).asEagerSingleton();
-
         bind(StatusBar.class).annotatedWith(Names.named("GamePanel"))
                 .to(StatusBar.class).asEagerSingleton();
 
@@ -212,7 +204,6 @@ public final class AkropiaModule extends AbstractModule {
         bind(PersistingService.class).in(Singleton.class);
 
         bind(ScreenSettingPresenter.class).asEagerSingleton();
-        bind(ScreenCampaignPresenter.class).asEagerSingleton();
         bind(ScreenMenuPresenter.class).asEagerSingleton();
 
         /**

@@ -7,7 +7,7 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.HallOfFame;
 import org.akropia.model.HallOfFameEntry;
 import org.akropia.model.AkropiaException;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;

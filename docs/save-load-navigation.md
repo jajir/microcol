@@ -1,3 +1,18 @@
+## Partie bez kampaní a misí — 26. listopadu 2026
+
+1. Vstup do uložených her má název Otevřít hru / Open Game. Přípravu nové
+   partie otevírá Nová hra / New Game; oddělená volba kampaně neexistuje.
+2. Obálka `GameModelPo` i odvozený `SaveSummaryPo` už neobsahují
+   `campaignName`, `missionName` ani `goalData`. Identita partie, název
+   uložení, celý herní model a odvozené údaje pro přehled zůstávají.
+   Vlastníkem je `model.game.po`; model sestavuje `model.game.GameModelDao`.
+3. Přibalené světy a testovací podklady používají přímo současné schéma.
+   Zpětná kompatibilita starších pozic není požadována; pouhé otevření
+   existující hráčský soubor nepřepisuje. Ověřování archivu a modelu zůstává.
+4. Nabídka hry nemá restart mise. Po ukončení partie se vrací hlavní menu;
+   vyhodnocení výsledku a záznam do síně slávy zůstávají. Starší odstavce
+   popisující typ kampaně či misi jsou tímto rozhodnutím překonány.
+
 ## Vizuální přehled uložených her — 21. listopadu 2026
 
 1. Řádek seznamu ukazuje stručný název bez přípony (automatické pozice mají

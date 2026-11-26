@@ -4,13 +4,13 @@ import org.akropia.i18n.MessageKeyResource;
 
 /** Shared saved-game and session-menu labels. */
 public enum SavedGameText implements MessageKeyResource {
-    freePlay, resume, save, load, quickSave, quickLoad, restart, settings,
-    mainMenu, quit, title, all, manual, quick, automatic, empty, name,
-    invalidName, overwrite, delete, importFile, exportFile, folder, cancel,
-    confirm, overwriteAction, deleteAction, leave, saveContinue, discard, saved,
-    failed, corrupt, noQuick, detailPrompt, previewMissing, unsupported,
-    summaryMissing, summaryPlayer, summaryYear, summaryGold, summarySupport,
-    summaryCounts, summarySaved, summaryType, summaryGameType, campaign,
-    currentGame, target, targetNone, leaveNew, autosaved, managedWarning,
-    savedAs, saveFileHint, editNameHint, saveNameYear;
+    freePlay, resume, save, load, quickSave, quickLoad, settings, mainMenu,
+    quit, title, all, manual, quick, automatic, empty, name, invalidName,
+    overwrite, delete, importFile, exportFile, folder, cancel, confirm,
+    overwriteAction, deleteAction, leave, saveContinue, discard, saved, failed,
+    corrupt, noQuick, detailPrompt, previewMissing, unsupported, summaryMissing,
+    summaryPlayer, summaryYear, summaryGold, summarySupport, summaryCounts,
+    summarySaved, summaryType, summaryGameType, currentGame, target, targetNone,
+    leaveNew, autosaved, managedWarning, savedAs, saveFileHint, editNameHint,
+    saveNameYear;
 }

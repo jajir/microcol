@@ -1,3 +1,24 @@
+<a id="main-menu-simplification-2026-11-26"></a>
+
+## Zjednodušení hlavního menu — 26. listopadu 2026
+
+1. Hlavní menu nabízí Pokračovat, Otevřít hru (Open Game), Nová hra (New Game),
+   Nastavení a ukončení. Editor map zůstává vývojářskou volbou. Dostupnost
+   Pokračovat nadále závisí na existující pozici.
+2. Obsah je vystředěný v šířce nejvýše 1440 logických pixelů včetně bočních
+   okrajů 16 px. Vlevo je menu, bezprostředně za ním neinteraktivní ukázka.
+   Slunce a odraz sledují pravý okraj tohoto prostoru; při zúžení okna je
+   odraz překrytý ukázkou. Ukázka běží automaticky, bez tlačítka pozastavení.
+3. Kampaň, mise a jejich restart jsou odstraněny. Konec běžné partie vrací
+   hráče do hlavního menu. Síň slávy zůstává ve statistikách a výsledku,
+   vstup z hlavního menu mizí. Zrušení načítání a přípravy zachovává
+   dosavadní návraty; pravidla rozehrané hry se nemění.
+4. Toto je dílčí úprava stávající kompozice. Společná hlavička a stavový
+   řádek z [R-0453](requirements/R-0453.md) čekají na samostatný návrh.
+   Změna nepředstavuje pozorování hráčů ani ověřenou použitelnost;
+   [evidence](functional-tests.md#main-menu-cleanup-2026-11-26) odděluje
+   kompilaci od výslovně vynechaných testů.
+
 ## Okamžitý výsledek dostavění — 23. listopadu 2026
 
 1. Hráč v otevřené kolonii zvolí nákup dokončení prvního projektu a potvrdí
@@ -984,7 +1005,7 @@ Následující přehled zachycuje vybrané vazby ve zdrojovém kódu. Nejde o ú
 | Popisky ikon | [ButtonImage](../akropia-game/src/main/java/org/akropia/gui/buttonpanel/ButtonImage.java) při najetí myši posílá lokalizovaný popis do stavového řádku a při opuštění jej odstraňuje. | Zda si hráč popisku všimne, rozpozná ikonu a dostane obdobnou pomoc při ovládání klávesnicí. |
 | Práce a vybavení v kolonii | [PanelOutsideColonyUnit](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelOutsideColonyUnit.java) používá přetažení a kontextové menu vybavení. [PanelColonyFields](../akropia-game/src/main/java/org/akropia/gui/screen/colony/PanelColonyFields.java) nabízí změnu produkce přes kontextové menu obsazeného pole. | Zda hráč najde tyto možnosti bez náhodného zkoušení, pozná platný cíl přesunu a potřebné suroviny. |
 | Přehled tahu | [ShowTurnEvensOnTurnStartedEvent](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevírá report pro čerstvý tah člověka s neprázdným seznamem. [TurnEventPanel](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/TurnEventPanel.java) zobrazuje zprávu jako text s odrážkou. | Zda hráč pozná naléhavost zprávy, najde dotčenou kolonii a ví, co může udělat dál. |
-| Výuka a následná nápověda | [Default_0_mission](../akropia-game/src/main/java/org/akropia/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../akropia-game/src/main/java/org/akropia/gui/screen/colonizopedia/ScreenColonizopedia.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
+| Výuka a následná nápověda | [Default_0_mission](https://github.com/jajir/microcol/blob/88be89b442720c20beeab18b5f8dc5686ea8dd84/akropia-game/src/main/java/org/akropia/model/campaign/Default_0_mission.java) obsahuje kontextové instrukce k počátečním úkolům. Tlačítko na mapě a klávesa H otevírají [ColonizopediaDialog](../akropia-game/src/main/java/org/akropia/gui/screen/colonizopedia/ScreenColonizopedia.java) s tématy pravidel, hledáním a zprávou o prázdném výsledku ([R-0206](requirements/done/R-0206.md)); cílené automatizované ověření prošlo, společná regrese dávky ještě následuje. | Zda hráč zvládne první kolonii a později dokáže znovu dohledat zapomenutý postup. Existence třídy dialogu neprokazuje dostupnou a úplnou nápovědu. |
 
 Při vstupu do hry mají zaměřené pole a skutečný výběr jednotky odpovídat:
 [R-0310](requirements/done/R-0310.md) vybírá vlastní jednotku nezávisle na úvodním

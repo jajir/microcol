@@ -1,6 +1,14 @@
+## Přejmenování po odstranění misí — 26. listopadu 2026
+
+Stávající zvuk vítězství má nyní zdroj a resource `game-success-01`;
+obsah WAV ani syntéza se nemění. `GameVictoryCue` přijímá `EventGameFinished`.
+Po odstranění kampaní je vítězným spouštěčem vyhrané povstání lidského hráče.
+Historické schválení poslechu níže platí pro stejný zvuk; nové přehrání
+ani testy při tomto přejmenování neproběhly.
+
 # Zvuky a zvuková odezva v Akropia
 
-Zvuk má hráči pomáhat poznat, co se právě stalo: potvrdit důležitý úspěch, upozornit na problém nebo doplnit atmosféru hry. Akropia zatím přehrává **jednu hudební skladbu na pozadí**. Od R-0228 je v kódu zapojen **jediný efekt**, krátký [zvuk vítězství v misi](#mission-success-01-zvuk-vitezstvi-v-misi). Obecná správa více zvuků a další efekty implementované nejsou.
+Zvuk má hráči pomáhat poznat, co se právě stalo: potvrdit důležitý úspěch, upozornit na problém nebo doplnit atmosféru hry. Akropia zatím přehrává **jednu hudební skladbu na pozadí**. Od R-0228 je v kódu zapojen **jediný efekt**, krátký [zvuk vítězství ve hře](#game-success-01-zvuk-vitezstvi-ve-hre). Obecná správa více zvuků a další efekty implementované nejsou.
 
 Tato stránka je společným místem pro současnou implementaci, základní pravidla a budoucí katalog zvuků. Grafická část má vlastní [pravidla a technický popis](graphics.md). Stav k **11. říjnu 2026**, větev `develop`, revize `aa1161ea7b3a7ea604a8031065c579557b3e8f92`. Popis současného chování vychází z kódu a metadat souboru; neznamená ověřený poslech na všech platformách.
 
@@ -18,7 +26,7 @@ Toto je výchozí pracovní zadání pro nové zvuky. Podrobný hudební styl, n
 
 ## Co je nyní uloženo v projektu
 
-V prohlédnutých zdrojích byl 11. října 2026 jediný audio soubor: [AnnounceMyName_1.wav](../akropia-game/src/main/resources/music/AnnounceMyName_1.wav). Není zde zdrojový projekt pro střih této skladby. Efekt R-0228 má vlastní editovatelný zdroj a export popsaný [v katalogu](#mission-success-01-zvuk-vitezstvi-v-misi).
+V prohlédnutých zdrojích byl 11. října 2026 jediný audio soubor: [AnnounceMyName_1.wav](../akropia-game/src/main/resources/music/AnnounceMyName_1.wav). Není zde zdrojový projekt pro střih této skladby. Efekt R-0228 má vlastní editovatelný zdroj a export popsaný [v katalogu](#game-success-01-zvuk-vitezstvi-ve-hre).
 
 | Vlastnost | Současná hodnota |
 | --- | --- |
@@ -69,7 +77,7 @@ Od [R-0227](requirements/done/R-0227.md) má hudba a efekty každá vlastní hla
 | Výchozí hodnoty | Nová instalace: obě 75. Nastavení uložené před R-0227 bez hlasitosti efektů: efekty převezmou uloženou hlasitost hudby, takže hráč, který zvolil ticho, zůstane v tichu. Hudba si ponechá uloženou hodnotu. Při první změně hudby se tato odvozená hlasitost efektů uloží ve stejném zápisu, takže se s hudbou nepohne; samotné čtení soubor nemění. |
 | Změna za běhu | [SettingVolumePresenter](../akropia-game/src/main/java/org/akropia/gui/screen/setting/SettingVolumePresenter.java) propojuje posuvníky s `PreferencesProperties.musicVolumeProperty` a `effectsVolumeProperty`. |
 | Uložení | [PreferencesProperties](../akropia-game/src/main/java/org/akropia/gui/preferences/PreferencesProperties.java) při každé změně okamžitě uloží jen danou kategorii přes `GamePreferences` a vyšle `VolumeChangeEvent` s její kategorií. Zpět, Escape, znovuotevření i restart aplikace ukážou uložené hodnoty. Jde o nastavení aplikace, ne o data uložené hry. |
-| Soubor nastavení | Pole `volume` (hudba; název zůstal) a `effectsVolume` v `${user.home}/.akropia/.setting.json`; [SettingService](../akropia-game/src/main/java/org/akropia/gui/preferences/SettingService.java), [SettingDao](../akropia-game/src/main/java/org/akropia/gui/preferences/SettingDao.java) a [PersistingTool](../akropia-game/src/main/java/org/akropia/model/campaign/po/PersistingTool.java). |
+| Soubor nastavení | Pole `volume` (hudba; název zůstal) a `effectsVolume` v `${user.home}/.akropia/.setting.json`; [SettingService](../akropia-game/src/main/java/org/akropia/gui/preferences/SettingService.java), [SettingDao](../akropia-game/src/main/java/org/akropia/gui/preferences/SettingDao.java) a [PersistingTool](../akropia-game/src/main/java/org/akropia/model/game/po/PersistingTool.java). |
 | Neplatné hodnoty | `GamePreferences` odmítne zápis mimo 0–100. Ručně upravenou hodnotu mimo rozsah při čtení omezí na 0, resp. 100; chybějící hudba má výchozí 75. Nečitelný soubor (například text místo čísla) nahradí výchozím nastavením jako u ostatních voleb. |
 | Zpracování události | `MusicController` předá hodnotu hudby do `MusicPlayer.setVolume()` a hodnotu efektů do `SuccessCuePlayer.setVolume()`, pokud je zvuk povolený. Kategorie se navzájem neovlivňují. |
 | Vypnutí při spuštění | JVM vlastnost `soundEnabled=false`, například argument `-DsoundEnabled=false` předaný přímo JVM hry. Utiší hudbu i efekty bez ohledu na uložené hodnoty a nemění je. |
@@ -100,16 +108,15 @@ Hra už má vizuální odezvu a modelové události, na které může další zv
 
 | Situace | Současná vizuální odezva a místo v kódu | Co rozlišit při budoucím ozvučení |
 | --- | --- | --- |
-| Zpráva scénáře | [MissionEventListener](../akropia-game/src/main/java/org/akropia/gui/event/model/MissionEventListener.java) otevírá lokalizovaný `DialogMessage` pro `EventShowMessages` a `DialogWithMan` pro `EventShowDialogWithMan`. | Typ dialogu sám neříká, zda jde o úspěch, varování nebo jinou zprávu. |
-| Konec mise | Tentýž listener při `EventFinishMission` zobrazí zprávy a přepne na obrazovku `CAMPAIGN`. Vítězný konec doprovodí [zvuk vítězství](#mission-success-01-zvuk-vitezstvi-v-misi). | Proherní či neutrální konec zvuk nemá; viz níže. |
-| Splněný dílčí cíl | Například [Default_1_mission](../akropia-game/src/main/java/org/akropia/model/campaign/Default_1_mission.java) mění stav cíle a posílá zprávu. [GoalsPanel](../akropia-game/src/main/java/org/akropia/gui/screen/goals/GoalsPanel.java) při otevření ukazuje různé pečetě podle splnění. | [MissionGoal.setFinished](../akropia-game/src/main/java/org/akropia/model/campaign/MissionGoal.java) pouze změní boolean; neexistuje zde univerzální událost dokončení cíle. Překreslení pečeti není nové splnění. |
+| Zpráva hry | `GameEventListener` otevírá lokalizovaný `DialogMessage` pro `EventShowMessages`. | Typ dialogu sám neříká, zda jde o úspěch nebo jinou zprávu. |
+| Konec hry | `GameEventListener` při `EventGameFinished` zobrazí výsledek a přepne na hlavní menu. Vítězství doprovodí zvuk. | Proherní či neutrální konec zvuk nemá. |
 | Začátek tahu a jeho přehled | [ShowTurnEvensOnTurnStartedEvent](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/ShowTurnEvensOnTurnStartedEvent.java) otevře report pouze pro čerstvý začátek tahu člověka s neprázdným seznamem zpráv. [TeService](../akropia-game/src/main/java/org/akropia/gui/screen/turnreport/TeService.java) zpracuje novou jednotku, příjezd lodě, hladomor, ztrátu či zničení kolonie a vyhozené zboží. | Oddělit zvuk začátku tahu od významu jednotlivých zpráv. Více zpráv nemá současně přehrát několik stejně důležitých efektů. |
 | Boj | [UnitAttackedEventListener](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/UnitAttackedEventListener.java) spustí animaci zkřížených mečů. [UnitAttackedEvent](../akropia-game/src/main/java/org/akropia/model/event/UnitAttackedEvent.java) nese útočníka, obránce a zničenou jednotku. | Výběr cíle, otevření bojového poradce, skutečný útok a výsledek jsou různé okamžiky; výhru vztáhnout ke správnému hráči. |
 | Pohyb a dobytí kolonie | [UnitMovedListener](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/UnitMovedListener.java) animuje krok pohybu. [GamePanelPresenter](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/GamePanelPresenter.java) při `ColonyWasCapturedEvent` otevírá dialog dobytí kolonie. | Každý krok nemusí mít zvuk; zvlášť řešit významnou událost dobytí a její příjemce. |
 | Narození jednotky | [SelectedUnitManager](../akropia-game/src/main/java/org/akropia/gui/screen/game/gamepanel/SelectedUnitManager.java) může po `NewUnitWasBornEvent` vybrat novou jednotku na vybraném políčku. Zpráva se objevuje také v přehledu tahu. | Určit jeden okamžik oznámení, aby narození a pozdější zobrazení reportu nehrály dvojmo. Výcvik, koupě a narození nejsou automaticky stejná událost. |
 | Nedostatek peněz nebo nemožný pohyb | [BuyUnitPanel](../akropia-game/src/main/java/org/akropia/gui/screen/europe/BuyUnitPanel.java) a [MarketBuyPanel](../akropia-game/src/main/java/org/akropia/gui/screen/market/MarketBuyPanel.java) zobrazují `DialogNotEnoughGold`; `GamePanelPresenter` pro některé nepovolené pohyby zobrazí `DialogUnitCantMoveHere`. | Chyba vstupu není herní prohra. Úspěšný nákup sám nevysílá univerzální událost „success“ a ne každá neplatná akce otevírá dialog. |
 
-**`EventFinishMission` nese od R-0228 výslovný výsledek.** Každý producent jej vytváří buď jako `EventFinishMission.victory(...)`, nebo `EventFinishMission.ended(...)`; GUI čte `isVictory()` a lokalizované zprávy nezkoumá. Vítězstvím jsou jen splnění všech cílů `Default_0_mission`, `Default_1_mission` a `Default_2_mission` a vyhrané povstání (`REBELLION_WON_PROCESSOR` v [GameOverProcessors](../akropia-game/src/main/java/org/akropia/model/campaign/GameOverProcessors.java)). Vypršení času, ztráta kolonií, prohrané povstání, kalendářní konec volné hry i odchod do důchodu jsou `ended`. Samostatný proherní motiv zůstává mimo rozsah.
+**`EventGameFinished` nese od R-0228 výslovný výsledek.** Každý producent jej vytváří buď jako `EventGameFinished.victory(...)`, nebo `EventGameFinished.ended(...)`; GUI čte `isVictory()` a lokalizované zprávy nezkoumá. Vítězstvím je po odstranění misí pouze vyhrané povstání (`REBELLION_WON_PROCESSOR` v `GameOverProcessors`). Vypršení času, ztráta kolonií, prohrané povstání, kalendářní konec volné hry i odchod do důchodu jsou `ended`. Samostatný proherní motiv zůstává mimo rozsah.
 
 [ModelListenerImpl](../akropia-game/src/main/java/org/akropia/gui/event/model/ModelListenerImpl.java) převádí modelové události na GUI `EventBus`, ale některé filtruje: například kroky pohybu podle viditelnosti a změnu zlata podle lidského hráče. Událost prodeje zboží v Evropě nepředává, boj naopak v této vrstvě nemá stejný filtr viditelnosti jako pohyb. Při napojení zvuku tedy ověřit celý tok od vzniku události po její zpracování; existence třídy události sama nestačí.
 
@@ -120,7 +127,7 @@ Následující struktura je výchozí návrh pro efekty. R-0228 z ní zavedl jen
 ### Soubory a formáty
 
 - Stávající hudbu ponechat v `akropia-game/src/main/resources/music/`.
-- Krátké efekty ukládat do `akropia-game/src/main/resources/sounds/`, s jednoduchými názvy podle účelu, například `mission-success-01.wav`. To je příklad budoucího souboru, nikoli dostupný resource.
+- Krátké efekty ukládat do `akropia-game/src/main/resources/sounds/`, s jednoduchými názvy podle účelu, například `game-success-01.wav`. To je příklad budoucího souboru, nikoli dostupný resource.
 - Pro první efekty používat jako výchozí export **WAV, nekomprimované PCM, 16 bitů, 44 100 Hz**. Navazuje na parametry existující skladby; přehrání nových souborů se přesto musí ověřit. Jednoduchý neprostorový efekt může být mono, hudba stereo. Jiné formáty či parametry nejprve ověřit v cílovém přehrávači.
 - Má-li zvuk editovatelný zdroj nebo vzniká úpravou nahrávky, evidovat jej odděleně od runtime exportu; navržené místo je `akropia-game/src/audio/`. Ukládat postup exportu a původ, aby změna nebyla závislá na jednom hotovém WAV.
 - Exporty mají mít čistý začátek a konec bez lupnutí, zbytečného ticha a slyšitelného zkreslení. Vnímanou hlasitost sladit s ostatními efekty a hudbou. Číselný cíl hlasitosti ani pevný počet variant zatím nejsou stanovené; smyčku připravovat jen tam, kde je požadována.
@@ -138,11 +145,11 @@ První implementace musí bezpečně obsloužit vlastní prostředky, respektova
 1. Uživatel pro [R-0228](requirements/done/R-0228.md) vybral krátké potvrzení vítězství v misi a pouze podporu přehrávání nezbytnou pro tento efekt. [R-0226](requirements/canceled/R-0226.md) zůstává zrušen; jeho obecný rozsah se tím neobnovuje.
 2. Efekt doplní první zobrazení potvrzeného úspěšného dokončení lidské mise (splněné cíle nebo potvrzené vítězství nezávislosti). Prohra, časový limit, odchod do důchodu, běžné kalendářní ukončení, znovuotevření zprávy a načtení dokončené hry jej nespustí. Stávající text a výsledek nesou úplnou informaci i bez zvuku.
 3. Jedna dokončená partie má nejvýše jeden zvuk; nevzniká fronta ani překryv. Nově rozehraná partie může mít vlastní vítězství. Do R-0227 platí současná hlasitost a nulová hodnota znamená ticho; `soundEnabled=false` má vždy přednost. Hudba běží nezávisle. Chyba zařízení nebo souboru nesmí ovlivnit hru ani zdržet UI.
-4. Implementace je popsána v [katalogu](#mission-success-01-zvuk-vitezstvi-v-misi), včetně zdroje, exportu, práv a stavu ověření. Uživatel schválil poslech náhledu 1. listopadu 2026; mix na všech platformách není ověřen. [R-0227](requirements/done/R-0227.md) následně přidá samostatné ovládání kategorií.
+4. Implementace je popsána v [katalogu](#game-success-01-zvuk-vitezstvi-ve-hre), včetně zdroje, exportu, práv a stavu ověření. Uživatel schválil poslech náhledu 1. listopadu 2026; mix na všech platformách není ověřen. [R-0227](requirements/done/R-0227.md) následně přidá samostatné ovládání kategorií.
 
 ## Katalog a šablona nového zvuku
 
-Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v-projektu) a [zvuk vítězství v misi](#mission-success-01-zvuk-vitezstvi-v-misi). Nové efekty přidávat sem s vlastní stručnou podkapitolou podle následující šablony. Katalog rozšiřovat podle skutečných funkčních změn; počty zvuků v [odhadu pracnosti](implementation-estimate.md#provisional-additional-work) jsou plánovací scénáře, nikoli schválený seznam povinných assetů.
+Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v-projektu) a [zvuk vítězství ve hře](#game-success-01-zvuk-vitezstvi-ve-hre). Nové efekty přidávat sem s vlastní stručnou podkapitolou podle následující šablony. Katalog rozšiřovat podle skutečných funkčních změn; počty zvuků v [odhadu pracnosti](implementation-estimate.md#provisional-additional-work) jsou plánovací scénáře, nikoli schválený seznam povinných assetů.
 
 | Položka | Co vyplnit |
 | --- | --- |
@@ -158,17 +165,19 @@ Současný katalog tvoří [jedna skladba popsaná výše](#co-je-nyni-ulozeno-v
 | Vypnutí a chyba | Chování při mute, vypnutém zvuku, chybějícím souboru nebo nedostupném zařízení. |
 | Ověření | Datum, scénář, platforma a výsledek; oddělit kontrolu kódu od skutečného poslechu. |
 
-### mission-success-01 — zvuk vítězství v misi
+<a id="mission-success-01-zvuk-vitezstvi-v-misi"></a>
+
+### game-success-01 — zvuk vítězství ve hře
 
 | Položka | Hodnota |
 | --- | --- |
-| Identifikátor a stav | `mission-success-01`; **zapojeno v kódu** ([R-0228](requirements/done/R-0228.md), 1. listopadu 2026). Export, automatické ověření a schválení poslechu náhledu jsou dokončeny; podrobnosti níže. |
-| Význam | Úspěch: hráč dokončil misi nebo vyhrál povstání. |
-| Spouštěč | `EventFinishMission` s `isVictory()`; [MissionEventListener](../akropia-game/src/main/java/org/akropia/gui/event/model/MissionEventListener.java) předá výsledek a identitu partie (`GameModel.getPlaythroughId()`) do [MissionVictoryCue](../akropia-game/src/main/java/org/akropia/gui/event/model/MissionVictoryCue.java). Konec mise vzniká jen z mise lidského hráče; roboti ani skryté dění jej nevyvolají. |
+| Identifikátor a stav | `game-success-01`; **zapojeno v kódu** ([R-0228](requirements/done/R-0228.md), 1. listopadu 2026). Export, automatické ověření a schválení poslechu náhledu jsou dokončeny; podrobnosti níže. |
+| Význam | Úspěch: hráč vyhrál povstání. |
+| Spouštěč | `EventGameFinished` s `isVictory()`; [GameEventListener](../akropia-game/src/main/java/org/akropia/gui/event/model/GameEventListener.java) předá výsledek a identitu partie (`GameModel.getPlaythroughId()`) do [GameVictoryCue](../akropia-game/src/main/java/org/akropia/gui/event/model/GameVictoryCue.java). Událost vyhodnocuje výsledek lidského hráče. |
 | Okamžik | Na JavaFX vlákně těsně před zobrazením první zprávy o vítězství. |
-| Vizuální doprovod | Stávající zpráva o vítězství (např. `Missions.gameOver_rebellionVictory`, `default_m0_gameOver`, `default_m1_done`, `default_m2_done1`), okno výsledku a přechod na obrazovku kampaně. Bez zvuku se nic nemění. |
-| Soubory | Runtime `sounds/mission-success-01.wav` v `akropia-game/src/main/resources/`; konstanta `JavaSoundSuccessCuePlayer.RESOURCE`. Editovatelný zdroj [mission-success-01.py](../akropia-game/src/audio/mission-success-01.py). Autor: projekt Akropia, listopad 2026; původní dílo vypočtené jen z čísel ve zdroji, bez převzaté nahrávky či melodie. Šíří se stejně jako ostatní původní zdroje projektu; cizí kredit není potřeba. |
-| Export | Z kořene repozitáře `python3 -I akropia-game/src/audio/mission-success-01.py`. Bez náhody; stejný Python na stejné platformě zapíše stejný soubor. |
+| Vizuální doprovod | `GameMessages.gameOver_rebellionVictory`, okno výsledku a přechod na hlavní menu. Bez zvuku se nic nemění. |
+| Soubory | Runtime `sounds/game-success-01.wav` v `akropia-game/src/main/resources/`; konstanta `JavaSoundSuccessCuePlayer.RESOURCE`. Editovatelný zdroj [game-success-01.py](../akropia-game/src/audio/game-success-01.py). Autor: projekt Akropia, listopad 2026; původní dílo vypočtené jen z čísel ve zdroji, bez převzaté nahrávky či melodie. Šíří se stejně jako ostatní původní zdroje projektu; cizí kredit není potřeba. |
+| Export | Z kořene repozitáře `python3 -I akropia-game/src/audio/game-success-01.py`. Bez náhody; stejný Python na stejné platformě zapíše stejný soubor. |
 | Parametry | Zadané ve zdroji: WAV, nekomprimované PCM, 44 100 Hz, 16 bitů, mono, 1,4 s, jedna varianta, bez smyčky. Vzestupný rozložený akord C dur (C5 E5 G5 C6) se zvonivým tónem, náběh 8 ms, doznění 0,25 s do přesného ticha, špička −6 dBFS. Export ověřen: 61 740 rámců, 1,400 s, 44 100 Hz, 16bitové mono PCM, špička 16 384; opakovaný export je bitově totožný. |
 | Hlasitost a priorita | Kategorie efekt, vlastní linka vedle hudby; hudba běží nezávisle. Od R-0227 platí jen uložená [hlasitost efektů](#hlasitost-a-vypnuti-zvuku) 0–100, hlasitost hudby se nečte: přehrávač lineárně násobí vzorky exportu `hlasitost / 100` (50 je asi −6 dB, 100 beze změny), takže nezávisí na `MASTER_GAIN` zařízení a nikdy nezesiluje ani neořezává. Změna během přehrávání platí od dalšího bloku 4 096 bajtů (asi 46 ms); nula pak zapisuje ticho. Ovladač gain linky nepoužívá; stejné násobení používá od R-0227 i hudba. Během přehrávání se další požadavek zahodí; fronta ani překryv nevznikají. |
 | Opakování | Nejvýše jednou za partii a běh aplikace. Opakované oznámení, zprávy, Continue, načtení či vítězství znovu dosažené ze starší pozice téže partie jej nespustí; nová partie má vlastní. |

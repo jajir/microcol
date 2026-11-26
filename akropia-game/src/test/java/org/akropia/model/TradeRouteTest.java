@@ -10,9 +10,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.TradeRoutePo;
 import org.akropia.model.store.TradeRouteStopPo;
@@ -34,7 +34,7 @@ class TradeRouteTest {
     }
 
     private Model load(final ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     private Player owner(final Model model) {

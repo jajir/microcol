@@ -20,9 +20,9 @@ import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.ScenarioProblem.Reason;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
@@ -357,7 +357,7 @@ class ScenarioDraftTest {
                 () -> reopened.getPlayabilityProblems().toString());
         final GameModelPo playable = reopened.playableScenario();
         final Model model = Model.make(playable.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         assertEquals("England",
                 playable.getModel().getGameManager().getCurrentPlayer());
@@ -385,8 +385,6 @@ class ScenarioDraftTest {
     /** A generated world: four nations, native settlements and braves. */
     private static GameModelPo generatedScenario() {
         final GameModelPo out = new GameModelPo();
-        out.setCampaignName("freePlay");
-        out.setMissionName("freePlay");
         out.setModel(GeneratedWorld.create(
                 new GeneratedWorldSettings(7, GeneratedClimate.TEMPERATE,
                         GeneratedLandShare.MEDIUM),

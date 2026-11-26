@@ -7,9 +7,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -45,8 +45,7 @@ class FoundingPreconditionsTest {
         data.getModel().getUnits().stream().filter(u -> u.getId() == 5)
                 .findFirst().orElseThrow().getCargo().getSlots().get(0)
                 .setUnitId(null);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private String snapshot(final Model model) {
@@ -119,7 +118,7 @@ class FoundingPreconditionsTest {
                 .filter(field -> field.getUnit().isPresent()).allMatch(
                         field -> model.getMap().isValid(field.getLocation())));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(edge,
                 restored.getColonyById(0).orElseThrow().getLocation());
         assertEquals(4, restored.getColonyById(0).orElseThrow()
@@ -181,7 +180,7 @@ class FoundingPreconditionsTest {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit founder = model.getUnitById(4);
         final String before = snapshot(model);
         assertEquals(0, founder.getActionPoints());
@@ -216,7 +215,7 @@ class FoundingPreconditionsTest {
         final org.akropia.model.store.ModelPo data = initial.save();
         data.getGameManager().setCurrentPlayer("Dutch");
         final Model otherTurn = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(otherTurn.canFoundColonyAt(otherTurn.getUnitById(4), SITE));
         assertFalse(otherTurn.canUnitBuildColony(otherTurn.getUnitById(4)));
         final String before = snapshot(otherTurn);
@@ -226,7 +225,7 @@ class FoundingPreconditionsTest {
         data.getUnits().stream().filter(unit -> unit.getId() == 4).findFirst()
                 .orElseThrow().setAvailableMoves(0);
         final Model exhausted = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(exhausted.canFoundColonyAt(exhausted.getUnitById(4), SITE));
         assertFalse(exhausted.canUnitBuildColony(exhausted.getUnitById(4)));
         final String exhaustedBefore = snapshot(exhausted);
@@ -258,7 +257,7 @@ class FoundingPreconditionsTest {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit founder = model.getUnitById(6);
         final Location site = Location.of(15, 10);
         final Location worked = Location.of(16, 10);
@@ -289,8 +288,7 @@ class FoundingPreconditionsTest {
                 TerrainType.GRASSLAND);
         final org.akropia.model.store.ModelPo saved = initial.save();
         saved.getMap().setRivers(Map.of(SITE, RiverSize.SMALL));
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final String before = snapshot(model);
         assertFalse(model.canUnitBuildColony(model.getUnitById(4)));
         assertThrows(IllegalArgumentException.class, () -> found(model));

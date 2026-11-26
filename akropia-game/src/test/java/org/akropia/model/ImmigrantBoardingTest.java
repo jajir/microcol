@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceEuropePortPo;
@@ -30,13 +30,12 @@ class ImmigrantBoardingTest {
     private static final int GALLEON_HOLDS = 6;
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private RecruitmentPo savedDutchPool(final GameModelPo data) {
@@ -281,7 +280,7 @@ class ImmigrantBoardingTest {
         model.optOutOfBoarding(first);
         model.prioritizeBoarding(second);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit reloadedFirst = restored.getUnitById(first.getId());
         final Unit reloadedSecond = restored.getUnitById(second.getId());
         assertTrue(reloadedFirst.isBoardingOptedOut());
@@ -303,7 +302,7 @@ class ImmigrantBoardingTest {
                 .findFirst().orElseThrow().setBoardingPriority(true);
         saved.getUnits().stream().filter(unit -> unit.getId() == second.getId())
                 .findFirst().orElseThrow().setBoardingPriority(true);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 }

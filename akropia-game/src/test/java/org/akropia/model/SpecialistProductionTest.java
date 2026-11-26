@@ -10,19 +10,18 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
-import org.akropia.model.store.PlaceColonyFieldPo;
 import org.akropia.model.store.PlaceConstructionSlotPo;
 import org.akropia.model.store.UnitPo;
 
 class SpecialistProductionTest {
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
@@ -30,8 +29,7 @@ class SpecialistProductionTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private UnitPo worker(final GameModelPo data) {

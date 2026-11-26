@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Collections;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -18,8 +18,8 @@ import com.google.gson.Gson;
 class CoastalFacilityTest {
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private ColonyPo savedColony(final GameModelPo data, final int id) {
@@ -35,8 +35,7 @@ class CoastalFacilityTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test
@@ -82,7 +81,7 @@ class CoastalFacilityTest {
             worker.placeToColonyField(water, GoodsType.GRAIN);
             assertTrue(water.getProduction().orElseThrow().getAmount() > 0);
             final Model restored = Model.make(model.save(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             final ColonyField restoredWater = restored.getColonyById(0)
                     .orElseThrow().getColonyFieldInDirection(Direction.east);
             assertFalse(restoredWater.isMissingDock());
@@ -243,7 +242,7 @@ class CoastalFacilityTest {
         assertTrue(
                 colony.getColonyBuildingQueue().getBuildingQueue().isEmpty());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(shipsBefore + 1, restored.getAllUnits().stream()
                 .filter(unit -> unit.getType() == UnitType.GALLEON).count());
     }

@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.PersistingTool;
 
 class SettingServiceConcurrencyTest {
 

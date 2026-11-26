@@ -7,8 +7,8 @@ import javax.imageio.ImageIO;
 import org.junit.jupiter.api.Test;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import javafx.scene.paint.Color;
 
 class SavePreviewTest {
@@ -16,7 +16,7 @@ class SavePreviewTest {
     void savedPreviewHasConstantDimensions() throws Exception {
         final Model model = Model.make(new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.akropia").getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final byte[] png = SavePreview.render(model);
         assertNotNull(png);
         final BufferedImage image = ImageIO.read(new ByteArrayInputStream(png));

@@ -1,9 +1,4 @@
 {
-  "campaignName": "default",
-  "missionName": "thrive",
-  "goalData": {
-    "militaryPower": "false"
-  },
   "model": {
   "calendar": {
     "startYear": 1,

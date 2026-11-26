@@ -10,9 +10,9 @@ import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
 import org.akropia.model.LaborLocation.Kind;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ConstructionPo;
@@ -132,7 +132,7 @@ class LaborReportTest {
     }
 
     private static Model make(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Model load(final GameModelPo data) {
@@ -315,7 +315,7 @@ class LaborReportTest {
     }
 
     /** The thrive reference game: Delft, its town hall and galleon 3. */
-    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String THRIVE = "/maps/fixture-developed-world.akropia";
 
     private static final int GALLEON_ID = 3;
 

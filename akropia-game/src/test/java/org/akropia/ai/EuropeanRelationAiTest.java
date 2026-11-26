@@ -13,9 +13,9 @@ import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.UnitFreeColonist;
 
 import com.google.common.eventbus.EventBus;
@@ -33,8 +33,7 @@ class EuropeanRelationAiTest {
                 .loadFromClassPath("/maps/free-play.akropia");
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         rival = model.getUnitById(6);
         rival.placeToLocation(Location.of(17, 11));
         human = model.getUnitById(0);
@@ -200,8 +199,7 @@ class EuropeanRelationAiTest {
                 .findFirst().orElseThrow().setOwnerId("Dutch");
         // A saved state whose first draw wins an ordinary land battle.
         data.getModel().setCombatRandomState(winningCombatState());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         rival = model.getUnitById(6);
         rival.placeToLocation(Location.of(18, 10));
         rival.getOwner().revealMapForUnit(rival);

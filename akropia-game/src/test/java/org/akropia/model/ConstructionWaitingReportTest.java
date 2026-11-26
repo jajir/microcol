@@ -12,9 +12,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.QueueItemType;
 import org.akropia.model.store.TurnEventPo;
@@ -31,10 +31,9 @@ class ConstructionWaitingReportTest {
 
     @BeforeEach
     void prepare() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         queue = colony.getColonyBuildingQueue();
         final Construction hall = colony
@@ -253,7 +252,7 @@ class ConstructionWaitingReportTest {
         assertEquals(Optional.empty(), event.getConstructionType());
         assertEquals(3, event.getMissingTools());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(Optional.of(UnitType.ARTILLERY),
                 waitingEvents(restored).get(0).getUnitType());
         // Supplying the tools completes the artillery instead of reminding.
@@ -271,7 +270,7 @@ class ConstructionWaitingReportTest {
         queue.startTurn();
         final ModelPo saved = model.save();
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         // Loading neither runs construction nor adds another reminder.
         assertEquals(1, waitingEvents(restored).size());
         assertEquals(1, waitingEvents(restored).get(0).getMissingTools());
@@ -360,8 +359,8 @@ class ConstructionWaitingReportTest {
                 saved.getTurnEvents());
         events.add(po);
         saved.setTurnEvents(events);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
         final List<TurnEvent> unchanged = model
                 .getTurnEventsLocalizedMessages(colony.getOwner());
         assertTrue(unchanged.isEmpty());

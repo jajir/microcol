@@ -5,7 +5,7 @@ import static org.akropia.model.NativeRelationsScene.*;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 
 class NativeAdvisorReportTest {
     private static NativeAdvisorReport report(final Model model,
@@ -59,7 +59,7 @@ class NativeAdvisorReportTest {
         assertEquals(NativeHostility.HOSTILE, report(model, DUTCH)
                 .getSettlements().get(0).getRelation().getAttitude());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(2, restored.getNativeFavour(NativeNation.ARAWAK,
                 EuropeanNation.DUTCH));
         assertEquals(randomBefore, restored.save().getCombatRandomState());

@@ -8,12 +8,11 @@ import java.util.List;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.akropia.model.campaign.po.RecoverySlot;
+import org.akropia.model.game.po.RecoverySlot;
 import org.akropia.page.DialogMessagePage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HostedPanelPage;
-import org.akropia.page.InGameLayoutPage;
 import org.akropia.page.SavedGamesPage;
 import org.akropia.page.SettingPage;
 import org.akropia.page.WelcomePage;
@@ -273,8 +272,7 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         final WelcomePage welcome = WelcomePage.of(getContext());
         final FreePlayAuditPage audit = new FreePlayAuditPage(getContext());
         final HostedPanelPage hosted = new HostedPanelPage(getContext());
-        welcome.verifyMenuEntries(List.of("Continue", "Load saved game",
-                "Play campaign", "New free play game", "Hall of Fame",
+        welcome.verifyMenuEntries(List.of("Continue", "Open Game", "New Game",
                 "Setting", "Quit Akropia"));
 
         // Tab to Load game and open it with Space; all save types are shown.
@@ -297,9 +295,8 @@ public class TC_43_F34_recovery_points_test extends AbstractAkropiaTest {
         final SettingPage setting = welcome.openSetting();
         setting.setCzechLanguage();
         setting.goBack().verifyMainScreen();
-        welcome.verifyMenuEntries(List.of("Pokračovat", "Nahrát hru",
-                "Spustit kampaň", "Nová neomezená hra", "Síň slávy",
-                "Nastavení", "Ukončit hru"));
+        welcome.verifyMenuEntries(List.of("Pokračovat", "Otevřít hru",
+                "Nová hra", "Nastavení", "Ukončit hru"));
 
         // The platform shortcut opens Load game with the Czech recovery
         // filter.

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.Ship;
 import org.akropia.model.unit.UnitWithCargo;
@@ -29,8 +29,7 @@ class TradeRouteAssignmentTest {
     private static final Location SEA = Location.of(29, 16);
 
     private static Model make(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private static UnitWithCargo ship(final Model model) {

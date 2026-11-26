@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.diagnostics.DiagnosticEvent;
-import org.akropia.model.campaign.po.RecoverySlot;
+import org.akropia.model.game.po.RecoverySlot;
 import org.akropia.page.DialogMessagePage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;

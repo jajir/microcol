@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.akropia.gui.event.ChangeLanguageEvent;
-import org.akropia.gui.screen.campaign.ScreenCampaign;
 import org.akropia.gui.screen.colony.ScreenColony;
 import org.akropia.gui.screen.editor.ScreenEditor;
 import org.akropia.gui.screen.europe.ScreenEurope;
@@ -45,9 +44,9 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
 
     @Inject
     public MainPanelView(final ScreenGame screenGame,
-            final ScreenMenu screenMenu, final ScreenCampaign screenCampaign,
-            final ScreenEurope screenEurope, final ScreenSetting screenSetting,
-            final ScreenLoad screenLoad, final ScreenFreePlay screenFreePlay,
+            final ScreenMenu screenMenu, final ScreenEurope screenEurope,
+            final ScreenSetting screenSetting, final ScreenLoad screenLoad,
+            final ScreenFreePlay screenFreePlay,
             final ScreenColony screenColony,
             final ScreenStatistics screenStatistics,
             final ScreenTurnReport screenTurnReport,
@@ -61,7 +60,7 @@ public final class MainPanelView implements JavaFxComponent, UpdatableLanguage {
         screens.add(Preconditions.checkNotNull(screenGame));
         screens.add(Preconditions.checkNotNull(screenMenu));
         screens.add(Preconditions.checkNotNull(screenFreePlay));
-        screens.add(Preconditions.checkNotNull(screenCampaign));
+
         screens.add(Preconditions.checkNotNull(screenEurope));
         screens.add(Preconditions.checkNotNull(screenSetting));
         screens.add(Preconditions.checkNotNull(screenLoad));

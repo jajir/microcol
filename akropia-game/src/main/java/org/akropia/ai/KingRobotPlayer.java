@@ -53,12 +53,12 @@ public final class KingRobotPlayer extends AbstractRobotPlayer {
     }
 
     /**
-     * The existing campaign rule: after the expedition was sent, a Crown whose
-     * military strength falls below the limit is conquered. A Crown that still
-     * has reserve ground units and a war galley to bring them is not conquered,
-     * because that army is still on its way. A reserve stranded without any
-     * carrier does not hold the rule back. This is not a victory rule of its
-     * own; the mission reads the same flag as before.
+     * The existing naval return rule: after the expedition was sent, a Crown
+     * whose military strength falls below the limit is conquered. A Crown that
+     * still has reserve ground units and a war galley to bring them is not
+     * conquered, because that army is still on its way. A reserve stranded
+     * without any carrier does not hold the rule back. This is not a victory
+     * rule of its own; the mission reads the same flag as before.
      */
     private boolean isKinngCoquered() {
         if (!isRefWasSend()) {

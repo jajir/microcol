@@ -2,8 +2,8 @@ package org.akropia.page;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.model.campaign.GameModel;
-import org.akropia.model.campaign.po.SavedGames;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.SavedGames;
 import org.testfx.util.WaitForAsyncUtils;
 import javafx.scene.control.ListView;
 import javafx.scene.input.KeyCode;
@@ -249,8 +249,9 @@ public final class SavedGamesPage extends AbstractScreen {
         final var entry = entry(name);
         assertEquals(filename, entry.file.getName());
         assertEquals(
-                getContext().getClassFromGuice(
-                        org.akropia.model.campaign.po.PersistingTool.class)
+                getContext()
+                        .getClassFromGuice(
+                                org.akropia.model.game.po.PersistingTool.class)
                         .getRootSaveDirectory().toPath().resolve("saves"),
                 entry.file.toPath().getParent());
     }
@@ -310,14 +311,14 @@ public final class SavedGamesPage extends AbstractScreen {
 
     /** The live game holds the gameplay of the named save. */
     public void verifyLoadedSave(final String name) throws Exception {
-        final var files = new org.akropia.model.campaign.po.GameModelPoDao();
+        final var files = new org.akropia.model.game.po.GameModelPoDao();
         final var expected = files.loadPlayerGame(entry(name).file);
         final java.nio.file.Path actualFile = java.nio.file.Files
                 .createTempFile("loaded-save-", ".akropia");
         try {
             getContext()
                     .getClassFromGuice(
-                            org.akropia.model.campaign.GameModelDao.class)
+                            org.akropia.model.game.GameModelDao.class)
                     .saveToFile(actualFile.toString(), game());
             final var actual = files.loadPlayerGame(actualFile.toFile());
             final var gson = new com.google.gson.Gson();
@@ -330,37 +331,12 @@ public final class SavedGamesPage extends AbstractScreen {
         }
     }
 
-    public void prepareCampaignImport() throws java.io.IOException {
-        final var reader = new org.akropia.model.campaign.po.GameModelPoDao();
-        final java.io.File file = java.io.File.createTempFile("campaign-menu-",
-                ".akropia");
-        file.deleteOnExit();
-        reader.saveToFile(file.getAbsolutePath(), reader.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia"));
-        org.mockito.Mockito.when(getContext()
-                .getClassFromGuice(org.akropia.gui.FileSelectingService.class)
-                .loadFile(org.mockito.ArgumentMatchers.any(java.io.File.class)))
-                .thenReturn(file);
-    }
-
     private com.google.gson.JsonElement initialMission;
     private String initialPlaythrough;
-
-    public void rememberMissionStart() {
-        initialMission = new com.google.gson.Gson()
-                .toJsonTree(game().getModel().save());
-        initialPlaythrough = game().getPlaythroughId();
-    }
 
     public void verifyRestartAvailable(final boolean expected) {
         assertEquals(expected,
                 !getNodeFinder().lookup("#menuRestart").queryAll().isEmpty());
-    }
-
-    public void verifyRestartedMission() {
-        assertNotEquals(initialPlaythrough, game().getPlaythroughId());
-        assertEquals(initialMission, new com.google.gson.Gson()
-                .toJsonTree(game().getModel().save()));
     }
 
     /** The detail beside the list describes the selected save. */

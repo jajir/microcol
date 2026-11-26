@@ -12,9 +12,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.ColonyWasCapturedEvent;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.store.CargoPo;
@@ -233,7 +233,7 @@ class ColonyDefenseTest {
     }
 
     private Model build(final ModelPo data) {
-        model = Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data, GameModel.gameOverEvaluators());
         dutch = model.getPlayerByName("Dutch");
         france = model.getPlayerByName("France");
         quebec = model.getColonyById(0).orElseThrow();
@@ -298,8 +298,7 @@ class ColonyDefenseTest {
     }
 
     private Model reloaded() {
-        return Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(model.save(), GameModel.gameOverEvaluators());
     }
 
     private ConstructionSlot freeSlot(final Colony colony) {
@@ -765,8 +764,8 @@ class ColonyDefenseTest {
         final ModelPo building = model.save();
         building.getUnits().stream().filter(unit -> unit.getId() == 101)
                 .findFirst().orElseThrow().setOwnerId("France");
-        assertThrows(IllegalArgumentException.class, () -> Model.make(building,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(building, GameModel.gameOverEvaluators()));
         // One worker cannot hold two jobs after the transfer either.
         final ModelPo twice = model.save();
         final ColonyPo colonyPo = twice.getColonies().stream()
@@ -776,8 +775,8 @@ class ColonyDefenseTest {
                 .filter(construction -> construction
                         .getType() == ConstructionType.TOWN_HALL)
                 .findFirst().orElseThrow().getSlots().get(1).setWorkerId(100);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(twice,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(twice, GameModel.gameOverEvaluators()));
     }
 
     // ------------------------------------------- peaceful declaration review

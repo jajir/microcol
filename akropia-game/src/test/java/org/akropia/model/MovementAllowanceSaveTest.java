@@ -8,9 +8,9 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitFreeColonist;
 
@@ -45,7 +45,7 @@ public class MovementAllowanceSaveTest {
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().setMovementThirds(4);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         // Saving needs a started game, and starting it restores every unit's
         // full allowance, so the fractional allowances are set afterwards.
         model.startGame();
@@ -64,7 +64,7 @@ public class MovementAllowanceSaveTest {
 
         final GameModelPo reloaded = dao.loadFromFile(file);
         final Model restored = Model.make(reloaded.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist unit = (UnitFreeColonist) restored
                 .getUnitById(6);
         assertEquals(colonistAt, unit.getLocation());
@@ -91,7 +91,7 @@ public class MovementAllowanceSaveTest {
                 final int position = index;
                 assertThrows(IllegalArgumentException.class,
                         () -> Model.make(data.getModel(),
-                                MissionImpl.getPredefinedGameOverEvaluators()),
+                                GameModel.gameOverEvaluators()),
                         () -> "unit index " + position + " allowance "
                                 + invalid);
             }

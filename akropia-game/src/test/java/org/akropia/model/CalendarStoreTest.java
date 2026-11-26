@@ -2,13 +2,10 @@ package org.akropia.model;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.store.CalendarPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 
 public class CalendarStoreTest {
 
@@ -16,13 +13,13 @@ public class CalendarStoreTest {
     @ValueSource(strings = { "/maps/free-play.akropia",
             "/maps/free-play-two-islands.akropia",
             "/maps/free-play-rival-expedition.akropia",
-            "/maps/default-campaign-mission-0-findNewWorld.akropia",
-            "/maps/default-campaign-mission-1-buildArmy.akropia",
-            "/maps/default-campaign-mission-2-thrive.akropia" })
+            "/maps/fixture-arrival-world.akropia",
+            "/maps/fixture-army-world.akropia",
+            "/maps/fixture-developed-world.akropia" })
     void bundledGameStartsInTheFirstSummer(final String resource) {
         final Model model = Model.make(
                 new GameModelPoDao().loadFromClassPath(resource).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         assertEquals(1, model.getCalendar().getStartYear());
         assertEquals(1, model.getCalendar().getCurrentYear());

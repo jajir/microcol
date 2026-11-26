@@ -7,8 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
@@ -51,8 +51,7 @@ class MilitaryPromotionTest {
                     .findFirst().orElseThrow().getCongress().getMembers()
                     .add(Founder.GEORGE_WASHINGTON);
         }
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -105,7 +104,7 @@ class MilitaryPromotionTest {
         assertTrue(soldier.isHoldingWeapons());
         assertEquals(7L + 2 * STEP, promoted.save().getCombatRandomState());
         final Model restored = Model.make(promoted.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(((UnitFreeColonist) restored.getUnitById(0)).isVeteran());
         assertEquals(promoted.save().getCombatRandomState(),
                 restored.save().getCombatRandomState());
@@ -157,7 +156,7 @@ class MilitaryPromotionTest {
         expert.setHoldingWeapons(false);
         assertTrue(expert.isVeteran());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist continued = (UnitFreeColonist) restored
                 .getUnitById(6);
         assertEquals(UnitType.MASTER_BLACKSMITH, continued.getType());
@@ -203,7 +202,7 @@ class MilitaryPromotionTest {
         // Only the battle drew: Washington promotes without the quarter roll.
         assertEquals(3L + STEP, model.save().getCombatRandomState());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(((UnitFreeColonist) restored.getUnitById(0)).isVeteran());
     }
 
@@ -251,8 +250,7 @@ class MilitaryPromotionTest {
                         unit.setHoldingWeapons(true);
                     }
                 }
-                model = Model.make(next,
-                        MissionImpl.getPredefinedGameOverEvaluators());
+                model = Model.make(next, GameModel.gameOverEvaluators());
             }
         }
     }
@@ -320,7 +318,7 @@ class MilitaryPromotionTest {
                 .loadFromClassPath("/maps/free-play.akropia").getModel();
         data.getUnits().stream().filter(unit -> unit.getId() == 3).findFirst()
                 .orElseThrow().setVeteran(true);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(data, GameModel.gameOverEvaluators()));
     }
 }

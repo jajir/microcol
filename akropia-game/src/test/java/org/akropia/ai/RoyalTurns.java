@@ -14,8 +14,8 @@ import org.akropia.model.ModelListenerAdapter;
 import org.akropia.model.Player;
 import org.akropia.model.PlayerKing;
 import org.akropia.model.RoyalScenarioFixtures;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.TurnStartedEvent;
 
@@ -49,8 +49,7 @@ final class RoyalTurns implements AutoCloseable {
      * @param data required saved game of a campaign with two nations
      */
     RoyalTurns(final GameModelPo data) throws InterruptedException {
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         king = (PlayerKing) model.getPlayerByName(RoyalScenarioFixtures.KING);
         robot = new KingRobotPlayer(model, king,
                 new AnimationManager(new EventBus()));

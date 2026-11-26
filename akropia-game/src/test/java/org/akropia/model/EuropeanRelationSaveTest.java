@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -64,7 +64,7 @@ class EuropeanRelationSaveTest {
         final byte[] before = Files.readAllBytes(file);
         assertThrows(IllegalArgumentException.class,
                 () -> Model.make(dao.loadFromFile(file.toFile()).getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                        GameModel.gameOverEvaluators()));
         assertArrayEquals(before, Files.readAllBytes(file));
     }
 

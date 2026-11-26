@@ -8,9 +8,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyBuildingQueueItemPo;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ConstructionPo;
@@ -22,8 +22,8 @@ class ColonyBreedingTest {
 
     private Model model(final int horses, final ConstructionType stable,
             final ConstructionType storage, final boolean queueStable) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final ColonyPo saved = data.getModel().getColonies().stream()
                 .filter(c -> c.getId() == 0).findFirst().orElseThrow();
         final Map<Location, TerrainType> terrain = data.getModel().getMap()
@@ -53,8 +53,7 @@ class ColonyBreedingTest {
             saved.getBuildingQueue().add(queued);
             saved.getColonyWarehouse().put("HAMMERS", 64);
         }
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Colony withFoodAfterResidents(final Model model, final int food) {
@@ -181,7 +180,7 @@ class ColonyBreedingTest {
         assertEquals(before, new Gson().toJson(model.save()));
         colony.startTurn();
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String after = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(after, new Gson().toJson(resumed.save()));

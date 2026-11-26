@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceEuropePortPo;
@@ -61,8 +61,8 @@ class MissionaryOrdinationTest {
     }
 
     private GameModelPo scenario(final List<Founder> dutchMembers) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getName().equals("Dutch")) {
@@ -110,7 +110,7 @@ class MissionaryOrdinationTest {
 
     private static Model start(final GameModelPo data) {
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         return model;
     }
@@ -422,7 +422,7 @@ class MissionaryOrdinationTest {
         // The bundled map is saved as started; this game has not begun.
         data.getModel().getGameManager().setGameStarted(false);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist unit = colonist(model, PIER_ID);
         final JsonObject before = saved(unit);
 
@@ -493,7 +493,7 @@ class MissionaryOrdinationTest {
         assertTrue(colonist(model, 0).hasEffectiveMissionaryExpertise());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertTrue(colonist(restored, 0).isMissionary());
         assertTrue(colonist(restored, 0).hasEffectiveMissionaryExpertise());
@@ -550,7 +550,7 @@ class MissionaryOrdinationTest {
         final JsonObject before = saved(unit);
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         final UnitFreeColonist loaded = colonist(restored, 0);
         assertEquals(before, saved(loaded));

@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.GameStoppedEvent;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.store.EuropeanRelationPo;
@@ -35,8 +35,7 @@ class EuropeanRelationModelTest {
     private Model model = make(data);
 
     private Model make(final GameModelPo saved) {
-        return Model.make(saved.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved.getModel(), GameModel.gameOverEvaluators());
     }
 
     private GameModelPo threePlayers() {

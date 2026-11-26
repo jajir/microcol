@@ -27,9 +27,9 @@ import org.akropia.model.Player;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -169,7 +169,7 @@ public class TC_121_F112_rival_expansion_test extends AbstractAkropiaTest {
         }
         data.getModel().setUnits(units);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             model.startGame();
             final Player france = model.getPlayerByName("France");

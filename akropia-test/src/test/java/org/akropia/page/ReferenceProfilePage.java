@@ -11,10 +11,10 @@ import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
 import org.akropia.model.Player;
 import org.akropia.model.PlayerKing;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.ReferenceExpedition;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.ReferenceExpedition;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.mockito.Mockito;
 import org.testfx.util.WaitForAsyncUtils;
 

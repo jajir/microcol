@@ -8,7 +8,7 @@ import com.google.common.eventbus.Subscribe;
 import com.google.inject.Inject;
 
 /**
- * When game finished, it set up visibility of free mission.
+ * Refreshes available main-menu actions after a game finishes.
  */
 @Listener
 public final class GameFinishedListener {

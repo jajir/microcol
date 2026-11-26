@@ -17,7 +17,7 @@ import org.akropia.model.EuropeanNation;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
 import org.akropia.model.store.UnitPo;
@@ -126,8 +126,7 @@ class GeneratedRumorsTest {
         final ModelPo po = generate(GeneratedClimate.COLD,
                 GeneratedLandShare.HIGH, 2024);
         final Set<Location> markers = po.getMap().getRumorSet();
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         final ModelPo saved;
         try {
             for (final Location marker : markers) {
@@ -149,7 +148,7 @@ class GeneratedRumorsTest {
 
         // Continue loads the started game as saved and keeps every marker.
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             assertTrue(restored.isGameStarted());
             for (final Location marker : markers) {

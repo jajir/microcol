@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.TurnEventPo;
 import org.akropia.model.store.UnitActionPlowFieldPo;
 import org.akropia.model.turnevent.TurnEventFieldPlowed;
@@ -35,8 +35,8 @@ class PlowFieldTest {
     private final Gson gson = new Gson();
 
     private GameModelPo data(final boolean forest, final boolean plowed) {
-        final GameModelPo data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final Set<Location> trees = data.getModel().getMap().getTreeSet();
         trees.remove(TARGET);
         if (forest) {

@@ -4,7 +4,6 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import org.akropia.gui.preferences.GamePreferences;
-import org.akropia.model.campaign.CampaignManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,12 +101,7 @@ public final class Akropia {
             gamePref.removeNode();
             gamePref.flush();
         });
-        exec(() -> {
-            final Preferences campaignPref = Preferences
-                    .userNodeForPackage(CampaignManager.class);
-            campaignPref.removeNode();
-            campaignPref.flush();
-        });
+
     }
 
     /**

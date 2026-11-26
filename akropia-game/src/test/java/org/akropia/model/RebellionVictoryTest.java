@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.akropia.model.RoyalRoster.Member;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
@@ -67,7 +67,7 @@ class RebellionVictoryTest {
     private static final Location QUEBEC_SEA = Location.of(18, 10);
 
     private static Model load(final ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     private static PlayerPo rebelPo(final ModelPo data) {

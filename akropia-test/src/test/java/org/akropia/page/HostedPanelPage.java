@@ -336,7 +336,7 @@ public final class HostedPanelPage extends AbstractScreen {
     /** The Load list keeps the given save selected. */
     public void verifySelectedSave(final String name) {
         @SuppressWarnings("unchecked")
-        final javafx.scene.control.ListView<org.akropia.model.campaign.po.SavedGames.Entry> list = (javafx.scene.control.ListView<org.akropia.model.campaign.po.SavedGames.Entry>) scene()
+        final javafx.scene.control.ListView<org.akropia.model.game.po.SavedGames.Entry> list = (javafx.scene.control.ListView<org.akropia.model.game.po.SavedGames.Entry>) scene()
                 .lookup("#savedGamesList");
         assertNotNull(list.getSelectionModel().getSelectedItem());
         assertEquals(name,

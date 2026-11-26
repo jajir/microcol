@@ -49,8 +49,7 @@ public class TC_106_F97_quick_cargo_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_01_manual_cargo_transfers_keep_saved_balances() throws Exception {
         final File savedFile = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("quick-cargo.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);

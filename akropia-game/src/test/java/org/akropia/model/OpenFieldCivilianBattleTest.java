@@ -8,8 +8,8 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
@@ -92,7 +92,7 @@ class OpenFieldCivilianBattleTest {
             final long randomState) {
         final Model model = Model.make(
                 scenario(defenderType, terrain, trees, randomState),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(ATTACKER_ID);
         attacker.placeToLocation(ORIGIN);
@@ -112,8 +112,7 @@ class OpenFieldCivilianBattleTest {
     }
 
     private static Model reload(final Model model) {
-        return Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(model.save(), GameModel.gameOverEvaluators());
     }
 
     /** The saved combat random state of the model. */

@@ -17,9 +17,9 @@ import org.akropia.model.ColonyAdvisorReport.ColonyStatus;
 import org.akropia.model.ColonyAdvisorReport.GoodsLine;
 import org.akropia.model.ColonyAdvisorReport.ProjectState;
 import org.akropia.model.ColonyAdvisorReport.Uncertainty;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.turnevent.TurnEventConstructionWaitingForTools;
 
 import com.google.gson.Gson;
@@ -32,7 +32,7 @@ import com.google.gson.Gson;
  */
 class ColonyAdvisorReportTest {
 
-    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String THRIVE = "/maps/fixture-developed-world.akropia";
 
     private static final String FREE_PLAY = "/maps/free-play.akropia";
 
@@ -45,8 +45,7 @@ class ColonyAdvisorReportTest {
     private Colony delft;
 
     private static Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private static GameModelPo thrive() {
@@ -548,7 +547,7 @@ class ColonyAdvisorReportTest {
         final ColonyAdvisorReport before = model
                 .getColonyAdvisorReport(delft.getOwner());
         final Model reloaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ColonyAdvisorReport after = reloaded
                 .getColonyAdvisorReport(reloaded.getPlayerByName(DUTCH));
         assertEquals(before.getColonies().size(), after.getColonies().size());

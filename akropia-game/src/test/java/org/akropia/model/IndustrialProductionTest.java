@@ -12,9 +12,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceColonyFieldPo;
 import org.akropia.model.store.PlaceConstructionSlotPo;
@@ -145,12 +145,12 @@ class IndustrialProductionTest {
                 .filter(candidate -> candidate.getProductionModifier(type
                         .getProductionPerTurn().orElseThrow().getType()) == 2)
                 .findFirst().orElseThrow();
-        final GameModelPo workers = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo workers = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         workers.getModel().getUnits().stream().filter(unit -> unit.getId() == 1)
                 .findFirst().orElseThrow().setType(expertType);
         final Model workersModel = Model.make(workers.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit ordinary = workersModel.getUnitById(0);
         final Unit expert = workersModel.getUnitById(1);
         assertEquals(input, ConstructionSlot
@@ -184,8 +184,8 @@ class IndustrialProductionTest {
 
     @Test
     void oreBecomesToolsAndThenWeaponsInOneUpdateWithoutDoubleSpend() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final var saved = data.getModel().getColonies().stream()
                 .filter(c -> c.getId() == 0).findFirst().orElseThrow();
         saved.getColonyFields().stream()
@@ -222,7 +222,7 @@ class IndustrialProductionTest {
         saved.getColonyWarehouse().put("WEAPONS", 0);
 
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = model.getColonyById(0).orElseThrow();
         final ColonyProductionStats preview = colony.getGoodsStats();
         assertEquals(3,
@@ -240,7 +240,7 @@ class IndustrialProductionTest {
         assertEquals(3,
                 colony.getWarehouse().getGoods(GoodsType.WEAPONS).getAmount());
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String savedState = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(savedState, new Gson().toJson(resumed.save()));
@@ -262,8 +262,8 @@ class IndustrialProductionTest {
                 .getType();
         final GoodsType outputType = type.getProductionPerTurn().orElseThrow()
                 .getType();
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final var saved = data.getModel().getColonies().stream()
                 .filter(c -> c.getId() == 0).findFirst().orElseThrow();
         saved.setTownCommonsGoods(TownCommons.NONE_CODE);
@@ -321,8 +321,7 @@ class IndustrialProductionTest {
         warehouseGoods.put(GoodsType.GRAIN.name(), 100);
         warehouseGoods.put(inputType.name(), input);
         warehouseGoods.put(outputType.name(), outputStock);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private static Stream<Arguments> manufacturingCells() {
@@ -414,7 +413,7 @@ class IndustrialProductionTest {
         model.getColonyById(0).orElseThrow().startTurn();
 
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony restored = resumed.getColonyById(0).orElseThrow();
         assertEquals(inputAfter,
                 restored.getWarehouse().getGoods(inputType).getAmount());

@@ -5,7 +5,7 @@ import static org.akropia.model.NativeRelationsScene.*;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 
 /** One-shot diplomacy, including cancellation and stale confirmations. */
@@ -107,7 +107,7 @@ class NativeMissionTest {
         assertEquals(2, preview(model, 200).getInfluence());
         send(model, 200);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.tryGetUnitById(200).isEmpty());
         assertEquals(7, restored.getNativeFavour(NativeNation.AZTEC,
                 EuropeanNation.DUTCH));
@@ -126,8 +126,7 @@ class NativeMissionTest {
                     row.getFavour().put(EuropeanNation.FRENCH, 8);
                     row.setFriend(EuropeanNation.FRENCH);
                 });
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         assertEquals(Optional.of(EuropeanNation.FRENCH),
                 model.getNativeFriend(NativeNation.AZTEC));
         send(model, 200);

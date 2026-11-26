@@ -12,7 +12,7 @@ import org.akropia.page.FramedSettingsPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HallOfFamePage;
 import org.akropia.page.RetirePage;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.SettingPage;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
@@ -80,7 +80,7 @@ public class TC_179_F204_summary_off_final_result_test
             hall.verifyCurrentResultShown();
             hall.verifyStoredEntries(HallOfFameFixture.RIVALS);
             hall.closeResultDialog();
-            new CampaignScreenPage(getContext()).verifyCampaignScreen();
+            new MainMenuPage(getContext()).verifyMainMenu();
         } finally {
             getContext().getClassFromGuice(GamePreferences.class)
                     .setShowTurnSummary(

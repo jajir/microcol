@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 import org.akropia.model.RoyalRoster.Family;
 import org.akropia.model.RoyalRoster.State;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ColonySightingPo;
@@ -43,7 +43,7 @@ public final class RoyalScenarioFixtures {
     /** First identity of a prepared passenger, in the order they are named. */
     public static final int FIRST_PASSENGER_ID = 101;
 
-    private static final String CAMPAIGN = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String DEVELOPED_WORLD = "/maps/fixture-developed-world.akropia";
 
     private static final int STORED_GALLEON_ID = 3;
 
@@ -64,7 +64,7 @@ public final class RoyalScenarioFixtures {
     public static GameModelPo crown(final Difficulty difficulty,
             final boolean declared) {
         final GameModelPo data = new GameModelPoDao()
-                .loadFromClassPath(CAMPAIGN);
+                .loadFromClassPath(DEVELOPED_WORLD);
         final ModelPo model = data.getModel();
         model.setDifficulty(difficulty);
         PlayerPo crown = null;

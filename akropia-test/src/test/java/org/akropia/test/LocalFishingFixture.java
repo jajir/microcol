@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 import java.io.File;
 
 import org.akropia.gui.FileSelectingService;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.page.TestContext;
 
 final class LocalFishingFixture {

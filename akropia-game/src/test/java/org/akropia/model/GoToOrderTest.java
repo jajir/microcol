@@ -16,9 +16,9 @@ import java.util.function.Consumer;
 import com.google.gson.Gson;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
@@ -33,7 +33,7 @@ import org.akropia.model.unit.Ship;
  * names. Saved games are changed in their data, never in the running model.
  */
 class GoToOrderTest {
-    private static final String MISSION = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MISSION = "/maps/fixture-developed-world.akropia";
 
     /** New Amsterdam, colony 0 of the mission, reached over the strip. */
     private static final Location COLONY = Location.of(25, 14);
@@ -96,8 +96,7 @@ class GoToOrderTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Saves the model into the data, lets the test edit it, and reloads it. */
@@ -881,13 +880,12 @@ class GoToOrderTest {
     @Test
     void newExpeditionShipWithoutMovementTakesEuropeAndSailsNextTurn() {
         final Model created = StartingArrivalRouteTest.newGame(
-                org.akropia.model.campaign.FreePlayMap.ORIGINAL,
+                org.akropia.model.game.FreePlayMap.ORIGINAL,
                 EuropeanNation.DUTCH);
         created.startGame();
         final org.akropia.model.store.ModelPo saved = created.save();
         saved.getGameManager().setCurrentPlayer("Dutch");
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final Ship ship = (Ship) model.getUnitById(3);
         final Location start = Location.of(45, 15);
         assertEquals(start, ship.getLocation());

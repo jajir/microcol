@@ -1,7 +1,4 @@
 {
-  "campaignName": "freePlay",
-  "missionName": "freePlay",
-  "goalData": {},
   "model": {
     "combatRandomState": 0,
     "difficulty": "CONQUISTADOR",

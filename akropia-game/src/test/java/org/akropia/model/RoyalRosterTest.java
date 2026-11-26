@@ -11,9 +11,9 @@ import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.EnumSource;
 import org.akropia.model.RoyalRoster.Family;
 import org.akropia.model.RoyalRoster.State;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.store.RoyalMemberPo;
 import org.akropia.model.store.RoyalRosterPo;
@@ -40,8 +40,8 @@ class RoyalRosterTest {
     }
 
     private static GameModelPo fixture(final boolean declared) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getWhosKingThisPlayerIs() != null) {
@@ -55,8 +55,7 @@ class RoyalRosterTest {
     }
 
     private static Model model(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @ParameterizedTest

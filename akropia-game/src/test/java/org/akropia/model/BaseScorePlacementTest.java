@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
@@ -130,7 +130,7 @@ class BaseScorePlacementTest {
     }
 
     private static Model make(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Model load(final GameModelPo data) {

@@ -44,7 +44,6 @@ module akropia.game {
     opens org.akropia.gui.event.model to com.google.guice;
     opens org.akropia.gui.image to com.google.guice;
     opens org.akropia.gui.preferences to com.google.guice, gson;
-    opens org.akropia.gui.screen.campaign to com.google.guice;
     opens org.akropia.gui.screen.colony to com.google.guice;
     opens org.akropia.gui.screen.colony.buildingqueue to com.google.guice;
     opens org.akropia.gui.screen.colonizopedia to com.google.guice;
@@ -60,9 +59,8 @@ module akropia.game {
     opens org.akropia.gui.screen.statistics to com.google.guice;
     opens org.akropia.gui.screen.turnreport to com.google.guice, com.google.common;
     opens org.akropia.gui.util to com.google.guice, com.google.common;
-    opens org.akropia.model.campaign to com.google.guice;
-    opens org.akropia.model.campaign.po to com.google.guice;
-    opens org.akropia.model.campaign.store to com.google.guice, gson;
+    opens org.akropia.model.game to com.google.guice;
+    opens org.akropia.model.game.po to com.google.guice;
     */
 
 }

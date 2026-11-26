@@ -118,7 +118,7 @@ public class TC_21_F15_free_play_screen_navigation_test
     @Test
     @Tag("local")
     void TC_13_menu_demo_is_visible_and_menu_remains_usable() throws Exception {
-        // Inspect the isolated map and pause its presentation.
+        // Inspect the isolated map while its presentation keeps running.
         WelcomePage welcome = WelcomePage.of(getContext());
         welcome.observeDemo(1000);
         welcome.verifyDemoVisible();
@@ -129,7 +129,6 @@ public class TC_21_F15_free_play_screen_navigation_test
         welcome.observeDemo(16000);
         welcome.verifyDemoVisible();
         welcome.captureDialog("menu-demo", "demo-loop.png");
-        welcome.pauseDemo();
         welcome.resizeWindow(1280, 850);
         welcome.verifyDemoVisible();
         welcome.captureDialog("menu-demo", "demo-wide.png");

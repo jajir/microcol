@@ -70,14 +70,11 @@ public class GameMenuBackground extends AbstractAnimatedBackground {
                 .setCenterStripeHeight(SEA_HEIGHT).make();
         this.threeStripesPainter = new ThreeStripesPainter(pref);
 
-        final Point centerImageSize = Point.of(imageCenter.getWidth(),
-                imageCenter.getHeight());
-        topImageStripePainter = new ImageStripePainter(ImageStripePref.build()
-                .setImage(imageTop).setCenterGap(centerImageSize.getX() - 10)
-                .setVerticalShift(-260).make());
+        topImageStripePainter = new ImageStripePainter(
+                ImageStripePref.build().setImage(imageTop).setCenterGap(0)
+                        .setVerticalShift(-260).make());
         bottomImageStripePainter = new ImageStripePainter(
-                ImageStripePref.build().setImage(imageBottom)
-                        .setCenterGap(centerImageSize.getX() - 10)
+                ImageStripePref.build().setImage(imageBottom).setCenterGap(0)
                         .setVerticalShift(230).make());
     }
 
@@ -95,7 +92,10 @@ public class GameMenuBackground extends AbstractAnimatedBackground {
         topImageStripePainter.paint(gc, canvasSize);
         bottomImageStripePainter.paint(gc, canvasSize);
         final Point diff = canvasSize.substract(centerImageSize).divide(2);
-        gc.drawImage(imageCenter, diff.getX(), diff.getY());
+        // The sun's right contour is at x=620 in the unchanged vector export.
+        final double right = (canvasSize.getX()
+                + Math.min(1440, canvasSize.getX())) / 2d - 16;
+        gc.drawImage(imageCenter, right - 620, diff.getY());
 
         // Paint animations, original size 480 × 270
         final Point size = Point.of(480, 270).divide(2).divide(3);

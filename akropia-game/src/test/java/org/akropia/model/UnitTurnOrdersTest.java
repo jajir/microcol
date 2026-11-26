@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.TurnFinishedEvent;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
@@ -34,8 +34,8 @@ class UnitTurnOrdersTest {
     }
 
     private Model fixture() {
-        final GameModelPo data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         final java.util.Set<Location> trees = data.getModel().getMap()
                 .getTreeSet();
@@ -140,8 +140,8 @@ class UnitTurnOrdersTest {
         final Model model = fixture();
         model.skipUnitTurn(model.getUnitById(0));
         final Path path = directory.resolve("save.akropia");
-        final GameModelPo data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.setModel(model.save());
         dao.saveToFile(path.toString(), data);
         final Model loaded = make(dao.loadFromFile(path.toFile()).getModel());

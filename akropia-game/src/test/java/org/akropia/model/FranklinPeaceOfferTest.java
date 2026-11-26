@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.EuropeanRelationPo;
 import org.akropia.model.store.ModelPo;
@@ -55,7 +55,7 @@ class FranklinPeaceOfferTest {
             final boolean contact) {
         final Model model = Model.make(
                 fixture(hasFranklin, joinsThisUpdate, war).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit visitor = model.getUnitById(0);
         visitor.placeToLocation(
                 contact ? Location.of(18, 10) : Location.of(30, 10));
@@ -109,7 +109,7 @@ class FranklinPeaceOfferTest {
         assertEquals(offer.getPrice(), notice.getPrice());
         final String pending = saved(model);
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         resumed.startGame();
         assertEquals(pending, saved(resumed));
         assertEquals(1, notices(resumed));
@@ -169,7 +169,7 @@ class FranklinPeaceOfferTest {
     @Test
     void everyContactedWarRivalGetsItsOwnDiscountedOffer() {
         final Model model = Model.make(withSpainAtWar().getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit visitor = model.getUnitById(0);
         visitor.placeToLocation(Location.of(18, 10));
         placeSpanishNeighbor(model);
@@ -199,7 +199,7 @@ class FranklinPeaceOfferTest {
                 model.getEuropeanRelation(dutch, spain));
 
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(150,
                 resumed.getPendingPeaceOffer(resumed.getPlayerByName("Dutch"),
                         resumed.getPlayerByName("France")).orElseThrow()
@@ -271,7 +271,7 @@ class FranklinPeaceOfferTest {
         frenchCongress.setOwls(0);
 
         final Model initial = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit dutchVisitor = initial.getUnitById(0);
         dutchVisitor.placeToLocation(Location.of(18, 10));
         dutchVisitor.getOwner().revealMapForUnit(dutchVisitor);
@@ -280,7 +280,7 @@ class FranklinPeaceOfferTest {
         final ModelPo franceTurn = initial.save();
         franceTurn.getGameManager().setCurrentPlayer("France");
         final Model model = Model.make(franceTurn,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player france = model.getPlayerByName("France");
         final Player dutch = model.getPlayerByName("Dutch");
         assertFalse(model.getPeaceVisitors(france, dutch).isEmpty());
@@ -311,7 +311,6 @@ class FranklinPeaceOfferTest {
                         .equals(TurnEventPeaceOffer.class.getSimpleName()))
                 .findFirst().orElseThrow().setPeacePrice(null);
         assertThrows(IllegalArgumentException.class,
-                () -> Model.make(missingPrice,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                () -> Model.make(missingPrice, GameModel.gameOverEvaluators()));
     }
 }

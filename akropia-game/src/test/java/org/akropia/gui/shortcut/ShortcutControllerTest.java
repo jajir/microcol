@@ -173,7 +173,7 @@ public class ShortcutControllerTest {
         // stray letter; each still opens its own confirmation.
         final ShortcutAction[] consequential = { ShortcutAction.QUIT_GAME,
                 ShortcutAction.EXIT_TO_MAIN_MENU,
-                ShortcutAction.RESTART_MISSION,
+
                 ShortcutAction.DECLARE_INDEPENDENCE, ShortcutAction.RETIRE,
                 ShortcutAction.DISBAND, ShortcutAction.JETTISON,
                 ShortcutAction.END_TURN };

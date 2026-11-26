@@ -6,16 +6,13 @@
 
 	<entry key="mainMenu">Akropia</entry>
 	<entry key="buttonContinue">Pokračovat</entry>
-	<entry key="buttonLoadSave">Nahrát hru</entry>
-	<entry key="buttonPlayCampaign">Spustit kampaň</entry>
-	<entry key="buttonFreeGame">Nová neomezená hra</entry>
-	<entry key="buttonHallOfFame">Síň slávy</entry>
+	<entry key="buttonLoadSave">Otevřít hru</entry>
+	<entry key="buttonFreeGame">Nová hra</entry>
 	<entry key="buttonExitAkropia">Ukončit hru</entry>
 	<entry key="settingTitle">Nastavení</entry>
 	<entry key="buttonSetting">Nastavení</entry>
 	<entry key="buttonMapEditor">Editor map</entry>
 	<entry key="buttonBack">Zpět</entry>
-	<entry key="campaignTitle">Akropia -> Kampaň</entry>
 	<entry key="settingLanguage">Jazyk: </entry>
 	<entry key="settingLanguageCz">Česky</entry>
 	<entry key="settingLanguageEn">Anglicky</entry>
@@ -31,14 +28,10 @@
 	<entry key="recoveryCorrupt">Datum není dostupné</entry>
 	<entry key="settingShowFightAdvisor">Použít náhled před bojem</entry>
 	<entry key="settingVersion">Verze: </entry>
-	<entry key="campaignPanelButtonBack">Zpět</entry>
-	<entry key="campaignPanel_default_findNewWorld">Kde je Nový Svět?</entry>
-	<entry key="campaignPanel_default_buildArmy">Armáda</entry>
-	<entry key="campaignPanel_default_thrive">Rozkvět</entry>
 
 
 
-    <entry key="setupTitle">Nová neomezená hra</entry>
+    <entry key="setupTitle">Nová hra</entry>
     <entry key="setupMap">Mapa</entry>
     <entry key="setupMapOriginal">Původní svět</entry>
     <entry key="setupMapTwoIslands">Dva ostrovy</entry>
@@ -94,6 +87,5 @@
     <entry key="setupGoalRule">Splnění kteréhokoli vybraného cíle znamená vítězství. Stejné cíle platí pro soupeře. Cíl a skóre se zapíší do Síně slávy. Bez časového limitu.</entry>
     <entry key="setupSandbox">Volné budování bez cílového vítězství a bez časového limitu. Ztráta poslední kolonie po jejím prvním získání stále znamená vyřazení.</entry>
     <entry key="demoCaption">Ukázka hraní: objev pobřeží a založ svou první kolonii.</entry>
-    <entry key="demoPause">Pozastavit ukázku</entry>
 <entry key="demoUnavailable">Ukázka hry není dostupná.</entry>
 </properties>

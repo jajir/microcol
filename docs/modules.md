@@ -1,3 +1,14 @@
+## Game session ownership — 26 November 2026
+
+The game module now owns ordinary sessions in `org.akropia.model.game` and
+save persistence in `org.akropia.model.game.po`. Campaign screens, mission
+registries and campaign progress storage have been removed. The former three
+campaign worlds are test resources only, named `fixture-arrival-world`,
+`fixture-army-world` and `fixture-developed-world`, in both the game unit-test
+module resources and the functional-test module resources. They are no longer
+part of the shipped game resources. Module boundaries and distribution
+packaging stay unchanged.
+
 # Maven modules and build outputs
 
 Akropia has one parent POM and nine child modules. Seven are shared modules;

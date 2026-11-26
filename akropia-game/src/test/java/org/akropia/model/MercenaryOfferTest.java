@@ -15,8 +15,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.EuropeanRelationPo;
@@ -157,7 +157,7 @@ class MercenaryOfferTest {
     }
 
     private static Model load(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Player dutch(final Model model) {

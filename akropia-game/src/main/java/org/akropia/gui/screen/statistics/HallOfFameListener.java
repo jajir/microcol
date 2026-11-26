@@ -3,7 +3,7 @@ package org.akropia.gui.screen.statistics;
 import org.akropia.gui.util.Listener;
 import org.akropia.model.AkropiaException;
 import org.akropia.model.Model;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 import org.akropia.model.event.GameFinishedEvent;
 import org.akropia.model.event.ScoreBoundaryRequiredEvent;
 import org.slf4j.Logger;

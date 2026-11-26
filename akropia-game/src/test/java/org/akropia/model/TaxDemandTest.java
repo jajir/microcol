@@ -17,9 +17,9 @@ import java.util.TreeMap;
 import java.util.function.Supplier;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
@@ -46,8 +46,8 @@ class TaxDemandTest {
      */
     private GameModelPo data(final Difficulty difficulty, final int rate,
             final int updatesToDemand) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().setDifficulty(difficulty);
         CrownRosterFixtures.freshCrownRosters(data.getModel());
         final PlayerPo dutch = player(data.getModel(), "Dutch");
@@ -95,7 +95,7 @@ class TaxDemandTest {
     }
 
     private Model load(final ModelPo saved) {
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     private void nextDutchTurn(final Model model) {

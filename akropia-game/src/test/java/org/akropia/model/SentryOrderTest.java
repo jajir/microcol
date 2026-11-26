@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.PlaceEuropePortPo;
 import org.akropia.model.store.CargoSlotPo;
@@ -27,13 +27,12 @@ class SentryOrderTest {
     private static final Location SHORE = Location.of(48, 15);
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private PlaceMapPo at(final Location location) {
@@ -93,7 +92,7 @@ class SentryOrderTest {
         dao.saveToFile(file.toString(), data);
         final Model restored = Model.make(
                 dao.loadFromFile(file.toFile()).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit waiting = restored.getUnitById(16);
         assertEquals(UnitActionType.sentry, waiting.getAction().getType());
         assertEquals(moves, waiting.getActionPoints());
@@ -128,7 +127,7 @@ class SentryOrderTest {
         assertSame(passenger, passenger.getPlaceCargoSlot().getCargoSlot()
                 .getUnit().orElseThrow());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.getUnitById(16).isAtCargoSlot());
         assertEquals(UnitActionType.noAction,
                 restored.getUnitById(16).getAction().getType());

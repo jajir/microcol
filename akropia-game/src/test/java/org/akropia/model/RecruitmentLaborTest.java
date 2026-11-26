@@ -4,16 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceConstructionSlotPo;
 
 class RecruitmentLaborTest {
 
     private GameModelPo scenario() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getGameManager().getPlayers().stream()
                 .filter(player -> player.getWhosKingThisPlayerIs() == null)
                 .forEach(player -> player
@@ -26,7 +26,7 @@ class RecruitmentLaborTest {
         data.getModel().getUnits().stream().filter(unit -> unit.getId() == 0)
                 .findFirst().orElseThrow().setType(type);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ColonyField field = model.getColonyById(0).orElseThrow()
                 .getColonyFieldInDirection(Direction.west);
         assertSame(type, field.getUnit().orElseThrow().getType());
@@ -54,7 +54,7 @@ class RecruitmentLaborTest {
                 .filter(slot -> slot.getWorkerId() == null).findFirst()
                 .orElseThrow().setWorkerId(0);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ConstructionSlot slot = model.getColonyById(0).orElseThrow()
                 .getConstructionByType(ConstructionType.BLACKSMITHS_HOUSE)
                 .getConstructionSlots().stream()

@@ -9,9 +9,9 @@ import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 class ConstructionAdmissionTest {
     private Model model;
@@ -20,8 +20,8 @@ class ConstructionAdmissionTest {
 
     private void prepare(final ConstructionType type,
             final String currentPlayer) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         type.getRequiredFounder().ifPresent(founder -> {
             final var congress = data.getModel().getGameManager().getPlayers()
                     .stream().filter(player -> player.getName().equals("Dutch"))
@@ -33,8 +33,7 @@ class ConstructionAdmissionTest {
             congress.setGeneration(2);
         });
         data.getModel().getGameManager().setCurrentPlayer(currentPlayer);
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         colony.getConstructions().removeIf(building -> type.getUpgradeChain()
                 .contains(building.getType()));

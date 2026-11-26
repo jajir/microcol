@@ -10,8 +10,8 @@ import org.akropia.model.Model;
 import org.akropia.model.TradeRoute;
 import org.akropia.model.TradeRouteKind;
 import org.akropia.model.TradeRouteStop;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
@@ -24,7 +24,7 @@ class DialogCarrierTradeRouteTest {
         final Model model = Model.make(new GameModelPoDao()
                 .loadFromFile(new File(
                         "../akropia-test/src/test/scenarios/F222-colony-markers.akropia"))
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .getModel(), GameModel.gameOverEvaluators());
         final List<TradeRouteStop> stops = IntStream.range(0, count)
                 .mapToObj(TradeRouteStop::ofColony)
                 .collect(Collectors.toList());

@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceConstructionSlotPo;
 import org.akropia.model.store.UnitPo;
@@ -46,8 +46,8 @@ class PrintingProductionTest {
 
     private GameModelPo fixture(final String workers,
             final ConstructionType printing) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final var colony = data.getModel().getColonies().stream()
                 .filter(saved -> saved.getId() == 0).findFirst().orElseThrow();
         final ConstructionPo hall = colony.getConstructions().stream()
@@ -89,8 +89,7 @@ class PrintingProductionTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @ParameterizedTest
@@ -112,7 +111,7 @@ class PrintingProductionTest {
         assertEquals(before + expected,
                 colony.getWarehouse().getGoods(GoodsType.OWLS).getAmount());
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String saved = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(saved, new Gson().toJson(resumed.save()));

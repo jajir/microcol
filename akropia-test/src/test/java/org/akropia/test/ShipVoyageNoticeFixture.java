@@ -7,9 +7,9 @@ import java.util.List;
 import org.akropia.gui.FileSelectingService;
 import org.akropia.model.*;
 import org.akropia.model.unit.Ship;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.page.TestContext;
 
 final class ShipVoyageNoticeFixture {
@@ -28,7 +28,7 @@ final class ShipVoyageNoticeFixture {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("Dutch");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Ship ship = (Ship) model.getUnitById(3);
         if (automatic) {
             final TradeRoute route = model.createTradeRoute(ship.getOwner(),
@@ -61,7 +61,7 @@ final class ShipVoyageNoticeFixture {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("Dutch");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = model.getColonyById(0).orElseThrow();
         model.addTurnEvent(new org.akropia.model.turnevent.TurnEventGoTo(
                 colony.getOwner().getName(),

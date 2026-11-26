@@ -10,9 +10,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.InterventionPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
@@ -25,7 +25,7 @@ import org.akropia.model.unit.UnitFreeColonist;
  */
 class InterventionDeliveryTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private static final int TARGET = 500;
 
@@ -44,7 +44,7 @@ class InterventionDeliveryTest {
     }
 
     private static Model load(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Player dutch(final Model model) {

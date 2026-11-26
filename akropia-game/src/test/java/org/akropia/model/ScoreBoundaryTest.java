@@ -5,8 +5,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 
 /** Free games have objectives and no year-based score or play boundary. */
@@ -20,7 +20,7 @@ class ScoreBoundaryTest {
     }
 
     static Model make(ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     static void round(Model model) {

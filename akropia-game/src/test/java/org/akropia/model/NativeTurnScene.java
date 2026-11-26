@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.UnitNativeBrave;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
@@ -214,7 +214,7 @@ final class NativeTurnScene {
     }
 
     static Model make(final ModelPo saved) {
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
 }

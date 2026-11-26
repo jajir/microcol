@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitActionFortifyPo;
@@ -25,8 +25,7 @@ class CombatOutcomeTest {
         final ModelPo data = new GameModelPoDao()
                 .loadFromClassPath("/maps/free-play.akropia").getModel();
         data.setCombatRandomState(state);
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -63,8 +62,7 @@ class CombatOutcomeTest {
         final UnitActionFortifyPo action = new UnitActionFortifyPo();
         action.setFortified(true);
         defenderPo.setAction(action);
-        final Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(data, GameModel.gameOverEvaluators());
         final UnitFreeColonist attacker = (UnitFreeColonist) model
                 .getUnitById(0);
         attacker.placeToLocation(ORIGIN);
@@ -121,7 +119,7 @@ class CombatOutcomeTest {
         assertTrue(defender.isHoldingWeapons());
         assertEquals(0L + 2 * STEP, model.save().getCombatRandomState());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertFalse(((UnitFreeColonist) restored.getUnitById(0))
                 .isHoldingWeapons());
@@ -134,9 +132,9 @@ class CombatOutcomeTest {
         final Model source = game(3L, false);
         final ModelPo snapshot = source.save();
         final Model first = Model.make(snapshot,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Model second = Model.make(snapshot,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         first.getUnitById(0).prepareAttack(TARGET, true).orElseThrow()
                 .execute();
         second.getUnitById(0).prepareAttack(TARGET, true).orElseThrow()
@@ -164,7 +162,7 @@ class CombatOutcomeTest {
         assertEquals(0, defender.getActionPoints());
         assertEquals(ORIGIN, attacker.getLocation());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         final UnitFreeColonist continued = (UnitFreeColonist) restored
                 .getUnitById(6);
@@ -195,7 +193,7 @@ class CombatOutcomeTest {
         assertEquals(0, defender.getActionPoints());
         assertEquals(ORIGIN, attacker.getLocation());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         final UnitFreeColonist continued = (UnitFreeColonist) restored
                 .getUnitById(6);

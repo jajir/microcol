@@ -13,8 +13,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.InterventionPo;
@@ -88,7 +88,7 @@ class InterventionDeliveryPortTest {
     }
 
     private static Model load(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Player dutch(final Model model) {

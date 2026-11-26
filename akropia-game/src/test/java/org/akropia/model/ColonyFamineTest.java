@@ -6,24 +6,23 @@ import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
-import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.Ship;
 
 import com.google.gson.Gson;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.turnevent.TurnEventFaminePlagueColony;
 
 class ColonyFamineTest {
 
     private Model model(final TerrainType foodTerrain) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final java.util.Map<Location, TerrainType> terrain = data.getModel()
                 .getMap().getTerrainMap();
         terrain.put(Location.of(24, 14), foodTerrain);
@@ -32,8 +31,7 @@ class ColonyFamineTest {
         terrain.put(Location.of(25, 14), TerrainType.ARCTIC);
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setFields(java.util.Collections.emptySet());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test
@@ -71,7 +69,7 @@ class ColonyFamineTest {
                 .filter(goods -> goods.getType().equals(GoodsType.GRAIN))
                 .findFirst().orElseThrow().getAmount());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(1, restored.getTurnEventStore()
                 .getForPlayer(
                         restored.getColonyById(0).orElseThrow().getOwner())
@@ -141,8 +139,8 @@ class ColonyFamineTest {
 
     @Test
     void outsideVisitorAndCargoPassengersSurviveFamine() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final UnitPo shipData = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         shipData.setPlaceHighSeas(null);
@@ -157,7 +155,7 @@ class ColonyFamineTest {
         terrain.put(Location.of(25, 13), TerrainType.OCEAN);
         data.getModel().getMap().setTerrainType(terrain);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit visitor = model.addUnitOutSideColony(colony);
         final Ship ship = (Ship) model.getUnitById(3);
@@ -199,7 +197,7 @@ class ColonyFamineTest {
                 .filter(TurnEventFaminePlagueColony.class::isInstance).count();
         assertEquals(1, losses);
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String saved = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(saved, new Gson().toJson(resumed.save()));

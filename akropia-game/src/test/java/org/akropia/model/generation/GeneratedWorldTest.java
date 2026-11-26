@@ -27,7 +27,7 @@ import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
 import org.akropia.model.store.PlayerPo;
@@ -505,8 +505,7 @@ class GeneratedWorldTest {
     void generatedWorldStartsSavesStopsAndContinuesWithItsSettings() {
         final ModelPo po = generate(GeneratedClimate.COLD,
                 GeneratedLandShare.HIGH, 42);
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         model.startGame();
         final ModelPo saved = model.save();
         model.stop();
@@ -517,7 +516,7 @@ class GeneratedWorldTest {
 
         // Continue loads the started game as saved; nothing is generated again.
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.isGameStarted());
         final ModelPo again = restored.save();
         assertSettings(again, GeneratedClimate.COLD, GeneratedLandShare.HIGH,
@@ -622,15 +621,13 @@ class GeneratedWorldTest {
                 GeneratedLandShare.LOW, 5);
         mismatched.getGeneratedWorld().setSeed(6);
         assertThrows(IllegalArgumentException.class,
-                () -> Model.make(mismatched,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                () -> Model.make(mismatched, GameModel.gameOverEvaluators()));
         assertEquals(6, mismatched.getGeneratedWorld().getSeed().intValue());
         final ModelPo incomplete = generate(GeneratedClimate.WARM,
                 GeneratedLandShare.LOW, 5);
         incomplete.getGeneratedWorld().setClimate(null);
         assertThrows(IllegalArgumentException.class,
-                () -> Model.make(incomplete,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                () -> Model.make(incomplete, GameModel.gameOverEvaluators()));
         assertFalse(incomplete.getGeneratedWorld().isComplete());
     }
 

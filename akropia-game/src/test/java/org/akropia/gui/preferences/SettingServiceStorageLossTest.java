@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.akropia.model.AkropiaException;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.PersistingTool;
 
 /**
  * Losing the save location during play must not stop running gameplay from

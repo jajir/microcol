@@ -10,7 +10,7 @@ import org.akropia.gui.util.ModalActions;
 import org.akropia.gui.util.ViewUtil;
 import org.akropia.i18n.I18n;
 import org.akropia.model.HallOfFameEntry;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

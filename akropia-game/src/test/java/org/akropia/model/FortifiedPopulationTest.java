@@ -6,19 +6,18 @@ import java.util.Collections;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
-import org.akropia.model.unit.UnitFreeColonist;
 
 import com.google.gson.Gson;
 
 class FortifiedPopulationTest {
 
     private Model model(final ConstructionType defense) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         if (defense != null) {
             final ConstructionPo completed = new ConstructionPo();
             completed.setType(defense);
@@ -26,8 +25,7 @@ class FortifiedPopulationTest {
                     .filter(colony -> colony.getId() == 0).findFirst()
                     .orElseThrow().getConstructions().add(completed);
         }
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void retainResidents(final Model model, final int number) {
@@ -97,7 +95,7 @@ class FortifiedPopulationTest {
                 .getAmount();
         empty(colony);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony saved = restored.getColonyById(0).orElseThrow();
         assertEquals(0, saved.getPopulation());
         assertEquals(stock,
@@ -176,8 +174,8 @@ class FortifiedPopulationTest {
 
     @Test
     void famineMayReducePopulationWithoutRemovingFortification() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final ConstructionPo stockade = new ConstructionPo();
         stockade.setType(ConstructionType.STOCKADE);
         data.getModel().getColonies().stream().filter(c -> c.getId() == 0)
@@ -188,7 +186,7 @@ class FortifiedPopulationTest {
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getMap().setFields(Collections.emptySet());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         retainResidents(model, 1);
         final Colony colony = model.getColonyById(0).orElseThrow();
         final Unit resident = colony.getUnitsInsideColony().get(0);
@@ -220,7 +218,7 @@ class FortifiedPopulationTest {
         assertTrue(colony.wasConstructionBuilded(ConstructionType.FORT));
         assertEquals(2, colony.getPopulation());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony saved = restored.getColonyById(0).orElseThrow();
         assertEquals(2, saved.getPopulation());
         assertTrue(saved.wasConstructionBuilded(ConstructionType.FORT));

@@ -1,3 +1,13 @@
+## Umístění slunce v menu — 26. listopadu 2026
+
+Menu používá nezměněný vektorový zdroj
+[sunset2.svg](../akropia-game/src/graphics/sunset2.svg) a jeho stávající PNG.
+Pravý obrys slunce (x = 620 v exportu) se zarovnává 16 px od pravého okraje
+vystředěného prostoru šířky nejvýše 1440 logických pixelů. Odraz zůstává
+ve vrstvě pozadí pod ukázkou; okrajové čáry se opakují přes celou šířku.
+Nevzniká nová ilustrace ani změna exportu. Zobrazení této úpravy za běhu
+nebylo ověřeno; viz [evidence](functional-tests.md#main-menu-cleanup-2026-11-26).
+
 <a id="food-artwork-2026-11-24"></a>
 
 ## Jídlo a rybolov — 24. listopadu 2026

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
-import org.akropia.model.campaign.po.RecoverySlot;
+import org.akropia.model.game.po.RecoverySlot;
 import org.akropia.gui.shortcut.ShortcutAction;
 import org.akropia.page.ColonyScreen;
 import org.akropia.page.KeyboardShortcutsPage;
@@ -336,37 +336,13 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
     @Test
     @Tag("local")
-    void TC_02_campaign_restart_can_be_cancelled_or_start_the_original_mission()
-            throws Exception {
-        // Turn autosaves off, so the played turn stays unsaved progress.
-        final SettingPage setting = WelcomePage.of(getContext()).openSetting();
-        setting.setAutosaveEnabled(false);
-
-        // Import a campaign position and keep the original mission state.
+    void TC_02_session_menu_has_no_campaign_restart() throws Exception {
+        // A regular game has no campaign restart action.
+        WelcomePage.of(getContext()).loadGame();
         final SavedGamesPage saves = new SavedGamesPage(getContext());
-        saves.prepareCampaignImport();
-        final GamePage game = setting.goBack().loadGame();
-        // A new campaign mission presents its two introductory messages.
-        DialogMessagePage.of(getContext()).close();
-        DialogMessagePage.of(getContext()).close();
-        saves.rememberMissionStart();
-        game.nextTurnAndCloseDialogs();
-        saves.rememberGame();
-
-        // Cancelling a restart preserves progress in the active mission.
         saves.openMenu();
-        saves.verifyRestartAvailable(true);
-        saves.chooseMenu("menuRestart");
-        saves.action("saveCancel");
-        saves.verifyGameUnchanged();
-
-        // Explicitly discarding progress starts the authored mission again.
-        saves.openMenu();
-        saves.chooseMenu("menuRestart");
-        saves.action("saveDiscard");
-        DialogMessagePage.of(getContext()).close();
-        DialogMessagePage.of(getContext()).close();
-        saves.verifyRestartedMission();
+        saves.verifyRestartAvailable(false);
+        saves.chooseMenu("menuResume");
     }
 
     @Test
@@ -520,7 +496,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
         // The main menu names the same Load shortcut.
         game.exitToMenu().verifyMainScreen();
-        hosted.verifyMenuShortcut("buttonLoad", "Load saved game", KeyCode.O);
+        hosted.verifyMenuShortcut("buttonLoad", "Open Game", KeyCode.O);
         hosted.captureDialog("buttonLoad", "r0377-main-menu-shortcut.png");
 
         // Double-click also loads from the main menu without an active game.
@@ -886,11 +862,10 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
         welcome.verifyMainScreen();
         welcome.verifyContinueAvailable(true);
 
-        // A modal opened from Welcome owns the key; Continue stays behind it.
-        saves.action("buttonHallOfFame");
+        // Settings owns C; Continue cannot activate behind another page.
+        final SettingPage menuSettings = welcome.openSetting();
         welcome.pressKeys(KeyCode.C);
-        welcome.verifyHallOfFameOpen();
-        saves.action("hallOfFameClose");
+        menuSettings.goBack();
         welcome.verifyMainScreen();
 
         // Modified C remains inert, even when Continue is available.
@@ -948,7 +923,7 @@ public class TC_191_F224_session_menu_test extends AbstractAkropiaTest {
 
         // The main menu names the new key at once; the old key does nothing.
         setting.goBack().verifyMainScreen();
-        hosted.verifyMenuShortcut("buttonLoad", "Load saved game", KeyCode.L);
+        hosted.verifyMenuShortcut("buttonLoad", "Open Game", KeyCode.L);
         hosted.pressShortcut(KeyCode.O);
         hosted.verifyLoadClosed();
         WelcomePage.of(getContext()).verifyMainScreen();

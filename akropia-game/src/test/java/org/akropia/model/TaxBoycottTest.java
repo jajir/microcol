@@ -14,9 +14,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.PlayerPo;
@@ -42,8 +42,8 @@ class TaxBoycottTest {
     private static final int WAGON_ID = 5000;
 
     private GameModelPo data(final GoodsType... boycotted) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies()
                 .forEach(colony -> colony.setExportGoods(List.of()));
         final PlayerPo dutch = data.getModel().getGameManager().getPlayers()
@@ -74,8 +74,7 @@ class TaxBoycottTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Model modelWithWagon(final GoodsType... boycotted) {
@@ -167,7 +166,7 @@ class TaxBoycottTest {
     void boycottSurvivesSaveAndLoad() {
         final Model model = modelWithWagon(GoodsType.ORE, GoodsType.SILVER);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = restored.getPlayerByName("Dutch");
         assertTrue(dutch.isBoycotted(GoodsType.ORE));
         assertTrue(dutch.isBoycotted(GoodsType.SILVER));

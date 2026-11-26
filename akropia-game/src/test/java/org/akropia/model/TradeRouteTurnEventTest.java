@@ -12,9 +12,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.TurnEventPo;
 import org.akropia.model.turnevent.TurnEventCriticality;
 import org.akropia.model.turnevent.TurnEventTradeRouteTransfer;
@@ -56,7 +56,7 @@ class TradeRouteTurnEventTest {
         World(final GameModelPo data) {
             this.data = data;
             this.model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+                    GameModel.gameOverEvaluators());
             this.delft = model.getColonyById(DELFT).orElseThrow();
             this.dutch = delft.getOwner();
             this.ship = (UnitWithCargo) dutch.getUnits().stream()

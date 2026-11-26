@@ -1,6 +1,6 @@
 /**
- * Contains converting translating model event to GUI events. For each model
- * event contains font-end event controlled. Mission reactions also decide when
- * a won mission requests its success cue.
+ * Bridges committed model events to GUI updates and game-result dialogs.
+ * GameEventListener presents outcomes and GameVictoryCue requests the success
+ * sound; rules remain in the model.
  */
 package org.akropia.gui.event.model;

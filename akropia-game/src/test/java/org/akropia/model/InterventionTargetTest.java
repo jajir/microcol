@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.InterventionPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
@@ -26,7 +26,7 @@ import org.akropia.model.turnevent.TurnEventIntervention;
  */
 class InterventionTargetTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private static GameModelPo data(final boolean declared) {
         final GameModelPo data = new GameModelPoDao().loadFromClassPath(MAP);
@@ -43,7 +43,7 @@ class InterventionTargetTest {
     }
 
     private static Model load(final ModelPo po) {
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static Player dutch(final Model model) {

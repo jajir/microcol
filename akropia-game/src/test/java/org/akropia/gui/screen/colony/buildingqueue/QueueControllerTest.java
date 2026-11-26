@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import org.akropia.gui.event.model.GameModelController;
 import org.akropia.gui.screen.colony.ColonyDialogCallback;
 import org.akropia.model.*;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 
 class QueueControllerTest {
     private Colony colony;
@@ -22,9 +22,8 @@ class QueueControllerTest {
     @BeforeEach
     void prepare() {
         final Model model = Model.make(new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
+                .getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         callback = mock(ColonyDialogCallback.class);
         game = mock(GameModelController.class);

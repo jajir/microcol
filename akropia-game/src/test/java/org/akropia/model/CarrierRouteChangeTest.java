@@ -3,8 +3,8 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
 import java.util.List;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.junit.jupiter.api.Test;
 import com.google.gson.Gson;
 
@@ -12,7 +12,7 @@ class CarrierRouteChangeTest {
     private Model model() {
         return Model.make(new GameModelPoDao().loadFromFile(new File(
                 "../akropia-test/src/test/scenarios/F109-trade-route-assignment.akropia"))
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .getModel(), GameModel.gameOverEvaluators());
     }
 
     private TradeRoute route(final Model model, final String name) {
@@ -49,7 +49,7 @@ class CarrierRouteChangeTest {
         assertEquals(location, wagon.getLocation());
         assertEquals(movement, wagon.getMovementThirds());
         final Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(save(model), save(loaded));
     }
 

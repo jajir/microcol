@@ -8,9 +8,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 
 import com.google.gson.Gson;
@@ -26,13 +26,12 @@ class FounderConstructionTest {
     }
 
     private GameModelPo fixture() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void giveFounder(final GameModelPo data, final Founder founder) {
@@ -174,7 +173,7 @@ class FounderConstructionTest {
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
         congress.setGeneration(1);
         final Model paused = Model.make(pausedPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony waiting = paused.getColonyByName("Delft").orElseThrow();
         final ColonyBuildingQueue queue = waiting.getColonyBuildingQueue();
         assertEquals(ColonyBuildingQueue.UnavailableReason.MISSING_FOUNDER,
@@ -198,7 +197,7 @@ class FounderConstructionTest {
                 Founder.WILLIAM_PENN, Founder.FERDINAND_MAGELLAN));
         restoredCongress.setGeneration(2);
         final Model resumed = Model.make(restoredPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony completed = resumed.getColonyByName("Delft").orElseThrow();
         completed.getColonyBuildingQueue().startTurn();
         assertTrue(completed
@@ -242,8 +241,7 @@ class FounderConstructionTest {
         colony.getWarehouse().addGoods(Goods.of(GoodsType.HAMMERS, 1));
         final ModelPo heldPo = model.save();
         heldPo.getGameManager().setCurrentPlayer(king.getName());
-        final Model held = Model.make(heldPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model held = Model.make(heldPo, GameModel.gameOverEvaluators());
         final Colony capturedColony = held.getColonyByName("Delft")
                 .orElseThrow();
         final ColonyBuildingQueue capturedQueue = capturedColony
@@ -262,7 +260,7 @@ class FounderConstructionTest {
         final ModelPo returnedPo = held.save();
         returnedPo.getGameManager().setCurrentPlayer(dutch.getName());
         final Model returned = Model.make(returnedPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony returnedColony = returned.getColonyByName("Delft")
                 .orElseThrow();
         returnedColony.getColonyBuildingQueue().startTurn();

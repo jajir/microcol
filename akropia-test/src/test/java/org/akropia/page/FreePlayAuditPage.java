@@ -20,8 +20,8 @@ import org.akropia.model.PlaceEuropePier;
 import org.akropia.model.PlaceCargoSlot;
 import org.akropia.model.Unit;
 import org.akropia.model.Colony;
-import org.akropia.model.campaign.po.RecoverySlot;
-import org.akropia.model.campaign.po.PersistingTool;
+import org.akropia.model.game.po.RecoverySlot;
+import org.akropia.model.game.po.PersistingTool;
 import org.akropia.model.unit.UnitFreeColonist;
 import org.testfx.util.WaitForAsyncUtils;
 
@@ -235,7 +235,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void verifyRecoveryOption(final RecoverySlot slot,
             final boolean available, final String date) {
         final java.io.File file = recoveryFile(slot);
-        final javafx.scene.control.ListView<org.akropia.model.campaign.po.SavedGames.Entry> list = savedList();
+        final javafx.scene.control.ListView<org.akropia.model.game.po.SavedGames.Entry> list = savedList();
         final var entry = list.getItems().stream()
                 .filter(value -> value.file.equals(file)).findFirst();
         assertEquals(available, entry.isPresent());
@@ -275,7 +275,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     }
 
     @SuppressWarnings("unchecked")
-    private javafx.scene.control.ListView<org.akropia.model.campaign.po.SavedGames.Entry> savedList() {
+    private javafx.scene.control.ListView<org.akropia.model.game.po.SavedGames.Entry> savedList() {
         return getNodeFinder().lookup("#savedGamesList")
                 .queryAs(javafx.scene.control.ListView.class);
     }
@@ -312,7 +312,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void verifyRecoveryTurn(final RecoverySlot slot,
             final int expectedTurn) {
         final java.io.File file = recoveryFile(slot);
-        final org.akropia.model.campaign.po.GameModelPo saved = new org.akropia.model.campaign.po.GameModelPoDao()
+        final org.akropia.model.game.po.GameModelPo saved = new org.akropia.model.game.po.GameModelPoDao()
                 .loadPlayerGame(file);
         assertEquals(expectedTurn,
                 saved.getModel().getCalendar().getNumberOfPlayedTurns());
@@ -321,14 +321,14 @@ public final class FreePlayAuditPage extends AbstractScreen {
     public void verifyLoadedRecoveryMatchesSlot(final RecoverySlot slot)
             throws Exception {
         final File source = recoveryFile(slot);
-        final var files = new org.akropia.model.campaign.po.GameModelPoDao();
+        final var files = new org.akropia.model.game.po.GameModelPoDao();
         final var expected = files.loadPlayerGame(source);
         final java.nio.file.Path actualFile = Files
                 .createTempFile("restored-recovery-", ".akropia");
         try {
             getContext()
                     .getClassFromGuice(
-                            org.akropia.model.campaign.GameModelDao.class)
+                            org.akropia.model.game.GameModelDao.class)
                     .saveToFile(actualFile.toString(),
                             getContext().getClassFromGuice(
                                     org.akropia.gui.event.model.GameModelController.class)
@@ -353,8 +353,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     public void prepareCorruptTurnSnapshot() throws Exception {
         corruptedTurnSnapshot = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .nextTurnSnapshot(1);
         Files.writeString(corruptedTurnSnapshot.toPath(), "{");
     }
@@ -389,7 +388,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         clickOnButtonWithId("saveConfirm");
     }
 
-    private org.akropia.model.campaign.GameModel activeGameBeforeSaveFailure;
+    private org.akropia.model.game.GameModel activeGameBeforeSaveFailure;
     private com.google.gson.JsonElement stateBeforeSaveFailure;
 
     public void rememberActiveGameBeforeSaveFailure() {
@@ -491,21 +490,20 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     private File invalidSave;
     private byte[] invalidSaveBytes;
-    private org.akropia.model.campaign.GameModel previousGame;
+    private org.akropia.model.game.GameModel previousGame;
     private com.google.gson.JsonElement previousWorld;
 
     public void prepareInvalidSavedGame(final boolean autosave)
             throws Exception {
-        final org.akropia.model.campaign.po.GameModelPoDao files = new org.akropia.model.campaign.po.GameModelPoDao();
-        final org.akropia.model.campaign.po.GameModelPo data = files
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia");
+        final org.akropia.model.game.po.GameModelPoDao files = new org.akropia.model.game.po.GameModelPoDao();
+        final org.akropia.model.game.po.GameModelPo data = files
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies().get(1).setLocation(Location.of(24, 13));
         invalidSave = autosave ? continueFile()
                 : Files.createTempFile("invalid-game-", ".akropia").toFile();
         // A player save with valid metadata whose game data are invalid.
         PlayerSaveFixture.writeInvalidGame(invalidSave, data,
-                "/maps/default-campaign-mission-2-thrive.akropia");
+                "/maps/fixture-developed-world.akropia");
         invalidSaveBytes = Files.readAllBytes(invalidSave.toPath());
         previousGame = getContext()
                 .getClassFromGuice(
@@ -538,7 +536,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         // The recovery point is an archive; its game entry is edited as plain
         // scenario JSON.
         final com.google.gson.JsonObject data = new com.google.gson.JsonParser()
-                .parse(new org.akropia.model.campaign.po.GameModelPoDao()
+                .parse(new org.akropia.model.game.po.GameModelPoDao()
                         .loadGameJson(source))
                 .getAsJsonObject();
         final com.google.gson.JsonObject model = data.getAsJsonObject("model");
@@ -701,8 +699,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
 
     private List<File> turnSnapshots() {
         return getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .turnSnapshots();
     }
 
@@ -711,7 +708,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
      * oldest write first (R-0388).
      */
     public void verifyTurnSnapshots(final Integer... expectedTurns) {
-        final var files = new org.akropia.model.campaign.po.GameModelPoDao();
+        final var files = new org.akropia.model.game.po.GameModelPoDao();
         assertEquals(List.of(expectedTurns),
                 turnSnapshots().stream()
                         .map(file -> files.loadPlayerGame(file).getModel()
@@ -760,8 +757,7 @@ public final class FreePlayAuditPage extends AbstractScreen {
         assertEquals(expectedYears.length, listed.size());
         for (int i = 0; i < listed.size(); i++) {
             final var entry = listed.get(i);
-            assertEquals(
-                    org.akropia.model.campaign.po.SavedGames.Kind.AUTOMATIC,
+            assertEquals(org.akropia.model.game.po.SavedGames.Kind.AUTOMATIC,
                     entry.kind);
             getRobot().interact(() -> list.getSelectionModel().select(entry));
             WaitForAsyncUtils.waitForFxEvents();

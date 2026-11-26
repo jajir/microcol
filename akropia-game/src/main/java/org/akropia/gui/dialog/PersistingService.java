@@ -19,14 +19,14 @@ import org.akropia.model.AkropiaException;
 import org.akropia.model.Model;
 import org.akropia.model.TurnPreparationException;
 import org.akropia.gui.event.model.GameModelController;
-import org.akropia.model.campaign.GameModel;
-import org.akropia.model.campaign.po.PersistingTool;
-import org.akropia.model.campaign.po.RecoveryCheckpointPolicy;
-import org.akropia.model.campaign.po.RecoverySlot;
-import org.akropia.model.campaign.po.SaveBaseline;
-import org.akropia.model.campaign.po.SaveSummaryPo;
-import org.akropia.model.campaign.po.SavedGames;
-import org.akropia.model.campaign.po.TurnSnapshot;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.PersistingTool;
+import org.akropia.model.game.po.RecoveryCheckpointPolicy;
+import org.akropia.model.game.po.RecoverySlot;
+import org.akropia.model.game.po.SaveBaseline;
+import org.akropia.model.game.po.SaveSummaryPo;
+import org.akropia.model.game.po.SavedGames;
+import org.akropia.model.game.po.TurnSnapshot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,7 +44,7 @@ import javafx.application.Platform;
 @com.google.inject.Singleton
 public class PersistingService {
 
-    private final org.akropia.model.campaign.po.SavedGames savedGames;
+    private final org.akropia.model.game.po.SavedGames savedGames;
     private final org.akropia.gui.util.ViewUtil view;
     private final org.akropia.i18n.I18n texts;
     private final org.akropia.gui.preferences.GamePreferences preferences;
@@ -87,7 +87,7 @@ public class PersistingService {
             final FileSelectingService fileSelectingService,
             final GameModelController gameModelController,
             final DiagnosticLog diagnosticLog,
-            final org.akropia.model.campaign.po.SavedGames savedGames,
+            final org.akropia.model.game.po.SavedGames savedGames,
             final org.akropia.gui.util.ViewUtil view,
             final org.akropia.i18n.I18n texts,
             final org.akropia.gui.preferences.GamePreferences preferences) {
@@ -104,7 +104,7 @@ public class PersistingService {
             final FileSelectingService fileSelectingService,
             final GameModelController gameModelController,
             final DiagnosticLog diagnosticLog,
-            final org.akropia.model.campaign.po.SavedGames savedGames,
+            final org.akropia.model.game.po.SavedGames savedGames,
             final org.akropia.gui.util.ViewUtil view,
             final org.akropia.i18n.I18n texts,
             final org.akropia.gui.preferences.GamePreferences preferences,
@@ -384,7 +384,7 @@ public class PersistingService {
     }
 
     private String suggestedName(final SaveSummaryPo current) {
-        return savedGames.unusedName(org.akropia.model.campaign.GameModelDao
+        return savedGames.unusedName(org.akropia.model.game.GameModelDao
                 .defaultName(current, texts.get(SavedGameText.saveNameYear)));
     }
 
@@ -619,13 +619,6 @@ public class PersistingService {
                 .orElse("true");
         return "true".equals(value) ? persistingTool.getAutoSaveFile()
                 : new File(value);
-    }
-
-    public void restartMission() {
-        if (gameController.restartMission(this::confirmLeave)) {
-            eventBus.post(new ShowScreenEvent(Screen.GAME));
-            checkpointNewGame();
-        }
     }
 
     /**

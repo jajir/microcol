@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.VisibilityPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -35,7 +35,7 @@ class PeaceNegotiationTest {
             congress.setGeneration(2);
         }
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit visitor = model.getUnitById(0);
         visitor.placeToLocation(Location.of(18, 10));
         visitor.getOwner().revealMapForUnit(visitor);
@@ -81,7 +81,7 @@ class PeaceNegotiationTest {
                 .filter(player -> player.getName().equals("Dutch")).findFirst()
                 .orElseThrow().setVisible(new VisibilityPo());
         final Model hidden = Model.make(hiddenState,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = hidden.getPlayerByName("Dutch");
         final Player france = hidden.getPlayerByName("France");
         final Unit visitor = hidden.getUnitById(0);
@@ -103,7 +103,7 @@ class PeaceNegotiationTest {
         final ModelPo wrongTurnState = wrongTurnSource.save();
         wrongTurnState.getGameManager().setCurrentPlayer("France");
         final Model wrongTurn = Model.make(wrongTurnState,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player dutch = wrongTurn.getPlayerByName("Dutch");
         final Player france = wrongTurn.getPlayerByName("France");
         assertTrue(wrongTurn.getPeaceVisitors(dutch, france).isEmpty());
@@ -130,7 +130,7 @@ class PeaceNegotiationTest {
         final ModelPo wartime = model.save();
         wartime.getGameManager().setCurrentPlayer("France");
         final Model aiAtWar = Model.make(wartime,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player warFrance = aiAtWar.getPlayerByName("France");
         final Player warDutch = aiAtWar.getPlayerByName("Dutch");
         assertTrue(aiAtWar.areHostile(warFrance, warDutch));
@@ -143,7 +143,7 @@ class PeaceNegotiationTest {
         final ModelPo peacetime = model.save();
         peacetime.getGameManager().setCurrentPlayer("France");
         final Model aiAtPeace = Model.make(peacetime,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player peaceFrance = aiAtPeace.getPlayerByName("France");
         final Player peaceDutch = aiAtPeace.getPlayerByName("Dutch");
         assertFalse(aiAtPeace.areHostile(peaceFrance, peaceDutch));
@@ -216,7 +216,7 @@ class PeaceNegotiationTest {
                 rival);
         final String saved = saved(model);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(saved, saved(restored));
         final Player restoredActor = restored.getPlayerByName("Dutch");
         final Player restoredRival = restored.getPlayerByName("France");
@@ -227,7 +227,7 @@ class PeaceNegotiationTest {
         assertEquals(pending.getVisitorId(), offer.getVisitorId());
         restored.acceptPeaceOffer(offer);
         final Model again = Model.make(restored.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(EuropeanRelationState.PEACE,
                 again.getEuropeanRelation(again.getPlayerByName("Dutch"),
                         again.getPlayerByName("France")));
@@ -295,7 +295,7 @@ class PeaceNegotiationTest {
         terrain.put(Location.of(18, 10), TerrainType.OCEAN);
         seaData.getModel().getMap().setTerrainType(terrain);
         final Model sea = Model.make(seaData.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player sailor = sea.getPlayerByName("Dutch");
         final Player coastOwner = sea.getPlayerByName("France");
         final Unit ship = sea.addUnitInEurope(UnitType.CARAVEL, sailor);
@@ -329,12 +329,12 @@ class PeaceNegotiationTest {
                 model.getPlayerByName("France"));
         final ModelPo missing = model.save();
         missing.getEuropeanRelations().get(0).getPeaceOffer().setPrice(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(missing,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(missing, GameModel.gameOverEvaluators()));
         final ModelPo wrongPair = model.save();
         wrongPair.getEuropeanRelations().get(0).getPeaceOffer()
                 .setRival("Unknown");
-        assertThrows(IllegalArgumentException.class, () -> Model.make(wrongPair,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(wrongPair, GameModel.gameOverEvaluators()));
     }
 }

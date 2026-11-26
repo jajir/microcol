@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
@@ -16,8 +16,8 @@ import org.akropia.model.unit.Ship;
 /** Owner updates are the only authority for transfer and repair progress. */
 class ShipRepairTest {
     private GameModelPo scenario() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final UnitPo ship = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         ship.setPlaceEuropePort(null);
@@ -33,8 +33,7 @@ class ShipRepairTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private Ship ship(final Model model) {
@@ -140,8 +139,7 @@ class ShipRepairTest {
                 .findFirst().orElseThrow().getConstructions()
                 .removeIf(construction -> construction
                         .getType() == ConstructionType.DRYDOCK);
-        model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved, GameModel.gameOverEvaluators());
         model.startGame();
         ownerUpdate(model);
         assertTrue(ship(model).getRepair().orElseThrow().isEuropeDestination());
@@ -159,17 +157,16 @@ class ShipRepairTest {
         final var invalid = model.save();
         invalid.getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().setPlaceMap(new PlaceMapPo());
-        assertThrows(IllegalArgumentException.class, () -> Model.make(invalid,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(invalid, GameModel.gameOverEvaluators()));
         final var invalidOrigin = model.save();
         final var repair = invalidOrigin.getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow()
                 .getPlaceShipRepair();
         repair.setOrigin(Location.of(25, 14));
         repair.setOriginWasPort(false);
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(invalidOrigin,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(invalidOrigin, GameModel.gameOverEvaluators()));
         final var event = new org.akropia.model.turnevent.TurnEventShipRepair(
                 "Dutch",
                 org.akropia.model.turnevent.TurnEventShipRepair.Kind.SUNK, 0,
@@ -202,7 +199,7 @@ class ShipRepairTest {
         saved.getUnits().removeIf(unit -> residents.contains(unit.getId()));
         saved.getColonies().remove(removed);
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         assertTrue(ship(restored).getRepair().orElseThrow().wasOriginPort());
         ownerUpdate(restored);
@@ -288,8 +285,7 @@ class ShipRepairTest {
         assertTrue(notice.getLostPassengers() > 0);
         assertEquals(notice.getLostPassengers(),
                 ((org.akropia.model.turnevent.TurnEventShipRepair) Model
-                        .make(model.save(),
-                                MissionImpl.getPredefinedGameOverEvaluators())
+                        .make(model.save(), GameModel.gameOverEvaluators())
                         .getTurnEventStore()
                         .getForPlayer(model.getCurrentPlayer()).stream()
                         .filter(event -> event instanceof org.akropia.model.turnevent.TurnEventShipRepair)
@@ -308,8 +304,7 @@ class ShipRepairTest {
                 .findFirst().orElseThrow().getConstructions()
                 .removeIf(construction -> construction
                         .getType() == ConstructionType.DRYDOCK);
-        model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved, GameModel.gameOverEvaluators());
         model.startGame();
         assertEquals(0,
                 ship(model).getRepair().orElseThrow().getDestinationColonyId());
@@ -352,7 +347,7 @@ class ShipRepairTest {
 
     private Model loadSaved(final Model model) {
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.startGame();
         return restored;
     }
@@ -371,7 +366,7 @@ class ShipRepairTest {
         invalid.getUnits().stream().filter(unit -> unit.getId() == 3)
                 .findFirst().orElseThrow().getPlaceShipRepair()
                 .setRemainingPhaseUpdates(0);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(invalid,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(invalid, GameModel.gameOverEvaluators()));
     }
 }

@@ -2,7 +2,7 @@ package org.akropia.gui.util;
 
 import org.akropia.gui.dialog.PersistingService;
 import org.akropia.gui.preferences.GamePreferences;
-import org.akropia.model.campaign.po.RecoveryCheckpointPolicy;
+import org.akropia.model.game.po.RecoveryCheckpointPolicy;
 import org.akropia.model.event.TurnStartedEvent;
 
 import com.google.common.base.Preconditions;

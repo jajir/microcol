@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -53,8 +53,8 @@ class ConstructionQueueSaveTest {
     private Path saveWithQueue(final String queueJson, final int hammers)
             throws Exception {
         final Path file = directory.resolve("construction.akropia");
-        dao.saveToFile(file.toString(), dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia"));
+        dao.saveToFile(file.toString(),
+                dao.loadFromClassPath("/maps/fixture-developed-world.akropia"));
         final Gson gson = new GsonBuilder().serializeNulls().create();
         final JsonObject json = gson.fromJson(Files.readString(file),
                 JsonObject.class);
@@ -80,8 +80,7 @@ class ConstructionQueueSaveTest {
         final byte[] before = Files.readAllBytes(file);
         assertThrows(IllegalArgumentException.class, () -> {
             final GameModelPo data = dao.loadFromFile(file.toFile());
-            Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            Model.make(data.getModel(), GameModel.gameOverEvaluators());
         });
         assertArrayEquals(before, Files.readAllBytes(file));
     }
@@ -95,7 +94,7 @@ class ConstructionQueueSaveTest {
         final byte[] before = Files.readAllBytes(file);
         final GameModelPo data = dao.loadFromFile(file.toFile());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony colony = model.getColonyByName("Delft").orElseThrow();
         assertEquals(1, colony.getUnitsInsideColony().size());
         assertFalse(
@@ -120,7 +119,7 @@ class ConstructionQueueSaveTest {
         final byte[] before = Files.readAllBytes(file);
         final GameModelPo data = dao.loadFromFile(file.toFile());
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final int turns = model.getCalendar().getNumberOfPlayedTurns();
         model.startGame();
         final Colony colony = model.getColonyByName("Delft").orElseThrow();

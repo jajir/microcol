@@ -16,7 +16,7 @@ import org.akropia.i18n.I18n;
 import org.akropia.model.Calendar;
 import org.akropia.model.AkropiaException;
 import org.akropia.model.TurnPlayerStatistics;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;

@@ -3,9 +3,9 @@ package org.akropia.gui;
 import com.google.inject.ImplementedBy;
 
 /**
- * Plays the short success cue of a won mission (R-0228). It is independent of
- * the background music. Implementations return at once, play at most one cue at
- * a time and never let an audio problem reach the caller.
+ * Plays the short success cue of a won game (R-0228). It is independent of the
+ * background music. Implementations return at once, play at most one cue at a
+ * time and never let an audio problem reach the caller.
  */
 @ImplementedBy(JavaSoundSuccessCuePlayer.class)
 public interface SuccessCuePlayer {

@@ -10,9 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.CongressPo;
@@ -31,8 +31,8 @@ import com.google.gson.Gson;
 class FounderOwlAndClayProductionTest {
 
     private GameModelPo data(final long liberty) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies().forEach(colony -> {
             colony.setLiberty(0L);
             colony.setLastColonialAffiliation(colony.getOwnerName());
@@ -109,8 +109,7 @@ class FounderOwlAndClayProductionTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private int stored(final Colony colony, final GoodsType type) {
@@ -260,7 +259,7 @@ class FounderOwlAndClayProductionTest {
         // (1 * 100 + 6 * 150) / 100 = 10.
         assertEquals(10, planned(colony(model), GoodsType.OWLS));
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(10, planned(colony(resumed), GoodsType.OWLS));
     }
 
@@ -319,7 +318,7 @@ class FounderOwlAndClayProductionTest {
         colony.startTurn();
         assertEquals(before + preview, stored(colony, GoodsType.OWLS));
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final String saved = new Gson().toJson(resumed.save());
         resumed.startGame();
         assertEquals(saved, new Gson().toJson(resumed.save()));
@@ -478,7 +477,7 @@ class FounderOwlAndClayProductionTest {
                 stored(quebec, GoodsType.OWLS));
 
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Colony reloaded = colony(resumed);
         assertEquals("Dutch", reloaded.getOwner().getName());
         assertEquals(afterOwls, planned(reloaded, GoodsType.OWLS));

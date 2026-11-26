@@ -13,9 +13,9 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.GoodsWasSoldInEuropeEvent;
 import org.akropia.model.event.UnitMovedStepFinishedEvent;
 import org.akropia.model.event.UnitMovedToHighSeasEvent;
@@ -76,8 +76,7 @@ class TradeRouteNavigationTest {
 
         World(final GameModelPo data) {
             this.data = data;
-            model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
             delft = model.getColonyById(DELFT).orElseThrow();
             dutch = delft.getOwner();
             ship = (UnitWithCargo) unitOf(model, SHIP_ID);

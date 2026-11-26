@@ -34,13 +34,9 @@ public final class ButtonsPanelView
 
     public static final String BUTTON_LOAD_ID = "buttonLoad";
 
-    public static final String BUTTON_PLAY_CAMPAIGN_ID = "buttonCampaign";
-
     public static final String BUTTON_START_FREE_GAME_ID = "buttonStartFreeGame";
 
     public static final String BUTTON_EXIT_ID = "buttonExit";
-
-    public static final String BUTTON_HALL_OF_FAME_ID = "buttonHallOfFame";
 
     public static final String BUTTON_MAP_EDITOR_ID = "buttonMapEditor";
 
@@ -51,20 +47,14 @@ public final class ButtonsPanelView
      * Columns of menu-icons.png in button order; column 1 holds the recovery
      * artwork, which no longer has a main-menu entry (R-0376).
      */
-    private static final int[] ICON_COLUMNS = { 0, 2, 3, 4, 5, 6, 7 };
+    private static final int[] ICON_COLUMNS = { 0, 2, 4, 6, 7 };
 
     private final Button buttonContinue = ActionButtons.button(ButtonIcon.PLAY);
 
     private final Button buttonLoad = ActionButtons.button(ButtonIcon.FOLDER);
 
-    private final Button buttonPlayCampaign = ActionButtons
-            .button(ButtonIcon.CAMPAIGN);
-
     private final Button buttonStartFreeGame = ActionButtons
             .button(ButtonIcon.NEW_GAME);
-
-    private final Button buttonHallOfFame = ActionButtons
-            .button(ButtonIcon.TROPHY);
 
     private final Button buttonSetting = ActionButtons
             .button(ButtonIcon.SETTINGS);
@@ -95,14 +85,10 @@ public final class ButtonsPanelView
         final java.util.Map<ShortcutAction, java.util.function.Supplier<? extends Button>> commands = new java.util.EnumMap<>(
                 ShortcutAction.class);
         commands.put(ShortcutAction.NEW_FREE_GAME, () -> buttonStartFreeGame);
-        commands.put(ShortcutAction.PLAY_CAMPAIGN, () -> buttonPlayCampaign);
-        commands.put(ShortcutAction.HALL_OF_FAME, () -> buttonHallOfFame);
         ShortcutButtons.install(buttonsBox, shortcuts, commands);
         buttonContinue.setId(BUTTON_CONTINUE_ID);
         buttonLoad.setId(BUTTON_LOAD_ID);
-        buttonPlayCampaign.setId(BUTTON_PLAY_CAMPAIGN_ID);
         buttonStartFreeGame.setId(BUTTON_START_FREE_GAME_ID);
-        buttonHallOfFame.setId(BUTTON_HALL_OF_FAME_ID);
         buttonSetting.setId(BUTTON_SETTING_ID);
         buttonExitAkropia.setId(BUTTON_EXIT_ID);
         buttonMapEditor.setId(BUTTON_MAP_EDITOR_ID);
@@ -123,16 +109,13 @@ public final class ButtonsPanelView
                 .addListener(observable -> placeMapEditor());
         buttonsBox.getChildren().add(buttonContinue);
         buttonsBox.getChildren().add(buttonLoad);
-        buttonsBox.getChildren().add(buttonPlayCampaign);
         buttonsBox.getChildren().add(buttonStartFreeGame);
-        buttonsBox.getChildren().add(buttonHallOfFame);
         buttonsBox.getChildren().add(buttonSetting);
         buttonsBox.getChildren().add(buttonMapEditor);
         buttonsBox.getChildren().add(buttonExitAkropia);
         final Image icons = images.getImage("menu-icons.png");
         final Button[] buttons = { buttonContinue, buttonLoad,
-                buttonPlayCampaign, buttonStartFreeGame, buttonHallOfFame,
-                buttonSetting, buttonExitAkropia };
+                buttonStartFreeGame, buttonSetting, buttonExitAkropia };
         for (int index = 0; index < buttons.length; index++) {
             final Button button = buttons[index];
             button.getStyleClass().add("game-toolbar-control");
@@ -191,9 +174,7 @@ public final class ButtonsPanelView
         buttonContinue.setText(i18n.get(GameMenu.buttonContinue));
         buttonLoad.setText(shortcuts.withHint(i18n.get(GameMenu.buttonLoadSave),
                 ShortcutAction.LOAD_GAME));
-        buttonPlayCampaign.setText(i18n.get(GameMenu.buttonPlayCampaign));
         buttonStartFreeGame.setText(i18n.get(GameMenu.buttonFreeGame));
-        buttonHallOfFame.setText(i18n.get(GameMenu.buttonHallOfFame));
         buttonSetting.setText(i18n.get(GameMenu.buttonSetting));
         buttonMapEditor.setText(i18n.get(GameMenu.buttonMapEditor));
         buttonExitAkropia.setText(i18n.get(GameMenu.buttonExitAkropia));
@@ -201,10 +182,6 @@ public final class ButtonsPanelView
         // labels stay compact and assistive technology names the key.
         buttonStartFreeGame.setAccessibleHelp(shortcuts.withHint(
                 buttonStartFreeGame.getText(), ShortcutAction.NEW_FREE_GAME));
-        buttonPlayCampaign.setAccessibleHelp(shortcuts.withHint(
-                buttonPlayCampaign.getText(), ShortcutAction.PLAY_CAMPAIGN));
-        buttonHallOfFame.setAccessibleHelp(shortcuts.withHint(
-                buttonHallOfFame.getText(), ShortcutAction.HALL_OF_FAME));
         buttonSetting.setAccessibleHelp(shortcuts.withHint(
                 buttonSetting.getText(), ShortcutAction.OPEN_SETTINGS));
         buttonExitAkropia.setAccessibleHelp(shortcuts.withHint(
@@ -215,37 +192,17 @@ public final class ButtonsPanelView
         return buttonStartFreeGame;
     }
 
-    /**
-     * @return the button that opens the Hall of Fame (R-0197)
-     */
-    public Button getButtonHallOfFame() {
-        return buttonHallOfFame;
-    }
-
     @Override
     public Region getContent() {
         return buttonsBox;
     }
 
-    /**
-     * @return the buttonContinue
-     */
     public Button getButtonContinue() {
         return buttonContinue;
     }
 
-    /**
-     * @return the buttonLoadSave
-     */
     public Button getButtonLoad() {
         return buttonLoad;
-    }
-
-    /**
-     * @return the buttonPlayCampaign
-     */
-    public Button getButtonPlayCampaign() {
-        return buttonPlayCampaign;
     }
 
     /**

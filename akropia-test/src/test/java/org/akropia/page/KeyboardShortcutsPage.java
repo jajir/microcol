@@ -235,7 +235,7 @@ public class KeyboardShortcutsPage extends AbstractScreen {
     private java.io.File settingFile() {
         return new java.io.File(getContext()
                 .getClassFromGuice(
-                        org.akropia.model.campaign.po.PersistingTool.class)
+                        org.akropia.model.game.po.PersistingTool.class)
                 .getRootSaveDirectory(), ".setting.json");
     }
 

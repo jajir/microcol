@@ -10,8 +10,8 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.EuropeanRelationPo;
@@ -89,7 +89,7 @@ class AllianceModelTest {
     }
 
     private Model make(final ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     /** Dutch colonist 0 stands next to the visible French colony. */

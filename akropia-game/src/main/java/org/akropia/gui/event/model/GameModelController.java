@@ -46,7 +46,7 @@ import org.akropia.model.Player;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
 import org.akropia.model.WorldMap;
-import org.akropia.model.campaign.GameModel;
+import org.akropia.model.game.GameModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

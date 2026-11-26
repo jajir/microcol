@@ -10,10 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.ReferenceExpedition;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.ReferenceExpedition;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.RecruitmentPo;
 import org.akropia.model.store.PlaceEuropePortPo;
 import org.akropia.model.store.UnitActionNoActionPo;
@@ -24,13 +24,12 @@ import com.google.gson.Gson;
 class ImmigrationTest {
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private RecruitmentPo savedDutchPool(final GameModelPo data) {
@@ -148,7 +147,7 @@ class ImmigrationTest {
         assertEquals(gold, dutch.getGold());
 
         final Model resumed = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player reloaded = resumed.getPlayerByName("Dutch");
         final long savedPier = pierPeople(reloaded);
         final int savedTorches = reloaded.getImmigrationTorches();

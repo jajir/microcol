@@ -3,9 +3,9 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitWithCargo;
@@ -13,8 +13,8 @@ import org.akropia.model.unit.UnitWithCargo;
 class RoyalExpeditionRoleTest {
     @Test
     void royalSoldiersCarryTheirAttackEquipmentThroughCargoAndSave() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
             if (player.getWhosKingThisPlayerIs() != null) {
@@ -25,7 +25,7 @@ class RoyalExpeditionRoleTest {
             }
         }
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         model.endTurn();
         final Player king = model.getPlayerByName("Dutch's King");
@@ -46,7 +46,7 @@ class RoyalExpeditionRoleTest {
         assertEquals(MilitaryRole.ROYAL, soldier.getMilitaryRole());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final UnitFreeColonist saved = (UnitFreeColonist) restored
                 .getUnitById(soldier.getId());
         assertTrue(saved.isHoldingWeapons());

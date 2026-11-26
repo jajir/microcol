@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
 

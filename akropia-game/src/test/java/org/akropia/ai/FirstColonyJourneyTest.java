@@ -31,9 +31,9 @@ import org.akropia.model.ModelListenerAdapter;
 import org.akropia.model.Player;
 import org.akropia.model.PlayerKing;
 import org.akropia.model.Unit;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.TurnStartedEvent;
 
 import com.google.common.eventbus.EventBus;
@@ -55,8 +55,7 @@ class FirstColonyJourneyTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private String humanUnits(final Model model) {

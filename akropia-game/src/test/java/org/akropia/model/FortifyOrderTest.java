@@ -7,9 +7,9 @@ import java.util.List;
 import com.google.gson.Gson;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.UnitActionFortifyPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitActionType;
@@ -19,8 +19,8 @@ class FortifyOrderTest {
     private static final Location SHORE = Location.of(48, 15);
 
     private GameModelPo scenario() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         final UnitPo soldier = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 16).findFirst().orElseThrow();
         soldier.setHoldingWeapons(true);
@@ -35,8 +35,7 @@ class FortifyOrderTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test

@@ -11,8 +11,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementKnowledgePo;
 import org.akropia.model.store.NativeSettlementPo;
@@ -122,15 +122,14 @@ class NativeSettlementFoundingTest {
     void foundingOnNativeSquareIsRefusedWithoutChangingState() {
         final ModelPo open = founderSave(false);
         final Location site = founderSquare(open);
-        final Model baseline = Model.make(open,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model baseline = Model.make(open, GameModel.gameOverEvaluators());
         // Without a settlement the same founder may found here, so the
         // refusal below is caused by the native square and nothing else.
         assertTrue(baseline.canFoundColonyAt(baseline.getUnitById(FOUNDER_ID),
                 site));
 
         final Model model = Model.make(founderSave(true),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit founder = model.getUnitById(FOUNDER_ID);
         final Player france = model.getPlayerByName("France");
         assertFalse(model.canFoundColonyAt(founder, site));
@@ -149,8 +148,7 @@ class NativeSettlementFoundingTest {
         final Location site = founderSquare(po);
         final Location near = Location.of(site.getX() + 1, site.getY());
         final Location far = Location.of(site.getX() + 3, site.getY());
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         final Player france = model.getPlayerByName("France");
         // The founder's sight covers the neighbouring square at once.
         assertTrue(model.getNativeSettlementKnownTo(france, near).isPresent());
@@ -162,7 +160,7 @@ class NativeSettlementFoundingTest {
                 model.getNativeSettlementsKnownTo(france));
         assertTrue(before.contains(1));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(before, ids(restored.getNativeSettlementsKnownTo(
                 restored.getPlayerByName("France"))));
     }
@@ -172,8 +170,7 @@ class NativeSettlementFoundingTest {
         final ModelPo po = founderSave(false);
         final Location site = founderSquare(po);
         final Location far = Location.of(site.getX() + 3, site.getY());
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         final Player france = model.getPlayerByName("France");
         // The far square is out of sight; a settlement there stays unknown.
         assertFalse(france.isCurrentlyVisible(far));
@@ -190,8 +187,8 @@ class NativeSettlementFoundingTest {
     }
 
     private static void assertRejected(final ModelPo po) {
-        assertThrows(IllegalArgumentException.class, () -> Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(po, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -205,8 +202,7 @@ class NativeSettlementFoundingTest {
     void emptyKnowledgeIsAcceptedWhenExplicit() {
         final ModelPo po = founderSave(false);
         po.setNativeSettlementKnowledge(new ArrayList<>());
-        assertNotNull(
-                Model.make(po, MissionImpl.getPredefinedGameOverEvaluators()));
+        assertNotNull(Model.make(po, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -263,15 +259,14 @@ class NativeSettlementFoundingTest {
         final ModelPo po = founderSave(false);
         po.setNativeSettlementKnowledge(
                 List.of(knowledge("France", List.of(2))));
-        final Model model = Model.make(po,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(po, GameModel.gameOverEvaluators());
         final Player france = model.getPlayerByName("France");
         // Remembered identity is kept even though the square is out of sight.
         assertFalse(france.isCurrentlyVisible(
                 model.getNativeSettlements().get(1).getLocation()));
         assertTrue(ids(model.getNativeSettlementsKnownTo(france)).contains(2));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(ids(model.getNativeSettlementsKnownTo(france)),
                 ids(restored.getNativeSettlementsKnownTo(
                         restored.getPlayerByName("France"))));

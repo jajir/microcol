@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.akropia.model.LostCityRumorRules.Outcome;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.event.UnitMoveFinishedEvent;
 import org.akropia.model.event.UnitMovedStepFinishedEvent;
 import org.akropia.model.store.CongressPo;
@@ -970,8 +970,7 @@ class LostCityRumorTest {
     }
 
     private static Model reload(final Model model) {
-        return Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(model.save(), GameModel.gameOverEvaluators());
     }
 
     /** Ends turns until the Dutch player is current again: one full round. */

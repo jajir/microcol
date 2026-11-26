@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.NewUnitWasBornEvent;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.PlaceMapPo;
@@ -38,8 +38,8 @@ class TurnPreparationActionTest {
     }
 
     private Model fixture(final boolean beforePreparation) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getCalendar().setStartYear(1);
         data.getModel().getCalendar().setNumberOfPlayedTurns(10);
         data.getModel().getColonies().get(1).getColonyWarehouse().put("GRAIN",

@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
@@ -43,13 +43,12 @@ class TerrainIdentityTest {
     private static final Location SHORE = Location.of(6, ROW);
 
     private GameModelPo scenario() {
-        return new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** A lake strip with a shore to the east, ringed by grassland. */
@@ -110,7 +109,7 @@ class TerrainIdentityTest {
         data.getModel().getMap().setCleared(Set.of());
 
         final Model restored = Model.make(load(data).save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         for (int index = 0; index < types.length; index++) {
             final Location at = Location.of(3 + index, ROW);
             assertEquals(types[index], restored.getMap().getTerrainTypeAt(at),

@@ -10,7 +10,7 @@ import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.Player;
 import org.akropia.model.WorldMap;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

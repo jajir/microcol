@@ -8,9 +8,9 @@ import org.akropia.model.event.ColonyProjectCompletedEvent;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.RoundStartedEvent;
 
 import com.google.gson.Gson;
@@ -27,10 +27,9 @@ class ConstructionRushTest {
 
     @BeforeEach
     void prepare() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         queue = colony.getColonyBuildingQueue();
         owner = colony.getOwner();
@@ -156,7 +155,7 @@ class ConstructionRushTest {
         assertThrows(IllegalStateException.class, () -> queue.rush(quote));
         assertEquals(completed, snapshot());
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(completed, new Gson().toJson(restored.save()));
         restored.startGame();
         assertEquals(completed, new Gson().toJson(restored.save()));
@@ -370,15 +369,14 @@ class ConstructionRushTest {
         assertEquals(overflow, snapshot());
 
         final GameModelPo independentData = new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia");
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         RebellionFixtures.declare(independentData.getModel(),
                 independentData.getModel().getGameManager().getPlayers()
                         .stream()
                         .filter(player -> player.getName().equals("Dutch"))
                         .findFirst().orElseThrow());
         final Model independent = Model.make(independentData.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final ColonyBuildingQueue blocked = independent.getColonyByName("Delft")
                 .orElseThrow().getColonyBuildingQueue();
         blocked.addAtEnd(ConstructionType.WAREHOUSE);

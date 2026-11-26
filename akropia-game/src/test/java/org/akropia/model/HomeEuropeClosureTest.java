@@ -13,9 +13,9 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlaceEuropePortPo;
 import org.akropia.model.store.PlaceHighSeasPo;
@@ -31,7 +31,7 @@ import org.akropia.model.unit.Ship;
  */
 class HomeEuropeClosureTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     /** Colony 0 of the scenario, a Dutch coastal colony after declarable(). */
     private static final Location PORT = Location.of(25, 14);
@@ -72,8 +72,7 @@ class HomeEuropeClosureTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private UnitPo savedShip(final GameModelPo data) {
@@ -239,7 +238,7 @@ class HomeEuropeClosureTest {
                 () -> ship.placeToHighSeas(false));
 
         final Model reloaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Ship restored = (Ship) reloaded.getUnitById(SHIP_ID);
         assertTrue(restored.isCrownSeized());
         assertTrue(restored.isAtEuropePort());
@@ -319,7 +318,7 @@ class HomeEuropeClosureTest {
 
         // Save and load keep the closure and the seized identities.
         final Model reloaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(reloaded.getUnitById(SHIP_ID).isCrownSeized());
         assertTrue(reloaded.getUnitById(PIER_ID).isCrownSeized());
         assertEquals(passengers, passengersOf(reloaded));
@@ -366,15 +365,15 @@ class HomeEuropeClosureTest {
         // A declared nation's ship in the port must be seized.
         final ModelPo unseized = model.save();
         unit(unseized, SHIP_ID).setCrownSeized(false);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(unseized,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(unseized, GameModel.gameOverEvaluators()));
 
         // A passenger aboard that ship must be seized with it.
         final ModelPo passenger = model.save();
         final int passengerId = passengersOf(model).get(0);
         unit(passenger, passengerId).setCrownSeized(false);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(passenger,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(passenger, GameModel.gameOverEvaluators()));
 
         // A unit on the map is never seized.
         final ModelPo onMap = model.save();
@@ -383,8 +382,8 @@ class HomeEuropeClosureTest {
                         && unit.getPlaceEuropePort() == null
                         && unit.getPlaceCargoSlot() == null)
                 .findFirst().orElseThrow().setCrownSeized(true);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(onMap,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(onMap, GameModel.gameOverEvaluators()));
 
         // Only a declared nation has seized units.
         final ModelPo undeclared = model.save();
@@ -392,8 +391,7 @@ class HomeEuropeClosureTest {
                 .stream().filter(player -> "Dutch".equals(player.getName()))
                 .findFirst().orElseThrow());
         assertThrows(IllegalArgumentException.class,
-                () -> Model.make(undeclared,
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+                () -> Model.make(undeclared, GameModel.gameOverEvaluators()));
     }
 
     private static UnitPo unit(final ModelPo model, final int id) {
@@ -438,7 +436,7 @@ class HomeEuropeClosureTest {
         passengers.forEach(
                 id -> assertTrue(model.getUnitById(id).isCrownSeized()));
         final Model reloaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(reloaded.getUnitById(SHIP_ID).isCrownSeized());
         assertEquals(passengers, passengersOf(reloaded));
     }

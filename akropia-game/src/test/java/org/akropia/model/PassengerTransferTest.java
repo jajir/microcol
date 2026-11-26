@@ -13,9 +13,9 @@ import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitMoveStartedEvent;
 import org.akropia.model.event.UnitMovedStepStartedEvent;
 import org.akropia.model.store.PlaceCargoSlotPo;
@@ -43,8 +43,7 @@ class PassengerTransferTest {
     private String afterCallback;
 
     private void prepare(Location shipAt, int moves) {
-        data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
         UnitPo ship = data.getModel().getUnits().stream()
                 .filter(u -> u.getId() == 3).findFirst().orElseThrow();
         ship.setPlaceHighSeas(null);
@@ -70,8 +69,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private PlaceMapPo at(Location location) {
@@ -124,8 +122,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
     }
 
@@ -218,8 +215,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         String passengerBefore = new Gson().toJson(passenger().save());
         String shipBefore = new Gson().toJson(ship().save());
         assertThrows(IllegalStateException.class,
@@ -271,8 +267,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         assertEquals(0, ship().getActionPoints());
         assertTrue(ship().getAvailableLocations().contains(SHORE));
         passenger().disembarkToLocation(SHORE);
@@ -311,8 +306,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         assertFalse(model.isOwnedCoastalPort(ship().getOwner(), PORT));
         unchangedOnRejection(() -> passenger().disembarkToLocation(PORT));
         assertFalse(ship().isPossibleToMoveAt(PORT));
@@ -352,8 +346,7 @@ class PassengerTransferTest {
                     .getMap().getTerrainMap()
                     .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                     .isSea());
-            model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
             assertTrue(model.isOwnedCoastalPort(ship().getOwner(), PORT),
                     water.toString());
             assertFalse(model.isOwnedCoastalPort(
@@ -501,9 +494,8 @@ class PassengerTransferTest {
         data.getModel().getUnits().stream().filter(u -> u.getId() == 101)
                 .findFirst().orElseThrow().getCargo().getSlots().get(0)
                 .setUnitId(16);
-        assertThrows(IllegalStateException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalStateException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
     }
 
     @ParameterizedTest
@@ -523,9 +515,8 @@ class PassengerTransferTest {
         data.getModel().getUnits().stream().filter(u -> u.getId() == 3)
                 .findFirst().orElseThrow().getCargo().getSlots().get(0)
                 .setUnitId(100);
-        assertThrows(IllegalStateException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalStateException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -658,8 +649,7 @@ class PassengerTransferTest {
                 .removeIf(title -> data.getModel().getMap().getTerrainMap()
                         .getOrDefault(title.getLocation(), TerrainType.OCEAN)
                         .isSea());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         for (int id = 13; id <= 16; id++) {
             ((AbstractUnit) model.getUnitById(id)).setActionPoints(1);
         }

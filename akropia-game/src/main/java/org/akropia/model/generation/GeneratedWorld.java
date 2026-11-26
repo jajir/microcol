@@ -12,8 +12,8 @@ import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.ReferenceExpedition;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.ReferenceExpedition;
 import org.akropia.model.store.GeneratedWorldPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
@@ -111,7 +111,7 @@ public final class GeneratedWorld {
      */
     static void requireLegalStarts(final ModelPo candidate) {
         final Model model = Model.make(candidate,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final GeneratedGrid grid = new GeneratedGrid(
                 candidate.getMap().getTerrainMap(),
                 candidate.getMap().getMaxX(), candidate.getMap().getMaxY());

@@ -11,9 +11,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 import org.akropia.model.ForeignPowerComparison.Disclosure;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ConstructionPo;
 import org.akropia.model.store.EuropeanRelationPo;
@@ -101,8 +101,7 @@ class ForeignPowerReportTest {
     }
 
     private void start(final GameModelPo data) {
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         model.startGame();
         dutch = model.getPlayerByName("Dutch");
         france = model.getPlayerByName("France");
@@ -110,8 +109,7 @@ class ForeignPowerReportTest {
     }
 
     private Model reload() {
-        return Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(model.save(), GameModel.gameOverEvaluators());
     }
 
     private static ForeignPowerComparison report(final Model from,
@@ -364,15 +362,15 @@ class ForeignPowerReportTest {
             saved.getGameManager().getPlayers().stream()
                     .filter(p -> p.getName().equals("Dutch")).findFirst()
                     .orElseThrow().setKnownPowers(List.of(invalid));
-            assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                    MissionImpl.getPredefinedGameOverEvaluators()));
+            assertThrows(IllegalArgumentException.class,
+                    () -> Model.make(saved, GameModel.gameOverEvaluators()));
         }
         final ModelPo twice = model.save();
         twice.getGameManager().getPlayers().stream()
                 .filter(p -> p.getName().equals("Dutch")).findFirst()
                 .orElseThrow().setKnownPowers(List.of("Spain", "Spain"));
-        assertThrows(IllegalArgumentException.class, () -> Model.make(twice,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(twice, GameModel.gameOverEvaluators()));
     }
 
     @Test

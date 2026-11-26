@@ -13,14 +13,13 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitActionNoActionPo;
 import org.akropia.model.store.UnitPo;
-import org.akropia.model.turnevent.TurnEventNativeConvert;
 import org.akropia.model.unit.UnitFreeColonist;
 import org.akropia.model.unit.UnitWithCargo;
 
@@ -38,7 +37,7 @@ import com.google.gson.Gson;
  */
 class NativeConvertColonyTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private static final String DUTCH_NAME = "Dutch";
 

@@ -21,9 +21,9 @@ import org.akropia.model.FleetReport.OwnShip;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.PlaceEuropePortPo;
@@ -95,8 +95,7 @@ class FleetNavigatorTest {
         units.add(onMap(OWN_MAP_ID, UnitType.CARAVEL, DUTCH, OWN_TILE));
         units.add(onMap(FOREIGN_ID, UnitType.GALLEON, FRANCE, FOREIGN_TILE));
         units.add(repairing(REPAIR_ID));
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Fields every saved unit carries; a ship adds its own place. */

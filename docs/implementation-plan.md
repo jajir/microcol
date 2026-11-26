@@ -100,7 +100,7 @@ Pracovní výklad o samostatné výuce lze upřesnit při potvrzení cíle.
 zpřístupňuje volnou hru až po dokončení kampaně. Naproti tomu
 [ApplicationController.startNewFreeGame](../akropia-game/src/main/java/org/akropia/gui/dialog/ApplicationController.java)
 už přímo spouští režim `freePlay` a jeho
-[factory](../akropia-game/src/main/java/org/akropia/model/campaign/FreePlay_0_missionFactory.java)
+[factory](https://github.com/jajir/microcol/blob/88be89b442720c20beeab18b5f8dc5686ea8dd84/akropia-game/src/main/java/org/akropia/model/campaign/FreePlay_0_missionFactory.java)
 používá prázdné cíle mise. To neprokazuje úplnost pravidel ani dohratelnost
 celé partie; ty zůstávají předmětem balíků níže. Jde o čtení zdrojů,
 nikoli o nově provedený průchod běžící hrou.

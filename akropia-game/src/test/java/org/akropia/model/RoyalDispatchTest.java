@@ -8,9 +8,9 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 import org.akropia.model.RoyalRoster.Family;
 import org.akropia.model.RoyalRoster.State;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.unit.UnitArtillery;
@@ -32,8 +32,8 @@ class RoyalDispatchTest {
 
     private static Model royalTurn(final boolean declared,
             final Difficulty difficulty) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().setDifficulty(difficulty);
         for (final PlayerPo player : data.getModel().getGameManager()
                 .getPlayers()) {
@@ -44,7 +44,7 @@ class RoyalDispatchTest {
             }
         }
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         assertEquals("Dutch", model.getCurrentPlayer().getName());
         model.endTurn();
@@ -217,7 +217,7 @@ class RoyalDispatchTest {
                 .map(Unit::getId).collect(Collectors.toList());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         assertEquals(expectedOrder, restored.getAllUnits().stream()
                 .map(Unit::getId).collect(Collectors.toList()));
@@ -232,7 +232,7 @@ class RoyalDispatchTest {
 
         final ModelPo saved = model.save();
         final Model restored = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(new com.google.gson.Gson().toJson(crown.save()),
                 new com.google.gson.Gson().toJson(crown(restored).save()));
 
@@ -242,8 +242,8 @@ class RoyalDispatchTest {
                 .orElseThrow().getRoyalRoster().getMembers().stream()
                 .filter(member -> member.getState() == State.SHIPPED)
                 .findFirst().orElseThrow().setUnitId(9999);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(broken,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(broken, GameModel.gameOverEvaluators()));
     }
 
     @Test
@@ -292,7 +292,7 @@ class RoyalDispatchTest {
     /** The Crown's own turn of a prepared war, played without a robot. */
     private static Model kingTurnOf(final GameModelPo data) {
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         model.endTurn();
         assertEquals(KING, model.getCurrentPlayer().getName());
@@ -354,7 +354,7 @@ class RoyalDispatchTest {
 
         // Continue keeps the ledger and the units.
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(ledger(model), ledger(restored));
     }
 
@@ -391,10 +391,9 @@ class RoyalDispatchTest {
 
     @Test
     void reloadIsRefusedOutsideTheCrownsOwnTurn() {
-        final Model model = Model.make(
-                RoyalScenarioFixtures.midWar(null, true, RESERVE, new int[0])
-                        .getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(RoyalScenarioFixtures
+                .midWar(null, true, RESERVE, new int[0]).getModel(),
+                GameModel.gameOverEvaluators());
         model.startGame();
         assertEquals("Dutch", model.getCurrentPlayer().getName());
         final Player king = model.getPlayerByName(KING);
@@ -431,7 +430,7 @@ class RoyalDispatchTest {
 
         // Continue keeps the captured state and accepts the unbound unit.
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(1,
                 crown(restored).getCount(Family.INFANTRY, State.CAPTURED));
     }
@@ -445,7 +444,7 @@ class RoyalDispatchTest {
                 .orElseThrow().getRoyalRoster().getMembers().get(0);
         member.setState(State.CAPTURED);
         member.setUnitId(900);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(saved, GameModel.gameOverEvaluators()));
     }
 }

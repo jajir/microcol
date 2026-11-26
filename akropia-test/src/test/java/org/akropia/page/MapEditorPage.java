@@ -26,7 +26,7 @@ import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.ScenarioDraft;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.NativeSettlementPo;

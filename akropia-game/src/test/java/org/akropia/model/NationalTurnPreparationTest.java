@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.NewUnitWasBornEvent;
 import org.akropia.model.event.UnitArrivedToColoniesEvent;
 import org.akropia.model.store.UnitPo;
@@ -31,8 +31,7 @@ class NationalTurnPreparationTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     private GameModelPo fixture() {
-        return dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model make(final GameModelPo data) {

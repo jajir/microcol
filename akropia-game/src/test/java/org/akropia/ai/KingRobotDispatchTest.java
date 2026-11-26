@@ -8,7 +8,7 @@ import org.akropia.model.RoyalRoster.Family;
 import org.akropia.model.RoyalRoster.State;
 import org.akropia.model.RoyalScenarioFixtures;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.store.PlayerPo;
 
 /**

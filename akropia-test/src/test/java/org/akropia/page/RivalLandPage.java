@@ -152,8 +152,7 @@ public final class RivalLandPage extends AbstractScreen {
         final org.akropia.model.store.ModelPo saved = getModel().save();
         saved.getGameManager().setCurrentPlayer(attacker.getOwner().getName());
         final org.akropia.model.Model copy = org.akropia.model.Model.make(saved,
-                org.akropia.model.campaign.MissionImpl
-                        .getPredefinedGameOverEvaluators());
+                org.akropia.model.game.GameModel.gameOverEvaluators());
         return copy.getUnitById(attacker.getId()).prepareAttack(target, false)
                 .flatMap(order -> order.getCombatStrengths())
                 .map(strengths -> strengths.getAttackerWinProbability())

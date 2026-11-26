@@ -177,8 +177,7 @@ final class IndependenceJourneyFixture {
     static File saveCheckpoint(final TestContext context,
             final org.akropia.page.GamePage game) {
         final File file = context
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("R0220-reference");
         game.saveGame(file);
         when(context.getClassFromGuice(FileSelectingService.class)

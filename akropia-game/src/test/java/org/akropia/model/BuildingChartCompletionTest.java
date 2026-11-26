@@ -9,9 +9,9 @@ import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.gson.Gson;
 
@@ -83,8 +83,8 @@ class BuildingChartCompletionTest {
      * projects get the smallest warehouse that holds the tools needed.
      */
     private void prepare(final ConstructionType type, final int neededTools) {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         type.getRequiredFounder().ifPresent(founder -> {
             final var congress = data.getModel().getGameManager().getPlayers()
                     .stream().filter(player -> player.getName().equals("Dutch"))
@@ -96,8 +96,7 @@ class BuildingChartCompletionTest {
             congress.setGeneration(2);
         });
         data.getModel().getGameManager().setCurrentPlayer("Dutch");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         colony.getConstructions().removeIf(building -> type.getUpgradeChain()
                 .contains(building.getType()));

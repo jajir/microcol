@@ -10,10 +10,10 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 class DifficultyProfileTest {
 
@@ -30,9 +30,9 @@ class DifficultyProfileTest {
                             .getDifficulty());
         }
         for (final String mission : new String[] {
-                "/maps/default-campaign-mission-0-findNewWorld.akropia",
-                "/maps/default-campaign-mission-1-buildArmy.akropia",
-                "/maps/default-campaign-mission-2-thrive.akropia" }) {
+                "/maps/fixture-arrival-world.akropia",
+                "/maps/fixture-army-world.akropia",
+                "/maps/fixture-developed-world.akropia" }) {
             assertEquals(Difficulty.CONQUISTADOR,
                     make(dao.loadFromClassPath(mission)).getDifficulty());
         }
@@ -78,7 +78,6 @@ class DifficultyProfileTest {
     }
 
     private Model make(final GameModelPo game) {
-        return Model.make(game.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(game.getModel(), GameModel.gameOverEvaluators());
     }
 }

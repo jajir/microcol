@@ -11,11 +11,8 @@ import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.WorldMap;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.generation.GeneratedClimate;
-import org.akropia.model.generation.GeneratedLandShare;
-import org.akropia.model.generation.GeneratedWorld;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.NorthAmericaWorld;
 import org.akropia.model.store.ModelPo;
 import org.testfx.util.WaitForAsyncUtils;
@@ -260,7 +257,7 @@ public final class FreePlaySetupPage extends AbstractScreen {
 
     public void verifySavedDifficulty(final Difficulty expected) {
         final java.io.File file = continueFile();
-        final org.akropia.model.campaign.po.GameModelPo data = new org.akropia.model.campaign.po.GameModelPoDao()
+        final org.akropia.model.game.po.GameModelPo data = new org.akropia.model.game.po.GameModelPoDao()
                 .loadPlayerGame(file);
         assertEquals(expected, data.getModel().getDifficulty());
     }

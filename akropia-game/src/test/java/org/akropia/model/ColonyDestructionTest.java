@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.turnevent.TurnEventColonyWasDestroyed;
 import org.akropia.model.unit.Ship;
@@ -16,13 +16,12 @@ class ColonyDestructionTest {
 
     private ModelPo fixture() {
         return new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
                 .getModel();
     }
 
     private Model load(final ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     private Ship newShip(final Model model, final Colony colony) {

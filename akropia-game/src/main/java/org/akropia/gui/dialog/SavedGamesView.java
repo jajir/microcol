@@ -17,11 +17,10 @@ import org.akropia.gui.util.ActionButtons;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Calendar;
 import org.akropia.model.EuropeanNation;
-import org.akropia.model.campaign.CampaignNames;
-import org.akropia.model.campaign.po.SaveArchiveException;
-import org.akropia.model.campaign.po.SaveSummaryPo;
-import org.akropia.model.campaign.po.SavedGames.Entry;
-import org.akropia.model.campaign.po.SavedGames.Kind;
+import org.akropia.model.game.po.SaveArchiveException;
+import org.akropia.model.game.po.SaveSummaryPo;
+import org.akropia.model.game.po.SavedGames.Entry;
+import org.akropia.model.game.po.SavedGames.Kind;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
@@ -402,7 +401,7 @@ public final class SavedGamesView {
     private void save() {
         try {
             choose(new SavedGamesDialog.Choice(SavedGamesDialog.Action.SAVE,
-                    null, org.akropia.model.campaign.po.SavedGames
+                    null, org.akropia.model.game.po.SavedGames
                             .manualName(name.getText())));
         } catch (IllegalArgumentException invalid) {
             error.setText(texts.get(SavedGameText.invalidName));
@@ -504,13 +503,6 @@ public final class SavedGamesView {
         }
         try {
             final String year = gameDate(value);
-            final String mission = CampaignNames.defaultCampaign.toString()
-                    .equals(value.getCampaignName())
-                            ? texts.get(SavedGameText.campaign) + " · "
-                                    + texts.get(GameMenu.get(
-                                            CampaignNames.defaultCampaign,
-                                            value.getMissionName()))
-                            : texts.get(SavedGameText.freePlay);
             return texts.get(SavedGameText.summaryPlayer, value.getPlayerName(),
                     nationName(value.getNation())) + "\n"
                     + texts.get(SavedGameText.summaryYear, year) + "\n"
@@ -522,7 +514,7 @@ public final class SavedGamesView {
                     + texts.get(SavedGameText.summaryCounts,
                             value.getPeopleCount(), value.getColonyCount(),
                             value.getShipCount())
-                    + "\n" + texts.get(SavedGameText.summaryGameType, mission)
+
                     + saved;
         } catch (RuntimeException invalid) {
             return texts.get(SavedGameText.summaryMissing) + saved;

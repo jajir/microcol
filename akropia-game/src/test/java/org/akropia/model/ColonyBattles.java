@@ -40,8 +40,8 @@ final class ColonyBattles {
             field.setWorkerId(null);
             field.setProducedGoodsType(null);
         }
-        return Model.make(saved, org.akropia.model.campaign.MissionImpl
-                .getPredefinedGameOverEvaluators());
+        return Model.make(saved,
+                org.akropia.model.game.GameModel.gameOverEvaluators());
     }
 
     /**

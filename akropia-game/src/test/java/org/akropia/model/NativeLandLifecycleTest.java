@@ -5,7 +5,7 @@ import static org.akropia.model.NativeRelationsScene.*;
 
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.unit.UnitActionType;
 
@@ -24,7 +24,7 @@ class NativeLandLifecycleTest {
                     row.getFavour().put(EuropeanNation.DUTCH, favour);
                     row.setFriend(favour >= 8 ? EuropeanNation.DUTCH : null);
                 });
-        return Model.make(saved, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     private static void attack(final Model model, final long id) {
@@ -42,8 +42,7 @@ class NativeLandLifecycleTest {
         saved.getLandOwnership()
                 .removeIf(row -> row.getLocation().equals(at(1, 0)));
         saved.getLandOwnership().add(claim);
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         assertEquals(Optional.of(NativeNation.CHEROKEE),
                 model.getNativeLandClaim(at(1, 0)));
         assertTrue(model.quoteNativeLand(model.getPlayerByName(DUTCH), at(1, 0))
@@ -55,8 +54,7 @@ class NativeLandLifecycleTest {
         final ModelPo saved = scene(8).save();
         saved.getUnits().stream().filter(unit -> unit.getId() == 200)
                 .forEach(unit -> unit.setTools(80));
-        final Model model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model model = Model.make(saved, GameModel.gameOverEvaluators());
         final Player owner = model.getPlayerByName(DUTCH);
         model.getUnitById(200).setActionType(UnitActionType.plowField);
         assertEquals(Optional.of(owner), model.getLandOwner(at(1, 0)));
@@ -77,7 +75,7 @@ class NativeLandLifecycleTest {
                 EuropeanNation.DUTCH));
         assertEquals(Optional.of(owner), model.getLandOwner(at(1, 0)));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         restored.moveUnit(restored.getUnitById(200),
                 Path.of(java.util.List.of(at(2, 0))));
         assertFalse(restored.getLandOwner(at(1, 0))

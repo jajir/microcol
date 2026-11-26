@@ -6,9 +6,9 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceHighSeasPo;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitPo;
@@ -31,8 +31,7 @@ class VoyageReversalTest {
     }
 
     private void load(final boolean originalToEurope, final int duration) {
-        data = files.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = files.loadFromClassPath("/maps/fixture-developed-world.akropia");
         final UnitPo ship = data.getModel().getUnits().stream()
                 .filter(unit -> unit.getId() == 3).findFirst().orElseThrow();
         final PlaceHighSeasPo voyage = ship.getPlaceHighSeas();
@@ -64,8 +63,7 @@ class VoyageReversalTest {
             ship.setDepartureLocation(Location.of(2, 15));
             ship.setDepartureDirection(Direction.west);
         }
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private void ownerUpdate() {
@@ -78,8 +76,7 @@ class VoyageReversalTest {
         final Path save = directory.resolve("reversed.akropia");
         files.saveToFile(save.toString(), data);
         data = files.loadFromFile(save.toFile());
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     @Test
@@ -270,8 +267,7 @@ class VoyageReversalTest {
     }
 
     private void assertInvalidSavedVoyage() {
-        assertThrows(IllegalArgumentException.class,
-                () -> Model.make(data.getModel(),
-                        MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class, () -> Model
+                .make(data.getModel(), GameModel.gameOverEvaluators()));
     }
 }

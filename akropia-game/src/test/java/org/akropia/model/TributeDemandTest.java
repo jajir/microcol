@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.VisibilityPo;
 import org.akropia.model.unit.UnitFreeColonist;
@@ -22,7 +22,7 @@ class TributeDemandTest {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("Dutch");
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit visitor = model.getUnitById(0);
         visitor.placeToLocation(Location.of(18, 10));
         visitor.getOwner().revealMapForUnit(visitor);
@@ -61,7 +61,7 @@ class TributeDemandTest {
                 .filter(player -> player.getName().equals("Dutch")).findFirst()
                 .orElseThrow().setVisible(new VisibilityPo());
         final Model hidden = Model.make(source.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit hiddenVisitor = hidden.getUnitById(0);
         hiddenVisitor.placeToLocation(Location.of(18, 10));
         arm(hidden, 0);
@@ -94,7 +94,7 @@ class TributeDemandTest {
         terrain.put(Location.of(18, 10), TerrainType.OCEAN);
         seaData.getModel().getMap().setTerrainType(terrain);
         final Model sea = Model.make(seaData.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Player sailor = sea.getPlayerByName("Dutch");
         final Unit ship = sea.addUnitInEurope(UnitType.CARAVEL, sailor);
         ship.placeToLocation(Location.of(18, 10));
@@ -134,7 +134,7 @@ class TributeDemandTest {
         final ModelPo ninth = model.save();
         ninth.getCalendar().setNumberOfPlayedTurns(9);
         final Model tooEarly = Model.make(ninth,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(1,
                 tooEarly.getTributeTurnsRemaining(
                         tooEarly.getPlayerByName("Dutch"),
@@ -147,7 +147,7 @@ class TributeDemandTest {
         final ModelPo tenth = model.save();
         tenth.getCalendar().setNumberOfPlayedTurns(10);
         final Model eligible = Model.make(tenth,
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(0,
                 eligible.getTributeTurnsRemaining(
                         eligible.getPlayerByName("Dutch"),
@@ -290,8 +290,7 @@ class TributeDemandTest {
                 fresh.getPlayerByName("France"));
         final ModelPo laterPo = fresh.save();
         laterPo.getCalendar().setNumberOfPlayedTurns(1);
-        final Model later = Model.make(laterPo,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final Model later = Model.make(laterPo, GameModel.gameOverEvaluators());
         final TributeDemand old = later
                 .getPendingTributeDemand(later.getPlayerByName("Dutch"),
                         later.getPlayerByName("France"))
@@ -312,7 +311,7 @@ class TributeDemandTest {
                 .prepareTributeDemand(model.getUnitById(0), rival);
         final String before = saved(model);
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(before, saved(restored));
         final Player actor2 = restored.getPlayerByName("Dutch");
         final Player rival2 = restored.getPlayerByName("France");
@@ -322,7 +321,7 @@ class TributeDemandTest {
         assertEquals(proposal.getQuotedRound(), resumed.getQuotedRound());
         assertEquals(200, restored.confirmTributeDemand(resumed));
         final Model after = Model.make(restored.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(after.getPendingTributeDemand(after.getPlayerByName("Dutch"),
                 after.getPlayerByName("France")).isEmpty());
         assertEquals(10,
@@ -332,12 +331,12 @@ class TributeDemandTest {
         final ModelPo malformed = model.save();
         malformed.getEuropeanRelations().get(0).getTributeDemand()
                 .setQuotedRound(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(malformed,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(malformed, GameModel.gameOverEvaluators()));
         final ModelPo future = after.save();
         future.getEuropeanRelations().get(0).setLastTributeRound(100);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(future,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(future, GameModel.gameOverEvaluators()));
     }
 
     @Test

@@ -34,9 +34,9 @@ import org.akropia.model.RivalTradeObjective;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
@@ -272,8 +272,7 @@ class RivalExpansionCycleTest {
             ISLAND_CREW.forEach(id -> units.add(colonist(ship, id, ISLAND)));
         }
         data.getModel().setUnits(units);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** A 3x3 grassland block whose west edge is the given square. */
@@ -347,8 +346,7 @@ class RivalExpansionCycleTest {
                     unit.setHoldingWeapons(true);
                 }
             }
-            model = Model.make(saved,
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(saved, GameModel.gameOverEvaluators());
         }
         model.getUnitById(FOUNDER_ID).startTurn();
         setGrain(s.food);
@@ -394,8 +392,7 @@ class RivalExpansionCycleTest {
             saved.getUnits().stream()
                     .filter(unit -> armed.contains(unit.getId()))
                     .forEach(unit -> unit.setHoldingWeapons(true));
-            model = Model.make(saved,
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(saved, GameModel.gameOverEvaluators());
         }
     }
 
@@ -426,8 +423,7 @@ class RivalExpansionCycleTest {
     private void reloadWith(final Consumer<ColonyPo> change) {
         final ModelPo saved = model.save();
         change.accept(saved.getColonies().get(0));
-        model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     /** Puts a crewmember to work the way the robot's workforce does. */
@@ -451,8 +447,7 @@ class RivalExpansionCycleTest {
     /** Save and load: the game and the robot continue from the saved state. */
     private void continueGame() {
         ai.stop();
-        model = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(model.save(), GameModel.gameOverEvaluators());
         ai = new SimpleAiPlayer(model, france(),
                 new AnimationManager(new EventBus()));
     }

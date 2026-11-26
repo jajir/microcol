@@ -15,9 +15,9 @@ import org.akropia.model.FleetReport.Destination;
 import org.akropia.model.FleetReport.ForeignShip;
 import org.akropia.model.FleetReport.OwnShip;
 import org.akropia.model.LaborLocation.Kind;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ModelPo;
@@ -39,7 +39,7 @@ import com.google.gson.Gson;
  */
 class FleetReportTest {
 
-    private static final String MISSION = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MISSION = "/maps/fixture-developed-world.akropia";
 
     private static final String DUTCH = "Dutch";
 
@@ -489,8 +489,7 @@ class FleetReportTest {
         terrain.put(DEPARTURE, TerrainType.HIGH_SEA);
         data.getModel().getMap().setTerrainType(terrain);
         data.getModel().getUnits().addAll(added);
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /**

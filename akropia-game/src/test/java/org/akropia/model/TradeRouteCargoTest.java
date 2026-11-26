@@ -6,8 +6,8 @@ import java.io.File;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 
 /** Saved cargo policy of trade route stops; processing has its own tests. */
@@ -24,7 +24,7 @@ class TradeRouteCargoTest {
     }
 
     private Model load(final ModelPo data) {
-        return Model.make(data, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data, GameModel.gameOverEvaluators());
     }
 
     private static Player owner(final Model model) {

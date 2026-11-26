@@ -70,8 +70,7 @@ public class TC_20_F02_colony_names_test extends AbstractAkropiaTest {
     @Tag("local")
     void TC_02_found_unicode_name_and_reload_same_identity() throws Exception {
         final File savedFile = getContext()
-                .getClassFromGuice(
-                        org.akropia.model.campaign.po.SavedGames.class)
+                .getClassFromGuice(org.akropia.model.game.po.SavedGames.class)
                 .target("colony-name.akropia");
         final FileSelectingService files = getContext()
                 .getClassFromGuice(FileSelectingService.class);

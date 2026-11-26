@@ -6,12 +6,12 @@ import java.util.*;
 import com.google.gson.Gson;
 import org.akropia.model.*;
 import org.akropia.model.unit.UnitActionType;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPoDao;
 
 /** Authored commands; all gameplay changes still pass through the model. */
 public final class DemoScene {
     private transient java.nio.file.Path directory;
-    private transient org.akropia.model.campaign.po.GameModelPo initialData;
+    private transient org.akropia.model.game.po.GameModelPo initialData;
     public String initialState;
     public Map<String, Integer> actors;
     public int[] camera;

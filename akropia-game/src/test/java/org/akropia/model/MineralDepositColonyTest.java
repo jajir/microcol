@@ -13,9 +13,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ColonyFieldPo;
 import org.akropia.model.store.ColonyPo;
 import org.akropia.model.store.WorldMapPo;
@@ -37,8 +37,8 @@ class MineralDepositColonyTest {
 
     /** Mission colony at full support, with grain so no update starves. */
     private GameModelPo data() {
-        final GameModelPo data = dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        final GameModelPo data = dao
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         data.getModel().getColonies().forEach(colony -> {
             colony.setLiberty(0L);
             colony.setLastColonialAffiliation(colony.getOwnerName());
@@ -55,8 +55,7 @@ class MineralDepositColonyTest {
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private static Set<Location> without(final Set<Location> locations,

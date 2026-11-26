@@ -3,7 +3,7 @@ package org.akropia.model.generation;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import org.akropia.model.*;
-import org.akropia.model.campaign.MissionImpl;
+import org.akropia.model.game.GameModel;
 import org.akropia.model.store.ModelPo;
 import org.junit.jupiter.api.Test;
 
@@ -49,8 +49,7 @@ class GeneratedWizardTest {
                 assertFalse(world.getMap().getRiverMap().isEmpty());
                 assertFalse(world.getMap().getResourceMap().isEmpty());
                 assertTrue(world.getNativeSettlements().size() >= 3);
-                Model model = Model.make(world,
-                        MissionImpl.getPredefinedGameOverEvaluators());
+                Model model = Model.make(world, GameModel.gameOverEvaluators());
                 model.startGame();
                 ModelPo saved = model.save();
                 model.stop();
@@ -105,7 +104,7 @@ class GeneratedWizardTest {
                         GeneratedMapSize.SMALL, GeneratedLandLayout.BIG_ISLANDS)
                         .getTextSeed().codePointCount(0, 128));
         first.getGeneratedWorld().setTextSeed("tampered");
-        assertThrows(IllegalArgumentException.class, () -> Model.make(first,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(first, GameModel.gameOverEvaluators()));
     }
 }

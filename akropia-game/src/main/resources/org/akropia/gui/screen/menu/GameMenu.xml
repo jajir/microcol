@@ -6,16 +6,13 @@
 
 	<entry key="mainMenu">Akropia</entry>
 	<entry key="buttonContinue">Continue</entry>
-	<entry key="buttonLoadSave">Load saved game</entry>
-	<entry key="buttonPlayCampaign">Play campaign</entry>
-	<entry key="buttonFreeGame">New free play game</entry>
-	<entry key="buttonHallOfFame">Hall of Fame</entry>
+	<entry key="buttonLoadSave">Open Game</entry>
+	<entry key="buttonFreeGame">New Game</entry>
 	<entry key="buttonExitAkropia">Quit Akropia</entry>
 	<entry key="settingTitle">Settings</entry>
 	<entry key="buttonSetting">Setting</entry>
 	<entry key="buttonMapEditor">Map editor</entry>
 	<entry key="buttonBack">Back</entry>
-	<entry key="campaignTitle">Akropia -> Campaign</entry>
 	<entry key="settingLanguage">Language: </entry>
 	<entry key="settingLanguageCz">Czech</entry>
 	<entry key="settingLanguageEn">English</entry>
@@ -32,14 +29,9 @@
 	<entry key="settingShowFightAdvisor">Use Fight Advisor</entry>
 	<entry key="settingVersion">Version: </entry>
 	
-	<entry key="campaignPanelButtonBack">Back</entry>
-	<entry key="campaignPanel_default_findNewWorld">new coast</entry>
-	<entry key="campaignPanel_default_buildArmy">Build an army</entry>
-	<entry key="campaignPanel_default_thrive">Thrive</entry>
-	
 
 
-    <entry key="setupTitle">New free play game</entry>
+    <entry key="setupTitle">New Game</entry>
     <entry key="setupMap">Map</entry>
     <entry key="setupMapOriginal">Original world</entry>
     <entry key="setupMapTwoIslands">Two islands</entry>
@@ -95,6 +87,5 @@
     <entry key="setupGoalRule">Complete any selected objective to win. Opponents have the same objectives. The objective and score enter the Hall of Fame. No time limit.</entry>
     <entry key="setupSandbox">Sandbox without objective victory or a time limit. Losing your last colony after establishing your nation still eliminates you.</entry>
     <entry key="demoCaption">Gameplay preview: discover a coast and found your first colony.</entry>
-    <entry key="demoPause">Pause preview</entry>
 <entry key="demoUnavailable">Gameplay preview unavailable.</entry>
 </properties>

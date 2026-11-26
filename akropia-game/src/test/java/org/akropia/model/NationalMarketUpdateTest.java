@@ -10,8 +10,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -28,8 +28,7 @@ class NationalMarketUpdateTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     private GameModelPo fixture() {
-        return dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model make(final GameModelPo data) {

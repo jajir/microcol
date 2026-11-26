@@ -3,21 +3,18 @@ package org.akropia.test;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.akropia.model.Location;
 import org.akropia.page.AttackPage;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.HallOfFamePage;
-import org.akropia.page.DialogSurfacesPage;
 import org.akropia.page.RebellionLossPage;
 import org.akropia.page.RebellionVictoryPage;
 import org.akropia.page.ScoreBoundaryPage;
-import org.akropia.page.ScreenTurnReport;
 import org.akropia.page.WelcomePage;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.Start;
@@ -106,19 +103,11 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         hall.verifyStoredEntries(HallOfFameFixture.RIVALS);
         game = hall.closeStatistics();
 
-        // After leaving the game the main menu opens the saved ranking alone.
+        // Leaving the game preserves the ranking; the main menu has no ranking
+        // entry.
         game.exitToMenu();
-        hall.openFromMenu();
-        // The modal content uses the shared paper surface.
-        final DialogSurfacesPage surfaces = new DialogSurfacesPage(
-                getContext());
-        surfaces.verifyScrollSurface("hallOfFameDialog");
-        surfaces.captureDialog("hallOfFameDialog",
-                "paper-hallOfFameDialog.png");
-        hall.verifyRankingRows(HallOfFameFixture.RIVALS);
-        hall.verifyNoCurrentResult();
+        WelcomePage.of(getContext()).verifyMainScreen();
         hall.verifyStoredEntries(HallOfFameFixture.RIVALS);
-        hall.closeMenuDialog();
     }
 
     @Test
@@ -156,12 +145,10 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         hall.verifyStoredEntries(1);
         game = hall.closeStatistics();
 
-        // After leaving the game the main menu still shows the same entry.
+        // Leaving the game preserves the one recorded result.
         game.exitToMenu();
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
+        WelcomePage.of(getContext()).verifyMainScreen();
         hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
     }
 
     @Test
@@ -175,15 +162,14 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         final GamePage game = WelcomePage.of(getContext()).loadGame();
         final HallOfFamePage hall = new HallOfFamePage(getContext());
 
-        // Leaving the game without reaching spring 1800 writes no ranking file,
-        // and the main menu shows an empty ranking.
-        game.exitToMenu();
-        hall.verifyNoStoredFile();
-        hall.openFromMenu();
+        // Statistics shows no result, and leaving writes no ranking file.
+        hall.openFromStatistics();
         hall.verifyRankingRows(0);
         hall.verifyNoCurrentResult();
+        hall.closeStatistics();
+        game.exitToMenu();
+        WelcomePage.of(getContext()).verifyMainScreen();
         hall.verifyNoStoredFile();
-        hall.closeMenuDialog();
     }
 
     @Test
@@ -226,7 +212,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         // The capture notice stayed open beneath the victory message and the
         // result window; the modal result window must be closed before it.
         victory.closeCaptureNotice(DELFT_NAME);
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
     }
 
     @Test
@@ -261,14 +247,11 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         // The capture notice stayed open beneath the victory message and the
         // result window; the modal result window must be closed before it.
         victory.closeCaptureNotice(DELFT_NAME);
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
 
-        // The main menu shows that same single entry afterwards.
-        new CampaignScreenPage(getContext()).back();
-        hall.openFromMenu();
-        hall.verifyRankingRows(1);
+        // Returning to the main menu keeps the same saved result.
+        WelcomePage.of(getContext()).verifyMainScreen();
         hall.verifyStoredEntries(1);
-        hall.closeMenuDialog();
     }
 
     @Test
@@ -305,7 +288,7 @@ public class TC_163_F197_hall_of_fame_test extends AbstractAkropiaTest {
         // The capture notice stayed open beneath the victory message and the
         // result window; the modal result window must be closed before it.
         victory.closeCaptureNotice(DELFT_NAME);
-        new CampaignScreenPage(getContext()).verifyCampaignScreen();
+        new MainMenuPage(getContext()).verifyMainMenu();
         hall.verifyStoredBytes(HallOfFameFixture.INVALID_RANKING);
     }
 

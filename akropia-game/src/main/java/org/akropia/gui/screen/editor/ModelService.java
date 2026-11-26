@@ -13,7 +13,7 @@ import org.akropia.model.ResourceOverlay;
 import org.akropia.model.RiverSize;
 import org.akropia.model.TerrainType;
 import org.akropia.model.WorldMap;
-import org.akropia.model.campaign.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPo;
 import org.akropia.model.generation.ScenarioDraft;
 
 import com.google.common.base.Preconditions;

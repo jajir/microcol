@@ -19,16 +19,12 @@ import org.akropia.gui.preferences.GamePreferences;
 import org.akropia.i18n.I18n;
 import org.akropia.model.Location;
 import org.akropia.model.Player;
-import org.akropia.model.campaign.CampaignManager;
-import org.akropia.model.campaign.CampaignModule;
-import org.akropia.model.campaign.GameModel;
-import org.akropia.model.campaign.GameModelDao;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.campaign.po.PersistingTool;
-import org.akropia.model.campaign.po.RecoverySlot;
-import org.akropia.model.campaign.po.SavedGames;
-import org.akropia.model.campaign.store.CampaignsDao;
-import org.akropia.model.campaign.store.CampaignsPo;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.GameModelDao;
+import org.akropia.model.game.po.GameModelPoDao;
+import org.akropia.model.game.po.PersistingTool;
+import org.akropia.model.game.po.RecoverySlot;
+import org.akropia.model.game.po.SavedGames;
 
 import com.google.common.eventbus.EventBus;
 import com.google.inject.Guice;
@@ -39,7 +35,7 @@ import com.google.inject.Injector;
  * snapshots establish that state only after a complete write (R-0387, R-0388).
  */
 class SaveStatePolicyTest {
-    private static final String THRIVE = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String THRIVE = "/maps/fixture-developed-world.akropia";
 
     @TempDir
     Path directory;
@@ -66,17 +62,12 @@ class SaveStatePolicyTest {
 
     @BeforeEach
     void prepare() throws Exception {
-        final CampaignsDao campaigns = mock(CampaignsDao.class);
-        when(campaigns.load()).thenReturn(new CampaignsPo());
-        final Injector injector = Guice.createInjector(new CampaignModule(),
-                binder -> binder.bind(CampaignsDao.class)
-                        .toInstance(campaigns));
+        final Injector injector = Guice.createInjector();
         games = injector.getInstance(GameModelDao.class);
         final DiagnosticLog diagnostics = new DiagnosticLog(
                 directory.resolve("logs"), "test-build");
         final GameController controller = new GameController(current, games,
-                injector.getInstance(CampaignManager.class), new EventBus(),
-                diagnostics);
+                new EventBus(), diagnostics);
         final File root = Files.createDirectories(directory.resolve("home"))
                 .toFile();
         paths = new PersistingTool() {

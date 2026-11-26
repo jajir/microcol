@@ -1,3 +1,36 @@
+<a id="main-menu-cleanup-2026-11-26"></a>
+
+## Main menu and campaign removal — 26 November 2026
+
+1. UC-114/115/119: the main menu keeps Continue, Open Game, New Game,
+   Settings, developer Map editor and Quit. Campaign, Hall of Fame entry
+   and preview pause are removed. Content is centered within 1440 logical
+   pixels; the right-aligned sun reflection remains behind the preview.
+   [UX](ux.md#main-menu-simplification-2026-11-26) owns the agreed behavior.
+2. Campaign and mission implementation, progress persistence and shipped
+   tutorial maps are removed. Ordinary game creation, authored scenarios,
+   save validation, objectives, scoring and result dialogs remain.
+   Endgame navigation now returns to the main menu. Test fixtures keep
+   their worlds without campaign/mission metadata.
+3. Updated scenario sources include `TC_21_F15_free_play_screen_navigation_test`,
+   `TC_191_F224_session_menu_test` and the endgame neighborhood in TC_157,
+   TC_158, TC_163, TC_164, TC_179 and TC_187. Shared page objects and model
+   tests use the new game package; restart-mission coverage now checks
+   absence of that action. These source updates are not passing test evidence.
+4. The user explicitly requested “pushni to bez testu”. Model/JUnit,
+   targeted Docker UI and smoke were not run. No native visual inspection,
+   remote CI or distribution verification was performed. Java sources were
+   formatted using the shared Eclipse profile. Maven `-pl akropia-test -am
+   -DskipTests test-compile` compiles production and test sources only;
+   compilation and documentation validation are reported separately from
+   runtime acceptance. This delivery does not establish a new fully tested
+   revision or a published game build.
+5. Final local checks for this change: Maven production and test-source
+   compilation **BUILD SUCCESS**, no test execution; shared Eclipse formatting
+   applied; documentation name audit **0 unexplained occurrences** and strict
+   MkDocs build **passed**. The pre-existing edit to
+   `docs/requirements/backlog.md` is excluded from this delivery.
+
 <a id="food-presentation-2026-11-24"></a>
 
 ## Food and fishing presentation — 24 November 2026

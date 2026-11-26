@@ -9,9 +9,9 @@ import java.util.List;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CongressPo;
 import org.akropia.model.store.PlayerPo;
 import org.akropia.model.event.UnitAttackedEvent;
@@ -139,7 +139,7 @@ class NavalCombatTest {
 
     private Model start(final GameModelPo wrapper) {
         final Model model = Model.make(wrapper.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         model.startGame();
         for (int i = 0; i < 8
                 && !model.getCurrentPlayer().getName().equals("Dutch"); i++) {
@@ -252,7 +252,7 @@ class NavalCombatTest {
         dao.saveToFile(file.toString(), data);
         final GameModelPo loaded = dao.loadFromFile(file.toFile());
         final Model reloaded = Model.make(loaded.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         reloaded.startGame();
         final CombatStrengths values = battle(reloaded, 3, 100);
         assertEquals(50, values.getAttacker().getFounderBonus());
@@ -495,7 +495,7 @@ class NavalCombatTest {
         assertTrue(model.getUnitById(101).isAtCargoSlot());
         final long random = model.save().getCombatRandomState();
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(random, restored.save().getCombatRandomState());
         assertTrue(((Ship) restored.getUnitById(100)).isDamaged());
         assertTrue(restored.getUnitById(101).isAtCargoSlot());

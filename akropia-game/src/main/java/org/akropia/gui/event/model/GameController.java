@@ -8,19 +8,13 @@ import org.akropia.diagnostics.DiagnosticLog;
 import org.akropia.model.Difficulty;
 import org.akropia.model.EuropeanNation;
 import org.akropia.model.AkropiaException;
-import org.akropia.model.campaign.Campaign;
-import org.akropia.model.campaign.CampaignManager;
-import org.akropia.model.campaign.CampaignMission;
-import org.akropia.model.campaign.CampaignName;
-import org.akropia.model.campaign.CampaignNames;
-import org.akropia.model.campaign.GameModel;
-import org.akropia.model.campaign.GameModelDao;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.MissionName;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.GameModelDao;
+import org.akropia.model.game.FreePlayMap;
 import org.akropia.model.Player;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.SavedGames;
-import org.akropia.model.campaign.po.TurnSnapshot;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.SavedGames;
+import org.akropia.model.game.po.TurnSnapshot;
 import org.akropia.model.generation.GeneratedWorldSettings;
 import org.akropia.gui.screen.game.components.SavePreview;
 
@@ -31,14 +25,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 
 /**
- * Responsible for loading and storing game. Class knows about state of default
- * campaign.
+ * Responsible for loading and storing game. The model owns game rules.
  */
 public final class GameController {
 
     private final GameModelController gameModelController;
-
-    private final CampaignManager campaignManager;
 
     private final GameModelDao gameModelDao;
 
@@ -48,13 +39,12 @@ public final class GameController {
 
     @Inject
     GameController(final GameModelController gameModelController,
-            final GameModelDao gameModelDao,
-            final CampaignManager campaignManager, final EventBus eventBus,
+            final GameModelDao gameModelDao, final EventBus eventBus,
             final DiagnosticLog diagnosticLog) {
         this.gameModelController = Preconditions
                 .checkNotNull(gameModelController);
         this.gameModelDao = Preconditions.checkNotNull(gameModelDao);
-        this.campaignManager = Preconditions.checkNotNull(campaignManager);
+
         this.eventBus = Preconditions.checkNotNull(eventBus);
         this.diagnosticLog = Preconditions.checkNotNull(diagnosticLog);
     }
@@ -110,19 +100,6 @@ public final class GameController {
                 SavePreview.render(game.getModel()));
     }
 
-    public boolean restartMission(
-            final java.util.function.BooleanSupplier beforeReplace) {
-        final GameModel current = gameModelController.getGameModel();
-        Preconditions.checkState(current.isCampaignMission());
-        final GameModel fresh = gameModelDao
-                .loadFromClassPath(current.getScenarioResource(), eventBus);
-        if (!beforeReplace.getAsBoolean()) {
-            return false;
-        }
-        startMission(fresh);
-        return true;
-    }
-
     public boolean loadModelFromFile(final File sourceFile) {
         return loadModelFromFile(sourceFile, () -> true);
     }
@@ -142,7 +119,7 @@ public final class GameController {
         if (!beforeReplace.getAsBoolean()) {
             return false;
         }
-        startMission(loaded);
+        startGame(loaded);
         return true;
     }
 
@@ -155,7 +132,7 @@ public final class GameController {
     public void startFreePlay(final FreePlayMap map, final String playerName,
             final Difficulty difficulty, final EuropeanNation nation,
             final java.util.List<org.akropia.model.FreePlayGoal> goals) {
-        startMission(gameModelDao.createFreePlay(map, playerName, difficulty,
+        startGame(gameModelDao.createFreePlay(map, playerName, difficulty,
                 nation, eventBus, goals));
     }
 
@@ -176,14 +153,14 @@ public final class GameController {
                 | AkropiaException rejected) {
             return false;
         }
-        startMission(generated);
+        startGame(generated);
         return true;
     }
 
     public void startGeneratedFreePlay(
             final org.akropia.model.store.ModelPo world,
             final String playerName) {
-        startMission(gameModelDao.createGeneratedFreePlay(world, playerName,
+        startGame(gameModelDao.createGeneratedFreePlay(world, playerName,
                 eventBus));
     }
 
@@ -197,29 +174,11 @@ public final class GameController {
      *                                                             it
      */
     public void startAuthoredScenario(final GameModelPo scenario) {
-        startMission(gameModelDao.createAuthoredScenario(scenario, eventBus));
+        startGame(gameModelDao.createAuthoredScenario(scenario, eventBus));
     }
 
-    public void startCampaignMission(final CampaignName campaignName,
-            final MissionName missionName) {
-        final Campaign campaign = campaignManager
-                .getCampaignByName(campaignName);
-        startCampaignMission(campaign.getMisssionByMissionName(missionName));
-    }
-
-    private void startCampaignMission(final CampaignMission campaignMission) {
-        startMission(gameModelDao.loadFromClassPath(
-                campaignMission.getClassPathFile(), eventBus));
-    }
-
-    private void startMission(final GameModel gameMode) {
+    private void startGame(final GameModel gameMode) {
         gameModelController.setAndStartModel(gameMode);
-    }
-
-    public boolean isDefaultCampaignFinished() {
-        final Campaign campaign = campaignManager
-                .getCampaignByName(CampaignNames.defaultCampaign);
-        return campaign.isFinished();
     }
 
     public void stopGame() {

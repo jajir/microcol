@@ -3,8 +3,8 @@ package org.akropia.model;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.UnitPo;
@@ -55,8 +55,7 @@ class ArtilleryTest {
     private Model model(boolean damaged, long randomState) {
         final ModelPo data = scenario(damaged);
         data.setCombatRandomState(randomState);
-        Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model model = Model.make(data, GameModel.gameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
         attacker.setHoldingWeapons(true);
@@ -89,7 +88,7 @@ class ArtilleryTest {
         assertEquals(0, gun.getActionPoints());
         assertEquals(0, attacker.getActionPoints());
         Model continued = Model.make(first.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(((UnitArtillery) continued.getUnitById(6)).isDamaged());
 
         Model second = model(true);
@@ -132,12 +131,9 @@ class ArtilleryTest {
             } else {
                 assertTrue(((UnitArtillery) battle.getUnitById(6)).isDamaged());
             }
-            assertTrue(
-                    ((UnitFreeColonist) Model
-                            .make(battle.save(),
-                                    MissionImpl
-                                            .getPredefinedGameOverEvaluators())
-                            .getUnitById(0)).isVeteran());
+            assertTrue(((UnitFreeColonist) Model
+                    .make(battle.save(), GameModel.gameOverEvaluators())
+                    .getUnitById(0)).isVeteran());
         }
     }
 
@@ -146,13 +142,13 @@ class ArtilleryTest {
         ModelPo missing = scenario(false);
         missing.getUnits().stream().filter(u -> u.getId() == 6).findFirst()
                 .orElseThrow().setArtilleryDamaged(null);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(missing,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(missing, GameModel.gameOverEvaluators()));
         ModelPo extra = scenario(false);
         extra.getUnits().stream().filter(u -> u.getId() == 0).findFirst()
                 .orElseThrow().setArtilleryDamaged(false);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(extra,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(extra, GameModel.gameOverEvaluators()));
         ModelPo carrying = scenario(false);
         UnitPo invalidGun = carrying.getUnits().stream()
                 .filter(u -> u.getId() == 6).findFirst().orElseThrow();
@@ -160,8 +156,8 @@ class ArtilleryTest {
         goods.setGoodsType(GoodsType.ORE);
         goods.setAmount(1);
         invalidGun.getCargo().getSlots().add(goods);
-        assertThrows(IllegalArgumentException.class, () -> Model.make(carrying,
-                MissionImpl.getPredefinedGameOverEvaluators()));
+        assertThrows(IllegalArgumentException.class,
+                () -> Model.make(carrying, GameModel.gameOverEvaluators()));
 
         Model model = model(false);
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
@@ -186,8 +182,7 @@ class ArtilleryTest {
         assertThrows(IllegalStateException.class,
                 () -> buyer.buy(UnitType.ARTILLERY, 500));
         assertEquals(550,
-                Model.make(model.save(),
-                        MissionImpl.getPredefinedGameOverEvaluators())
+                Model.make(model.save(), GameModel.gameOverEvaluators())
                         .getPlayerByName("Dutch")
                         .getUnitPurchasePrice(UnitType.ARTILLERY));
     }
@@ -208,8 +203,7 @@ class ArtilleryTest {
         assertEquals(0, gun.getActionPoints());
         assertEquals(UnitActionType.fortify, gun.getAction().getType());
         assertFalse(model.isFortified(gun));
-        Model loaded = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model loaded = Model.make(model.save(), GameModel.gameOverEvaluators());
         UnitArtillery waiting = (UnitArtillery) loaded.getUnitById(gun.getId());
         assertEquals(UnitActionType.fortify, waiting.getAction().getType());
         loaded.cancelFortify(waiting);
@@ -239,18 +233,16 @@ class ArtilleryTest {
                 .filter(s -> !s.isEmpty()).count());
         assertEquals(passenger.getId(), slot.getUnit().orElseThrow().getId());
         Model restored = Model.make(cargoModel.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertTrue(restored.getUnitById(passenger.getId()).isAtCargoSlot());
     }
 
     @Test
     void armoryTierIsRequiredAtAdmissionAndCompletion() {
         ModelPo data = new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
                 .getModel();
-        Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model model = Model.make(data, GameModel.gameOverEvaluators());
         Colony colony = model.getColonyByName("Delft").orElseThrow();
         ColonyBuildingQueue queue = colony.getColonyBuildingQueue();
         colony.getConstructions().removeIf(
@@ -299,8 +291,7 @@ class ArtilleryTest {
             defending.setMissionary(false);
             defending.setArtilleryDamaged(null);
             defending.setHoldingWeapons(true);
-            Model battle = Model.make(data,
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            Model battle = Model.make(data, GameModel.gameOverEvaluators());
             UnitArtillery gun = (UnitArtillery) battle.getUnitById(0);
             gun.placeToLocation(ORIGIN);
             gun.getOwner().revealMapForUnit(gun);
@@ -346,8 +337,7 @@ class ArtilleryTest {
         defending.setMissionary(false);
         defending.setArtilleryDamaged(null);
         defending.setHoldingWeapons(false);
-        Model battle = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model battle = Model.make(data, GameModel.gameOverEvaluators());
         UnitArtillery gun = (UnitArtillery) battle.getUnitById(0);
         gun.placeToLocation(ORIGIN);
         gun.getOwner().revealMapForUnit(gun);
@@ -375,8 +365,7 @@ class ArtilleryTest {
         UnitActionFortifyPo action = new UnitActionFortifyPo();
         action.setFortified(true);
         gun.setAction(action);
-        Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model model = Model.make(data, GameModel.gameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
         attacker.setHoldingWeapons(true);
@@ -392,8 +381,7 @@ class ArtilleryTest {
         ModelPo data = scenario(false);
         data.getUnits().stream().filter(u -> u.getId() == 6).findFirst()
                 .orElseThrow().getPlaceMap().setLocation(Location.of(17, 10));
-        Model model = Model.make(data,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        Model model = Model.make(data, GameModel.gameOverEvaluators());
         UnitFreeColonist attacker = (UnitFreeColonist) model.getUnitById(0);
         attacker.placeToLocation(ORIGIN);
         attacker.setHoldingWeapons(true);

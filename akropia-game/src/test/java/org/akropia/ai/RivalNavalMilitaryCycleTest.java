@@ -29,9 +29,9 @@ import org.akropia.model.ShipPatrolRules;
 import org.akropia.model.TerrainType;
 import org.akropia.model.Unit;
 import org.akropia.model.UnitType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.CargoPo;
 import org.akropia.model.store.CargoSlotPo;
 import org.akropia.model.store.ColonyPo;
@@ -352,8 +352,7 @@ class RivalNavalMilitaryCycleTest {
     private void start(final GameModelPo data) {
         data.getModel().getGameManager().setGameStarted(true);
         data.getModel().getGameManager().setCurrentPlayer("France");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     /** Reveals what the French ship sees from its present square. */
@@ -382,8 +381,7 @@ class RivalNavalMilitaryCycleTest {
         final ModelPo saved = model.save();
         saved.setCombatRandomState(
                 statePinning(draws.toArray(new DoublePredicate[0])));
-        model = Model.make(saved,
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(saved, GameModel.gameOverEvaluators());
     }
 
     private void pinBattle(final int attackerId, final Location approach,
@@ -1161,8 +1159,7 @@ class RivalNavalMilitaryCycleTest {
         pinBattle(FIRST_NEW_ID, WARSHIP_START, Location.of(19, 9), true);
         playFrenchTurn();
         assertTrue(isSunk(SECOND_NEW_ID));
-        model = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(model.save(), GameModel.gameOverEvaluators());
         final long restoredCombat = combatState();
         final Unit restored = model.getUnitById(FIRST_NEW_ID);
         final Location at = restored.getLocation();

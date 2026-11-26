@@ -17,7 +17,7 @@ import org.akropia.gui.screen.menu.MenuHolderPanel;
 import org.akropia.gui.util.ActionButtons;
 import org.akropia.gui.util.InGamePage;
 import org.akropia.i18n.I18n;
-import org.akropia.model.campaign.po.SavedGames.Entry;
+import org.akropia.model.game.po.SavedGames.Entry;
 
 import com.google.common.base.Preconditions;
 import com.google.common.eventbus.EventBus;

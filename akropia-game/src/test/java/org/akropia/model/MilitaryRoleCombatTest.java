@@ -17,9 +17,9 @@ import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitAttackedEvent;
 import org.akropia.model.store.PlaceMapPo;
 import org.akropia.model.store.UnitActionNoActionPo;
@@ -35,7 +35,7 @@ import com.google.gson.Gson;
  */
 class MilitaryRoleCombatTest {
 
-    private static final String MAP = "/maps/default-campaign-mission-2-thrive.akropia";
+    private static final String MAP = "/maps/fixture-developed-world.akropia";
 
     private static final Location ORIGIN = Location.of(27, 10);
 
@@ -91,7 +91,7 @@ class MilitaryRoleCombatTest {
         data.getModel().getUnits().add(attacker);
         data.getModel().getUnits().add(defender);
         final Model model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit actor = model.getUnitById(ATTACKER);
         actor.getOwner().revealMapForUnit(actor);
         return model;
@@ -293,7 +293,7 @@ class MilitaryRoleCombatTest {
                 soldier(DEFENDER, "Dutch's King", TARGET, false, false,
                         MilitaryRole.ROYAL));
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         assertEquals(MilitaryRole.CONTINENTAL,
                 colonist(restored, ATTACKER).getMilitaryRole());
         assertEquals(MilitaryRole.ROYAL,

@@ -5,17 +5,16 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.unit.UnitActionType;
 import org.akropia.model.unit.UnitFreeColonist;
 
 class UnitTaskSignTest {
     private Model model() {
         return Model.make(new GameModelPoDao()
-                .loadFromClassPath(
-                        "/maps/default-campaign-mission-2-thrive.akropia")
-                .getModel(), MissionImpl.getPredefinedGameOverEvaluators());
+                .loadFromClassPath("/maps/fixture-developed-world.akropia")
+                .getModel(), GameModel.gameOverEvaluators());
     }
 
     @ParameterizedTest

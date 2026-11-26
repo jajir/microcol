@@ -15,8 +15,8 @@ import org.akropia.model.TradeRoute;
 import org.akropia.model.TradeRouteKind;
 import org.akropia.model.TradeRoutePreview;
 import org.akropia.model.TradeRouteStop;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.EnumSource;
@@ -48,7 +48,7 @@ class TradeRoutePlanningPainterTest {
             parts[x - 1] = "_";
             rows[17] = prefix + String.join(",", parts);
         }
-        return Model.make(po, MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(po, GameModel.gameOverEvaluators());
     }
 
     private static TradeRoutePreview loop(final Model model, final int start,

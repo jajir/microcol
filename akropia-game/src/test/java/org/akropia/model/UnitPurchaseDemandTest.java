@@ -13,10 +13,10 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.ReferenceExpedition;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.ReferenceExpedition;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.PlaceEuropePortPo;
 import org.akropia.model.store.UnitActionNoActionPo;
 import org.akropia.model.store.UnitPo;
@@ -31,13 +31,11 @@ class UnitPurchaseDemandTest {
     private final GameModelPoDao dao = new GameModelPoDao();
 
     private GameModelPo scenario() {
-        return dao.loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        return dao.loadFromClassPath("/maps/fixture-developed-world.akropia");
     }
 
     private Model load(final GameModelPo data) {
-        return Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(data.getModel(), GameModel.gameOverEvaluators());
     }
 
     private String snapshot(final Model model) {

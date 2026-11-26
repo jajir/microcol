@@ -9,9 +9,9 @@ import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.QueueItemType;
 import org.akropia.model.turnevent.TurnEventProjectCompleted;
 
@@ -23,10 +23,9 @@ class ProjectCompletedNoticeTest {
 
     @BeforeEach
     void prepare() {
-        final GameModelPo data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        final GameModelPo data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         colony = model.getColonyByName("Delft").orElseThrow();
         queue = colony.getColonyBuildingQueue();
         final Construction hall = colony
@@ -80,7 +79,7 @@ class ProjectCompletedNoticeTest {
         assertEquals(1, completedEvents().size());
 
         final Model restored = Model.make(model.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
 
         final Colony delft = restored.getColonyByName("Delft").orElseThrow();
         final List<TurnEventProjectCompleted> events = restored

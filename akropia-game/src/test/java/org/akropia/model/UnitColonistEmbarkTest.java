@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.event.UnitEmbarkedEvent;
 import org.akropia.model.event.UnitMoveStartedEvent;
 import org.akropia.model.store.PlaceMapPo;
@@ -33,8 +33,8 @@ public class UnitColonistEmbarkTest {
 
     @BeforeEach
     void prepare() {
-        data = new GameModelPoDao().loadFromClassPath(
-                "/maps/default-campaign-mission-2-thrive.akropia");
+        data = new GameModelPoDao()
+                .loadFromClassPath("/maps/fixture-developed-world.akropia");
         UnitPo carrier = data.getModel().getUnits().stream()
                 .filter(u -> u.getId() == 3).findFirst().orElseThrow();
         carrier.setPlaceHighSeas(null);
@@ -64,8 +64,7 @@ public class UnitColonistEmbarkTest {
     }
 
     private void restore() {
-        model = Model.make(data.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
         unit = model.getUnitById(16);
         ship = (Ship) model.getUnitById(3);
         slot = ship.getCargo().getSlotByIndex(0);

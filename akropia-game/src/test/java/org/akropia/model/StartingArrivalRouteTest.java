@@ -10,13 +10,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.CampaignModule;
-import org.akropia.model.campaign.FreePlayMap;
-import org.akropia.model.campaign.GameModelDao;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPoDao;
-import org.akropia.model.campaign.store.CampaignsDao;
-import org.akropia.model.campaign.store.CampaignsPo;
+import org.akropia.model.game.FreePlayMap;
+import org.akropia.model.game.GameModelDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.GeneratedClimate;
 import org.akropia.model.generation.GeneratedLandShare;
 import org.akropia.model.generation.GeneratedWorldSettings;
@@ -40,13 +37,7 @@ class StartingArrivalRouteTest {
             FreePlayMap.TWO_ISLANDS, FreePlayMap.RIVAL_EXPEDITION };
 
     private static GameModelDao games() {
-        final CampaignsDao campaigns = mock(CampaignsDao.class);
-        when(campaigns.load()).thenReturn(new CampaignsPo());
-        return Guice
-                .createInjector(new CampaignModule(),
-                        binder -> binder.bind(CampaignsDao.class)
-                                .toInstance(campaigns))
-                .getInstance(GameModelDao.class);
+        return Guice.createInjector().getInstance(GameModelDao.class);
     }
 
     /** A game created by New Game, before it starts. */
@@ -57,10 +48,9 @@ class StartingArrivalRouteTest {
 
     /** The bundled data of an authored map loaded without New Game. */
     private static Model loadedOnly(final FreePlayMap map) {
-        return Model.make(
-                new GameModelPoDao().loadFromClassPath(map.getResource())
-                        .getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+        return Model.make(new GameModelPoDao()
+                .loadFromClassPath(map.getResource()).getModel(),
+                GameModel.gameOverEvaluators());
     }
 
     private static Set<Location> known(final Model model, final Player player) {
@@ -154,7 +144,7 @@ class StartingArrivalRouteTest {
         final Player dutch = created.getUnitById(3).getOwner();
         created.startGame();
         final Model restored = Model.make(created.save(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Unit ship = restored.getUnitById(3);
         assertEquals(known(created, dutch), known(restored, ship.getOwner()));
         assertTrue(((AbstractUnit) ship).findEuropeGoToRoute().isPresent());
@@ -174,10 +164,10 @@ class StartingArrivalRouteTest {
 
     @Test
     void campaignMissionKeepsItsAuthoredExploration() {
-        final String mission = "/maps/default-campaign-mission-0-findNewWorld.akropia";
+        final String mission = "/maps/fixture-arrival-world.akropia";
         final Model loaded = Model.make(
                 new GameModelPoDao().loadFromClassPath(mission).getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         final Model campaign = games()
                 .loadFromClassPath(mission, new EventBus()).getModel();
         for (final Player player : campaign.getPlayers()) {

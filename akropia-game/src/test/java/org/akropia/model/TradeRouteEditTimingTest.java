@@ -9,9 +9,9 @@ import java.util.Optional;
 import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.store.ModelPo;
 import org.akropia.model.store.UnitPo;
 import org.akropia.model.unit.UnitWithCargo;
@@ -71,8 +71,7 @@ class TradeRouteEditTimingTest {
 
         World(final GameModelPo data) {
             this.data = data;
-            model = Model.make(data.getModel(),
-                    MissionImpl.getPredefinedGameOverEvaluators());
+            model = Model.make(data.getModel(), GameModel.gameOverEvaluators());
             dutch = model.getColonyById(NEW_AMSTERDAM).orElseThrow().getOwner();
             king = model.getPlayers().stream().filter(player -> player != dutch)
                     .findFirst().orElseThrow();

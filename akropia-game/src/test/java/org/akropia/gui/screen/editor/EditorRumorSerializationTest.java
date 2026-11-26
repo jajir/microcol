@@ -15,9 +15,9 @@ import org.akropia.gui.screen.game.gamepanel.VisibleAreaService;
 import org.akropia.model.Location;
 import org.akropia.model.Model;
 import org.akropia.model.TerrainType;
-import org.akropia.model.campaign.MissionImpl;
-import org.akropia.model.campaign.po.GameModelPo;
-import org.akropia.model.campaign.po.GameModelPoDao;
+import org.akropia.model.game.GameModel;
+import org.akropia.model.game.po.GameModelPo;
+import org.akropia.model.game.po.GameModelPoDao;
 import org.akropia.model.generation.ScenarioDraft;
 
 /**
@@ -67,7 +67,7 @@ class EditorRumorSerializationTest {
 
         // The game accepts the edited world and sees both markers.
         final Model model = Model.make(saved.getModel(),
-                MissionImpl.getPredefinedGameOverEvaluators());
+                GameModel.gameOverEvaluators());
         try {
             assertTrue(model.getMap().hasLostCityRumorAt(FIRST));
             assertTrue(model.getMap().hasLostCityRumorAt(SECOND));

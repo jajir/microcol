@@ -11,7 +11,7 @@ import org.akropia.model.GameOverEvaluator;
 import org.akropia.model.GameResult;
 import org.akropia.model.HallOfFame;
 import org.akropia.model.RetirementQuote;
-import org.akropia.model.campaign.po.HallOfFameDao;
+import org.akropia.model.game.po.HallOfFameDao;
 import org.testfx.util.WaitForAsyncUtils;
 
 import javafx.scene.Node;

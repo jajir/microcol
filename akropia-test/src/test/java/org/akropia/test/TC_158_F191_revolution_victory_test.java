@@ -11,7 +11,7 @@ import org.akropia.gui.SuccessCuePlayer;
 import org.akropia.mock.RecordingSuccessCuePlayer;
 import org.akropia.model.Location;
 import org.akropia.page.AttackPage;
-import org.akropia.page.CampaignScreenPage;
+import org.akropia.page.MainMenuPage;
 import org.akropia.page.FreePlayAuditPage;
 import org.akropia.page.GamePage;
 import org.akropia.page.RebellionLossPage;
@@ -33,7 +33,7 @@ import javafx.stage.Stage;
  * residents, and only two royal regulars are left in its reserve. The player's
  * armed colonist beside Delft attacks it in its own turn and wins; the colony
  * falls back to the rebels, and the rebellion is won at that moment with its
- * explicit reason. The game then leaves for the campaign screen, saves no end
+ * explicit reason. The game then leaves for the main menu, saves no end
  * position, and a saved open position still continues without repeating the
  * end. The victory message requests one success cue that Continue does not
  * repeat; without an audio device the victory is shown and recorded the same
@@ -108,15 +108,14 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
         rebellion.verifyColonyOwner(DELFT, DUTCH);
 
         // Acknowledging the victory message and then the capture notice beneath
-        // it leaves the game for the campaign screen.
+        // it leaves the game for the main menu.
         victory.closeVictoryDialog(REASON_TEXT);
         victory.closeCaptureNotice(DELFT_NAME);
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
-        campaign.verifyCampaignScreen();
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
+        mainMenu.verifyMainMenu();
 
         // The ending does not replace the last successfully loaded position.
-        campaign.back();
+
         new FreePlayAuditPage(getContext()).verifyContinueButtonEnabled(true);
         new FreePlayAuditPage(getContext()).continueGame();
         rebellion.verifyRebellionHolds();
@@ -135,8 +134,7 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
         final RebellionVictoryPage victory = new RebellionVictoryPage(
                 getContext());
         final AttackPage attack = new AttackPage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
 
         // Save: leaving to the menu stores the open position before the battle,
         // and Continue opens it again.
@@ -157,8 +155,7 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
         victory.verifyVictoryRecorded();
         victory.closeVictoryDialog(REASON_TEXT);
         victory.closeCaptureNotice(DELFT_NAME);
-        campaign.verifyCampaignScreen();
-        campaign.back();
+        mainMenu.verifyMainMenu();
 
         // The won end was not saved. Continue opens the saved open position
         // again: Delft is still Crown-held, and no victory is shown again.
@@ -181,8 +178,7 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
                 getContext());
         final AttackPage attack = new AttackPage(getContext());
         final SuccessCuePage cue = new SuccessCuePage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
         rebellion.verifyRebellionHolds();
         cue.verifySuccessCueRequests(0);
 
@@ -197,16 +193,16 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
         victory.verifyVictoryRecorded();
         cue.verifySuccessCueRequests(1);
 
-        // Acknowledging both messages leaves for the campaign screen without
+        // Acknowledging both messages leaves for the main menu without
         // another cue.
         victory.closeVictoryDialog(REASON_TEXT);
         victory.closeCaptureNotice(DELFT_NAME);
-        campaign.verifyCampaignScreen();
+        mainMenu.verifyMainMenu();
         cue.verifySuccessCueRequests(1);
 
         // Continue reopens the open position; neither the victory message nor
         // its cue is repeated.
-        campaign.back();
+
         new FreePlayAuditPage(getContext()).continueGame();
         rebellion.verifyRebellionHolds();
         victory.verifyNoVictoryDialogShown(REASON_TEXT);
@@ -225,8 +221,7 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
                 getContext());
         final AttackPage attack = new AttackPage(getContext());
         final SuccessCuePage cue = new SuccessCuePage(getContext());
-        final CampaignScreenPage campaign = new CampaignScreenPage(
-                getContext());
+        final MainMenuPage mainMenu = new MainMenuPage(getContext());
         rebellion.verifyRebellionHolds();
 
         // The audio device is gone before the battle.
@@ -244,9 +239,9 @@ public class TC_158_F191_revolution_victory_test extends AbstractAkropiaTest {
         rebellion.verifyColonyOwner(DELFT, DUTCH);
         cue.verifySuccessCueRequests(1);
 
-        // Acknowledging both messages still leaves for the campaign screen.
+        // Acknowledging both messages still leaves for the main menu.
         victory.closeVictoryDialog(REASON_TEXT);
         victory.closeCaptureNotice(DELFT_NAME);
-        campaign.verifyCampaignScreen();
+        mainMenu.verifyMainMenu();
     }
 }

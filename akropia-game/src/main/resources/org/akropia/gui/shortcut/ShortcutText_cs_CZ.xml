@@ -67,11 +67,8 @@
     <entry key="saveFailed">Zkratky se nepodařilo uložit; vaše změny zůstávají a platí dosavadní zkratky. Zkontrolujte, zda lze zapisovat do složky nastavení.</entry>
     <entry key="actionOpenSettings">Nastavení</entry>
     <entry key="actionQuitGame">Ukončit Akropii</entry>
-    <entry key="actionNewFreeGame">Nová volná hra</entry>
-    <entry key="actionPlayCampaign">Hrát kampaň</entry>
-    <entry key="actionHallOfFame">Síň slávy</entry>
+    <entry key="actionNewFreeGame">Nová hra</entry>
     <entry key="actionExitToMainMenu">Hlavní menu</entry>
-    <entry key="actionRestartMission">Restartovat misi</entry>
     <entry key="actionDeclareIndependence">Vyhlásit nezávislost</entry>
     <entry key="actionRetire">Odejít na odpočinek</entry>
     <entry key="actionDisband">Rozpustit jednotku</entry>
